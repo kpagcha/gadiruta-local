@@ -1,13 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import { formatNetworkSnapshotDate, getRouteLabel, getRoutePreview } from '../data/network.ts';
-import { useNetworkDataset } from '../data/use-network-dataset.ts';
+import { useNetworkDataset, type NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { Panel } from './Panel';
 
-/** Render the local network asset's visible loading state, summary, and route preview. */
+/** The explicit local-data state rendered by the presentational network-status panel. */
+interface NetworkStatusPanelViewProps {
+  state: NetworkDatasetState;
+}
+
+/** Load the network asset for the page and pass its state to the reusable visual panel. */
 export function NetworkStatusPanel() {
+  return <NetworkStatusPanelView state={useNetworkDataset()} />;
+}
+
+/** Render one injected local-network state without starting a request of its own. */
+export function NetworkStatusPanelView({ state }: NetworkStatusPanelViewProps) {
   const { t, i18n } = useTranslation();
-  const networkState = useNetworkDataset();
 
   return (
     <Panel aria-labelledby="data-status-title">
@@ -18,7 +27,7 @@ export function NetworkStatusPanel() {
         {t('dataStatus.eyebrow')}
       </p>
       <div aria-live="polite">
-        {networkState.status === 'loading' && (
+        {state.status === 'loading' && (
           <>
             <h2
               id="data-status-title"
@@ -32,7 +41,7 @@ export function NetworkStatusPanel() {
           </>
         )}
 
-        {networkState.status === 'error' && (
+        {state.status === 'error' && (
           <>
             <h2
               id="data-status-title"
@@ -46,7 +55,7 @@ export function NetworkStatusPanel() {
           </>
         )}
 
-        {networkState.status === 'ready' && (
+        {state.status === 'ready' && (
           <>
             <h2
               id="data-status-title"
@@ -57,7 +66,7 @@ export function NetworkStatusPanel() {
             <p className="mt-4 max-w-100 text-[15px] leading-[1.65] text-muted">
               {t('dataStatus.ready.description', {
                 date: formatNetworkSnapshotDate(
-                  networkState.dataset.source.generatedAt,
+                  state.dataset.source.generatedAt,
                   i18n.resolvedLanguage ?? 'en',
                 ),
               })}
@@ -68,7 +77,7 @@ export function NetworkStatusPanel() {
                   {t('dataStatus.ready.routes')}
                 </dt>
                 <dd className="mt-1 text-lg font-[650] tracking-[-0.6px]">
-                  {networkState.dataset.routes.length}
+                  {state.dataset.routes.length}
                 </dd>
               </div>
               <div>
@@ -76,7 +85,7 @@ export function NetworkStatusPanel() {
                   {t('dataStatus.ready.stops')}
                 </dt>
                 <dd className="mt-1 text-lg font-[650] tracking-[-0.6px]">
-                  {networkState.dataset.stops.length}
+                  {state.dataset.stops.length}
                 </dd>
               </div>
               <div>
@@ -84,13 +93,13 @@ export function NetworkStatusPanel() {
                   {t('dataStatus.ready.patterns')}
                 </dt>
                 <dd className="mt-1 text-lg font-[650] tracking-[-0.6px]">
-                  {networkState.dataset.patterns.length}
+                  {state.dataset.patterns.length}
                 </dd>
               </div>
             </dl>
             <h3 className="mt-6 text-sm font-[650]">{t('dataStatus.ready.previewTitle')}</h3>
             <ul className="mt-3 divide-y divide-line-subtle">
-              {getRoutePreview(networkState.dataset.routes).map((route) => {
+              {getRoutePreview(state.dataset.routes).map((route) => {
                 const label = getRouteLabel(route);
                 return (
                   <li className="flex gap-3 py-2.5 first:pt-0 last:pb-0" key={route.id}>

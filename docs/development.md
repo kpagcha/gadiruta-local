@@ -12,6 +12,7 @@ Install Node.js 24, npm 11, and [just](https://just.systems/). The project suppl
 - **TypeScript** type-checks browser code and the local GTFS processor.
 - **Vite** serves the development site and creates deployable static files.
 - **Tailwind CSS** supplies the styling classes used by components.
+- **Storybook** renders components and their saved visual states outside the application flow.
 - **ESLint** and **Prettier** check code quality and formatting.
 - **Node's test runner** runs the focused, dependency-free data tests.
 
@@ -32,6 +33,8 @@ the page when source files change. Stop it with `Ctrl+C`.
 ```shell
 just data          # rebuild the checked-in snapshot from a local GTFS ZIP
 just data-refresh  # download CTAN GTFS, then rebuild that snapshot
+just storybook      # develop component stories at http://127.0.0.1:6006
+just storybook-build # build the separate static Storybook site
 just test          # local GTFS transformation and runtime-contract tests
 just typecheck     # strict TypeScript checks without build output
 just lint          # JavaScript and TypeScript linting
@@ -41,6 +44,9 @@ just check         # lint, formatting, tests, and production build
 just preview       # serve a completed production build locally
 just format        # deliberately rewrite files using the shared formatting rules
 ```
+
+Stories live beside their components as `*.stories.tsx`. They provide isolated, manually
+inspectable visual states; they do not call CTAN or replace the focused automated tests.
 
 ## Network data
 

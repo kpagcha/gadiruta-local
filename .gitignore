@@ -5,6 +5,7 @@
 # Node and build output
 node_modules/
 dist/
+storybook-static/
 coverage/
 *.tsbuildinfo
 
