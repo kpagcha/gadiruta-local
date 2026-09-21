@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Gadiruta Local",
+    "title": "Gadiruta Local · Muévete por Cádiz",
+    "home": "Inicio de Gadiruta Local",
+    "skipToContent": "Saltar al contenido"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "enShort": "EN",
+    "esShort": "ES"
+  },
+  "theme": {
+    "switchToDark": "Cambiar al tema oscuro",
+    "switchToLight": "Cambiar al tema claro"
+  },
+  "hero": {
+    "eyebrow": "Transporte local, en tu dispositivo",
+    "title": "Muévete\npor Cádiz",
+    "description": "Gadiruta Local se está convirtiendo en una forma sencilla y local de descubrir el transporte público en la Bahía de Cádiz."
+  },
+  "dataStatus": {
+    "eyebrow": "Punto de partida",
+    "title": "Los datos de transporte llegan en el próximo paso.",
+    "description": "Esta primera versión es la base en el navegador. El siguiente paso es un pequeño conjunto de datos GTFS estático que se pueda consultar directamente en tu dispositivo."
+  },
+  "footer": {
+    "region": "Hecho para la Bahía de Cádiz.",
+    "attribution": "Los futuros datos de transporte procederán de",
+    "source": "datos abiertos de CTAN",
+    "independent": "Un proyecto independiente. No es un servicio oficial de CTAN ni de la Junta de Andalucía."
+  }
+}

@@ -1,25 +1,13 @@
-# Python
-__pycache__/
-*.py[cod]
-*.sqlite3
-.venv/
+# Environment files
 .env
 .env.*
-!.env.example
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-# Frontend
+
+# Node and build output
 node_modules/
-frontend/dist/
+dist/
+coverage/
 *.tsbuildinfo
-# Local browser verification artifacts
-output/playwright/
-.playwright-cli/
-# Django
-staticfiles/
+
 # PyCharm
 .idea/
 # OS

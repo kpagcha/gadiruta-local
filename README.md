@@ -1,72 +1,56 @@
-# Gadiruta
+# Gadiruta Local
 
-Gadiruta is a Cádiz-focused public transport web application inspired conceptually by Rome2Rio.
+Gadiruta Local is a Cádiz-area public-transport web app that is being rebuilt as a local-first,
+static React application.
 
-The MVP focuses on making official CTAN transport data easier to use for:
+It will eventually download a preprocessed transit dataset and run place search, direct-journey
+lookup, timetables, and network visualisation in the browser. It has no application backend at
+runtime.
 
-- Direct journey search.
-- Schedule lookup.
-- Line exploration.
-- Stop / population centre exploration.
-- Relevant service notices.
+## Current status
 
-## Stack
+The repository currently contains the browser application foundation: bilingual interface,
+light/dark theme, responsive visual system, and local development tooling. No transit dataset or
+journey search is bundled yet, so data-dependent features are intentionally not exposed as working
+controls.
 
-### Backend
+## Roadmap
 
-- Python
-- Django 6.1.1
-- Django Ninja
-- PostgreSQL
-- httpx
-- pytest / pytest-django
+- [x] **Static foundation:** Root-level React app with no runtime backend, bilingual UI, and theme
+      preference.
+- [ ] **First local data slice (next):** Validate a small preprocessed CTAN GTFS dataset and query
+      it directly in the browser.
+- [ ] **Place search:** Let people select Cádiz-area places using local transit data.
+- [ ] **Direct journeys:** Find date-aware direct services between selected places on-device.
+- [ ] **Network browsing:** Add line, stop, and timetable views.
+- [ ] **Offline experience:** Add local data persistence and deliberate PWA caching once real data
+      needs it.
 
-### Frontend
+Each completed milestone should be checked here. Keep the list outcome-focused; technical design
+belongs in the relevant source code and architecture documentation.
 
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS
-- Lucide React
-- React Router
-- TanStack Query
-- react-i18next
+## Development
 
-## Architecture
+Requires Node.js 24, npm 11, and [just](https://just.systems/), a small project command runner.
 
-```text
-Browser / React
-       ↓
-  Django API
-       ↓
- Transport domain/services
-       ↓
- Capability-specific providers
-       ↓
-  CTAN integration
-       ↓
-    CTAN API
+```shell
+just install
+just dev
 ```
 
-The frontend uses Gadiruta's API, and services consume normalized provider capabilities.
-CTAN is the current place and direct-journey implementation, not the application/domain contract.
+Useful checks:
+
+```shell
+just check
+```
+
+New to these tools? [The development guide](docs/development.md) explains just, npm, React,
+TypeScript, Vite, and the project commands in plain language.
 
 ## Documentation
 
-- [`docs/product.md`](docs/product.md) — product goals, MVP scope, principles, and future direction.
-- [`docs/features.md`](docs/features.md) — current feature inventory and implementation status.
-- [`docs/architecture.md`](docs/architecture.md) — major architecture and system boundaries.
-- [`docs/ctan-api.md`](docs/ctan-api.md) — upstream CTAN API discoveries and quirks.
-- [`docs/decisions.md`](docs/decisions.md) — significant decisions and rationale.
-- [`docs/development.md`](docs/development.md) — local development setup and commands.
-- [`AGENTS.md`](AGENTS.md) — instructions for coding agents working on the repository.
+- [Product scope](docs/product.md)
+- [Architecture](docs/architecture.md)
+- [Development conventions](docs/development.md)
 
-Gadiruta's own API reference is generated from Django Ninja/OpenAPI and should not be manually duplicated in
-documentation.
-
-## Development approach
-
-Development is iterative and Git-driven. Work should be delivered in small, coherent, tested commits rather than one
-large implementation pass.
-
-See `AGENTS.md` for the complete agent workflow.
+Gadiruta Local is independent and is not an official CTAN or Junta de Andalucía service.

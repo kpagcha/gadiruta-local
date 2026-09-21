@@ -1,0 +1,137 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2');
+}
+
+@theme {
+  --breakpoint-desktop: 53.125rem;
+  --font-sans: 'Manrope', 'Segoe UI', sans-serif;
+  --color-paper: #f7f6f0;
+  --color-ink: #193839;
+  --color-muted: #5f6f6c;
+  --color-muted-soft: #727d79;
+  --color-muted-faint: #b4beb7;
+  --color-accent: #155f64;
+  --color-accent-strong: #114e50;
+  --color-warning: #8b471f;
+  --color-icon-muted: #83978c;
+  --color-icon-accent: #63877c;
+  --color-icon-strong: #648478;
+  --color-line: #dce2dc;
+  --color-line-subtle: #edf0eb;
+  --color-line-brand: #b8c9bf;
+  --color-line-decoration: #adbbb2;
+  --color-line-input: #c8d2cc;
+  --color-line-popover: #bfcfc3;
+  --color-line-hover: #a4b8aa;
+  --color-surface-active: #e7eee8;
+  --color-surface-hover: #e6eee8;
+  --color-surface-hover-strong: #e4eee6;
+  --color-surface-selected: #eaf2ec;
+  --color-surface-input: #f5f9f6;
+  --color-surface-card: #ffffff;
+  --color-on-accent: #ffffff;
+  --color-focus: #b95723;
+}
+
+@layer components {
+  .skip-link {
+    transform: translateY(-200%);
+    transition: transform 150ms ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --shadow-card: 0 14px 50px -35px #16474233;
+    --shadow-popover: 0 18px 35px -12px #153a3938;
+    --shadow-field-focus: 0 0 0 3px #155f6412;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+    --color-paper: #0e191a;
+    --color-ink: #edf5ef;
+    --color-muted: #a8bab3;
+    --color-muted-soft: #9bafa7;
+    --color-muted-faint: #7f9790;
+    --color-accent: #79cbc2;
+    --color-accent-strong: #a8e2d9;
+    --color-warning: #f1b07a;
+    --color-icon-muted: #91aea4;
+    --color-icon-accent: #76bcae;
+    --color-icon-strong: #8fc6b9;
+    --color-line: #34504b;
+    --color-line-subtle: #243b38;
+    --color-line-brand: #57776d;
+    --color-line-decoration: #66877d;
+    --color-line-input: #4a625d;
+    --color-line-popover: #55736a;
+    --color-line-hover: #6a9386;
+    --color-surface-active: #25423d;
+    --color-surface-hover: #203a36;
+    --color-surface-hover-strong: #294b43;
+    --color-surface-selected: #2d5149;
+    --color-surface-input: #203c38;
+    --color-surface-card: #142425;
+    --color-on-accent: #0e191a;
+    --color-focus: #f0a16d;
+    --shadow-card: 0 12px 20px -18px #071516aa;
+    --shadow-popover: 0 18px 35px -12px #071516cc;
+    --shadow-field-focus: 0 0 0 3px #79cbc233;
+  }
+
+  body {
+    min-width: 280px;
+    margin: 0;
+    color: var(--color-ink);
+    background: var(--color-paper);
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 4px;
+  }
+
+  button {
+    color: inherit;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+  }
+
+  button svg {
+    pointer-events: none;
+  }
+}

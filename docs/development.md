@@ -1,208 +1,61 @@
 # Development
 
-This document contains the commands and conventions needed to work on Gadiruta locally. Keep implementation details in code/configuration unless developers genuinely need them here.
+## Tooling
 
-## Prerequisites
+You only need Node.js 24, npm 11, and [just](https://just.systems/) installed to work on this
+project. The rest is managed by the project itself.
 
-- Git.
-- Python 3.14.
-- [uv](https://docs.astral.sh/uv/).
-- Docker Desktop with Docker Compose V2.
-- PostgreSQL 15+; Compose currently uses PostgreSQL 16.
-- Node.js 24 and npm 11.
+- **Node.js** runs the tools that prepare the web app. It does not run a Gadiruta backend.
+- **just** provides the short project commands. Run `just --list` to see them.
+- **npm** downloads JavaScript packages and runs the underlying tasks for `just`.
+- **React** builds the interface in `src/`.
+- **TypeScript** adds error checking before code reaches a browser; use `just typecheck` to run it.
+- **Vite** starts the local site and creates static files for deployment.
+- **Tailwind CSS** supplies the styling classes used in React components.
+- **ESLint** and **Prettier** check code quality and formatting; `just check` runs them.
 
-## Quick start
+## Start the app
 
-Run from the repository root in PowerShell.
+Run these commands from the repository root in PowerShell:
 
-```powershell
-uv sync --locked
-Copy-Item .env.example .env
-uv run --locked python -c "import secrets; print(secrets.token_urlsafe(50))"
+```shell
+just install
+just dev
 ```
 
-Put the generated value in `.env` as `DJANGO_SECRET_KEY`, then set the local PostgreSQL and pgAdmin passwords.
+`just install` downloads the exact versions recorded by the project, so everyone starts from the
+same set of tools. It is normally needed after cloning or after package dependencies change.
 
-Start local services:
+`just dev` starts a local development website. Open `http://127.0.0.1:5173` in a browser. Keep that
+command running while you work; Vite refreshes the page when you save a source file. Stop it with
+`Ctrl+C`.
 
-```powershell
-docker compose up --detach
-uv run --locked --env-file .env python manage.py migrate
+## Check a change
+
+```shell
+just check
 ```
 
-Optional admin account:
+`just check` runs the usual pre-commit checks: linting, formatting verification, and a production
+build. The build includes a TypeScript check and asks Vite to create the static files that a web host
+would serve.
 
-```powershell
-uv run --locked --env-file .env python manage.py createsuperuser
+Use `just --list` to see every available command. The most useful individual ones are `just lint`,
+`just typecheck`, `just build`, and `just preview`.
+
+To reformat files deliberately:
+
+```shell
+just format
 ```
 
-Start Django:
+## Code and tests
 
-```powershell
-uv run --locked --env-file .env python manage.py runserver
-```
+Use strict TypeScript. Keep React components focused on rendering and interaction; put reusable
+data logic in ordinary TypeScript modules or hooks. User-facing text belongs in both translation
+files under `src/i18n/`.
 
-Start the frontend in another terminal:
-
-```powershell
-npm --prefix frontend ci
-npm --prefix frontend run dev
-```
-
-Open:
-
-- Web app: http://127.0.0.1:5173
-- API: http://127.0.0.1:8000
-- API docs: http://127.0.0.1:8000/api/v1/docs
-- pgAdmin: http://127.0.0.1:5050
-
-Vite proxies `/api/` to Django on port 8000.
-
-## Database
-
-`compose.yaml` provides PostgreSQL and pgAdmin for local development. Named volumes preserve data across normal restarts.
-
-```powershell
-docker compose up --detach
-docker compose ps
-docker compose down
-```
-
-Do not run `docker compose down --volumes` unless you intend to delete local database and pgAdmin state.
-
-To verify connectivity/migrations:
-
-```powershell
-uv run --locked --env-file .env python manage.py check --database default
-uv run --locked --env-file .env python manage.py migrate --check
-```
-
-Tests use PostgreSQL; the configured development role must be able to create the test database.
-
-## Backend commands
-
-```powershell
-uv run --locked --env-file .env python manage.py check
-uv run --locked --env-file .env python manage.py makemigrations --check --dry-run
-uv run --locked --env-file .env pytest
-uv run --locked ruff check .
-uv run --locked ruff format --check .
-uv run --locked mypy
-```
-
-To format Python:
-
-```powershell
-uv run --locked ruff format .
-```
-
-Normal tests must not make live CTAN requests.
-
-## Frontend commands
-
-```powershell
-npm --prefix frontend ci
-npm --prefix frontend run dev
-npm --prefix frontend run build
-npm --prefix frontend run preview
-npm --prefix frontend run format
-```
-
-Production build output goes to ignored `frontend/dist/`.
-
-The frontend uses React, TypeScript, Vite, Tailwind CSS, Lucide React, React Router, TanStack Query, and react-i18next.
-
-## Environment variables
-
-`.env` is private and must not be committed. Settings read the process environment; local commands normally load `.env` with `uv run --env-file .env`.
-
-| Variable | Purpose |
-| --- | --- |
-| `DJANGO_SECRET_KEY` | Required Django signing secret. |
-| `DJANGO_DEBUG` | Local/debug mode flag. |
-| `DJANGO_ALLOWED_HOSTS` | Comma-separated allowed hosts. |
-| `POSTGRES_DB` | PostgreSQL database name. |
-| `POSTGRES_USER` | PostgreSQL role. |
-| `POSTGRES_PASSWORD` | PostgreSQL role password. |
-| `POSTGRES_HOST` | PostgreSQL host. |
-| `POSTGRES_PORT` | PostgreSQL port. |
-| `PGADMIN_DEFAULT_EMAIL` | Local pgAdmin login. |
-| `PGADMIN_DEFAULT_PASSWORD` | Local pgAdmin password. |
-| `GADIRUTA_PLACE_PROVIDER` | Current place provider selection; CTAN is implemented. |
-| `GADIRUTA_DIRECT_JOURNEY_PROVIDER` | Current direct-journey provider selection; existing CTAN path is transitional until GTFS migration. |
-
-Do not treat `.env.example` as production configuration.
-
-## Provider and data fixtures
-
-Captured CTAN REST fixtures live under `tests/fixtures/ctan/`. Use them for parsing/error behavior rather than live requests.
-
-When adding an upstream fixture:
-
-1. capture a representative response during discovery;
-2. remove anything unsuitable for the repository;
-3. record request/provenance metadata;
-4. document meaningful provider quirks in `docs/ctan-api.md`;
-5. add deterministic tests.
-
-For GTFS work, prefer small representative fixture feeds that exercise importer/query behavior without requiring the full live feed in the normal test suite.
-
-The GTFS importer should eventually be runnable as a management command so it can be tested manually and scheduled without adding Celery.
-
-## API documentation
-
-Django Ninja/OpenAPI is the canonical endpoint reference.
-
-- Interactive docs: http://127.0.0.1:8000/api/v1/docs
-- OpenAPI JSON: http://127.0.0.1:8000/api/v1/openapi.json
-- Health: http://127.0.0.1:8000/api/v1/health
-- Place search: http://127.0.0.1:8000/api/v1/places?q=cadiz
-- Direct journeys: http://127.0.0.1:8000/api/v1/journeys/direct
-
-Keep global data attribution/independence text in the top-level API description rather than repeating it on every endpoint.
-
-## Localization
-
-Translation files:
-
-```text
-frontend/src/i18n/en.json
-frontend/src/i18n/es.json
-```
-
-When adding user-facing text, update both languages and reference the translation key from the component. Avoid literal UI strings in JSX.
-
-## Python documentation
-
-Follow the project's configured lint/type rules. Public modules/classes/functions should have useful English docstrings describing purpose and non-obvious behavior; do not duplicate implementation details mechanically.
-
-## Git hooks and workflow
-
-Install the repository hooks once per clone:
-
-```powershell
-uv run --locked pre-commit install --install-hooks
-```
-
-Useful full checks:
-
-```powershell
-uv run --locked pre-commit run --all-files
-uv run --locked pre-commit run --hook-stage pre-push --all-files
-```
-
-Before a coherent change:
-
-```powershell
-git status
-```
-
-Before committing, run relevant checks, review `git diff`, and update affected docs. Use focused Conventional Commit-style English messages such as:
-
-```text
-feat: import CTAN GTFS data
-fix: preserve overnight GTFS stop times
-docs: streamline project documentation
-```
-
-Avoid giant implementation commits and trivial microcommits.
+There is no automated test runner yet because the app has no data-query behaviour to test. Add
+Vitest and Testing Library with the first data-backed feature, focusing on GTFS parsing,
+normalization, dates, local indexes, direct-journey calculations, and important interactions. Tests
+must not call live transit services.

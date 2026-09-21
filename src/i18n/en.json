@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Gadiruta Local",
+    "title": "Gadiruta Local · Your way around Cádiz",
+    "home": "Gadiruta Local home",
+    "skipToContent": "Skip to content"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Spanish",
+    "enShort": "EN",
+    "esShort": "ES"
+  },
+  "theme": {
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme"
+  },
+  "hero": {
+    "eyebrow": "Local transport, on your device",
+    "title": "Your way\naround Cádiz",
+    "description": "Gadiruta Local is becoming a simple, local-first way to explore public transport around the Bay of Cádiz."
+  },
+  "dataStatus": {
+    "eyebrow": "Starting point",
+    "title": "Transit data is coming next.",
+    "description": "This first release is the browser foundation. The next step is a small static GTFS dataset that can be searched directly on your device."
+  },
+  "footer": {
+    "region": "Made for the Bay of Cádiz.",
+    "attribution": "Future transport data will be sourced from",
+    "source": "CTAN open data",
+    "independent": "An independent project. Not an official CTAN or Junta de Andalucía service."
+  }
+}
