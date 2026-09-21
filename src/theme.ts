@@ -73,6 +73,8 @@ export function useTheme(): ThemeState {
 
   useEffect(() => {
     const media = window.matchMedia(MEDIA_QUERY);
+
+    /** Re-resolve the preference so system-mode changes update both React and the document. */
     const updateTheme = () => setTheme(applyTheme(mode));
     updateTheme();
 

@@ -10,6 +10,7 @@ const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   moon: Moon,
 };
 
+/** Properties shared by the custom mark and the imported decorative icons. */
 interface IconProps {
   name: IconName;
   className?: string;

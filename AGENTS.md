@@ -13,6 +13,20 @@ Do not retain or introduce a permanent application backend, database, or direct 
 without a concrete, documented need. The browser should eventually consume preprocessed static
 transit data and query it locally.
 
+## Engineering practice
+
+- Apply KISS, YAGNI, and the Rule of Three: solve the present requirement plainly, tolerate small
+  local duplication, and extract an abstraction only after repeated real use proves one is needed.
+- Separate genuinely different responsibilities, but do not invent layers, services, adapters,
+  repositories, factories, or interfaces merely to make the project look architectural.
+- Prefer explicit control flow and ordinary TypeScript over cleverness. Keep modules cohesive by
+  concept rather than arbitrary file length, and prefer pure functions for data transformations.
+- Use strict TypeScript. Do not use `any` without a concrete, documented reason.
+- Write a concise TSDoc/JSDoc block for every function. State its contract; for non-obvious code,
+  explain the invariant, assumption, external-data quirk, or reason behind the implementation
+  instead of narrating syntax or mechanically repeating parameter types.
+- Do not optimize or generalize before a real feature demonstrates the need.
+
 ## Frontend
 
 - Use React, strict TypeScript, Vite, react-i18next, and the existing lightweight styling system.
@@ -30,8 +44,9 @@ Do not design a complete GTFS importer or local database before a feature needs 
 upstream data assumptions and save small representative fixtures when they affect code. Record
 important source-data findings in `docs/architecture.md` until they justify their own document.
 
-Use Vitest and Testing Library selectively for meaningful behaviour. Tests must not rely on live
-upstream services.
+Use the existing focused test runner for meaningful behaviour. Add Vitest and Testing Library only
+when browser interaction tests make them a concrete need. Tests must not rely on live upstream
+services.
 
 `public/data/bahia-cadiz-network.json` is a reviewed, versioned data snapshot and is deliberately
 tracked so the app can run offline after checkout. Its downloaded input under `data/source/` remains

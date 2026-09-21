@@ -58,11 +58,27 @@ snapshot.
 
 ## Code and tests
 
-Use strict TypeScript. Keep React components focused on rendering and interaction; put reusable
-data logic in ordinary TypeScript modules or hooks. All user-facing text belongs in both
-translation files under `src/i18n/`.
+Use these practices when changing the project:
+
+- Prefer the smallest explicit design that meets the current requirement. KISS, YAGNI, and the
+  Rule of Three mean small local duplication is acceptable until repeated use proves an abstraction
+  is needed.
+- Split code only at a real responsibility boundary. Do not add layers, services, adapters,
+  repositories, factories, or interfaces merely to make the code look more architectural.
+- Keep modules cohesive by concept. Prefer pure functions for parsing, normalization, indexing,
+  calendar handling, and journey calculations.
+- Use strict TypeScript and no `any` without a documented concrete reason.
+- Write a concise TSDoc/JSDoc block for every function. Describe its contract; add the why,
+  invariant, source-data assumption, or quirk when it is not obvious. Do not narrate syntax or
+  mechanically repeat parameter types.
+- Keep React components focused on rendering and interaction; reusable non-UI logic belongs in
+  ordinary TypeScript modules or hooks. All user-facing text belongs in both translation files
+  under `src/i18n/`.
+- Do not optimize or generalize before a real feature needs it.
 
 Tests use small saved GTFS tables and never contact live transit services. Focus them on meaningful
 failure risks: parsing, upstream quirks, normalization, reference integrity, date/calendar rules,
 indexes, journey calculations, and important interactions as those features are added. Avoid
-snapshot suites and implementation-detail tests.
+snapshot suites, trivial component tests, and implementation-detail tests. The current project uses
+Node's built-in test runner to keep this small; introduce Vitest and Testing Library only when a
+browser interaction test makes them worthwhile.

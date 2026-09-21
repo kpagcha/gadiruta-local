@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loadNetworkDataset, type NetworkDataset } from './network.ts';
 
+/** The three visible states while one mounted interface loads the local network asset. */
 export type NetworkDatasetState =
   { status: 'loading' } | { status: 'ready'; dataset: NetworkDataset } | { status: 'error' };
 

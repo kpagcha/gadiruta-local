@@ -48,6 +48,15 @@ test('rejects unknown route and stop references', () => {
   assert.throws(() => parseNetworkDataset(invalid), NetworkDataError);
 });
 
+test('rejects malformed source provenance', () => {
+  const invalid = {
+    ...dataset,
+    source: { ...dataset.source, archiveSha256: 'not-a-hash' },
+  };
+
+  assert.throws(() => parseNetworkDataset(invalid), /SHA-256/);
+});
+
 test('selects a numeric-aware route preview without changing input order', () => {
   const route = dataset.routes[0];
   assert.ok(route);

@@ -56,12 +56,15 @@ export class NetworkDataError extends Error {
   }
 }
 
+/** A JSON object before its individual properties have been validated. */
 type UnknownRecord = Record<string, unknown>;
 
+/** Narrow unknown JSON to a non-array object before reading named properties from it. */
 function isRecord(value: unknown): value is UnknownRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+/** Require a non-blank string so source identifiers cannot be replaced by empty display values. */
 function requiredString(value: unknown, label: string): string {
   if (typeof value !== 'string' || value.trim() === '') {
     throw new NetworkDataError(`${label} must be a non-empty string.`);
@@ -70,6 +73,7 @@ function requiredString(value: unknown, label: string): string {
   return value;
 }
 
+/** Accept null for an optional field, otherwise apply the same non-blank string invariant. */
 function optionalString(value: unknown, label: string): string | null {
   if (value === null) {
     return null;
@@ -78,6 +82,7 @@ function optionalString(value: unknown, label: string): string | null {
   return requiredString(value, label);
 }
 
+/** Require a finite JSON number before it can be used as a coordinate or GTFS route type. */
 function requiredNumber(value: unknown, label: string): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     throw new NetworkDataError(`${label} must be a finite number.`);
@@ -86,6 +91,7 @@ function requiredNumber(value: unknown, label: string): number {
   return value;
 }
 
+/** Require an array while retaining unknown elements for each shape-specific parser. */
 function requiredArray(value: unknown, label: string): unknown[] {
   if (!Array.isArray(value)) {
     throw new NetworkDataError(`${label} must be an array.`);
@@ -94,6 +100,7 @@ function requiredArray(value: unknown, label: string): unknown[] {
   return value;
 }
 
+/** Require a JSON object before a parser reads its contract-defined fields. */
 function requiredRecord(value: unknown, label: string): UnknownRecord {
   if (!isRecord(value)) {
     throw new NetworkDataError(`${label} must be an object.`);
@@ -102,6 +109,7 @@ function requiredRecord(value: unknown, label: string): UnknownRecord {
   return value;
 }
 
+/** Collect stable IDs and reject duplicates that would make cross-reference validation ambiguous. */
 function uniqueIds(items: readonly { id: string }[], label: string): Set<string> {
   const ids = new Set<string>();
 
@@ -115,6 +123,7 @@ function uniqueIds(items: readonly { id: string }[], label: string): Set<string>
   return ids;
 }
 
+/** Validate an agency record at its source-array position for a precise error message. */
 function parseAgency(value: unknown, index: number): NetworkAgency {
   const record = requiredRecord(value, `agencies[${index}]`);
   return {
@@ -123,6 +132,7 @@ function parseAgency(value: unknown, index: number): NetworkAgency {
   };
 }
 
+/** Validate a route record without letting raw GTFS field names leak into UI-facing data. */
 function parseRoute(value: unknown, index: number): NetworkRoute {
   const record = requiredRecord(value, `routes[${index}]`);
   return {
@@ -136,6 +146,7 @@ function parseRoute(value: unknown, index: number): NetworkRoute {
   };
 }
 
+/** Validate a physical stop and reject impossible coordinates before map features consume them. */
 function parseStop(value: unknown, index: number): NetworkStop {
   const record = requiredRecord(value, `stops[${index}]`);
   const latitude = requiredNumber(record.latitude, `stops[${index}].latitude`);
@@ -154,6 +165,7 @@ function parseStop(value: unknown, index: number): NetworkStop {
   };
 }
 
+/** Validate an ordered route-stop sequence while preserving a nullable GTFS direction identifier. */
 function parsePattern(value: unknown, index: number): RoutePattern {
   const record = requiredRecord(value, `patterns[${index}]`);
   const stopIds = requiredArray(record.stopIds, `patterns[${index}].stopIds`).map(
@@ -193,6 +205,9 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
 
   if (Number.isNaN(Date.parse(source.generatedAt))) {
     throw new NetworkDataError('dataset.source.generatedAt must be an ISO date-time.');
+  }
+  if (!/^[a-f0-9]{64}$/.test(source.archiveSha256)) {
+    throw new NetworkDataError('dataset.source.archiveSha256 must be a lowercase SHA-256 hash.');
   }
 
   const agencies = requiredArray(record.agencies, 'dataset.agencies').map(parseAgency);

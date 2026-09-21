@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createNetworkDataset, parseCsv, readZipTextFiles } from './build-network-data.ts';
+import { createNetworkDataset } from './build-network-data.ts';
 import { topologyFixture } from './fixtures/gtfs-topology.ts';
+import { parseCsv, readZipTextFiles } from './gtfs-archive.ts';
 
 test('creates a Bahía-only topology with stable deduplicated patterns', () => {
   const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64));

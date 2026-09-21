@@ -27,6 +27,15 @@ export function getRouteLabel(route: NetworkRoute): string {
   return route.shortName ?? route.longName ?? route.id;
 }
 
+/**
+ * Format validated snapshot provenance for the current interface language.
+ *
+ * `parseNetworkDataset` rejects an invalid generation date before a component can call this.
+ */
+export function formatNetworkSnapshotDate(value: string, language: string): string {
+  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(new Date(value));
+}
+
 /** Select a small deterministic sample for the landing-page network preview. */
 export function getRoutePreview(routes: readonly NetworkRoute[], limit = 6): NetworkRoute[] {
   return [...routes]

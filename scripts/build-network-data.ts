@@ -2,17 +2,25 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { inflateRawSync } from 'node:zlib';
 import { parseNetworkDataset, type NetworkDataset } from '../src/data/network-schema.ts';
+import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
 
+/** The verified upstream archive; this is used only by the explicit refresh command. */
 const sourceUrl = 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip';
+
+/** CTAN's stable identifier for the agency represented by this local snapshot. */
 const bahiaAgencyId = 'CMTBC';
+
+/** A name check prevents a reused upstream identifier from silently expanding this app's scope. */
 const bahiaAgencyName = 'Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz';
+
+/** The ignored archive location used by the normal, offline data command. */
 const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
+
+/** The reviewed static asset consumed by the browser. */
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
 
-type CsvRow = Record<string, string>;
-
+/** GTFS tables needed for the current topology-only snapshot. */
 interface InputTables {
   agency: readonly CsvRow[];
   routes: readonly CsvRow[];
@@ -21,21 +29,25 @@ interface InputTables {
   stopTimes: readonly CsvRow[];
 }
 
+/** A Bay trip reduced to the fields needed to derive its stop pattern. */
 interface SelectedTrip {
   id: string;
   routeId: string;
   directionId: string | null;
 }
 
+/** A stop occurrence whose sequence defines its position within one trip. */
 interface OrderedStopTime {
   stopId: string;
   sequence: number;
 }
 
+/** Stop generation with a consistent, actionable description of an invalid upstream assumption. */
 function fail(message: string): never {
   throw new Error(`GTFS data error: ${message}`);
 }
 
+/** Read a required GTFS value after trimming transport-feed whitespace at the boundary. */
 function requiredValue(row: CsvRow, column: string, table: string): string {
   const value = row[column]?.trim();
   if (value === undefined || value === '') {
@@ -45,11 +57,13 @@ function requiredValue(row: CsvRow, column: string, table: string): string {
   return value;
 }
 
+/** Convert an absent or blank optional GTFS field to the snapshot's explicit null value. */
 function optionalValue(row: CsvRow, column: string): string | null {
   const value = row[column]?.trim();
   return value === undefined || value === '' ? null : value;
 }
 
+/** Parse a required integer without accepting a malformed GTFS identifier or sequence value. */
 function requiredInteger(row: CsvRow, column: string, table: string): number {
   const value = Number(requiredValue(row, column, table));
   if (!Number.isInteger(value)) {
@@ -59,6 +73,7 @@ function requiredInteger(row: CsvRow, column: string, table: string): number {
   return value;
 }
 
+/** Parse a finite stop coordinate before it reaches the app-facing data contract. */
 function requiredCoordinate(row: CsvRow, column: string): number {
   const value = Number(requiredValue(row, column, 'stops'));
   if (!Number.isFinite(value)) {
@@ -68,6 +83,7 @@ function requiredCoordinate(row: CsvRow, column: string): number {
   return value;
 }
 
+/** Index external IDs while rejecting ambiguity that would invalidate reference checks. */
 function uniqueById<T extends { id: string }>(items: readonly T[], label: string): Map<string, T> {
   const result = new Map<string, T>();
 
@@ -81,197 +97,18 @@ function uniqueById<T extends { id: string }>(items: readonly T[], label: string
   return result;
 }
 
+/** Keep generated JSON deterministic so meaningful source-data changes remain reviewable. */
 function compareText(first: string, second: string): number {
   return first.localeCompare(second, 'en');
 }
 
-/** Parse GTFS CSV, including CTAN stop names that contain unescaped quotation marks. */
-export function parseCsv(text: string): CsvRow[] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = '';
-  let quoted = false;
-  let sawContent = false;
-
-  const addField = () => {
-    row.push(field);
-    field = '';
-  };
-
-  const addRow = () => {
-    addField();
-    if (row.some((value) => value !== '')) {
-      rows.push(row);
-    }
-    row = [];
-    sawContent = false;
-  };
-
-  for (let index = 0; index < text.length; index += 1) {
-    const character = text[index] ?? '';
-
-    if (quoted) {
-      if (character === '"') {
-        if (text[index + 1] === '"') {
-          field += '"';
-          index += 1;
-        } else if (
-          text[index + 1] === undefined ||
-          text[index + 1] === ',' ||
-          text[index + 1] === '\r' ||
-          text[index + 1] === '\n'
-        ) {
-          quoted = false;
-        } else {
-          // CTAN currently has labels such as `"Oasis " Viveros " (V)"`.
-          // Treat an interior quote as display text until a field boundary closes the value.
-          field += '"';
-        }
-      } else if (character === '\r' && text[index + 1] === '\n') {
-        field += '\n';
-        index += 1;
-      } else {
-        field += character;
-      }
-      continue;
-    }
-
-    if (character === '"') {
-      if (field !== '') {
-        fail(`unexpected quote in CSV field near character ${index}.`);
-      }
-      quoted = true;
-      sawContent = true;
-    } else if (character === ',') {
-      addField();
-      sawContent = true;
-    } else if (character === '\n') {
-      addRow();
-    } else if (character === '\r') {
-      if (text[index + 1] !== '\n') {
-        addRow();
-      }
-    } else {
-      field += character;
-      sawContent = true;
-    }
-  }
-
-  if (quoted) {
-    fail('unterminated quoted CSV field.');
-  }
-  if (sawContent || field !== '' || row.length > 0) {
-    addRow();
-  }
-
-  const [header, ...values] = rows;
-  if (header === undefined || header.length === 0) {
-    fail('CSV table has no header.');
-  }
-
-  const columns = header.map((column) => column.replace(/^\uFEFF/, '').trim());
-  if (new Set(columns).size !== columns.length || columns.some((column) => column === '')) {
-    fail('CSV header contains duplicate or empty columns.');
-  }
-
-  return values.map((valuesRow, rowIndex) => {
-    if (valuesRow.length !== columns.length) {
-      fail(`CSV row ${rowIndex + 2} has ${valuesRow.length} fields; expected ${columns.length}.`);
-    }
-
-    return Object.fromEntries(
-      columns.map((column, columnIndex) => [column, valuesRow[columnIndex] ?? '']),
-    );
-  });
-}
-
-function unsigned16(bytes: Uint8Array, offset: number): number {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint16(offset, true);
-}
-
-function unsigned32(bytes: Uint8Array, offset: number): number {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(offset, true);
-}
-
-function findEndOfCentralDirectory(bytes: Uint8Array): number {
-  const earliestOffset = Math.max(0, bytes.length - 65_557);
-
-  for (let offset = bytes.length - 22; offset >= earliestOffset; offset -= 1) {
-    if (unsigned32(bytes, offset) === 0x06054b50) {
-      return offset;
-    }
-  }
-
-  fail('ZIP archive has no end-of-central-directory record.');
-}
-
-/** Read stored and deflated UTF-8 files from the flat GTFS ZIP archive. */
-export function readZipTextFiles(bytes: Uint8Array): Map<string, string> {
-  const decoder = new TextDecoder('utf-8', { fatal: true });
-  const endOffset = findEndOfCentralDirectory(bytes);
-  const entryCount = unsigned16(bytes, endOffset + 10);
-  let offset = unsigned32(bytes, endOffset + 16);
-  const files = new Map<string, string>();
-
-  for (let entryIndex = 0; entryIndex < entryCount; entryIndex += 1) {
-    if (unsigned32(bytes, offset) !== 0x02014b50) {
-      fail('ZIP archive has an invalid central-directory record.');
-    }
-
-    const compression = unsigned16(bytes, offset + 10);
-    const compressedSize = unsigned32(bytes, offset + 20);
-    const uncompressedSize = unsigned32(bytes, offset + 24);
-    const filenameLength = unsigned16(bytes, offset + 28);
-    const extraLength = unsigned16(bytes, offset + 30);
-    const commentLength = unsigned16(bytes, offset + 32);
-    const localOffset = unsigned32(bytes, offset + 42);
-    const nameStart = offset + 46;
-    const filename = decoder.decode(bytes.subarray(nameStart, nameStart + filenameLength));
-
-    if (unsigned32(bytes, localOffset) !== 0x04034b50) {
-      fail(`ZIP entry ${filename} has an invalid local-file record.`);
-    }
-
-    const localFilenameLength = unsigned16(bytes, localOffset + 26);
-    const localExtraLength = unsigned16(bytes, localOffset + 28);
-    const dataStart = localOffset + 30 + localFilenameLength + localExtraLength;
-    const compressed = bytes.subarray(dataStart, dataStart + compressedSize);
-    const contents =
-      compression === 0
-        ? compressed
-        : compression === 8
-          ? inflateRawSync(compressed)
-          : fail(`ZIP entry ${filename} uses unsupported compression method ${compression}.`);
-
-    if (contents.byteLength !== uncompressedSize) {
-      fail(`ZIP entry ${filename} has an unexpected uncompressed size.`);
-    }
-    if (files.has(filename)) {
-      fail(`ZIP archive contains duplicate entry ${filename}.`);
-    }
-
-    files.set(filename, decoder.decode(contents));
-    offset += 46 + filenameLength + extraLength + commentLength;
-  }
-
-  return files;
-}
-
-function table(files: ReadonlyMap<string, string>, filename: string): CsvRow[] {
-  const contents = files.get(filename);
-  if (contents === undefined) {
-    fail(`archive does not contain ${filename}.`);
-  }
-
-  try {
-    return parseCsv(contents);
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`${filename}: ${message}`, { cause: error });
-  }
-}
-
-/** Build the deliberately limited, app-facing Bahía network topology from parsed GTFS tables. */
+/**
+ * Build the deliberately limited, app-facing Bahía network topology from parsed GTFS tables.
+ *
+ * This boundary intentionally excludes schedules, calendars, shapes, and every other GTFS table
+ * until a user-facing feature requires them. It also checks references before emitting a snapshot
+ * so the browser never receives a topology that cannot be queried reliably.
+ */
 export function createNetworkDataset(tables: InputTables, archiveSha256: string): NetworkDataset {
   const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
   if (agency === undefined) {
@@ -418,6 +255,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
   });
 }
 
+/** Parse the deliberately small command interface, rejecting flags that could hide a typo. */
 function parseArguments(arguments_: readonly string[]): { inputPath: string; download: boolean } {
   let download = false;
   let inputPath = defaultInputPath;
@@ -441,6 +279,7 @@ function parseArguments(arguments_: readonly string[]): { inputPath: string; dow
   return { inputPath, download };
 }
 
+/** Download the archive only for the explicit refresh command and retain it as reviewable input. */
 async function downloadArchive(inputPath: string): Promise<Uint8Array> {
   const response = await fetch(sourceUrl);
   if (!response.ok) {
@@ -453,7 +292,12 @@ async function downloadArchive(inputPath: string): Promise<Uint8Array> {
   return archive;
 }
 
-/** Generate and write the checked-in local network snapshot. */
+/**
+ * Generate the checked-in local network snapshot from a local archive or explicit download.
+ *
+ * Normal development reads an already-downloaded file, so application startup and tests never
+ * depend on CTAN availability.
+ */
 export async function buildNetworkData(
   arguments_: readonly string[] = process.argv.slice(2),
 ): Promise<void> {
@@ -461,11 +305,11 @@ export async function buildNetworkData(
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
   const files = readZipTextFiles(archive);
   const tables: InputTables = {
-    agency: table(files, 'agency.txt'),
-    routes: table(files, 'routes.txt'),
-    stops: table(files, 'stops.txt'),
-    trips: table(files, 'trips.txt'),
-    stopTimes: table(files, 'stop_times.txt'),
+    agency: readGtfsTable(files, 'agency.txt'),
+    routes: readGtfsTable(files, 'routes.txt'),
+    stops: readGtfsTable(files, 'stops.txt'),
+    trips: readGtfsTable(files, 'trips.txt'),
+    stopTimes: readGtfsTable(files, 'stop_times.txt'),
   };
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
   const dataset = createNetworkDataset(tables, archiveSha256);
