@@ -41,3 +41,16 @@ not derive it from names alone.
 - UI components should receive app-facing data rather than raw GTFS rows. Keep parsing,
   normalization, calendar handling, indexes, and journey calculations in ordinary TypeScript
   modules close to the feature that needs them.
+
+## Future data aggregation
+
+For the initial Cádiz scope, Gadiruta Local can consume a single compact processed dataset.
+
+If coverage expands, the client should not be expected to download one large merged transit dataset. Upstream feeds such
+as CTAN and Renfe may instead be normalized and split during preprocessing into smaller Gadiruta-owned datasets by
+region or network.
+
+A lightweight manifest can map places to the datasets relevant to them, allowing the app to lazily download only the
+data needed for a search and cache it locally.
+
+This is a future scaling concern and should not be implemented until the current dataset size makes it necessary.
