@@ -22,13 +22,27 @@
     "description": "Gadiruta Local se está convirtiendo en una forma sencilla y local de descubrir el transporte público en la Bahía de Cádiz."
   },
   "dataStatus": {
-    "eyebrow": "Punto de partida",
-    "title": "Los datos de transporte llegan en el próximo paso.",
-    "description": "Esta primera versión es la base en el navegador. El siguiente paso es un pequeño conjunto de datos GTFS estático que se pueda consultar directamente en tu dispositivo."
+    "eyebrow": "Red local",
+    "loading": {
+      "title": "Cargando la red local.",
+      "description": "La instantánea de transporte de la Bahía de Cádiz se está leyendo en este dispositivo."
+    },
+    "ready": {
+      "title": "La red de la Bahía de Cádiz ya está disponible.",
+      "description": "Esta instantánea local GTFS de CTAN se generó el {{date}}.",
+      "routes": "Líneas",
+      "stops": "Paradas",
+      "patterns": "Recorridos",
+      "previewTitle": "Un primer vistazo a la red"
+    },
+    "error": {
+      "title": "No se pudo cargar la red local.",
+      "description": "Prueba a actualizar la página. Puede que los datos de transporte incluidos no estén completos."
+    }
   },
   "footer": {
     "region": "Hecho para la Bahía de Cádiz.",
-    "attribution": "Los futuros datos de transporte procederán de",
+    "attribution": "Datos de transporte procedentes de",
     "source": "datos abiertos de CTAN",
     "independent": "Un proyecto independiente. No es un servicio oficial de CTAN ni de la Junta de Andalucía."
   }

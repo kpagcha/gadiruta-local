@@ -2,17 +2,18 @@
 
 ## Tooling
 
-You only need Node.js 24, npm 11, and [just](https://just.systems/) installed to work on this
-project. The rest is managed by the project itself.
+Install Node.js 24, npm 11, and [just](https://just.systems/). The project supplies the rest.
 
-- **Node.js** runs the tools that prepare the web app. It does not run a Gadiruta backend.
-- **just** provides the short project commands. Run `just --list` to see them.
-- **npm** downloads JavaScript packages and runs the underlying tasks for `just`.
-- **React** builds the interface in `src/`.
-- **TypeScript** adds error checking before code reaches a browser; use `just typecheck` to run it.
-- **Vite** starts the local site and creates static files for deployment.
-- **Tailwind CSS** supplies the styling classes used in React components.
-- **ESLint** and **Prettier** check code quality and formatting; `just check` runs them.
+- **Node.js** runs the build, data processor, and focused test runner; it does not run a Gadiruta
+  backend.
+- **just** exposes the project commands. Run `just --list` to see them.
+- **npm** installs the locked JavaScript packages and calls the underlying project tasks.
+- **React** renders the interface in `src/`.
+- **TypeScript** type-checks browser code and the local GTFS processor.
+- **Vite** serves the development site and creates deployable static files.
+- **Tailwind CSS** supplies the styling classes used by components.
+- **ESLint** and **Prettier** check code quality and formatting.
+- **Node's test runner** runs the focused, dependency-free data tests.
 
 ## Start the app
 
@@ -23,39 +24,45 @@ just install
 just dev
 ```
 
-`just install` downloads the exact versions recorded by the project, so everyone starts from the
-same set of tools. It is normally needed after cloning or after package dependencies change.
+Open `http://127.0.0.1:5173` in a browser. Keep the command running while you work; Vite refreshes
+the page when source files change. Stop it with `Ctrl+C`.
 
-`just dev` starts a local development website. Open `http://127.0.0.1:5173` in a browser. Keep that
-command running while you work; Vite refreshes the page when you save a source file. Stop it with
-`Ctrl+C`.
-
-## Check a change
+## Commands
 
 ```shell
-just check
+just data          # rebuild the checked-in snapshot from a local GTFS ZIP
+just data-refresh  # download CTAN GTFS, then rebuild that snapshot
+just test          # local GTFS transformation and runtime-contract tests
+just typecheck     # strict TypeScript checks without build output
+just lint          # JavaScript and TypeScript linting
+just format-check  # formatting verification
+just build         # type-check and create deployable static files
+just check         # lint, formatting, tests, and production build
+just preview       # serve a completed production build locally
+just format        # deliberately rewrite files using the shared formatting rules
 ```
 
-`just check` runs the usual pre-commit checks: linting, formatting verification, and a production
-build. The build includes a TypeScript check and asks Vite to create the static files that a web host
-would serve.
+## Network data
 
-Use `just --list` to see every available command. The most useful individual ones are `just lint`,
-`just typecheck`, `just build`, and `just preview`.
+The app runs from the checked-in `public/data/bahia-cadiz-network.json` snapshot. Its raw CTAN
+input is intentionally not committed.
 
-To reformat files deliberately:
+1. Download `https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip`.
+2. Save it unchanged as `data/source/ctan-gtfs.zip`.
+3. Run `just data`.
+4. Review the JSON diff, then run `just check`.
 
-```shell
-just format
-```
+`just data-refresh` performs the download and processing in one explicit command. Do not put it in
+normal checks or application startup: it needs upstream access and refreshes a reviewed source
+snapshot.
 
 ## Code and tests
 
 Use strict TypeScript. Keep React components focused on rendering and interaction; put reusable
-data logic in ordinary TypeScript modules or hooks. User-facing text belongs in both translation
-files under `src/i18n/`.
+data logic in ordinary TypeScript modules or hooks. All user-facing text belongs in both
+translation files under `src/i18n/`.
 
-There is no automated test runner yet because the app has no data-query behaviour to test. Add
-Vitest and Testing Library with the first data-backed feature, focusing on GTFS parsing,
-normalization, dates, local indexes, direct-journey calculations, and important interactions. Tests
-must not call live transit services.
+Tests use small saved GTFS tables and never contact live transit services. Focus them on meaningful
+failure risks: parsing, upstream quirks, normalization, reference integrity, date/calendar rules,
+indexes, journey calculations, and important interactions as those features are added. Avoid
+snapshot suites and implementation-detail tests.

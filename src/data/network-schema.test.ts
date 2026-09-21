@@ -1,0 +1,64 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { getRoutePreview } from './network.ts';
+import { NetworkDataError, parseNetworkDataset } from './network-schema.ts';
+
+const dataset = {
+  formatVersion: 1,
+  source: {
+    url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
+    generatedAt: '2026-09-21T15:15:44.000Z',
+    archiveSha256: 'a'.repeat(64),
+  },
+  agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
+  routes: [
+    {
+      id: '2_13',
+      agencyId: 'CMTBC',
+      shortName: 'M-040',
+      longName: 'Cádiz-El Puerto',
+      type: 3,
+      color: '9933ff',
+      textColor: 'FFFFFF',
+    },
+  ],
+  stops: [
+    { id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null },
+    {
+      id: 'puerto',
+      name: 'El Puerto',
+      latitude: 36.6,
+      longitude: -6.23,
+      parentStationId: null,
+    },
+  ],
+  patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['cadiz', 'puerto'] }],
+};
+
+test('accepts the version-one topology contract', () => {
+  assert.deepEqual(parseNetworkDataset(dataset), dataset);
+});
+
+test('rejects unknown route and stop references', () => {
+  const invalid = {
+    ...dataset,
+    patterns: [{ routeId: 'unknown', directionId: null, stopIds: ['missing'] }],
+  };
+
+  assert.throws(() => parseNetworkDataset(invalid), NetworkDataError);
+});
+
+test('selects a numeric-aware route preview without changing input order', () => {
+  const route = dataset.routes[0];
+  assert.ok(route);
+  const routes = [
+    { ...route, id: 'route-10', shortName: 'M-100' },
+    { ...route, id: 'route-2', shortName: 'M-20' },
+  ];
+
+  assert.deepEqual(
+    getRoutePreview(routes).map((route) => route.id),
+    ['route-2', 'route-10'],
+  );
+  assert.equal(routes[0]?.id, 'route-10');
+});

@@ -12,6 +12,14 @@ install:
 dev:
     npm run dev
 
+# Build the tracked local network snapshot from data/source/ctan-gtfs.zip.
+data:
+    npm run data
+
+# Download the current CTAN archive, then rebuild the tracked local network snapshot.
+data-refresh:
+    npm run data:refresh
+
 # Preview a completed production build locally.
 preview:
     npm run preview
@@ -23,6 +31,10 @@ lint:
 # Check TypeScript without creating build files.
 typecheck:
     npm run typecheck
+
+# Run the focused local-data tests without contacting external services.
+test:
+    npm test
 
 # Check that files follow the shared formatting rules.
 format-check:
@@ -37,5 +49,5 @@ build:
     npm run build
 
 # Run the usual checks before committing.
-check: lint format-check
+check: lint format-check test
     npm run build

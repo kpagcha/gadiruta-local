@@ -1,51 +1,51 @@
 # Gadiruta Local
 
-Gadiruta Local is a Cádiz-area public-transport web app that is being rebuilt as a local-first,
-static React application.
-
-It will eventually download a preprocessed transit dataset and run place search, direct-journey
-lookup, timetables, and network visualisation in the browser. It has no application backend at
-runtime.
+Gadiruta Local is a Cádiz-area public-transport web app. It is a local-first static React
+application: the deployed site has no application backend, database, runtime proxy, or direct CTAN
+requests.
 
 ## Current status
 
-The repository currently contains the browser application foundation: bilingual interface,
-light/dark theme, responsive visual system, and local development tooling. No transit dataset or
-journey search is bundled yet, so data-dependent features are intentionally not exposed as working
-controls.
+The app bundles a reviewed Bahía de Cádiz network-topology snapshot derived from CTAN GTFS. The
+home page loads that asset in the browser, validates it, and previews a few routes. It does not yet
+offer place search, journey results, timetables, maps, or offline persistence.
 
 ## Roadmap
 
 - [x] **Static foundation:** Root-level React app with no runtime backend, bilingual UI, and theme
       preference.
-- [ ] **First local data slice (next):** Validate a small preprocessed CTAN GTFS dataset and query
-      it directly in the browser.
+- [x] **First local data slice:** A validated Bahía de Cádiz GTFS topology snapshot loads and is
+      queried directly in the browser.
 - [ ] **Place search:** Let people select Cádiz-area places using local transit data.
 - [ ] **Direct journeys:** Find date-aware direct services between selected places on-device.
 - [ ] **Network browsing:** Add line, stop, and timetable views.
 - [ ] **Offline experience:** Add local data persistence and deliberate PWA caching once real data
       needs it.
 
-Each completed milestone should be checked here. Keep the list outcome-focused; technical design
-belongs in the relevant source code and architecture documentation.
+Each completed milestone is checked here. Technical design belongs in the architecture and source
+code.
 
 ## Development
 
-Requires Node.js 24, npm 11, and [just](https://just.systems/), a small project command runner.
+Requires Node.js 24, npm 11, and [just](https://just.systems/).
 
 ```shell
 just install
 just dev
 ```
 
-Useful checks:
+Run the usual checks with:
 
 ```shell
 just check
 ```
 
-New to these tools? [The development guide](docs/development.md) explains just, npm, React,
-TypeScript, Vite, and the project commands in plain language.
+The committed network snapshot makes normal development work offline. To rebuild it from a local
+CTAN archive, place the unmodified file at `data/source/ctan-gtfs.zip` and run `just data`. To
+download a fresh archive from `https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip` before rebuilding,
+run `just data-refresh`.
+
+[The development guide](docs/development.md) explains the project tools and commands.
 
 ## Documentation
 

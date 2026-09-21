@@ -1,56 +1,60 @@
 # Architecture
 
-## What runs today
+## Runtime
 
-Gadiruta Local is a static web application. It is built from the files in this repository and can
-be hosted as ordinary website files. There is no application server, database, runtime proxy, or
-direct CTAN REST request.
-
-```text
-Browser → React application → bundled website files
-```
-
-The browser currently owns the interface language and theme preference. It will also own transit
-searches once a local dataset is introduced.
-
-## Data direction
-
-The next milestone is a small, preprocessed slice of CTAN GTFS data published as static files. The
-app will download that data and query it on the device.
+Gadiruta Local is a static web application. A web host serves ordinary files; there is no
+application server, database, runtime proxy, or direct CTAN request.
 
 ```text
-CTAN GTFS → preprocessing outside the app → static dataset → browser-local queries
+Browser → React application → static files
+                 ↓
+      /data/bahia-cadiz-network.json
 ```
 
-CTAN's unified feed has historically been available at:
+The browser owns language and theme preferences. It fetches the versioned network asset, validates
+it, and keeps it in memory for the current page. The home page currently uses it for counts and a
+route preview.
+
+## Local network data
+
+The committed `public/data/bahia-cadiz-network.json` is a reviewed source snapshot, not disposable
+build output. It is generated from CTAN's unified GTFS archive by `just data` and is intentionally
+tracked so a fresh checkout can run without upstream access.
 
 ```text
-https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip
+CTAN GTFS ZIP → local preprocessing → committed static JSON → browser-local queries
 ```
 
-Before depending on it, verify its current coverage, identifiers, and attribution requirements.
-GTFS stops are physical boarding locations, while Gadiruta's place-first interface needs broader
-areas such as Cádiz or Jerez. A reliable place-to-stop association is still a discovery task; do
-not derive it from names alone.
+The processor reads only `agency.txt`, `routes.txt`, `stops.txt`, `trips.txt`, and
+`stop_times.txt`. It selects `agency_id = CMTBC` only after verifying that the feed labels it
+“Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz.” It fails on absent data,
+inconsistent references, empty selections, malformed rows, or an agency-name change. It does not
+use display names or coordinates to define the Bay boundary.
+
+Version 1 of the app-facing asset contains:
+
+- source URL, generation time, and archive SHA-256;
+- the selected agency and routes;
+- physical stops with coordinates; and
+- deduplicated ordered route-stop patterns.
+
+GTFS ZIP/CSV details remain in the processor. UI code receives only this normalized contract and
+validates it again at load time. The current feed has a few stop labels with unescaped quotation
+marks; the processor preserves those labels rather than rejecting an otherwise usable snapshot.
+
+## Refreshing the snapshot
+
+`data/source/ctan-gtfs.zip` is ignored because it is a downloaded input. `just data` transforms an
+archive already at that path. `just data-refresh` deliberately downloads CTAN's current archive,
+replaces that ignored input, and regenerates the tracked JSON. Review the resulting data diff and
+run checks before committing a refresh. Normal development and tests never contact CTAN.
 
 ## Deliberate boundaries
 
-- The application lives at the repository root because it is the only runtime application.
-- No importer, IndexedDB schema, service worker, or edge service exists yet. Their shape should
-  follow the first data-backed feature instead of preceding it.
-- UI components should receive app-facing data rather than raw GTFS rows. Keep parsing,
-  normalization, calendar handling, indexes, and journey calculations in ordinary TypeScript
-  modules close to the feature that needs them.
-
-## Future data aggregation
-
-For the initial Cádiz scope, Gadiruta Local can consume a single compact processed dataset.
-
-If coverage expands, the client should not be expected to download one large merged transit dataset. Upstream feeds such
-as CTAN and Renfe may instead be normalized and split during preprocessing into smaller Gadiruta-owned datasets by
-region or network.
-
-A lightweight manifest can map places to the datasets relevant to them, allowing the app to lazily download only the
-data needed for a search and cache it locally.
-
-This is a future scaling concern and should not be implemented until the current dataset size makes it necessary.
+- GTFS stops are physical boarding locations, not user-facing places. A verified place-to-stop
+  association has not been designed or inferred.
+- The snapshot deliberately excludes service calendars, trip times, shapes, fare data, and alerts.
+  Add those only with the feature that needs them.
+- There is no IndexedDB schema, service worker, PWA caching policy, edge service, or backend.
+- Data parsing and validation live in focused TypeScript modules. Future normalization, indexing,
+  calendar handling, and journey logic should remain outside React components.

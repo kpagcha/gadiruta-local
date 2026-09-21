@@ -8,6 +8,9 @@ dist/
 coverage/
 *.tsbuildinfo
 
+# Downloaded GTFS input; the reviewed static network snapshot in public/data is tracked instead.
+data/source/
+
 # PyCharm
 .idea/
 # OS

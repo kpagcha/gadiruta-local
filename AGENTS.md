@@ -33,6 +33,10 @@ important source-data findings in `docs/architecture.md` until they justify thei
 Use Vitest and Testing Library selectively for meaningful behaviour. Tests must not rely on live
 upstream services.
 
+`public/data/bahia-cadiz-network.json` is a reviewed, versioned data snapshot and is deliberately
+tracked so the app can run offline after checkout. Its downloaded input under `data/source/` remains
+ignored; this is the narrow exception to the generated-output rule below.
+
 ## Documentation
 
 Keep the small documentation set concise and non-overlapping:
@@ -44,6 +48,7 @@ Keep the small documentation set concise and non-overlapping:
 
 ## Git
 
-Never commit secrets, generated output, `node_modules`, or editor state. Avoid destructive Git
-operations. Use small, focused Conventional Commits such as `feat: add local place index` or
+Never commit secrets, disposable generated output, `node_modules`, or editor state. The reviewed
+network snapshot described above is the only exception. Avoid destructive Git operations. Use
+small, focused Conventional Commits such as `feat: add local place index` or
 `refactor: simplify static data loading`.

@@ -1,0 +1,5109 @@
+{
+  "formatVersion": 1,
+  "source": {
+    "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
+    "generatedAt": "2026-09-21T16:18:15.730Z",
+    "archiveSha256": "05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844"
+  },
+  "agencies": [
+    {
+      "id": "CMTBC",
+      "name": "Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz"
+    }
+  ],
+  "routes": [
+    {
+      "id": "2_10",
+      "agencyId": "CMTBC",
+      "shortName": "M-032",
+      "longName": "Cádiz-Río San Pedro-Puerto Real (512 Viviendas)",
+      "type": 3,
+      "color": "00ffff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_11",
+      "agencyId": "CMTBC",
+      "shortName": "M-033",
+      "longName": "Cádiz-Puerto Real (Directo)",
+      "type": 3,
+      "color": "99cc00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_12",
+      "agencyId": "CMTBC",
+      "shortName": "M-034",
+      "longName": "Cádiz-Hospital De Puerto Real (Por Autovía)",
+      "type": 3,
+      "color": "9933cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_13",
+      "agencyId": "CMTBC",
+      "shortName": "M-040",
+      "longName": "Cádiz-El Puerto De Santa María (Directo)",
+      "type": 3,
+      "color": "9933ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_14",
+      "agencyId": "CMTBC",
+      "shortName": "M-041",
+      "longName": "Cádiz-El Puerto De Santa María (Por Río San Pedro Y Campus Universitario De Puerto Real)",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_15",
+      "agencyId": "CMTBC",
+      "shortName": "B-042",
+      "longName": "Cádiz-El Puerto De Santa María",
+      "type": 4,
+      "color": "33ff00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_155",
+      "agencyId": "CMTBC",
+      "shortName": "M-250",
+      "longName": "Conil-Jerez (La Línea-Sevilla)",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_156",
+      "agencyId": "CMTBC",
+      "shortName": "M-251",
+      "longName": "Conil-Jerez (Atlanterra-Sevilla)",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_16",
+      "agencyId": "CMTBC",
+      "shortName": "M-050",
+      "longName": "Cádiz-Jerez De La Frontera (Directo)",
+      "type": 3,
+      "color": "ff33cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_163",
+      "agencyId": "CMTBC",
+      "shortName": "M-960",
+      "longName": "Chipiona-Sanlúcar De Barrameda-Cádiz (Por Puerto Real Y Campus)",
+      "type": 3,
+      "color": "0033ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_164",
+      "agencyId": "CMTBC",
+      "shortName": "M-961",
+      "longName": "Chipiona-Sanlúcar De Barrameda-El Puerto De Santa María-Cádiz",
+      "type": 3,
+      "color": "9900ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_165",
+      "agencyId": "CMTBC",
+      "shortName": "M-962",
+      "longName": "Chipiona-Sanlúcar De Barrameda-San Fernando (Por Puerto Real Y Hospital)",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_166",
+      "agencyId": "CMTBC",
+      "shortName": "M-963",
+      "longName": "Chipiona-Sanlúcar De Barrameda-Jerez De La Frontera",
+      "type": 3,
+      "color": "009933",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_167",
+      "agencyId": "CMTBC",
+      "shortName": "M-964",
+      "longName": "Chipiona-Sanlúcar De Barrameda-Jerez De La Frontera (Por Hospital)",
+      "type": 3,
+      "color": "cc66cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_168",
+      "agencyId": "CMTBC",
+      "shortName": "M-970",
+      "longName": "Sanlúcar De Barrameda-Jerez De La Frontera",
+      "type": 3,
+      "color": "00ff99",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_169",
+      "agencyId": "CMTBC",
+      "shortName": "M-971",
+      "longName": "Sanlúcar De Barrameda-Jerez De La Frontera (Por Hospital)",
+      "type": 3,
+      "color": "0066ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_17",
+      "agencyId": "CMTBC",
+      "shortName": "M-051",
+      "longName": "Cádiz-Jerez De La Frontera (Por El Puerto De Santa María)",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_170",
+      "agencyId": "CMTBC",
+      "shortName": "M-972",
+      "longName": "Sanlúcar De Barrameda-Campus De Jerez",
+      "type": 3,
+      "color": "ff33cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_172",
+      "agencyId": "CMTBC",
+      "shortName": "M-561",
+      "longName": "Costa Ballena-Chipiona-Sanlúcar-Jerez",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_175",
+      "agencyId": "CMTBC",
+      "shortName": "M-953",
+      "longName": "Arcos De La Frontera-Jerez De La Frontera (Ubrique)",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_177",
+      "agencyId": "CMTBC",
+      "shortName": "M-053",
+      "longName": "Cádiz-Jerez De La Frontera (Por Hospital De Jerez)",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_18",
+      "agencyId": "CMTBC",
+      "shortName": "M-052",
+      "longName": "Cádiz-Jerez De La Frontera (Por Campus Universitario De Puerto Real Y El Puerto De Santa María)",
+      "type": 3,
+      "color": "ff33cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_19",
+      "agencyId": "CMTBC",
+      "shortName": "M-060",
+      "longName": "Cádiz-El Puerto De Santa María-Rota (Por Costa Oeste)",
+      "type": 3,
+      "color": "33ff00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_2",
+      "agencyId": "CMTBC",
+      "shortName": "M-010",
+      "longName": "Cádiz-San Fernando Norte (Por León Herrero)",
+      "type": 3,
+      "color": "0000ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_20",
+      "agencyId": "CMTBC",
+      "shortName": "M-061",
+      "longName": "Cádiz-El Puerto De Santa María-Rota (Por Río San Pedro  Campus De Puerto Real Y Costa Oeste)",
+      "type": 3,
+      "color": "00cccc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_21",
+      "agencyId": "CMTBC",
+      "shortName": "M-062",
+      "longName": "Cádiz-El Puerto De Santa María-Rota",
+      "type": 3,
+      "color": "9999cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_219",
+      "agencyId": "CMTBC",
+      "shortName": "M-966",
+      "longName": "Chipiona-Costa Ballena-Rota",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_22",
+      "agencyId": "CMTBC",
+      "shortName": "B-065",
+      "longName": "Cádiz-Rota",
+      "type": 4,
+      "color": "33ff00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_220",
+      "agencyId": "CMTBC",
+      "shortName": "M-035",
+      "longName": "Cádiz-Escuela De Ingeniería",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_221",
+      "agencyId": "CMTBC",
+      "shortName": "M-231",
+      "longName": "Chiclana De La Frontera-Campus Universitario De Puerto Real",
+      "type": 3,
+      "color": "FF00FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_222",
+      "agencyId": "CMTBC",
+      "shortName": "M-330",
+      "longName": "Puerto Real-Escuela De Ingeniería",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_223",
+      "agencyId": "CMTBC",
+      "shortName": "M-351",
+      "longName": "Jerez De La Frontera-Campus Universitario De Puerto Real  (Por Cuatro Caminos)",
+      "type": 3,
+      "color": "CC6666",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_224",
+      "agencyId": "CMTBC",
+      "shortName": "M-352",
+      "longName": "Jerez De La Frontera-Campus Universitario De Puerto Real (Por El Puerto De Santa María)",
+      "type": 3,
+      "color": "00FF00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_225",
+      "agencyId": "CMTBC",
+      "shortName": "M-967",
+      "longName": "Chipiona-Sanlúcar De Barrameda-Cádiz  (Por Campus De Puerto Real)",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_226",
+      "agencyId": "CMTBC",
+      "shortName": "M-340",
+      "longName": "El Puerto De Santa María-Campus Universitario De Puerto Real",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_23",
+      "agencyId": "CMTBC",
+      "shortName": "M-130",
+      "longName": "San Fernando-Campus Universitario",
+      "type": 3,
+      "color": "cc0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_230",
+      "agencyId": "CMTBC",
+      "shortName": "M-965",
+      "longName": "Chipiona-Sanlúcar De Barrameda (Sevilla/Utrera)",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_231",
+      "agencyId": "CMTBC",
+      "shortName": "M-974",
+      "longName": "Costa Ballena-Chipiona-Sanlúcar De Barrameda (Sevilla)",
+      "type": 3,
+      "color": "FF00FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_234",
+      "agencyId": "CMTBC",
+      "shortName": "M-911",
+      "longName": "Cádiz-Conil-Barbate (Por La Barca/Por Los Caños)",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_235",
+      "agencyId": "CMTBC",
+      "shortName": "M-912",
+      "longName": "Cádiz-Conil-Atlanterra (Por Vejer/Por Los Caños)",
+      "type": 3,
+      "color": "FF00FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_236",
+      "agencyId": "CMTBC",
+      "shortName": "M-913",
+      "longName": "Cádiz-Conil-Barbate Por Hospital",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_237",
+      "agencyId": "CMTBC",
+      "shortName": "M-914",
+      "longName": "Cádiz-Conil-Caños De Meca",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_239",
+      "agencyId": "CMTBC",
+      "shortName": "M-036",
+      "longName": "Cádiz-Puerto Real (Por Ca-35)",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_240",
+      "agencyId": "CMTBC",
+      "shortName": "M-037",
+      "longName": "Cádiz-Campus De Puerto Real (Por Ca-35)",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_26",
+      "agencyId": "CMTBC",
+      "shortName": "M-230",
+      "longName": "Chiclana De La Frontera-Hospital De Puerto Real (Por Marquesado)",
+      "type": 3,
+      "color": "ff9999",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_267",
+      "agencyId": "CMTBC",
+      "shortName": "M-038",
+      "longName": "Cádiz-Puerto Real (Por Av. Constitución De 1812 Y Ca-35)",
+      "type": 3,
+      "color": "FF0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_27",
+      "agencyId": "CMTBC",
+      "shortName": "M-350",
+      "longName": "Jerez De La Frontera-Campus Universitario De Puerto Real",
+      "type": 3,
+      "color": "3333ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_28",
+      "agencyId": "CMTBC",
+      "shortName": "M-360",
+      "longName": "Rota-Costa Oeste-El Puerto De Santa María-Hospital De Puerto Real",
+      "type": 3,
+      "color": "ff6666",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_3",
+      "agencyId": "CMTBC",
+      "shortName": "M-011",
+      "longName": "Cádiz-San Fernando Sur (Por Camposoto Y San Marcos)",
+      "type": 3,
+      "color": "ff0033",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_32",
+      "agencyId": "CMTBC",
+      "shortName": "M-560",
+      "longName": "Rota-Jerez De La Frontera",
+      "type": 3,
+      "color": "00ff33",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_36",
+      "agencyId": "CMTBC",
+      "shortName": "M-902",
+      "longName": "Cádiz-El Puerto De Santa María-Jerez De La Frontera-Arcos De La Frontera (Ronda)",
+      "type": 3,
+      "color": "0000ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_38",
+      "agencyId": "CMTBC",
+      "shortName": "M-904",
+      "longName": "Cádiz-El Puerto De Santa María-Jerez-Arcos De La Frontera (Alcalá Del Valle)",
+      "type": 3,
+      "color": "0066ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_39",
+      "agencyId": "CMTBC",
+      "shortName": "M-905",
+      "longName": "Rota-Jerez De La Frontera (Sevilla)",
+      "type": 3,
+      "color": "0000FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_4",
+      "agencyId": "CMTBC",
+      "shortName": "M-020",
+      "longName": "Cádiz-Chiclana De La Frontera",
+      "type": 3,
+      "color": "00FF99",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_41",
+      "agencyId": "CMTBC",
+      "shortName": "M-940",
+      "longName": "Medina-Chiclana-San Fernando-Cádiz (Alcalá De Los Gazules)",
+      "type": 3,
+      "color": "99ff99",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_43",
+      "agencyId": "CMTBC",
+      "shortName": "M-942",
+      "longName": "Medina-Chiclana-Hospital-Puerto Real-Cádiz",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_44",
+      "agencyId": "CMTBC",
+      "shortName": "M-943",
+      "longName": "Medina-Hospital-Puerto Real-Cádiz (Benalúp Y Paterna)",
+      "type": 3,
+      "color": "996699",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_46",
+      "agencyId": "CMTBC",
+      "shortName": "M-945",
+      "longName": "Medina-Jerez De La Frontera",
+      "type": 3,
+      "color": "ff0000",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_48",
+      "agencyId": "CMTBC",
+      "shortName": "M-947",
+      "longName": "Medina-Chiclana De La Frontera",
+      "type": 3,
+      "color": "ff00ff",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_49",
+      "agencyId": "CMTBC",
+      "shortName": "M-950",
+      "longName": "Arcos De La Frontera-Cádiz (Ubrique)",
+      "type": 3,
+      "color": "9999cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_5",
+      "agencyId": "CMTBC",
+      "shortName": "M-021",
+      "longName": "Cádiz-Cementerio Mancomunado",
+      "type": 3,
+      "color": "669966",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_50",
+      "agencyId": "CMTBC",
+      "shortName": "M-951",
+      "longName": "Arcos De La Frontera-Jerez De La Frontera",
+      "type": 3,
+      "color": "FF00FF",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_51",
+      "agencyId": "CMTBC",
+      "shortName": "M-952",
+      "longName": "Arcos De La Frontera-Jerez De La Frontera (Villamartín)",
+      "type": 3,
+      "color": "6699cc",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_54",
+      "agencyId": "CMTBC",
+      "shortName": "M-955",
+      "longName": "Arcos De La Frontera - Jerez De La Frontera (Málaga)",
+      "type": 3,
+      "color": "33ff00",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_6",
+      "agencyId": "CMTBC",
+      "shortName": "M-030",
+      "longName": "Cádiz-Río San Pedro-Campus Universitario-Puerto Real-Hospital",
+      "type": 3,
+      "color": "00ff99",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_7",
+      "agencyId": "CMTBC",
+      "shortName": "M-120",
+      "longName": "Chiclana-San Fernando",
+      "type": 3,
+      "color": "ff6600",
+      "textColor": "FFFFFF"
+    },
+    {
+      "id": "2_9",
+      "agencyId": "CMTBC",
+      "shortName": "M-031",
+      "longName": "Cádiz-Río San Pedro-Campus Universitario-Puerto Real",
+      "type": 3,
+      "color": "ff66cc",
+      "textColor": "FFFFFF"
+    }
+  ],
+  "stops": [
+    {
+      "id": "2_1",
+      "name": "Avda. Del Puerto-Edif. Trocadero",
+      "latitude": 36.53021016116525,
+      "longitude": -6.2909189520454385,
+      "parentStationId": null
+    },
+    {
+      "id": "2_10",
+      "name": "Audiencia Provincial V",
+      "latitude": 36.527229903333485,
+      "longitude": -6.288757091579435,
+      "parentStationId": null
+    },
+    {
+      "id": "2_100",
+      "name": "Barrio Jarana",
+      "latitude": 36.502917,
+      "longitude": -6.143661,
+      "parentStationId": null
+    },
+    {
+      "id": "2_101",
+      "name": "Barrio Jarana V",
+      "latitude": 36.502844,
+      "longitude": -6.143829,
+      "parentStationId": null
+    },
+    {
+      "id": "2_102",
+      "name": "Venta Santa Ana",
+      "latitude": 36.491921,
+      "longitude": -6.1423,
+      "parentStationId": null
+    },
+    {
+      "id": "2_103",
+      "name": "Venta Paquete",
+      "latitude": 36.496422,
+      "longitude": -6.139463,
+      "parentStationId": null
+    },
+    {
+      "id": "2_104",
+      "name": "Venta Paquete V",
+      "latitude": 36.496326,
+      "longitude": -6.139463,
+      "parentStationId": null
+    },
+    {
+      "id": "2_105",
+      "name": "Club Hípico",
+      "latitude": 36.496177,
+      "longitude": -6.133945,
+      "parentStationId": null
+    },
+    {
+      "id": "2_106",
+      "name": "Club Hípico V",
+      "latitude": 36.496057,
+      "longitude": -6.134278,
+      "parentStationId": null
+    },
+    {
+      "id": "2_107",
+      "name": "Finca Villanueva Y Rosal",
+      "latitude": 36.496047,
+      "longitude": -6.130434,
+      "parentStationId": null
+    },
+    {
+      "id": "2_108",
+      "name": "Finca Villanueva Y Rosal V",
+      "latitude": 36.495915,
+      "longitude": -6.130379,
+      "parentStationId": null
+    },
+    {
+      "id": "2_109",
+      "name": "Cuartel",
+      "latitude": 36.49389,
+      "longitude": -6.115483,
+      "parentStationId": null
+    },
+    {
+      "id": "2_11",
+      "name": "Comisaría",
+      "latitude": 36.521808460123054,
+      "longitude": -6.285879081306455,
+      "parentStationId": null
+    },
+    {
+      "id": "2_110",
+      "name": "Cuartel V",
+      "latitude": 36.493934,
+      "longitude": -6.115563,
+      "parentStationId": null
+    },
+    {
+      "id": "2_111",
+      "name": "Campo De Fútbol",
+      "latitude": 36.486832,
+      "longitude": -6.116635,
+      "parentStationId": null
+    },
+    {
+      "id": "2_112",
+      "name": "Campo De Fútbol V",
+      "latitude": 36.486799,
+      "longitude": -6.11674,
+      "parentStationId": null
+    },
+    {
+      "id": "2_113",
+      "name": "Matadero",
+      "latitude": 36.480557,
+      "longitude": -6.11695,
+      "parentStationId": null
+    },
+    {
+      "id": "2_114",
+      "name": "Matadero V",
+      "latitude": 36.480496,
+      "longitude": -6.117084,
+      "parentStationId": null
+    },
+    {
+      "id": "2_115",
+      "name": "Mirlo",
+      "latitude": 36.476511,
+      "longitude": -6.11725,
+      "parentStationId": null
+    },
+    {
+      "id": "2_116",
+      "name": "Mirlo V",
+      "latitude": 36.476513,
+      "longitude": -6.117374,
+      "parentStationId": null
+    },
+    {
+      "id": "2_117",
+      "name": "Venta El Chirimono",
+      "latitude": 36.471414,
+      "longitude": -6.118335,
+      "parentStationId": null
+    },
+    {
+      "id": "2_118",
+      "name": "Venta El Chirimono V",
+      "latitude": 36.471373,
+      "longitude": -6.118447,
+      "parentStationId": null
+    },
+    {
+      "id": "2_119",
+      "name": "El Marquesado-Venta Nicolás",
+      "latitude": 36.469496,
+      "longitude": -6.118366,
+      "parentStationId": null
+    },
+    {
+      "id": "2_12",
+      "name": "Comisaría V",
+      "latitude": 36.52170122369042,
+      "longitude": -6.285630976972578,
+      "parentStationId": null
+    },
+    {
+      "id": "2_120",
+      "name": "El Marquesado-Venta Nicolás V",
+      "latitude": 36.469479,
+      "longitude": -6.118493,
+      "parentStationId": null
+    },
+    {
+      "id": "2_121",
+      "name": "Los Toruños",
+      "latitude": 36.57923384877586,
+      "longitude": -6.214028769346247,
+      "parentStationId": null
+    },
+    {
+      "id": "2_122",
+      "name": "Los Toruños V",
+      "latitude": 36.579645,
+      "longitude": -6.214024,
+      "parentStationId": null
+    },
+    {
+      "id": "2_123",
+      "name": "Valdelagrana-Caballo Blanco",
+      "latitude": 36.583432,
+      "longitude": -6.217442,
+      "parentStationId": null
+    },
+    {
+      "id": "2_124",
+      "name": "Valdelagrana-Caballo Blanco V",
+      "latitude": 36.58469,
+      "longitude": -6.218058,
+      "parentStationId": null
+    },
+    {
+      "id": "2_125",
+      "name": "Estación Fc El Pto. De Sta. María",
+      "latitude": 36.604761,
+      "longitude": -6.218873,
+      "parentStationId": null
+    },
+    {
+      "id": "2_126",
+      "name": "Estación Fc El Pto. De Sta. María V",
+      "latitude": 36.604685,
+      "longitude": -6.21863,
+      "parentStationId": null
+    },
+    {
+      "id": "2_127",
+      "name": "Parque Vino Fino",
+      "latitude": 36.607108316360744,
+      "longitude": -6.221217346234019,
+      "parentStationId": null
+    },
+    {
+      "id": "2_128",
+      "name": "Parque Vino Fino V",
+      "latitude": 36.607183,
+      "longitude": -6.219736,
+      "parentStationId": null
+    },
+    {
+      "id": "2_129",
+      "name": "Avda. Sanlúcar",
+      "latitude": 36.604638,
+      "longitude": -6.228673,
+      "parentStationId": null
+    },
+    {
+      "id": "2_130",
+      "name": "Avda. Sanlúcar V",
+      "latitude": 36.604675,
+      "longitude": -6.229028,
+      "parentStationId": null
+    },
+    {
+      "id": "2_131",
+      "name": "Cl. Valdés-Hospital",
+      "latitude": 36.59845,
+      "longitude": -6.236959,
+      "parentStationId": null
+    },
+    {
+      "id": "2_132",
+      "name": "Cl. Valdés-Hospital V",
+      "latitude": 36.598339,
+      "longitude": -6.237023,
+      "parentStationId": null
+    },
+    {
+      "id": "2_133",
+      "name": "Plaza De Toros",
+      "latitude": 36.597182,
+      "longitude": -6.232289,
+      "parentStationId": null
+    },
+    {
+      "id": "2_14",
+      "name": "Estación De Autobuses Cádiz",
+      "latitude": 36.52722370886567,
+      "longitude": -6.2853893637657166,
+      "parentStationId": null
+    },
+    {
+      "id": "2_141",
+      "name": "Fuenterrabía",
+      "latitude": 36.609399,
+      "longitude": -6.278401,
+      "parentStationId": null
+    },
+    {
+      "id": "2_142",
+      "name": "Fuenterrabía V",
+      "latitude": 36.609376,
+      "longitude": -6.278192,
+      "parentStationId": null
+    },
+    {
+      "id": "2_143",
+      "name": "Vistahermosa",
+      "latitude": 36.60042,
+      "longitude": -6.250995,
+      "parentStationId": null
+    },
+    {
+      "id": "2_144",
+      "name": "Vistahermosa V",
+      "latitude": 36.601004,
+      "longitude": -6.251889,
+      "parentStationId": null
+    },
+    {
+      "id": "2_145",
+      "name": "Las Tórtolas",
+      "latitude": 36.617615,
+      "longitude": -6.277921,
+      "parentStationId": null
+    },
+    {
+      "id": "2_146",
+      "name": "Las Tórtolas V",
+      "latitude": 36.616435,
+      "longitude": -6.276822,
+      "parentStationId": null
+    },
+    {
+      "id": "2_15",
+      "name": "Plaza Asdrúbal V",
+      "latitude": 36.51777055559838,
+      "longitude": -6.283383285818098,
+      "parentStationId": null
+    },
+    {
+      "id": "2_155",
+      "name": "A-2078 Venta El Cepo",
+      "latitude": 36.666621,
+      "longitude": -6.246744,
+      "parentStationId": null
+    },
+    {
+      "id": "2_156",
+      "name": "A-2078 Venta El Cepo V",
+      "latitude": 36.666777,
+      "longitude": -6.247073,
+      "parentStationId": null
+    },
+    {
+      "id": "2_159",
+      "name": "Cuatro Caminos",
+      "latitude": 36.677662,
+      "longitude": -6.14502,
+      "parentStationId": null
+    },
+    {
+      "id": "2_16",
+      "name": "Hospital Puerta Del Mar V",
+      "latitude": 36.50875847325536,
+      "longitude": -6.278260266599653,
+      "parentStationId": null
+    },
+    {
+      "id": "2_160",
+      "name": "Cuatro Caminos V",
+      "latitude": 36.677576,
+      "longitude": -6.144948,
+      "parentStationId": null
+    },
+    {
+      "id": "2_161",
+      "name": "Estación De Autobuses Jerez",
+      "latitude": 36.679414,
+      "longitude": -6.126668,
+      "parentStationId": null
+    },
+    {
+      "id": "2_162",
+      "name": "Avda. Ntra. Sra. De La Paz",
+      "latitude": 36.681659,
+      "longitude": -6.128064,
+      "parentStationId": null
+    },
+    {
+      "id": "2_163",
+      "name": "Avda.Cartuja-Estación Fc",
+      "latitude": 36.680821,
+      "longitude": -6.127525,
+      "parentStationId": null
+    },
+    {
+      "id": "2_164",
+      "name": "Parque Juan Carlos Durán (La Unión)",
+      "latitude": 36.695612,
+      "longitude": -6.135986,
+      "parentStationId": null
+    },
+    {
+      "id": "2_165",
+      "name": "Parque Juan Carlos Durán (La Unión) V",
+      "latitude": 36.695488,
+      "longitude": -6.136216,
+      "parentStationId": null
+    },
+    {
+      "id": "2_166",
+      "name": "Torres Blancas",
+      "latitude": 36.68760813398017,
+      "longitude": -6.113221049308777,
+      "parentStationId": null
+    },
+    {
+      "id": "2_167",
+      "name": "La Granja-Hogar Del Pensionista",
+      "latitude": 36.69322461018721,
+      "longitude": -6.103653609752655,
+      "parentStationId": null
+    },
+    {
+      "id": "2_168",
+      "name": "La Granja-Hogar Del Pensionista V",
+      "latitude": 36.693075572792075,
+      "longitude": -6.103569120168686,
+      "parentStationId": null
+    },
+    {
+      "id": "2_169",
+      "name": "Avda M Álvarez Beigbeder",
+      "latitude": 36.697053,
+      "longitude": -6.143516,
+      "parentStationId": null
+    },
+    {
+      "id": "2_17",
+      "name": "Ingeniero La Cierva V",
+      "latitude": 36.50627379526967,
+      "longitude": -6.27683333140373,
+      "parentStationId": null
+    },
+    {
+      "id": "2_170",
+      "name": "Avda M Álvarez Beigbeder V",
+      "latitude": 36.696897,
+      "longitude": -6.143476,
+      "parentStationId": null
+    },
+    {
+      "id": "2_171",
+      "name": "Campus De Jerez",
+      "latitude": 36.686249,
+      "longitude": -6.119375,
+      "parentStationId": null
+    },
+    {
+      "id": "2_172",
+      "name": "Campus De Jerez V",
+      "latitude": 36.686025,
+      "longitude": -6.119362,
+      "parentStationId": null
+    },
+    {
+      "id": "2_173",
+      "name": "Aeropuerto",
+      "latitude": 36.75033683761318,
+      "longitude": -6.064587212548067,
+      "parentStationId": null
+    },
+    {
+      "id": "2_174",
+      "name": "Avda.Cartuja-Estación Fc V",
+      "latitude": 36.68055,
+      "longitude": -6.127447,
+      "parentStationId": null
+    },
+    {
+      "id": "2_175",
+      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso",
+      "latitude": 36.52513,
+      "longitude": -5.982413,
+      "parentStationId": null
+    },
+    {
+      "id": "2_176",
+      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso V",
+      "latitude": 36.525248,
+      "longitude": -5.98246,
+      "parentStationId": null
+    },
+    {
+      "id": "2_177",
+      "name": "Baldío Gallardo",
+      "latitude": 36.564217,
+      "longitude": -6.010452,
+      "parentStationId": null
+    },
+    {
+      "id": "2_178",
+      "name": "El Mojo",
+      "latitude": 36.580883,
+      "longitude": -6.016463,
+      "parentStationId": null
+    },
+    {
+      "id": "2_179",
+      "name": "Plaza Del Caballo",
+      "latitude": 36.693608,
+      "longitude": -6.129309,
+      "parentStationId": null
+    },
+    {
+      "id": "2_18",
+      "name": "Telegrafía Sin Hilos V",
+      "latitude": 36.50027844018818,
+      "longitude": -6.2733156142806985,
+      "parentStationId": null
+    },
+    {
+      "id": "2_180",
+      "name": "Plaza Del Caballo V",
+      "latitude": 36.693656,
+      "longitude": -6.130328,
+      "parentStationId": null
+    },
+    {
+      "id": "2_181",
+      "name": "Estación De Autobuses Rota",
+      "latitude": 36.627986,
+      "longitude": -6.355891,
+      "parentStationId": null
+    },
+    {
+      "id": "2_182",
+      "name": "Cementerio",
+      "latitude": 36.659012,
+      "longitude": -6.370426,
+      "parentStationId": null
+    },
+    {
+      "id": "2_183",
+      "name": "Cementerio V",
+      "latitude": 36.659056,
+      "longitude": -6.3708,
+      "parentStationId": null
+    },
+    {
+      "id": "2_186",
+      "name": "Avda. Juan Carlos I-H. Colón",
+      "latitude": 36.692467,
+      "longitude": -6.410083,
+      "parentStationId": null
+    },
+    {
+      "id": "2_187",
+      "name": "Avda. Juan Carlos I-H. Playa",
+      "latitude": 36.688138,
+      "longitude": -6.41723,
+      "parentStationId": null
+    },
+    {
+      "id": "2_188",
+      "name": "Estación De Autobuses Medina",
+      "latitude": 36.462408,
+      "longitude": -5.930291,
+      "parentStationId": null
+    },
+    {
+      "id": "2_189",
+      "name": "Jédula",
+      "latitude": 36.724754,
+      "longitude": -5.92982,
+      "parentStationId": null
+    },
+    {
+      "id": "2_19",
+      "name": "Complejo Deportivo V",
+      "latitude": 36.49781923454934,
+      "longitude": -6.271917123126218,
+      "parentStationId": null
+    },
+    {
+      "id": "2_190",
+      "name": "Jédula V",
+      "latitude": 36.725011,
+      "longitude": -5.929644,
+      "parentStationId": null
+    },
+    {
+      "id": "2_191",
+      "name": "Estación De Autobuses Arcos",
+      "latitude": 36.749337,
+      "longitude": -5.818322,
+      "parentStationId": null
+    },
+    {
+      "id": "2_193",
+      "name": "Terminal Marítima Cádiz",
+      "latitude": 36.530915,
+      "longitude": -6.289546,
+      "parentStationId": null
+    },
+    {
+      "id": "2_194",
+      "name": "Terminal Marítima El Puerto De Santa María",
+      "latitude": 36.593778,
+      "longitude": -6.226493,
+      "parentStationId": null
+    },
+    {
+      "id": "2_195",
+      "name": "Terminal Marítima Rota",
+      "latitude": 36.615357,
+      "longitude": -6.352778,
+      "parentStationId": null
+    },
+    {
+      "id": "2_196",
+      "name": "Centro P. Puerto Iii",
+      "latitude": 36.664249,
+      "longitude": -6.256196,
+      "parentStationId": null
+    },
+    {
+      "id": "2_197",
+      "name": "Centro P. Puerto I Y Ii",
+      "latitude": 36.6634,
+      "longitude": -6.246123,
+      "parentStationId": null
+    },
+    {
+      "id": "2_198",
+      "name": "Manuel De Falla",
+      "latitude": 36.457785,
+      "longitude": -6.198996,
+      "parentStationId": null
+    },
+    {
+      "id": "2_199",
+      "name": "Manuel De Falla V",
+      "latitude": 36.457479,
+      "longitude": -6.19901,
+      "parentStationId": null
+    },
+    {
+      "id": "2_20",
+      "name": "La Ardila",
+      "latitude": 36.455872605383455,
+      "longitude": -6.214650338706968,
+      "parentStationId": null
+    },
+    {
+      "id": "2_200",
+      "name": "Ronda Del Estero",
+      "latitude": 36.45174793639307,
+      "longitude": -6.205760000000016,
+      "parentStationId": null
+    },
+    {
+      "id": "2_201",
+      "name": "Ronda Del Estero V",
+      "latitude": 36.451438,
+      "longitude": -6.205556,
+      "parentStationId": null
+    },
+    {
+      "id": "2_202",
+      "name": "Hospital De Jerez-Carretera A-2000",
+      "latitude": 36.699575,
+      "longitude": -6.14593,
+      "parentStationId": null
+    },
+    {
+      "id": "2_203",
+      "name": "Hospital De Jerez-Carretera A-2000 V",
+      "latitude": 36.700154,
+      "longitude": -6.146432,
+      "parentStationId": null
+    },
+    {
+      "id": "2_206",
+      "name": "Torres Blancas V",
+      "latitude": 36.687529047173,
+      "longitude": -6.1129045486450195,
+      "parentStationId": null
+    },
+    {
+      "id": "2_207",
+      "name": "Parque Almirante Laulhé V",
+      "latitude": 36.46447342713473,
+      "longitude": -6.2016550419029155,
+      "parentStationId": null
+    },
+    {
+      "id": "2_222",
+      "name": "Estación De Autobuses Sanlúcar",
+      "latitude": 36.78157949665965,
+      "longitude": -6.358451783497618,
+      "parentStationId": null
+    },
+    {
+      "id": "2_223",
+      "name": "Avda. V Centenario V",
+      "latitude": 36.77198805523583,
+      "longitude": -6.356999367316054,
+      "parentStationId": null
+    },
+    {
+      "id": "2_224",
+      "name": "Avda. V Centenario",
+      "latitude": 36.77142406819268,
+      "longitude": -6.356657385666655,
+      "parentStationId": null
+    },
+    {
+      "id": "2_225",
+      "name": "Hospital Virgen Del Camino V",
+      "latitude": 36.76810559184053,
+      "longitude": -6.358388751585768,
+      "parentStationId": null
+    },
+    {
+      "id": "2_226",
+      "name": "Hospital Virgen Del Camino",
+      "latitude": 36.76814319273308,
+      "longitude": -6.35866099580078,
+      "parentStationId": null
+    },
+    {
+      "id": "2_227",
+      "name": "Avda. Pto. Sta. Mª (El Palmar)",
+      "latitude": 36.76691739413688,
+      "longitude": -6.34674528225212,
+      "parentStationId": null
+    },
+    {
+      "id": "2_228",
+      "name": "Avda. Pto. Sta. Mª (El Palmar) V",
+      "latitude": 36.76695392128419,
+      "longitude": -6.346570938666152,
+      "parentStationId": null
+    },
+    {
+      "id": "2_229",
+      "name": "Avda. Constitución",
+      "latitude": 36.76979957546195,
+      "longitude": -6.346879836069508,
+      "parentStationId": null
+    },
+    {
+      "id": "2_23",
+      "name": "Avda. Al-Andalus",
+      "latitude": 36.45947743713433,
+      "longitude": -6.208618050632475,
+      "parentStationId": null
+    },
+    {
+      "id": "2_230",
+      "name": "Avda. De Trebujena",
+      "latitude": 36.76998776245468,
+      "longitude": -6.345768958170699,
+      "parentStationId": null
+    },
+    {
+      "id": "2_231",
+      "name": "Avda. Del Puerto V",
+      "latitude": 36.53168650743388,
+      "longitude": -6.292225187835691,
+      "parentStationId": null
+    },
+    {
+      "id": "2_232",
+      "name": "Plaza De España",
+      "latitude": 36.53324687781956,
+      "longitude": -6.293276613769529,
+      "parentStationId": null
+    },
+    {
+      "id": "2_233",
+      "name": "Apeadero De Autobuses De Costa Ballena",
+      "latitude": 36.69267585556875,
+      "longitude": -6.407162643357848,
+      "parentStationId": null
+    },
+    {
+      "id": "2_234",
+      "name": "Plaza De Las Marinas",
+      "latitude": 36.69774139541855,
+      "longitude": -6.137006203041078,
+      "parentStationId": null
+    },
+    {
+      "id": "2_235",
+      "name": "Plaza De Las Marinas V",
+      "latitude": 36.69748332381943,
+      "longitude": -6.136633375988008,
+      "parentStationId": null
+    },
+    {
+      "id": "2_236",
+      "name": "Reyes Católicos",
+      "latitude": 36.46828169535278,
+      "longitude": -6.200212013452903,
+      "parentStationId": null
+    },
+    {
+      "id": "2_237",
+      "name": "Reyes Católicos V",
+      "latitude": 36.469463073798345,
+      "longitude": -6.198961553846683,
+      "parentStationId": null
+    },
+    {
+      "id": "2_238",
+      "name": "Plaza De España V",
+      "latitude": 36.534726398838174,
+      "longitude": -6.291927462635038,
+      "parentStationId": null
+    },
+    {
+      "id": "2_24",
+      "name": "Avda. Al-Andalus V",
+      "latitude": 36.45926926319895,
+      "longitude": -6.208403473911283,
+      "parentStationId": null
+    },
+    {
+      "id": "2_241",
+      "name": "Camino Del Arroyo",
+      "latitude": 36.43977465050151,
+      "longitude": -6.121705070114185,
+      "parentStationId": null
+    },
+    {
+      "id": "2_243",
+      "name": "Camino Del Arroyo V",
+      "latitude": 36.43835915987877,
+      "longitude": -6.122581863224021,
+      "parentStationId": null
+    },
+    {
+      "id": "2_244",
+      "name": "Camino De Algodonales V",
+      "latitude": 36.44740316594242,
+      "longitude": -6.118354701816551,
+      "parentStationId": null
+    },
+    {
+      "id": "2_245",
+      "name": "Camino De Algodonales",
+      "latitude": 36.44621645900167,
+      "longitude": -6.1186124831199935,
+      "parentStationId": null
+    },
+    {
+      "id": "2_247",
+      "name": "Ruiz Marcet",
+      "latitude": 36.47055843000482,
+      "longitude": -6.198037200022721,
+      "parentStationId": null
+    },
+    {
+      "id": "2_248",
+      "name": "Ruiz Marcet V",
+      "latitude": 36.47080431274299,
+      "longitude": -6.197586579982218,
+      "parentStationId": null
+    },
+    {
+      "id": "2_249",
+      "name": "Tres Caminos",
+      "latitude": 36.469026950332044,
+      "longitude": -6.173693007049598,
+      "parentStationId": null
+    },
+    {
+      "id": "2_25",
+      "name": "Avda. Almirante León Herrero",
+      "latitude": 36.462013231240284,
+      "longitude": -6.205045348224638,
+      "parentStationId": null
+    },
+    {
+      "id": "2_251",
+      "name": "C.C. Las Dunas",
+      "latitude": 36.74914487225048,
+      "longitude": -6.336783170700073,
+      "parentStationId": null
+    },
+    {
+      "id": "2_254",
+      "name": "Avda. De La Marina",
+      "latitude": 36.62310164168587,
+      "longitude": -6.361879706355467,
+      "parentStationId": null
+    },
+    {
+      "id": "2_255",
+      "name": "Avda. De La Marina V",
+      "latitude": 36.62353033128876,
+      "longitude": -6.359878522921463,
+      "parentStationId": null
+    },
+    {
+      "id": "2_257",
+      "name": "Casines",
+      "latitude": 36.52205713228747,
+      "longitude": -6.170787960290909,
+      "parentStationId": null
+    },
+    {
+      "id": "2_258",
+      "name": "Casines V",
+      "latitude": 36.52196121257755,
+      "longitude": -6.170778572559357,
+      "parentStationId": null
+    },
+    {
+      "id": "2_259",
+      "name": "Ciudad Jardín",
+      "latitude": 36.52316289473787,
+      "longitude": -6.175190806388855,
+      "parentStationId": null
+    },
+    {
+      "id": "2_26",
+      "name": "Avda. Almirante León Herrero V",
+      "latitude": 36.462049903111584,
+      "longitude": -6.204723483142851,
+      "parentStationId": null
+    },
+    {
+      "id": "2_260",
+      "name": "Ciudad Jardín V",
+      "latitude": 36.523071287338,
+      "longitude": -6.175255179405212,
+      "parentStationId": null
+    },
+    {
+      "id": "2_261",
+      "name": "Recinto Ferial",
+      "latitude": 36.61375793480854,
+      "longitude": -6.241360902786255,
+      "parentStationId": null
+    },
+    {
+      "id": "2_262",
+      "name": "Escuela Ingeniería",
+      "latitude": 36.53687476012414,
+      "longitude": -6.200977563858032,
+      "parentStationId": null
+    },
+    {
+      "id": "2_263",
+      "name": "Escuela Ingeniería V",
+      "latitude": 36.53683596858676,
+      "longitude": -6.200854182243347,
+      "parentStationId": null
+    },
+    {
+      "id": "2_264",
+      "name": "Escuela Ingeniería (Interior)",
+      "latitude": 36.536704179923404,
+      "longitude": -6.20187939574726,
+      "parentStationId": null
+    },
+    {
+      "id": "2_265",
+      "name": "Las Aletas",
+      "latitude": 36.54456587548587,
+      "longitude": -6.199142932891846,
+      "parentStationId": null
+    },
+    {
+      "id": "2_266",
+      "name": "Estación De Autobuses Chipiona",
+      "latitude": 36.736829230805995,
+      "longitude": -6.428471803665161,
+      "parentStationId": null
+    },
+    {
+      "id": "2_268",
+      "name": "Los Esteros V",
+      "latitude": 36.42992355995217,
+      "longitude": -6.144657290680287,
+      "parentStationId": null
+    },
+    {
+      "id": "2_269",
+      "name": "Las Redes/Los Esteros",
+      "latitude": 36.42969612822568,
+      "longitude": -6.144150942564011,
+      "parentStationId": null
+    },
+    {
+      "id": "2_27",
+      "name": "Parque Almirante Laulhé",
+      "latitude": 36.466547451970136,
+      "longitude": -6.202521395414726,
+      "parentStationId": null
+    },
+    {
+      "id": "2_270",
+      "name": "Avda. Del Comercio V",
+      "latitude": 36.42623558881636,
+      "longitude": -6.1479878425598145,
+      "parentStationId": null
+    },
+    {
+      "id": "2_271",
+      "name": "Avda. Del Comercio",
+      "latitude": 36.426464353900435,
+      "longitude": -6.1477330327034,
+      "parentStationId": null
+    },
+    {
+      "id": "2_272",
+      "name": "Río Iro",
+      "latitude": 36.42284935511073,
+      "longitude": -6.149012446403503,
+      "parentStationId": null
+    },
+    {
+      "id": "2_273",
+      "name": "A-480 Venta El Menuito",
+      "latitude": 36.748809603470434,
+      "longitude": -6.380444169044495,
+      "parentStationId": null
+    },
+    {
+      "id": "2_274",
+      "name": "A-480 Venta El Menuito V",
+      "latitude": 36.7484184547089,
+      "longitude": -6.381315886974335,
+      "parentStationId": null
+    },
+    {
+      "id": "2_277",
+      "name": "Pocito Blanco",
+      "latitude": 36.28734491029222,
+      "longitude": -6.079431921243668,
+      "parentStationId": null
+    },
+    {
+      "id": "2_278",
+      "name": "Pocito Blanco V",
+      "latitude": 36.28562500540278,
+      "longitude": -6.08068585395813,
+      "parentStationId": null
+    },
+    {
+      "id": "2_279",
+      "name": "Casa De Postas",
+      "latitude": 36.295076987330354,
+      "longitude": -6.07407420873642,
+      "parentStationId": null
+    },
+    {
+      "id": "2_280",
+      "name": "Casa De Postas V",
+      "latitude": 36.2944760033553,
+      "longitude": -6.073215901851654,
+      "parentStationId": null
+    },
+    {
+      "id": "2_282",
+      "name": "El Canario V",
+      "latitude": 36.3115373918375,
+      "longitude": -6.082891970872879,
+      "parentStationId": null
+    },
+    {
+      "id": "2_283",
+      "name": "Chinarejos",
+      "latitude": 36.32113750990034,
+      "longitude": -6.088643968105316,
+      "parentStationId": null
+    },
+    {
+      "id": "2_284",
+      "name": "Chinarejos V",
+      "latitude": 36.32250654341758,
+      "longitude": -6.0887981951236725,
+      "parentStationId": null
+    },
+    {
+      "id": "2_285",
+      "name": "El Colorado-1",
+      "latitude": 36.33182116766874,
+      "longitude": -6.090564429759979,
+      "parentStationId": null
+    },
+    {
+      "id": "2_287",
+      "name": "El Colorado-2 V",
+      "latitude": 36.33498449396479,
+      "longitude": -6.091635972261429,
+      "parentStationId": null
+    },
+    {
+      "id": "2_289",
+      "name": "San Andrés Golf",
+      "latitude": 36.35478045485695,
+      "longitude": -6.105598211288452,
+      "parentStationId": null
+    },
+    {
+      "id": "2_29",
+      "name": "Avda. Constitución 1.978-Comisaría",
+      "latitude": 36.452110112753,
+      "longitude": -6.216447418746946,
+      "parentStationId": null
+    },
+    {
+      "id": "2_291",
+      "name": "Avda. Las Cortes",
+      "latitude": 36.52179847212352,
+      "longitude": -6.276908218860626,
+      "parentStationId": null
+    },
+    {
+      "id": "2_292",
+      "name": "Avda. Las Cortes V",
+      "latitude": 36.52178446133996,
+      "longitude": -6.27649113535881,
+      "parentStationId": null
+    },
+    {
+      "id": "2_296",
+      "name": "Apeadero De Autobuses Conil",
+      "latitude": 36.28192562206986,
+      "longitude": -6.081410050392151,
+      "parentStationId": null
+    },
+    {
+      "id": "2_3",
+      "name": "Puerta Tierra",
+      "latitude": 36.52605953745319,
+      "longitude": -6.2892090437984445,
+      "parentStationId": null
+    },
+    {
+      "id": "2_30",
+      "name": "Avda. Constitución 1.978-Comisaría V",
+      "latitude": 36.45194183186898,
+      "longitude": -6.216259664115904,
+      "parentStationId": null
+    },
+    {
+      "id": "2_300",
+      "name": "Plaza De España V",
+      "latitude": 36.534506852336875,
+      "longitude": -6.292211562395096,
+      "parentStationId": null
+    },
+    {
+      "id": "2_301",
+      "name": "Cañada De Los Barrancos-Los Cazadores",
+      "latitude": 36.42186086643798,
+      "longitude": -6.124802827835083,
+      "parentStationId": null
+    },
+    {
+      "id": "2_302",
+      "name": "Cañada De Los Barrancos-Los Cazadores V",
+      "latitude": 36.42207993215277,
+      "longitude": -6.124805510044098,
+      "parentStationId": null
+    },
+    {
+      "id": "2_303",
+      "name": "Av. Astilleros-Estación Autobuses",
+      "latitude": 36.52731210460236,
+      "longitude": -6.28530889749527,
+      "parentStationId": null
+    },
+    {
+      "id": "2_304",
+      "name": "Av. Astilleros-Estación Autobuses V",
+      "latitude": 36.52746527283803,
+      "longitude": -6.284932047128677,
+      "parentStationId": null
+    },
+    {
+      "id": "2_305",
+      "name": "Plaza De Sevilla",
+      "latitude": 36.530139952837146,
+      "longitude": -6.2889352440834045,
+      "parentStationId": null
+    },
+    {
+      "id": "2_306",
+      "name": "Plaza De Sevilla V",
+      "latitude": 36.529921257403295,
+      "longitude": -6.289133056998253,
+      "parentStationId": null
+    },
+    {
+      "id": "2_31",
+      "name": "Avda. Constitución 1.978-Instituto",
+      "latitude": 36.4520669638431,
+      "longitude": -6.2097204385375955,
+      "parentStationId": null
+    },
+    {
+      "id": "2_310",
+      "name": "Avda. De Andalucía",
+      "latitude": 36.70521618846066,
+      "longitude": -6.117768883461606,
+      "parentStationId": null
+    },
+    {
+      "id": "2_311",
+      "name": "Avda. De Andalucía V",
+      "latitude": 36.705044040788934,
+      "longitude": -6.117529394175983,
+      "parentStationId": null
+    },
+    {
+      "id": "2_312",
+      "name": "Carretera De Jerez",
+      "latitude": 36.7648275805982,
+      "longitude": -6.342550813855808,
+      "parentStationId": null
+    },
+    {
+      "id": "2_313",
+      "name": "Carretera De Jerez V",
+      "latitude": 36.7648876416888,
+      "longitude": -6.342341568997988,
+      "parentStationId": null
+    },
+    {
+      "id": "2_314",
+      "name": "El Berrueco",
+      "latitude": 36.43822774664942,
+      "longitude": -6.021543920873059,
+      "parentStationId": null
+    },
+    {
+      "id": "2_315",
+      "name": "El Berrueco V",
+      "latitude": 36.43827966851398,
+      "longitude": -6.02193014997476,
+      "parentStationId": null
+    },
+    {
+      "id": "2_316",
+      "name": "General Lobo",
+      "latitude": 36.474772340495385,
+      "longitude": -6.195007783417189,
+      "parentStationId": null
+    },
+    {
+      "id": "2_317",
+      "name": "General Lobo V",
+      "latitude": 36.47490612630914,
+      "longitude": -6.19447153200973,
+      "parentStationId": null
+    },
+    {
+      "id": "2_318",
+      "name": "Hospital S. Carlos",
+      "latitude": 36.47931003858101,
+      "longitude": -6.195349549614012,
+      "parentStationId": null
+    },
+    {
+      "id": "2_319",
+      "name": "Hospital S. Carlos V",
+      "latitude": 36.4795343793609,
+      "longitude": -6.194936245040586,
+      "parentStationId": null
+    },
+    {
+      "id": "2_32",
+      "name": "Avda. Constitución 1.978-Instituto V",
+      "latitude": 36.45183395931541,
+      "longitude": -6.2096936164474466,
+      "parentStationId": null
+    },
+    {
+      "id": "2_320",
+      "name": "Puerta Tierra V",
+      "latitude": 36.526362988126415,
+      "longitude": -6.289908753174425,
+      "parentStationId": null
+    },
+    {
+      "id": "2_321",
+      "name": "Avda. Campo Del Sur-Catedral V",
+      "latitude": 36.53169747747063,
+      "longitude": -6.3054697276509755,
+      "parentStationId": null
+    },
+    {
+      "id": "2_322",
+      "name": "Avda. De Huelva V",
+      "latitude": 36.52047729359471,
+      "longitude": -6.276453000667986,
+      "parentStationId": null
+    },
+    {
+      "id": "2_33",
+      "name": "San Onofre",
+      "latitude": 36.45552714170314,
+      "longitude": -6.201299428939819,
+      "parentStationId": null
+    },
+    {
+      "id": "2_34",
+      "name": "San Onofre V",
+      "latitude": 36.45487346194542,
+      "longitude": -6.201371848583221,
+      "parentStationId": null
+    },
+    {
+      "id": "2_345",
+      "name": "Avda. De Huelva",
+      "latitude": 36.51935382183055,
+      "longitude": -6.278385040952424,
+      "parentStationId": null
+    },
+    {
+      "id": "2_346",
+      "name": "Avda. Campo Del Sur-Mercado",
+      "latitude": 36.52878168661495,
+      "longitude": -6.298829126284983,
+      "parentStationId": null
+    },
+    {
+      "id": "2_347",
+      "name": "F. Ciencias Empresariales",
+      "latitude": 36.53151436143342,
+      "longitude": -6.305470381012,
+      "parentStationId": null
+    },
+    {
+      "id": "2_348",
+      "name": "F. Ciencias Empresariales V",
+      "latitude": 36.53173008854554,
+      "longitude": -6.30545409268817,
+      "parentStationId": null
+    },
+    {
+      "id": "2_349",
+      "name": "Av. De María Auxiliadora",
+      "latitude": 36.62743140679498,
+      "longitude": -6.364939600449971,
+      "parentStationId": null
+    },
+    {
+      "id": "2_35",
+      "name": "San Marcos",
+      "latitude": 36.461352102035576,
+      "longitude": -6.196463484256598,
+      "parentStationId": null
+    },
+    {
+      "id": "2_350",
+      "name": "Av. De María Auxiliadora V",
+      "latitude": 36.626545498314236,
+      "longitude": -6.364661617773433,
+      "parentStationId": null
+    },
+    {
+      "id": "2_351",
+      "name": "Plaza Asdrúbal",
+      "latitude": 36.51833347122721,
+      "longitude": -6.283853592528017,
+      "parentStationId": null
+    },
+    {
+      "id": "2_352",
+      "name": "Avda. Tomás García Figueras",
+      "latitude": 36.70067483881514,
+      "longitude": -6.141437308963645,
+      "parentStationId": null
+    },
+    {
+      "id": "2_353",
+      "name": "Avda. Tomás García Figueras V",
+      "latitude": 36.69973714869114,
+      "longitude": -6.140830918081077,
+      "parentStationId": null
+    },
+    {
+      "id": "2_354",
+      "name": "Hospital Puerta Del Mar",
+      "latitude": 36.5085324881102,
+      "longitude": -6.2784447361305045,
+      "parentStationId": null
+    },
+    {
+      "id": "2_355",
+      "name": "Hospital Puerta Del Mar",
+      "latitude": 36.50858203795657,
+      "longitude": -6.2783348011775635,
+      "parentStationId": null
+    },
+    {
+      "id": "2_356",
+      "name": "Hospital Puerta Del Mar",
+      "latitude": 36.50946374914346,
+      "longitude": -6.278802997610547,
+      "parentStationId": null
+    },
+    {
+      "id": "2_357",
+      "name": "Hospital Puerta Del Mar",
+      "latitude": 36.509606136566184,
+      "longitude": -6.278905688681334,
+      "parentStationId": null
+    },
+    {
+      "id": "2_359",
+      "name": "Hospital De Puerto Real",
+      "latitude": 36.51934562282705,
+      "longitude": -6.151750414591955,
+      "parentStationId": null
+    },
+    {
+      "id": "2_36",
+      "name": "San Marcos V",
+      "latitude": 36.460923240375976,
+      "longitude": -6.196589331282798,
+      "parentStationId": null
+    },
+    {
+      "id": "2_360",
+      "name": "Intercambiador De Transporte",
+      "latitude": 36.60440093320923,
+      "longitude": -6.217192866107507,
+      "parentStationId": null
+    },
+    {
+      "id": "2_361",
+      "name": "Hospital Universitario De Jerez",
+      "latitude": 36.699289838552495,
+      "longitude": -6.148633480981442,
+      "parentStationId": null
+    },
+    {
+      "id": "2_37",
+      "name": "Avda. San Juan Bosco",
+      "latitude": 36.46440380402708,
+      "longitude": -6.1927323147193825,
+      "parentStationId": null
+    },
+    {
+      "id": "2_38",
+      "name": "Avda. San Juan Bosco V",
+      "latitude": 36.46415034402248,
+      "longitude": -6.192692081584159,
+      "parentStationId": null
+    },
+    {
+      "id": "2_4",
+      "name": "Plaza Asdrúbal",
+      "latitude": 36.51749323128765,
+      "longitude": -6.283438271102903,
+      "parentStationId": null
+    },
+    {
+      "id": "2_40",
+      "name": "Ponce De León",
+      "latitude": 36.45615267513754,
+      "longitude": -6.210423839286802,
+      "parentStationId": null
+    },
+    {
+      "id": "2_41",
+      "name": "Ponce De León V",
+      "latitude": 36.45628858696246,
+      "longitude": -6.21023608465576,
+      "parentStationId": null
+    },
+    {
+      "id": "2_42",
+      "name": "Plaza De Juan Vargas V",
+      "latitude": 36.466743471012485,
+      "longitude": -6.19060680270195,
+      "parentStationId": null
+    },
+    {
+      "id": "2_43",
+      "name": "Plaza Del Castillo",
+      "latitude": 36.46784010550127,
+      "longitude": -6.190936259187963,
+      "parentStationId": null
+    },
+    {
+      "id": "2_47",
+      "name": "Estación Fc-Bahía Sur",
+      "latitude": 36.46924203486384,
+      "longitude": -6.206721375836555,
+      "parentStationId": null
+    },
+    {
+      "id": "2_48",
+      "name": "Estación Fc-Bahía Sur V",
+      "latitude": 36.46905006444781,
+      "longitude": -6.206614087475959,
+      "parentStationId": null
+    },
+    {
+      "id": "2_49",
+      "name": "Bahía Sur",
+      "latitude": 36.47277506839376,
+      "longitude": -6.2067388101951515,
+      "parentStationId": null
+    },
+    {
+      "id": "2_5",
+      "name": "Hospital Puerta Del Mar",
+      "latitude": 36.50903119010323,
+      "longitude": -6.278618341503141,
+      "parentStationId": null
+    },
+    {
+      "id": "2_50",
+      "name": "Apeadero Fc-Hospital S.Carlos V",
+      "latitude": 36.47536326914427,
+      "longitude": -6.19404659713668,
+      "parentStationId": null
+    },
+    {
+      "id": "2_51",
+      "name": "Cantabria",
+      "latitude": 36.47500955347344,
+      "longitude": -6.18805454219741,
+      "parentStationId": null
+    },
+    {
+      "id": "2_56",
+      "name": "Cementerio Mancomunado",
+      "latitude": 36.42153388542836,
+      "longitude": -6.093550941016199,
+      "parentStationId": null
+    },
+    {
+      "id": "2_57",
+      "name": "Jardines Del Marquesado",
+      "latitude": 36.43007,
+      "longitude": -6.140354,
+      "parentStationId": null
+    },
+    {
+      "id": "2_58",
+      "name": "Jardines Del Marquesado V",
+      "latitude": 36.4302,
+      "longitude": -6.140269,
+      "parentStationId": null
+    },
+    {
+      "id": "2_59",
+      "name": "Venta El Pino",
+      "latitude": 36.431565,
+      "longitude": -6.135204,
+      "parentStationId": null
+    },
+    {
+      "id": "2_6",
+      "name": "Ingeniero La Cierva",
+      "latitude": 36.506289425814266,
+      "longitude": -6.277057295856474,
+      "parentStationId": null
+    },
+    {
+      "id": "2_60",
+      "name": "Venta El Pino V",
+      "latitude": 36.431615,
+      "longitude": -6.135438,
+      "parentStationId": null
+    },
+    {
+      "id": "2_61",
+      "name": "Cañada De Los Barrancos",
+      "latitude": 36.432902007264104,
+      "longitude": -6.13138010943027,
+      "parentStationId": null
+    },
+    {
+      "id": "2_62",
+      "name": "Cañada De Los Barrancos V",
+      "latitude": 36.43296672394737,
+      "longitude": -6.131388005615276,
+      "parentStationId": null
+    },
+    {
+      "id": "2_63",
+      "name": "Venta Pololo",
+      "latitude": 36.435422,
+      "longitude": -6.124686,
+      "parentStationId": null
+    },
+    {
+      "id": "2_64",
+      "name": "Venta Pololo V",
+      "latitude": 36.435623,
+      "longitude": -6.124618,
+      "parentStationId": null
+    },
+    {
+      "id": "2_65",
+      "name": "Camino Lagunetas",
+      "latitude": 36.442686,
+      "longitude": -6.120368,
+      "parentStationId": null
+    },
+    {
+      "id": "2_66",
+      "name": "Camino Lagunetas V",
+      "latitude": 36.442701,
+      "longitude": -6.120468,
+      "parentStationId": null
+    },
+    {
+      "id": "2_67",
+      "name": "Manuel Aragón",
+      "latitude": 36.451805,
+      "longitude": -6.118891,
+      "parentStationId": null
+    },
+    {
+      "id": "2_68",
+      "name": "Manuel Aragón V",
+      "latitude": 36.452707,
+      "longitude": -6.1191,
+      "parentStationId": null
+    },
+    {
+      "id": "2_69",
+      "name": "Camino Del Cañaveral",
+      "latitude": 36.456257,
+      "longitude": -6.11856,
+      "parentStationId": null
+    },
+    {
+      "id": "2_7",
+      "name": "Telegrafía Sin Hilos",
+      "latitude": 36.500057150866574,
+      "longitude": -6.273421347141266,
+      "parentStationId": null
+    },
+    {
+      "id": "2_70",
+      "name": "Camino Del Cañaveral V",
+      "latitude": 36.456977,
+      "longitude": -6.118562,
+      "parentStationId": null
+    },
+    {
+      "id": "2_71",
+      "name": "Arroyo Del Aljibe",
+      "latitude": 36.461041,
+      "longitude": -6.118616,
+      "parentStationId": null
+    },
+    {
+      "id": "2_72",
+      "name": "Arroyo Del Aljibe V",
+      "latitude": 36.462239,
+      "longitude": -6.118723,
+      "parentStationId": null
+    },
+    {
+      "id": "2_73",
+      "name": "Águila-El Término",
+      "latitude": 36.467022,
+      "longitude": -6.118394,
+      "parentStationId": null
+    },
+    {
+      "id": "2_74",
+      "name": "Águila-El Término V",
+      "latitude": 36.467212,
+      "longitude": -6.118493,
+      "parentStationId": null
+    },
+    {
+      "id": "2_75",
+      "name": "Avda. Argentina-Edif. Bahía",
+      "latitude": 36.524031,
+      "longitude": -6.227945,
+      "parentStationId": null
+    },
+    {
+      "id": "2_76",
+      "name": "Avda. Argentina-Edif. Bahía V",
+      "latitude": 36.524244,
+      "longitude": -6.22798,
+      "parentStationId": null
+    },
+    {
+      "id": "2_77",
+      "name": "Avda. Argentina-Instituto",
+      "latitude": 36.524832,
+      "longitude": -6.222788,
+      "parentStationId": null
+    },
+    {
+      "id": "2_78",
+      "name": "Avda. Argentina-Instituto V",
+      "latitude": 36.525028,
+      "longitude": -6.22286,
+      "parentStationId": null
+    },
+    {
+      "id": "2_79",
+      "name": "Campus-C. Educación",
+      "latitude": 36.527558,
+      "longitude": -6.213559,
+      "parentStationId": null
+    },
+    {
+      "id": "2_8",
+      "name": "Complejo Deportivo",
+      "latitude": 36.49696012447015,
+      "longitude": -6.271749204216001,
+      "parentStationId": null
+    },
+    {
+      "id": "2_80",
+      "name": "Campus-C. Educación V",
+      "latitude": 36.527449,
+      "longitude": -6.213339,
+      "parentStationId": null
+    },
+    {
+      "id": "2_81",
+      "name": "Campus-Ciencias",
+      "latitude": 36.530918,
+      "longitude": -6.210391,
+      "parentStationId": null
+    },
+    {
+      "id": "2_82",
+      "name": "Campus-Ciencias V",
+      "latitude": 36.530915,
+      "longitude": -6.210186,
+      "parentStationId": null
+    },
+    {
+      "id": "2_83",
+      "name": "El Cartabón",
+      "latitude": 36.526036,
+      "longitude": -6.182332,
+      "parentStationId": null
+    },
+    {
+      "id": "2_84",
+      "name": "El Cartabón V",
+      "latitude": 36.526808,
+      "longitude": -6.183799,
+      "parentStationId": null
+    },
+    {
+      "id": "2_85",
+      "name": "Huerta Pley",
+      "latitude": 36.528564,
+      "longitude": -6.18511,
+      "parentStationId": null
+    },
+    {
+      "id": "2_86",
+      "name": "Estación Fc Puerto Real",
+      "latitude": 36.530555,
+      "longitude": -6.185302,
+      "parentStationId": null
+    },
+    {
+      "id": "2_87",
+      "name": "Estación Fc Puerto Real V",
+      "latitude": 36.530454,
+      "longitude": -6.185305,
+      "parentStationId": null
+    },
+    {
+      "id": "2_88",
+      "name": "Plaza Iglesia",
+      "latitude": 36.528436,
+      "longitude": -6.189262,
+      "parentStationId": null
+    },
+    {
+      "id": "2_90",
+      "name": "Campo De Fútbol Pto. Real",
+      "latitude": 36.531574,
+      "longitude": -6.193957,
+      "parentStationId": null
+    },
+    {
+      "id": "2_91",
+      "name": "512 Viviendas",
+      "latitude": 36.530574,
+      "longitude": -6.196301,
+      "parentStationId": null
+    },
+    {
+      "id": "2_92",
+      "name": "512 Viviendas V",
+      "latitude": 36.530409,
+      "longitude": -6.196348,
+      "parentStationId": null
+    },
+    {
+      "id": "2_93",
+      "name": "Marina De La Bahía",
+      "latitude": 36.530703,
+      "longitude": -6.199554,
+      "parentStationId": null
+    },
+    {
+      "id": "2_94",
+      "name": "Marina De La Bahía V",
+      "latitude": 36.530667,
+      "longitude": -6.199933,
+      "parentStationId": null
+    },
+    {
+      "id": "2_95",
+      "name": "Hospital De Puerto Real",
+      "latitude": 36.51928966617859,
+      "longitude": -6.152954202760202,
+      "parentStationId": null
+    },
+    {
+      "id": "2_96",
+      "name": "La Romera-Venta Rosario",
+      "latitude": 36.517358,
+      "longitude": -6.04446,
+      "parentStationId": null
+    },
+    {
+      "id": "2_97",
+      "name": "La Romera-Venta Rosario V",
+      "latitude": 36.517486,
+      "longitude": -6.044727,
+      "parentStationId": null
+    },
+    {
+      "id": "2_98",
+      "name": "Pinar De Los Franceses",
+      "latitude": 36.440655103661825,
+      "longitude": -6.143926978111267,
+      "parentStationId": null
+    },
+    {
+      "id": "2_99",
+      "name": "Pinar De Los Franceses V",
+      "latitude": 36.441012,
+      "longitude": -6.14423,
+      "parentStationId": null
+    }
+  ],
+  "patterns": [
+    {
+      "routeId": "2_10",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_3",
+        "2_351",
+        "2_356",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92"
+      ]
+    },
+    {
+      "routeId": "2_10",
+      "directionId": "1",
+      "stopIds": [
+        "2_91",
+        "2_93",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_11",
+      "directionId": "1",
+      "stopIds": [
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_18",
+        "2_5",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_12",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_3",
+        "2_351",
+        "2_356",
+        "2_7",
+        "2_102",
+        "2_100",
+        "2_359"
+      ]
+    },
+    {
+      "routeId": "2_12",
+      "directionId": "1",
+      "stopIds": [
+        "2_359",
+        "2_91",
+        "2_93",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_13",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133"
+      ]
+    },
+    {
+      "routeId": "2_13",
+      "directionId": "1",
+      "stopIds": [
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_14",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_265",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133"
+      ]
+    },
+    {
+      "routeId": "2_14",
+      "directionId": "1",
+      "stopIds": [
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_262",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_15",
+      "directionId": "0",
+      "stopIds": [
+        "2_193",
+        "2_194"
+      ]
+    },
+    {
+      "routeId": "2_15",
+      "directionId": "1",
+      "stopIds": [
+        "2_194",
+        "2_193"
+      ]
+    },
+    {
+      "routeId": "2_155",
+      "directionId": "0",
+      "stopIds": [
+        "2_296",
+        "2_272",
+        "2_86",
+        "2_360",
+        "2_161",
+        "2_172"
+      ]
+    },
+    {
+      "routeId": "2_156",
+      "directionId": "0",
+      "stopIds": [
+        "2_296",
+        "2_272",
+        "2_86",
+        "2_360",
+        "2_161",
+        "2_172"
+      ]
+    },
+    {
+      "routeId": "2_156",
+      "directionId": "1",
+      "stopIds": [
+        "2_171",
+        "2_161",
+        "2_360",
+        "2_272",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_16",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_354",
+        "2_160",
+        "2_161",
+        "2_179",
+        "2_311",
+        "2_173"
+      ]
+    },
+    {
+      "routeId": "2_16",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_159",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_16",
+      "directionId": "1",
+      "stopIds": [
+        "2_173",
+        "2_310",
+        "2_180",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_16",
+      "directionId": "1",
+      "stopIds": [
+        "2_173",
+        "2_310",
+        "2_180",
+        "2_161",
+        "2_159",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_163",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_163",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_197",
+        "2_196",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_163",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_197",
+        "2_196",
+        "2_261",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_163",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_197",
+        "2_196",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_274",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_163",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_274",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_164",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_164",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_197",
+        "2_196",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_164",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_165",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_87",
+        "2_95",
+        "2_101",
+        "2_249",
+        "2_42"
+      ]
+    },
+    {
+      "routeId": "2_165",
+      "directionId": "1",
+      "stopIds": [
+        "2_42",
+        "2_249",
+        "2_100",
+        "2_95",
+        "2_86",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_166",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_166",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_313",
+        "2_229",
+        "2_223",
+        "2_222",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_167",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_203",
+        "2_361",
+        "2_235",
+        "2_180",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_167",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_202",
+        "2_361",
+        "2_229",
+        "2_223",
+        "2_222",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_168",
+      "directionId": "0",
+      "stopIds": [
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_168",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_313",
+        "2_223",
+        "2_222"
+      ]
+    },
+    {
+      "routeId": "2_169",
+      "directionId": "0",
+      "stopIds": [
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_202",
+        "2_361",
+        "2_235",
+        "2_180",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_169",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_202",
+        "2_361",
+        "2_313",
+        "2_229",
+        "2_223",
+        "2_222"
+      ]
+    },
+    {
+      "routeId": "2_170",
+      "directionId": "0",
+      "stopIds": [
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_203",
+        "2_361",
+        "2_170",
+        "2_165",
+        "2_180",
+        "2_174",
+        "2_172"
+      ]
+    },
+    {
+      "routeId": "2_170",
+      "directionId": "1",
+      "stopIds": [
+        "2_172",
+        "2_163",
+        "2_179",
+        "2_164",
+        "2_169",
+        "2_202",
+        "2_361",
+        "2_313",
+        "2_229",
+        "2_223",
+        "2_222"
+      ]
+    },
+    {
+      "routeId": "2_17",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_354",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_160",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_17",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_159",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_172",
+      "directionId": "0",
+      "stopIds": [
+        "2_187",
+        "2_233",
+        "2_266",
+        "2_274",
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_203",
+        "2_361",
+        "2_235",
+        "2_180",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_172",
+      "directionId": "0",
+      "stopIds": [
+        "2_187",
+        "2_233",
+        "2_266",
+        "2_274",
+        "2_222",
+        "2_224",
+        "2_229",
+        "2_312",
+        "2_361",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_172",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_202",
+        "2_361",
+        "2_313",
+        "2_223",
+        "2_222",
+        "2_273",
+        "2_266",
+        "2_233",
+        "2_186",
+        "2_187"
+      ]
+    },
+    {
+      "routeId": "2_172",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_361",
+        "2_313",
+        "2_223",
+        "2_222",
+        "2_273",
+        "2_266",
+        "2_233",
+        "2_186",
+        "2_187"
+      ]
+    },
+    {
+      "routeId": "2_175",
+      "directionId": "0",
+      "stopIds": [
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_175",
+      "directionId": "0",
+      "stopIds": [
+        "2_361",
+        "2_353",
+        "2_235",
+        "2_180",
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_175",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_175",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_352",
+        "2_361"
+      ]
+    },
+    {
+      "routeId": "2_177",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_354",
+        "2_7",
+        "2_203",
+        "2_361",
+        "2_235",
+        "2_180",
+        "2_161",
+        "2_179",
+        "2_311",
+        "2_173"
+      ]
+    },
+    {
+      "routeId": "2_177",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_202",
+        "2_361",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_18",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_354",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_160",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_18",
+      "directionId": "1",
+      "stopIds": [
+        "2_173",
+        "2_310",
+        "2_180",
+        "2_161",
+        "2_159",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_262",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_19",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_144",
+        "2_142",
+        "2_146",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_19",
+      "directionId": "1",
+      "stopIds": [
+        "2_181",
+        "2_145",
+        "2_141",
+        "2_143",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_19",
+      "directionId": "1",
+      "stopIds": [
+        "2_233",
+        "2_181",
+        "2_145",
+        "2_141",
+        "2_143",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_20",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_265",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_144",
+        "2_142",
+        "2_146",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_20",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_265",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_144",
+        "2_142",
+        "2_146",
+        "2_181",
+        "2_233"
+      ]
+    },
+    {
+      "routeId": "2_20",
+      "directionId": "1",
+      "stopIds": [
+        "2_233",
+        "2_181",
+        "2_145",
+        "2_141",
+        "2_143",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_262",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_2",
+      "directionId": "0",
+      "stopIds": [
+        "2_232",
+        "2_1",
+        "2_3",
+        "2_4",
+        "2_5",
+        "2_6",
+        "2_7",
+        "2_8",
+        "2_41",
+        "2_24",
+        "2_26",
+        "2_207",
+        "2_237",
+        "2_248",
+        "2_317",
+        "2_319"
+      ]
+    },
+    {
+      "routeId": "2_21",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_21",
+      "directionId": "1",
+      "stopIds": [
+        "2_181",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_2",
+      "directionId": "1",
+      "stopIds": [
+        "2_318",
+        "2_316",
+        "2_247",
+        "2_236",
+        "2_27",
+        "2_25",
+        "2_23",
+        "2_40",
+        "2_19",
+        "2_18",
+        "2_17",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_232"
+      ]
+    },
+    {
+      "routeId": "2_219",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_233",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_219",
+      "directionId": "1",
+      "stopIds": [
+        "2_181",
+        "2_233",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_220",
+      "directionId": "0",
+      "stopIds": [
+        "2_232",
+        "2_1",
+        "2_3",
+        "2_351",
+        "2_356",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_220",
+      "directionId": "1",
+      "stopIds": [
+        "2_264",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_22",
+      "directionId": "0",
+      "stopIds": [
+        "2_193",
+        "2_195"
+      ]
+    },
+    {
+      "routeId": "2_221",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_98",
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_80",
+        "2_82",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_221",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_98",
+        "2_80",
+        "2_82",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_221",
+      "directionId": "1",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_264",
+        "2_94",
+        "2_92",
+        "2_88",
+        "2_84",
+        "2_260",
+        "2_258",
+        "2_99",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_221",
+      "directionId": "1",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_264",
+        "2_99",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_22",
+      "directionId": "1",
+      "stopIds": [
+        "2_195",
+        "2_193"
+      ]
+    },
+    {
+      "routeId": "2_222",
+      "directionId": "0",
+      "stopIds": [
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_223",
+      "directionId": "0",
+      "stopIds": [
+        "2_161",
+        "2_159",
+        "2_262",
+        "2_81",
+        "2_79"
+      ]
+    },
+    {
+      "routeId": "2_223",
+      "directionId": "1",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_160",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_224",
+      "directionId": "1",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_170",
+        "2_165",
+        "2_180",
+        "2_162",
+        "2_206",
+        "2_168"
+      ]
+    },
+    {
+      "routeId": "2_225",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_227",
+        "2_251",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_262",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_306",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_225",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_225",
+      "directionId": "1",
+      "stopIds": [
+        "2_14",
+        "2_305",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_261",
+        "2_251",
+        "2_228",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_226",
+      "directionId": "0",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133"
+      ]
+    },
+    {
+      "routeId": "2_230",
+      "directionId": "0",
+      "stopIds": [
+        "2_266",
+        "2_274",
+        "2_225",
+        "2_222",
+        "2_230"
+      ]
+    },
+    {
+      "routeId": "2_230",
+      "directionId": "1",
+      "stopIds": [
+        "2_229",
+        "2_222",
+        "2_226",
+        "2_273",
+        "2_266"
+      ]
+    },
+    {
+      "routeId": "2_23",
+      "directionId": "0",
+      "stopIds": [
+        "2_236",
+        "2_27",
+        "2_25",
+        "2_23",
+        "2_40",
+        "2_31",
+        "2_29",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_231",
+      "directionId": "0",
+      "stopIds": [
+        "2_233",
+        "2_266",
+        "2_274",
+        "2_226",
+        "2_222",
+        "2_230"
+      ]
+    },
+    {
+      "routeId": "2_231",
+      "directionId": "1",
+      "stopIds": [
+        "2_229",
+        "2_222",
+        "2_225",
+        "2_273",
+        "2_266",
+        "2_233"
+      ]
+    },
+    {
+      "routeId": "2_23",
+      "directionId": "1",
+      "stopIds": [
+        "2_264",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_30",
+        "2_32",
+        "2_41",
+        "2_24",
+        "2_26",
+        "2_207",
+        "2_237"
+      ]
+    },
+    {
+      "routeId": "2_234",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_4",
+        "2_354",
+        "2_42",
+        "2_272",
+        "2_289",
+        "2_285",
+        "2_283",
+        "2_279",
+        "2_277",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_234",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_4",
+        "2_354",
+        "2_42",
+        "2_289",
+        "2_285",
+        "2_283",
+        "2_279",
+        "2_277",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_234",
+      "directionId": "1",
+      "stopIds": [
+        "2_296",
+        "2_278",
+        "2_280",
+        "2_282",
+        "2_284",
+        "2_287",
+        "2_289",
+        "2_272",
+        "2_42",
+        "2_5",
+        "2_4",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_234",
+      "directionId": "1",
+      "stopIds": [
+        "2_296",
+        "2_278",
+        "2_280",
+        "2_282",
+        "2_284",
+        "2_287",
+        "2_289",
+        "2_42",
+        "2_5",
+        "2_4",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_235",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_4",
+        "2_354",
+        "2_42",
+        "2_272",
+        "2_289",
+        "2_285",
+        "2_283",
+        "2_279",
+        "2_277",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_235",
+      "directionId": "1",
+      "stopIds": [
+        "2_296",
+        "2_278",
+        "2_280",
+        "2_282",
+        "2_284",
+        "2_287",
+        "2_289",
+        "2_272",
+        "2_42",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_236",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_4",
+        "2_354",
+        "2_95",
+        "2_272",
+        "2_289",
+        "2_285",
+        "2_283",
+        "2_279",
+        "2_277",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_236",
+      "directionId": "1",
+      "stopIds": [
+        "2_296",
+        "2_278",
+        "2_280",
+        "2_282",
+        "2_284",
+        "2_287",
+        "2_289",
+        "2_272",
+        "2_95",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_237",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_4",
+        "2_354",
+        "2_42",
+        "2_272",
+        "2_289",
+        "2_285",
+        "2_283",
+        "2_279",
+        "2_277",
+        "2_296"
+      ]
+    },
+    {
+      "routeId": "2_239",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_303",
+        "2_291",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92",
+        "2_88",
+        "2_84",
+        "2_260",
+        "2_257"
+      ]
+    },
+    {
+      "routeId": "2_239",
+      "directionId": "1",
+      "stopIds": [
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_292",
+        "2_304",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_240",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_303",
+        "2_291",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_264"
+      ]
+    },
+    {
+      "routeId": "2_26",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_57",
+        "2_59",
+        "2_61",
+        "2_63",
+        "2_241",
+        "2_65",
+        "2_245",
+        "2_67",
+        "2_69",
+        "2_71",
+        "2_73",
+        "2_119",
+        "2_117",
+        "2_115",
+        "2_113",
+        "2_111",
+        "2_109",
+        "2_107",
+        "2_105",
+        "2_103",
+        "2_100",
+        "2_359"
+      ]
+    },
+    {
+      "routeId": "2_26",
+      "directionId": "1",
+      "stopIds": [
+        "2_359",
+        "2_101",
+        "2_104",
+        "2_106",
+        "2_108",
+        "2_110",
+        "2_112",
+        "2_114",
+        "2_116",
+        "2_118",
+        "2_120",
+        "2_74",
+        "2_72",
+        "2_70",
+        "2_68",
+        "2_244",
+        "2_66",
+        "2_243",
+        "2_64",
+        "2_62",
+        "2_60",
+        "2_58",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_267",
+      "directionId": "0",
+      "stopIds": [
+        "2_347",
+        "2_346",
+        "2_345",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_92",
+        "2_88",
+        "2_84",
+        "2_260",
+        "2_258"
+      ]
+    },
+    {
+      "routeId": "2_267",
+      "directionId": "1",
+      "stopIds": [
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_322",
+        "2_15",
+        "2_320",
+        "2_321",
+        "2_348"
+      ]
+    },
+    {
+      "routeId": "2_27",
+      "directionId": "0",
+      "stopIds": [
+        "2_167",
+        "2_166",
+        "2_163",
+        "2_179",
+        "2_164",
+        "2_169",
+        "2_262",
+        "2_81",
+        "2_79"
+      ]
+    },
+    {
+      "routeId": "2_27",
+      "directionId": "1",
+      "stopIds": [
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_265",
+        "2_170",
+        "2_165",
+        "2_180",
+        "2_162",
+        "2_206",
+        "2_168"
+      ]
+    },
+    {
+      "routeId": "2_28",
+      "directionId": "0",
+      "stopIds": [
+        "2_181",
+        "2_145",
+        "2_141",
+        "2_143",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_129",
+        "2_127",
+        "2_125",
+        "2_123",
+        "2_121",
+        "2_95"
+      ]
+    },
+    {
+      "routeId": "2_28",
+      "directionId": "1",
+      "stopIds": [
+        "2_95",
+        "2_122",
+        "2_124",
+        "2_126",
+        "2_128",
+        "2_130",
+        "2_132",
+        "2_133",
+        "2_131",
+        "2_144",
+        "2_142",
+        "2_146",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_3",
+      "directionId": "0",
+      "stopIds": [
+        "2_232",
+        "2_1",
+        "2_3",
+        "2_4",
+        "2_5",
+        "2_6",
+        "2_7",
+        "2_8",
+        "2_30",
+        "2_32",
+        "2_201",
+        "2_34",
+        "2_199",
+        "2_36",
+        "2_38",
+        "2_42"
+      ]
+    },
+    {
+      "routeId": "2_3",
+      "directionId": "1",
+      "stopIds": [
+        "2_42",
+        "2_37",
+        "2_35",
+        "2_198",
+        "2_33",
+        "2_200",
+        "2_31",
+        "2_29",
+        "2_19",
+        "2_18",
+        "2_17",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_232"
+      ]
+    },
+    {
+      "routeId": "2_32",
+      "directionId": "0",
+      "stopIds": [
+        "2_181",
+        "2_254",
+        "2_349",
+        "2_182",
+        "2_155",
+        "2_203",
+        "2_361",
+        "2_180",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_32",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_179",
+        "2_202",
+        "2_361",
+        "2_156",
+        "2_183",
+        "2_350",
+        "2_255",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_36",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_360",
+        "2_160",
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_36",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161",
+        "2_159",
+        "2_360",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_38",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_351",
+        "2_355",
+        "2_7",
+        "2_80",
+        "2_82",
+        "2_263",
+        "2_360",
+        "2_160",
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_38",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161",
+        "2_159",
+        "2_360",
+        "2_262",
+        "2_81",
+        "2_79",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_39",
+      "directionId": "0",
+      "stopIds": [
+        "2_181",
+        "2_182",
+        "2_155",
+        "2_160",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_39",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_159",
+        "2_156",
+        "2_183",
+        "2_181"
+      ]
+    },
+    {
+      "routeId": "2_4",
+      "directionId": "0",
+      "stopIds": [
+        "2_300",
+        "2_1",
+        "2_3",
+        "2_4",
+        "2_355",
+        "2_7",
+        "2_99",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_41",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_355",
+        "2_42",
+        "2_268",
+        "2_272",
+        "2_269",
+        "2_59",
+        "2_301",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_41",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_302",
+        "2_60",
+        "2_268",
+        "2_272",
+        "2_269",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_4",
+      "directionId": "1",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_98",
+        "2_19",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_300"
+      ]
+    },
+    {
+      "routeId": "2_43",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_355",
+        "2_87",
+        "2_95",
+        "2_268",
+        "2_272",
+        "2_269",
+        "2_59",
+        "2_301",
+        "2_314",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_43",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_302",
+        "2_60",
+        "2_268",
+        "2_272",
+        "2_269",
+        "2_95",
+        "2_86",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_43",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_315",
+        "2_302",
+        "2_60",
+        "2_268",
+        "2_272",
+        "2_269",
+        "2_95",
+        "2_86",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_44",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_355",
+        "2_87",
+        "2_95",
+        "2_96",
+        "2_175",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_44",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_176",
+        "2_97",
+        "2_95",
+        "2_86",
+        "2_16",
+        "2_15",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_46",
+      "directionId": "0",
+      "stopIds": [
+        "2_188",
+        "2_178",
+        "2_177",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_46",
+      "directionId": "1",
+      "stopIds": [
+        "2_161",
+        "2_177",
+        "2_178",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_48",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_269",
+        "2_59",
+        "2_301",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_48",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_269",
+        "2_59",
+        "2_301",
+        "2_314",
+        "2_188"
+      ]
+    },
+    {
+      "routeId": "2_48",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_302",
+        "2_60",
+        "2_268",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_48",
+      "directionId": "1",
+      "stopIds": [
+        "2_188",
+        "2_315",
+        "2_302",
+        "2_60",
+        "2_268",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_49",
+      "directionId": "0",
+      "stopIds": [
+        "2_14",
+        "2_3",
+        "2_11",
+        "2_351",
+        "2_357",
+        "2_7",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_49",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_12",
+        "2_10",
+        "2_14"
+      ]
+    },
+    {
+      "routeId": "2_50",
+      "directionId": "0",
+      "stopIds": [
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_50",
+      "directionId": "0",
+      "stopIds": [
+        "2_361",
+        "2_353",
+        "2_235",
+        "2_180",
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_50",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_50",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161",
+        "2_179",
+        "2_234",
+        "2_352",
+        "2_361"
+      ]
+    },
+    {
+      "routeId": "2_5",
+      "directionId": "0",
+      "stopIds": [
+        "2_300",
+        "2_1",
+        "2_3",
+        "2_4",
+        "2_355",
+        "2_7",
+        "2_20",
+        "2_42",
+        "2_56"
+      ]
+    },
+    {
+      "routeId": "2_51",
+      "directionId": "0",
+      "stopIds": [
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_51",
+      "directionId": "0",
+      "stopIds": [
+        "2_361",
+        "2_353",
+        "2_235",
+        "2_180",
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_51",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_5",
+      "directionId": "1",
+      "stopIds": [
+        "2_56",
+        "2_42",
+        "2_20",
+        "2_19",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_300"
+      ]
+    },
+    {
+      "routeId": "2_54",
+      "directionId": "0",
+      "stopIds": [
+        "2_161",
+        "2_172",
+        "2_206",
+        "2_168",
+        "2_189",
+        "2_191"
+      ]
+    },
+    {
+      "routeId": "2_54",
+      "directionId": "1",
+      "stopIds": [
+        "2_191",
+        "2_190",
+        "2_167",
+        "2_166",
+        "2_171",
+        "2_161"
+      ]
+    },
+    {
+      "routeId": "2_6",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_3",
+        "2_351",
+        "2_356",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92",
+        "2_88",
+        "2_84",
+        "2_260",
+        "2_258",
+        "2_359"
+      ]
+    },
+    {
+      "routeId": "2_6",
+      "directionId": "1",
+      "stopIds": [
+        "2_359",
+        "2_257",
+        "2_259",
+        "2_83",
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    },
+    {
+      "routeId": "2_7",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_98",
+        "2_249",
+        "2_48",
+        "2_49"
+      ]
+    },
+    {
+      "routeId": "2_7",
+      "directionId": "0",
+      "stopIds": [
+        "2_272",
+        "2_271",
+        "2_269",
+        "2_98",
+        "2_48",
+        "2_49"
+      ]
+    },
+    {
+      "routeId": "2_7",
+      "directionId": "1",
+      "stopIds": [
+        "2_49",
+        "2_47",
+        "2_26",
+        "2_207",
+        "2_237",
+        "2_50",
+        "2_51",
+        "2_43",
+        "2_249",
+        "2_99",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_7",
+      "directionId": "1",
+      "stopIds": [
+        "2_49",
+        "2_47",
+        "2_26",
+        "2_207",
+        "2_237",
+        "2_50",
+        "2_51",
+        "2_43",
+        "2_99",
+        "2_268",
+        "2_270",
+        "2_272"
+      ]
+    },
+    {
+      "routeId": "2_9",
+      "directionId": "0",
+      "stopIds": [
+        "2_238",
+        "2_1",
+        "2_3",
+        "2_351",
+        "2_356",
+        "2_7",
+        "2_75",
+        "2_77",
+        "2_80",
+        "2_82",
+        "2_94",
+        "2_92",
+        "2_88",
+        "2_85"
+      ]
+    },
+    {
+      "routeId": "2_9",
+      "directionId": "1",
+      "stopIds": [
+        "2_85",
+        "2_90",
+        "2_91",
+        "2_93",
+        "2_81",
+        "2_79",
+        "2_78",
+        "2_76",
+        "2_18",
+        "2_16",
+        "2_15",
+        "2_10",
+        "2_231",
+        "2_238"
+      ]
+    }
+  ]
+}

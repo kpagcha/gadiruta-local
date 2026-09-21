@@ -22,13 +22,27 @@
     "description": "Gadiruta Local is becoming a simple, local-first way to explore public transport around the Bay of Cádiz."
   },
   "dataStatus": {
-    "eyebrow": "Starting point",
-    "title": "Transit data is coming next.",
-    "description": "This first release is the browser foundation. The next step is a small static GTFS dataset that can be searched directly on your device."
+    "eyebrow": "Local network",
+    "loading": {
+      "title": "Loading the local network.",
+      "description": "The Bay of Cádiz transit snapshot is being read on this device."
+    },
+    "ready": {
+      "title": "The Bay of Cádiz network is here.",
+      "description": "This local CTAN GTFS snapshot was generated on {{date}}.",
+      "routes": "Routes",
+      "stops": "Stops",
+      "patterns": "Patterns",
+      "previewTitle": "A first look at the network"
+    },
+    "error": {
+      "title": "The local network could not load.",
+      "description": "Try refreshing the page. The bundled transit data may be incomplete."
+    }
   },
   "footer": {
     "region": "Made for the Bay of Cádiz.",
-    "attribution": "Future transport data will be sourced from",
+    "attribution": "Transport data sourced from",
     "source": "CTAN open data",
     "independent": "An independent project. Not an official CTAN or Junta de Andalucía service."
   }
