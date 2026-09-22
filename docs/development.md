@@ -23,7 +23,7 @@ Keep this overview current when a tracked directory gains or changes a responsib
 ```text
 src/           Browser application: components, pages, local-data code, translations, and styles.
 public/data/   Reviewed static network snapshot served to the browser.
-scripts/       Developer-only GTFS snapshot processor, CTAN crosswalk probe, and focused fixtures/tests.
+scripts/       Developer-only GTFS snapshot processor, CTAN crosswalk/probe code, and focused fixtures/tests.
 .storybook/    Storybook configuration; component stories live beside components in src/.
 docs/          Product, architecture, and contributor documentation.
 data/source/   Ignored local CTAN ZIP and explicit CTAN location-probe captures.

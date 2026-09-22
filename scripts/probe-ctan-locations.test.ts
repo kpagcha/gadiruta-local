@@ -11,8 +11,8 @@ import {
   parseCtanMunicipalities,
   parseCtanNuclei,
   parseCtanStops,
-  probeCtanLocations,
-} from './probe-ctan-locations.ts';
+} from './ctan-location-crosswalk.ts';
+import { probeCtanLocations } from './probe-ctan-locations.ts';
 import { ctanLocationFixture } from './fixtures/ctan-location.ts';
 
 test('proves a complete CTAN hierarchy using the exact consortium-prefixed GTFS stop ID', () => {

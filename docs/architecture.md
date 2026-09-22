@@ -64,6 +64,11 @@ GTFS archive, fetches those CTAN directory resources, and writes raw responses, 
 hashes, and a coverage report to an ignored timestamped directory under `data/source/`. It never
 changes the reviewed browser snapshot or makes a browser request.
 
+The command-specific file, `scripts/probe-ctan-locations.ts`, is limited to loading local GTFS,
+fetching/capturing CTAN responses, and writing audit files. Its pure response parsing, identifier
+crosswalk, and report validation live in `scripts/ctan-location-crosswalk.ts`, where offline tests
+can exercise them without initiating network requests.
+
 The probe accepts only CTAN's deterministic identifier relation: a CTAN `idParada` maps to GTFS
 `stop_id` `2_<idParada>`, where `2` is the Bahía consortium identifier. It validates every
 municipality -> núcleo -> stop relationship and succeeds only when every selected CMTBC GTFS stop
