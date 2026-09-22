@@ -378,7 +378,7 @@ export async function buildNetworkData(
 ): Promise<void> {
   const { inputPath, download } = parseArguments(arguments_);
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
-  const files = readZipTextFiles(archive);
+  const files = await readZipTextFiles(archive);
   const tables: InputTables = {
     agency: readGtfsTable(files, 'agency.txt'),
     routes: readGtfsTable(files, 'routes.txt'),

@@ -58,3 +58,12 @@ export const topologyFixture = {
     { trip_id: 'other-agency', stop_id: 'sevilla', stop_sequence: '1' },
   ],
 } as const;
+
+/**
+ * A compressed CTAN-style stops table with a UTF-8 BOM, whitespace around headers, and the
+ * upstream's unescaped interior quotes. The final blank record exercises empty-line handling.
+ */
+export const ctanMalformedQuoteArchiveFixture = Buffer.from(
+  'UEsDBBQAAAAIAHhXNl3pHj73MgAAADoAAAAJAAAAc3RvcHMudHh0e797v0JxSX5BfGaKgg6ElZeYm6rApZCfWJxZrKCj5A+mlRTCMstSi/JBLI0wTSUuLgBQSwECFAAUAAAACAB4VzZd6R4+9zIAAAA6AAAACQAAAAAAAAAAAAAAAAAAAAAAc3RvcHMudHh0UEsFBgAAAAABAAEANwAAAFkAAAAAAA==',
+  'base64',
+);

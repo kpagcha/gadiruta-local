@@ -38,9 +38,10 @@ Version 1 of the app-facing asset contains:
 - physical stops with coordinates; and
 - deduplicated ordered route-stop patterns.
 
-GTFS ZIP/CSV details remain in the processor. `scripts/gtfs-archive.ts` handles archive and CSV
-decoding; `scripts/build-network-data.ts` selects and normalizes the app-facing topology. This is a
-small responsibility split, not a reusable general-purpose GTFS importer. UI code receives only
+GTFS ZIP/CSV details remain in the processor. `scripts/gtfs-archive.ts` uses `yauzl` for archive
+entries and `csv-parse` for CSV decoding; `scripts/build-network-data.ts` selects and normalizes
+the app-facing topology. This is a small responsibility split, not a reusable general-purpose GTFS
+importer. UI code receives only
 the normalized contract and validates it again at load time. The current feed has a few stop labels
 with unescaped quotation marks; the processor preserves those labels rather than rejecting an
 otherwise usable snapshot.

@@ -1,4 +1,6 @@
-import { inflateRawSync } from 'node:zlib';
+import { buffer } from 'node:stream/consumers';
+import { parse } from 'csv-parse/sync';
+import { fromBufferPromise, type Entry, type ZipFile } from 'yauzl';
 
 /** A decoded GTFS CSV row keyed by its trimmed header names. */
 export type CsvRow = Record<string, string>;
@@ -8,104 +10,58 @@ function fail(message: string): never {
   throw new Error(`GTFS data error: ${message}`);
 }
 
+/** Convert an unknown caught value into the diagnostic text supplied by its source. */
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+/** Identify errors already annotated with the processor's GTFS data context. */
+function isGtfsDataError(error: unknown): boolean {
+  return error instanceof Error && error.message.startsWith('GTFS data error:');
+}
+
+/**
+ * Convert CTAN's bare interior quotes into standard CSV quote escapes.
+ *
+ * A quote with ordinary field content on both sides cannot be a field boundary. This preserves
+ * CTAN labels such as `"Oasis " Viveros " (V)"` without replacing CSV parsing itself.
+ */
+function repairCtanInteriorQuotes(text: string): string {
+  return text.replaceAll(/(?<=[^",\r\n])"(?=[^",\r\n])/g, '""');
+}
+
 /**
  * Parse one GTFS CSV table into records keyed by trimmed header names.
  *
- * CTAN's current feed contains unescaped interior quotes in a few stop labels. Those quotes are
- * preserved as text until a field boundary closes the value, while all other malformed row shapes
- * still fail generation rather than shifting columns silently.
+ * CSV parsing stays deliberately permissive only for CTAN's known interior-quote issue. Row
+ * lengths and normalized headers are validated here so malformed tables cannot shift fields.
  */
 export function parseCsv(text: string): CsvRow[] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = '';
-  let quoted = false;
-  let sawContent = false;
+  let parsedRows: string[][];
 
-  /** Commit the current field before moving to the next CSV delimiter. */
-  const addField = () => {
-    row.push(field);
-    field = '';
-  };
-
-  /** Commit a non-empty record and reset the parser state for the next line. */
-  const addRow = () => {
-    addField();
-    if (row.some((value) => value !== '')) {
-      rows.push(row);
-    }
-    row = [];
-    sawContent = false;
-  };
-
-  for (let index = 0; index < text.length; index += 1) {
-    const character = text[index] ?? '';
-
-    if (quoted) {
-      if (character === '"') {
-        if (text[index + 1] === '"') {
-          field += '"';
-          index += 1;
-        } else if (
-          text[index + 1] === undefined ||
-          text[index + 1] === ',' ||
-          text[index + 1] === '\r' ||
-          text[index + 1] === '\n'
-        ) {
-          quoted = false;
-        } else {
-          // CTAN currently has labels such as `"Oasis " Viveros " (V)"`.
-          // Treat an interior quote as display text until a field boundary closes the value.
-          field += '"';
-        }
-      } else if (character === '\r' && text[index + 1] === '\n') {
-        field += '\n';
-        index += 1;
-      } else {
-        field += character;
-      }
-      continue;
-    }
-
-    if (character === '"') {
-      if (field !== '') {
-        fail(`unexpected quote in CSV field near character ${index}.`);
-      }
-      quoted = true;
-      sawContent = true;
-    } else if (character === ',') {
-      addField();
-      sawContent = true;
-    } else if (character === '\n') {
-      addRow();
-    } else if (character === '\r') {
-      if (text[index + 1] !== '\n') {
-        addRow();
-      }
-    } else {
-      field += character;
-      sawContent = true;
-    }
+  try {
+    parsedRows = parse(repairCtanInteriorQuotes(text), {
+      bom: true,
+      relax_column_count: true,
+      relax_quotes: true,
+      skip_empty_lines: true,
+    });
+  } catch (error: unknown) {
+    fail(`CSV parsing failed: ${errorMessage(error)}`);
   }
 
-  if (quoted) {
-    fail('unterminated quoted CSV field.');
-  }
-  if (sawContent || field !== '' || row.length > 0) {
-    addRow();
-  }
-
-  const [header, ...values] = rows;
+  const rows = parsedRows.filter((row) => row.some((value) => value !== ''));
+  const [header, ...valueRows] = rows;
   if (header === undefined || header.length === 0) {
     fail('CSV table has no header.');
   }
 
-  const columns = header.map((column) => column.replace(/^\uFEFF/, '').trim());
+  const columns = header.map((column) => column.trim());
   if (new Set(columns).size !== columns.length || columns.some((column) => column === '')) {
     fail('CSV header contains duplicate or empty columns.');
   }
 
-  return values.map((valuesRow, rowIndex) => {
+  return valueRows.map((valuesRow, rowIndex) => {
     if (valuesRow.length !== columns.length) {
       fail(`CSV row ${rowIndex + 2} has ${valuesRow.length} fields; expected ${columns.length}.`);
     }
@@ -116,86 +72,47 @@ export function parseCsv(text: string): CsvRow[] {
   });
 }
 
-/** Read one little-endian 16-bit value from ZIP metadata. */
-function unsigned16(bytes: Uint8Array, offset: number): number {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint16(offset, true);
-}
-
-/** Read one little-endian 32-bit value from ZIP metadata. */
-function unsigned32(bytes: Uint8Array, offset: number): number {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(offset, true);
+/** Read and strictly UTF-8 decode one ZIP entry while retaining the entry name in failures. */
+async function readZipEntryText(archive: ZipFile, entry: Entry): Promise<string> {
+  try {
+    const contents = await buffer(await archive.openReadStreamPromise(entry));
+    return new TextDecoder('utf-8', { fatal: true }).decode(contents);
+  } catch (error: unknown) {
+    fail(`ZIP entry ${entry.fileName} cannot be read: ${errorMessage(error)}`);
+  }
 }
 
 /**
- * Find the final ZIP directory marker, allowing for the format's optional 65,535-byte comment.
+ * Read UTF-8 text entries from a GTFS ZIP archive, rejecting duplicate filenames.
  *
- * This small reader intentionally supports only the conventional ZIP layout used by the verified
- * CTAN archive; a future source that needs ZIP64 should introduce that support with a fixture.
+ * `yauzl` owns ZIP metadata, ZIP64, compression, size, and stream-integrity handling. This
+ * module only retains the decoded files needed by the GTFS processor and its useful diagnostics.
  */
-function findEndOfCentralDirectory(bytes: Uint8Array): number {
-  const earliestOffset = Math.max(0, bytes.length - 65_557);
+export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, string>> {
+  let archive: ZipFile;
 
-  for (let offset = bytes.length - 22; offset >= earliestOffset; offset -= 1) {
-    if (unsigned32(bytes, offset) === 0x06054b50) {
-      return offset;
-    }
+  try {
+    archive = await fromBufferPromise(Buffer.from(bytes), { validateEntrySizes: true });
+  } catch (error: unknown) {
+    fail(`could not open ZIP archive: ${errorMessage(error)}`);
   }
 
-  fail('ZIP archive has no end-of-central-directory record.');
-}
-
-/**
- * Read stored and deflated UTF-8 files from the flat GTFS ZIP archive.
- *
- * The snapshot generator needs only named text tables, so this avoids adding a general ZIP
- * dependency while rejecting compression methods and duplicate paths it cannot interpret safely.
- */
-export function readZipTextFiles(bytes: Uint8Array): Map<string, string> {
-  const decoder = new TextDecoder('utf-8', { fatal: true });
-  const endOffset = findEndOfCentralDirectory(bytes);
-  const entryCount = unsigned16(bytes, endOffset + 10);
-  let offset = unsigned32(bytes, endOffset + 16);
   const files = new Map<string, string>();
+  try {
+    for await (const entry of archive.eachEntry()) {
+      if (files.has(entry.fileName)) {
+        fail(`ZIP archive contains duplicate entry ${entry.fileName}.`);
+      }
 
-  for (let entryIndex = 0; entryIndex < entryCount; entryIndex += 1) {
-    if (unsigned32(bytes, offset) !== 0x02014b50) {
-      fail('ZIP archive has an invalid central-directory record.');
+      files.set(entry.fileName, await readZipEntryText(archive, entry));
     }
-
-    const compression = unsigned16(bytes, offset + 10);
-    const compressedSize = unsigned32(bytes, offset + 20);
-    const uncompressedSize = unsigned32(bytes, offset + 24);
-    const filenameLength = unsigned16(bytes, offset + 28);
-    const extraLength = unsigned16(bytes, offset + 30);
-    const commentLength = unsigned16(bytes, offset + 32);
-    const localOffset = unsigned32(bytes, offset + 42);
-    const nameStart = offset + 46;
-    const filename = decoder.decode(bytes.subarray(nameStart, nameStart + filenameLength));
-
-    if (unsigned32(bytes, localOffset) !== 0x04034b50) {
-      fail(`ZIP entry ${filename} has an invalid local-file record.`);
+  } catch (error: unknown) {
+    if (isGtfsDataError(error)) {
+      throw error;
     }
-
-    const localFilenameLength = unsigned16(bytes, localOffset + 26);
-    const localExtraLength = unsigned16(bytes, localOffset + 28);
-    const dataStart = localOffset + 30 + localFilenameLength + localExtraLength;
-    const compressed = bytes.subarray(dataStart, dataStart + compressedSize);
-    const contents =
-      compression === 0
-        ? compressed
-        : compression === 8
-          ? inflateRawSync(compressed)
-          : fail(`ZIP entry ${filename} uses unsupported compression method ${compression}.`);
-
-    if (contents.byteLength !== uncompressedSize) {
-      fail(`ZIP entry ${filename} has an unexpected uncompressed size.`);
-    }
-    if (files.has(filename)) {
-      fail(`ZIP archive contains duplicate entry ${filename}.`);
-    }
-
-    files.set(filename, decoder.decode(contents));
-    offset += 46 + filenameLength + extraLength + commentLength;
+    fail(`could not read ZIP archive: ${errorMessage(error)}`);
+  } finally {
+    archive.close();
   }
 
   return files;
