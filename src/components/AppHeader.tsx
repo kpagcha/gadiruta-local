@@ -7,6 +7,7 @@ import { Icon } from './Icon';
 
 /** Render the persistent site header while keeping preferences owned by their dedicated hooks. */
 export function AppHeader() {
+  // The resolved language controls which selector button is visually and semantically active.
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage ?? 'en';
   const { theme, toggleTheme } = useTheme();
@@ -14,6 +15,7 @@ export function AppHeader() {
 
   return (
     <header className="flex min-h-25 items-center justify-between gap-5 border-b border-line">
+      {/* The brand is also the simple route back to this single-page application's home view. */}
       <a
         className="inline-flex items-center gap-2.75 text-[25px] font-[750] tracking-[-1.2px] text-ink no-underline"
         href="/"
@@ -24,6 +26,7 @@ export function AppHeader() {
         </span>
         <span>{t('app.name')}</span>
       </a>
+      {/* Appearance and language are independent persisted preferences. */}
       <div className="flex items-center gap-2.5">
         <button
           type="button"
@@ -35,6 +38,7 @@ export function AppHeader() {
         >
           <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
         </button>
+        {/* `aria-pressed` makes this two-button language choice understandable without colour. */}
         <div className="flex items-center gap-0.5 text-[13px] font-bold" role="group" aria-label={t('language.label')}>
           <button
             type="button"

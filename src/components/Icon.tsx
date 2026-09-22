@@ -21,6 +21,7 @@ interface IconProps {
 /** Render a decorative icon without taking over its surrounding accessible label. */
 export function Icon({ name, className, size = 24, strokeWidth = 1.6 }: IconProps) {
   if (name === 'gadiruta') {
+    // The brand mark is a small local SVG; the remaining names delegate to the icon library.
     return (
       <svg
         aria-hidden="true"
@@ -42,6 +43,7 @@ export function Icon({ name, className, size = 24, strokeWidth = 1.6 }: IconProp
     );
   }
 
+  // TypeScript narrows `name` here, so it is safe to index the library-icon map.
   const IconComponent = iconComponents[name];
   return (
     <IconComponent aria-hidden="true" className={className} focusable="false" size={size} strokeWidth={strokeWidth} />

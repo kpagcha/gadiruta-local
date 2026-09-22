@@ -149,6 +149,8 @@ function parseRoute(value: unknown, index: number): NetworkRoute {
 /** Validate a physical stop and reject impossible coordinates before map features consume them. */
 function parseStop(value: unknown, index: number): NetworkStop {
   const record = requiredRecord(value, `stops[${index}]`);
+
+  // Parse coordinates separately because their geographic bounds need a second validation step.
   const latitude = requiredNumber(record.latitude, `stops[${index}].latitude`);
   const longitude = requiredNumber(record.longitude, `stops[${index}].longitude`);
 
@@ -168,6 +170,8 @@ function parseStop(value: unknown, index: number): NetworkStop {
 /** Validate an ordered route-stop sequence while preserving a nullable GTFS direction identifier. */
 function parsePattern(value: unknown, index: number): RoutePattern {
   const record = requiredRecord(value, `patterns[${index}]`);
+
+  // Preserve stop order: it represents a route traversal, not a set of stops.
   const stopIds = requiredArray(record.stopIds, `patterns[${index}].stopIds`).map((stopId, stopIndex) =>
     requiredString(stopId, `patterns[${index}].stopIds[${stopIndex}]`),
   );
@@ -190,6 +194,7 @@ function parsePattern(value: unknown, index: number): RoutePattern {
  * makes a partial upload fail visibly instead of producing subtly broken local queries.
  */
 export function parseNetworkDataset(value: unknown): NetworkDataset {
+  // Validate the outer version before treating any file contents as the current contract.
   const record = requiredRecord(value, 'dataset');
 
   if (record.formatVersion !== 1) {
@@ -197,6 +202,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   }
 
   const sourceRecord = requiredRecord(record.source, 'dataset.source');
+
+  // Provenance is shown to users and supports review, so validate it with the transit topology.
   const source = {
     url: requiredString(sourceRecord.url, 'dataset.source.url'),
     generatedAt: requiredString(sourceRecord.generatedAt, 'dataset.source.generatedAt'),
@@ -210,6 +217,7 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     throw new NetworkDataError('dataset.source.archiveSha256 must be a lowercase SHA-256 hash.');
   }
 
+  // Shape-check each collection before examining relationships between their IDs.
   const agencies = requiredArray(record.agencies, 'dataset.agencies').map(parseAgency);
   const routes = requiredArray(record.routes, 'dataset.routes').map(parseRoute);
   const stops = requiredArray(record.stops, 'dataset.stops').map(parseStop);
@@ -219,6 +227,7 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     throw new NetworkDataError('dataset must contain agencies, routes, stops, and patterns.');
   }
 
+  // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
   const stopIds = uniqueIds(stops, 'dataset.stops');
@@ -229,12 +238,14 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
   }
 
+  // A parent station and a pattern stop must both refer to records in this same local file.
   for (const stop of stops) {
     if (stop.parentStationId !== null && !stopIds.has(stop.parentStationId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown parent station.`);
     }
   }
 
+  // Patterns complete the graph by connecting route IDs to their ordered stop IDs.
   for (const pattern of patterns) {
     if (!routeIds.has(pattern.routeId)) {
       throw new NetworkDataError(`a pattern references unknown route ${pattern.routeId}.`);

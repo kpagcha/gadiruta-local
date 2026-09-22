@@ -111,6 +111,7 @@ function compareText(first: string, second: string): number {
  * so the browser never receives a topology that cannot be queried reliably.
  */
 export function createNetworkDataset(tables: InputTables, archiveSha256: string): NetworkDataset {
+  // First lock the snapshot to the one agency this application is allowed to represent.
   const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
   if (agency === undefined) {
     fail(`agency ${bahiaAgencyId} is not present.`);
@@ -125,6 +126,8 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
       name: bahiaAgencyName,
     },
   ];
+
+  // Keep only that agency's routes and sort by stable source ID for a reviewable generated file.
   const routes = tables.routes
     .filter((row) => optionalValue(row, 'agency_id') === bahiaAgencyId)
     .map((row) => ({
@@ -142,6 +145,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     fail(`agency ${bahiaAgencyId} has no routes.`);
   }
 
+  // Trips are the link between a route and its ordered `stop_times` rows.
   const trips = tables.trips
     .filter((row) => routeById.has(optionalValue(row, 'route_id') ?? ''))
     .map(
@@ -157,6 +161,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     fail('Bahía routes have no trips.');
   }
 
+  // Group the relevant stop times once so each trip can later build its ordered stop sequence.
   const stopTimesByTrip = new Map<string, OrderedStopTime[]>();
   for (const row of tables.stopTimes) {
     const tripId = optionalValue(row, 'trip_id');
@@ -172,6 +177,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     stopTimesByTrip.set(tripId, stopTimes);
   }
 
+  // Different trips with the same route, direction, and stops become one reusable route pattern.
   const patternsByKey = new Map<string, NetworkDataset['patterns'][number]>();
   const referencedStopIds = new Set<string>();
   for (const trip of trips) {
@@ -180,6 +186,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
       fail(`trip ${trip.id} has no stop times.`);
     }
 
+    // GTFS stores stop times as rows; their sequence field restores the route traversal order.
     stopTimes.sort((first, second) => first.sequence - second.sequence);
     for (let index = 1; index < stopTimes.length; index += 1) {
       if (stopTimes[index - 1]?.sequence === stopTimes[index]?.sequence) {
@@ -197,6 +204,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     });
   }
 
+  // Index all source stops before resolving the IDs referenced by selected trips.
   const stopById = new Map<string, CsvRow>();
   for (const row of tables.stops) {
     const id = requiredValue(row, 'stop_id', 'stops');
@@ -206,6 +214,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     stopById.set(id, row);
   }
 
+  // Include a referenced stop's parent station too, so the local graph keeps that valid relationship.
   const selectedStopIds = new Set(referencedStopIds);
   for (const stopId of referencedStopIds) {
     const stop = stopById.get(stopId);
@@ -219,6 +228,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     }
   }
 
+  // Convert only selected source rows into the small application-facing stop contract.
   const stops = [...selectedStopIds]
     .map((stopId) => {
       const stop = stopById.get(stopId);
@@ -242,6 +252,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     return compareText(firstKey, secondKey);
   });
 
+  // Validate the generated shape through the same boundary the browser uses before returning it.
   return parseNetworkDataset({
     formatVersion: 1,
     source: {
@@ -297,8 +308,11 @@ async function downloadArchive(inputPath: string): Promise<Uint8Array> {
  * depend on CTAN availability.
  */
 export async function buildNetworkData(arguments_: readonly string[] = process.argv.slice(2)): Promise<void> {
+  // Normal runs read an existing local input; only the explicit flag authorizes a network download.
   const { inputPath, download } = parseArguments(arguments_);
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
+
+  // Extract just the five GTFS tables needed for the current topology-only browser snapshot.
   const files = await readZipTextFiles(archive);
   const tables: InputTables = {
     agency: readGtfsTable(files, 'agency.txt'),
@@ -307,9 +321,12 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
     trips: readGtfsTable(files, 'trips.txt'),
     stopTimes: readGtfsTable(files, 'stop_times.txt'),
   };
+
+  // Record input provenance, then build and validate the reduced app-facing dataset.
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
   const dataset = createNetworkDataset(tables, archiveSha256);
 
+  // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
   await mkdir(resolve(outputPath, '..'), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
   const inputStats = await stat(inputPath);
@@ -320,6 +337,7 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
 
 const invokedPath = process.argv[1];
 if (invokedPath !== undefined && import.meta.url === pathToFileURL(resolve(invokedPath)).href) {
+  // Permit importing this module in tests without also executing the command-line workflow.
   void buildNetworkData().catch((error: unknown) => {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 1;

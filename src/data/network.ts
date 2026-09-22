@@ -6,6 +6,7 @@ const datasetUrl = '/data/bahia-cadiz-network.json';
 
 /** Load the versioned static network asset without contacting an upstream transit service. */
 export async function loadNetworkDataset(signal?: AbortSignal): Promise<NetworkDataset> {
+  // This is a checked-in static asset, never a direct request to CTAN from the browser.
   const response = await fetch(datasetUrl, { signal });
 
   if (!response.ok) {
@@ -14,6 +15,7 @@ export async function loadNetworkDataset(signal?: AbortSignal): Promise<NetworkD
 
   let value: unknown;
   try {
+    // JSON decoding only establishes syntax; the schema parser below establishes the data contract.
     value = await response.json();
   } catch {
     throw new Error('The local network data is not valid JSON.');
@@ -33,11 +35,13 @@ export function getRouteLabel(route: NetworkRoute): string {
  * `parseNetworkDataset` rejects an invalid generation date before a component can call this.
  */
 export function formatNetworkSnapshotDate(value: string, language: string): string {
+  // The schema already verified this value is a date, so formatting cannot turn an invalid feed into UI text.
   return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(new Date(value));
 }
 
 /** Select a small deterministic sample for the landing-page network preview. */
 export function getRoutePreview(routes: readonly NetworkRoute[], limit = 6): NetworkRoute[] {
+  // Copy before sorting: callers may still use the source order elsewhere in the interface.
   return [...routes]
     .sort((first, second) =>
       getRouteLabel(first).localeCompare(getRouteLabel(second), 'es', {

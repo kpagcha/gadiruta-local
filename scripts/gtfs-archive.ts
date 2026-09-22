@@ -40,6 +40,7 @@ export function parseCsv(text: string): CsvRow[] {
   let parsedRows: string[][];
 
   try {
+    // Repair CTAN's one known CSV quirk before handing the rest of the format to a real parser.
     parsedRows = parse(repairCtanInteriorQuotes(text), {
       bom: true,
       relax_column_count: true,
@@ -50,6 +51,7 @@ export function parseCsv(text: string): CsvRow[] {
     fail(`CSV parsing failed: ${errorMessage(error)}`);
   }
 
+  // Ignore genuinely empty lines, then use the first remaining row as the column definition.
   const rows = parsedRows.filter((row) => row.some((value) => value !== ''));
   const [header, ...valueRows] = rows;
   if (header === undefined || header.length === 0) {
@@ -62,6 +64,7 @@ export function parseCsv(text: string): CsvRow[] {
   }
 
   return valueRows.map((valuesRow, rowIndex) => {
+    // Reject a shifted row rather than pairing its values with incorrect GTFS field names.
     if (valuesRow.length !== columns.length) {
       fail(`CSV row ${rowIndex + 2} has ${valuesRow.length} fields; expected ${columns.length}.`);
     }
@@ -73,6 +76,7 @@ export function parseCsv(text: string): CsvRow[] {
 /** Read and strictly UTF-8 decode one ZIP entry while retaining the entry name in failures. */
 async function readZipEntryText(archive: ZipFile, entry: Entry): Promise<string> {
   try {
+    // Read through yauzl so ZIP compression and integrity details stay in one maintained library.
     const contents = await buffer(await archive.openReadStreamPromise(entry));
     return new TextDecoder('utf-8', { fatal: true }).decode(contents);
   } catch (error: unknown) {
@@ -90,6 +94,7 @@ export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, s
   let archive: ZipFile;
 
   try {
+    // Opening validates the archive container before any table parser sees its contents.
     archive = await fromBufferPromise(Buffer.from(bytes), { validateEntrySizes: true });
   } catch (error: unknown) {
     fail(`could not open ZIP archive: ${errorMessage(error)}`);
@@ -98,6 +103,7 @@ export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, s
   const files = new Map<string, string>();
   try {
     for await (const entry of archive.eachEntry()) {
+      // A duplicate filename would make a later lookup depend on ZIP entry order.
       if (files.has(entry.fileName)) {
         fail(`ZIP archive contains duplicate entry ${entry.fileName}.`);
       }
@@ -110,6 +116,7 @@ export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, s
     }
     fail(`could not read ZIP archive: ${errorMessage(error)}`);
   } finally {
+    // Always release the archive handle, including after a malformed entry or CSV error.
     archive.close();
   }
 
@@ -118,6 +125,7 @@ export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, s
 
 /** Parse a required GTFS table and retain its filename when CSV parsing fails. */
 export function readGtfsTable(files: ReadonlyMap<string, string>, filename: string): CsvRow[] {
+  // Keep the source filename in downstream diagnostics; it is the useful unit when inspecting a ZIP.
   const contents = files.get(filename);
   if (contents === undefined) {
     fail(`archive does not contain ${filename}.`);

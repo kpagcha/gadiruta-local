@@ -45,8 +45,11 @@ function resolveTheme(mode: ThemeMode): ResolvedTheme {
 
 /** Apply the resolved theme to document attributes and browser chrome metadata. */
 function applyTheme(mode: ThemeMode): ResolvedTheme {
+  // Resolve before writing so the document never receives the abstract "system" value.
   const theme = resolveTheme(mode);
   const root = document.documentElement;
+
+  // `data-theme` drives CSS, while these browser hints affect native controls and the address bar.
   root.dataset.theme = theme;
   root.style.colorScheme = theme;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme]);
@@ -64,14 +67,17 @@ function persistThemeMode(mode: ThemeMode): void {
 
 /** Synchronize React state, system preference changes, and the document theme. */
 export function useTheme(): ThemeState {
+  // Read storage lazily so it runs only when this hook first mounts.
   const [mode, setMode] = useState<ThemeMode>(() => readThemeMode());
   const [theme, setTheme] = useState<ResolvedTheme>(() => {
+    // An early document theme avoids a visible flash while React is starting up.
     const initialTheme = document.documentElement.dataset.theme;
     if (initialTheme === 'dark' || initialTheme === 'light') return initialTheme;
     return resolveTheme(readThemeMode());
   });
 
   useEffect(() => {
+    // Listen only in system mode; an explicit choice must not change with the OS setting.
     const media = window.matchMedia(MEDIA_QUERY);
 
     /** Re-resolve the preference so system-mode changes update both React and the document. */
@@ -86,6 +92,7 @@ export function useTheme(): ThemeState {
 
   /** Toggle to the opposite explicit theme, overriding the system choice for this browser. */
   function toggleTheme(): void {
+    // Toggling always creates an explicit preference, even if the starting mode was "system".
     const nextTheme: ResolvedTheme = theme === 'dark' ? 'light' : 'dark';
     persistThemeMode(nextTheme);
     setMode(nextTheme);

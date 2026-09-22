@@ -8,6 +8,7 @@ export function AppFooter() {
 
   return (
     <footer className="grid gap-4.5 border-t border-line py-6.25 pb-8.75 desktop:grid-cols-[1fr_1.65fr] desktop:items-start desktop:gap-10">
+      {/* Keep the service area and source statement present on every page, not tied to a feature. */}
       <p className="text-[13px] font-semibold">{t('footer.region')}</p>
       <div className="max-w-150 text-[11px] leading-[1.7] text-muted">
         <p>

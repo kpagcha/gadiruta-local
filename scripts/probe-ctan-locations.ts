@@ -195,16 +195,19 @@ export function createCtanLocationProbeReport(
   directory: CtanLocationDirectory,
   gtfsStopIds: readonly string[],
 ): CtanLocationProbeReport {
+  // Index each CTAN level first, which both detects duplicate IDs and makes relationship checks direct.
   const municipalitiesById = uniqueById(directory.municipalities, 'municipalities');
   const nucleiById = uniqueById(directory.nuclei, 'nuclei');
   const stopsById = uniqueById(directory.stops, 'stops');
 
+  // A núcleo cannot be useful to the crosswalk unless its parent municipality is present.
   for (const nucleus of directory.nuclei) {
     if (!municipalitiesById.has(nucleus.municipalityId)) {
       fail(`nucleus ${nucleus.id} references unknown municipality ${nucleus.municipalityId}.`);
     }
   }
 
+  // Every stop must point to a known núcleo that agrees about the enclosing municipality.
   for (const stop of directory.stops) {
     const nucleus = nucleiById.get(stop.nucleusId);
     if (nucleus === undefined) {
@@ -215,6 +218,7 @@ export function createCtanLocationProbeReport(
     }
   }
 
+  // The GTFS selection is the coverage target; duplicates would make the reported counts misleading.
   const uniqueGtfsStopIds = new Set(gtfsStopIds);
   if (uniqueGtfsStopIds.size !== gtfsStopIds.length) {
     fail('selected GTFS stops contain duplicate stop IDs.');
@@ -223,6 +227,7 @@ export function createCtanLocationProbeReport(
     fail('selected GTFS stops are empty.');
   }
 
+  // Translate only the verified identifier relation; names and coordinates never take part in matching.
   const matchedGtfsStopIds = new Set<string>();
   for (const ctanStopId of stopsById.keys()) {
     const gtfsStopId = getGtfsStopId(ctanStopId);
@@ -231,6 +236,7 @@ export function createCtanLocationProbeReport(
     }
   }
 
+  // This final difference is the user-facing evidence of records CTAN did not supply.
   const unmatchedGtfsStopIds = [...uniqueGtfsStopIds]
     .filter((stopId) => !matchedGtfsStopIds.has(stopId))
     .sort(compareText);
@@ -248,6 +254,7 @@ export function createCtanLocationProbeReport(
 
 /** Fetch one JSON endpoint while retaining its raw response for source-data review. */
 async function fetchJson(url: string): Promise<CapturedResponse> {
+  // Non-success responses from required directory endpoints invalidate the entire probe run.
   const response = await fetch(url);
   if (!response.ok) {
     fail(`could not load ${url} (${response.status}).`);
@@ -258,6 +265,7 @@ async function fetchJson(url: string): Promise<CapturedResponse> {
 
 /** Identify CTAN's ordinary response for an individual stop identifier that has no record. */
 export function isMissingCtanStopResponse(status: number, text: string): boolean {
+  // CTAN uses both ordinary 404s and this Spanish 400 payload for a stop ID with no record.
   if (status === 404) {
     return true;
   }
@@ -266,6 +274,7 @@ export function isMissingCtanStopResponse(status: number, text: string): boolean
   }
 
   try {
+    // Only accept CTAN's exact no-data message; a different 400 still needs attention.
     const value: unknown = JSON.parse(text);
     return isRecord(value) && value.error === 'No se encuentran los datos';
   } catch {
@@ -275,6 +284,7 @@ export function isMissingCtanStopResponse(status: number, text: string): boolean
 
 /** Fetch and retain a detail response whose absent resource is unresolved-stop evidence, not a crash. */
 async function fetchCtanStopDetail(url: string): Promise<CtanStopDetailResponse> {
+  // Read the body before deciding whether it is a tolerated absence so it can always be captured.
   const response = await fetch(url);
   const text = await response.text();
   const isMissing = isMissingCtanStopResponse(response.status, text);
@@ -288,6 +298,7 @@ async function fetchCtanStopDetail(url: string): Promise<CtanStopDetailResponse>
 /** Parse one captured response as JSON without losing the original text written to disk. */
 function parseCapturedJson(response: CapturedResponse): unknown {
   try {
+    // Keep JSON parsing separate from fetching so the raw body is available for audit on disk.
     return JSON.parse(response.text) as unknown;
   } catch {
     fail(`${response.url} did not return valid JSON.`);
@@ -301,6 +312,7 @@ function getCtanUrl(path: string): string {
 
 /** Read the same selected-stop slice as the network generator without rewriting the browser asset. */
 async function loadBahiaGtfsStopIds(inputPath: string): Promise<{ archiveSha256: string; stopIds: string[] }> {
+  // Reuse the snapshot generator's selection rules rather than creating a subtly different GTFS slice.
   const archive = await readFile(inputPath);
   const files = await readZipTextFiles(archive);
   const dataset = createNetworkDataset(
@@ -320,6 +332,7 @@ async function loadBahiaGtfsStopIds(inputPath: string): Promise<{ archiveSha256:
     createHash('sha256').update(archive).digest('hex'),
   );
 
+  // The resulting browser dataset contains precisely the stop IDs the CTAN crosswalk must cover.
   return { archiveSha256: dataset.source.archiveSha256, stopIds: dataset.stops.map((stop) => stop.id) };
 }
 
@@ -330,6 +343,7 @@ function getCaptureDirectoryName(now: Date): string {
 
 /** Keep generated API evidence under ignored source data, even when a developer chooses a custom path. */
 function isSourceDataPath(path: string): boolean {
+  // A relative path beginning with `..` would escape the ignored source-data boundary.
   const relativePath = relative(sourceDataPath, path);
   return (
     relativePath === '' || (!relativePath.startsWith(`..${sep}`) && relativePath !== '..' && !isAbsolute(relativePath))
@@ -338,6 +352,7 @@ function isSourceDataPath(path: string): boolean {
 
 /** Persist one raw API response and append its integrity metadata to the capture manifest. */
 async function writeCapture(outputPath: string, response: CapturedResponse, manifest: CaptureManifest): Promise<void> {
+  // Write the exact body first, then record enough metadata to verify it later without recontacting CTAN.
   await writeFile(outputPath, response.text);
   manifest.responses.push({
     path: outputPath,
@@ -359,6 +374,8 @@ function parseProbeArguments(arguments_: readonly string[]): ProbeArguments {
       allowPositionals: false,
     });
     const outputParentPath = values.output === undefined ? defaultOutputParentPath : resolve(values.output);
+
+    // This command is investigative only; prevent a custom option from writing into application assets.
     if (!isSourceDataPath(outputParentPath)) {
       fail('--output must stay within data/source.');
     }
@@ -380,22 +397,29 @@ function parseProbeArguments(arguments_: readonly string[]): ProbeArguments {
 export async function probeCtanLocations(
   arguments_: readonly string[] = process.argv.slice(2),
 ): Promise<{ outputPath: string; report: CtanLocationProbeReport }> {
+  // The local GTFS archive defines the exact stop IDs that this probe must account for.
   const { inputPath, outputParentPath } = parseProbeArguments(arguments_);
   const { archiveSha256, stopIds } = await loadBahiaGtfsStopIds(inputPath);
+
+  // Each run has its own ignored evidence directory, so it cannot alter the browser's data snapshot.
   const outputPath = resolve(outputParentPath, getCaptureDirectoryName(new Date()));
   await mkdir(outputPath, { recursive: true });
 
+  // The manifest ties the captured API files back to this specific GTFS archive.
   const manifest: CaptureManifest = {
     retrievedAt: new Date().toISOString(),
     gtfsArchiveSha256: archiveSha256,
     responses: [],
   };
+
+  // CTAN exposes the hierarchy from the top down: municipalities, then their núcleos, then stops.
   const municipalitiesResponse = await fetchJson(getCtanUrl('municipios'));
   await writeCapture(resolve(outputPath, 'municipios.json'), municipalitiesResponse, manifest);
   const municipalities = parseCtanMunicipalities(parseCapturedJson(municipalitiesResponse));
 
   const nuclei: CtanNucleus[] = [];
   for (const municipality of municipalities) {
+    // This endpoint is scoped to one municipality; verify CTAN did not return a mismatched child.
     const response = await fetchJson(getCtanUrl(`municipios/${municipality.id}/nucleos`));
     await writeCapture(resolve(outputPath, `municipio-${municipality.id}-nucleos.json`), response, manifest);
     const municipalityNuclei = parseCtanNuclei(parseCapturedJson(response));
@@ -407,21 +431,28 @@ export async function probeCtanLocations(
     }
   }
 
+  // Start with CTAN's all-stops directory, which is faster but known to be incomplete.
   const stopsResponse = await fetchJson(getCtanUrl('paradas'));
   await writeCapture(resolve(outputPath, 'paradas.json'), stopsResponse, manifest);
   const stops = parseCtanStops(parseCapturedJson(stopsResponse));
+
+  // Use the first report only to identify which GTFS IDs need a direct CTAN stop lookup.
   const collectionReport = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
   for (const gtfsStopId of collectionReport.unmatchedGtfsStopIds) {
+    // The identifier rule is reversible: GTFS "2_91" corresponds to CTAN stop "91".
     const ctanStopId = getCtanStopId(gtfsStopId);
     if (ctanStopId === null) {
       continue;
     }
 
+    // Preserve both a found detail record and CTAN's ordinary no-data response as evidence.
     const response = await fetchCtanStopDetail(getCtanUrl(`paradas/${ctanStopId}`));
     await writeCapture(resolve(outputPath, `parada-${ctanStopId}.json`), response, manifest);
     if (response.isMissing) {
       continue;
     }
+
+    // A detail response must name the requested stop before it can supplement the collection.
     const stop = parseCtanStop(parseCapturedJson(response));
     if (stop.id !== ctanStopId) {
       fail(`stop detail ${ctanStopId} returned ${stop.id}.`);
@@ -429,8 +460,10 @@ export async function probeCtanLocations(
     stops.push(stop);
   }
 
+  // Recompute from the supplemented directory; this final report defines "unmatched".
   const report = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
 
+  // Write the reproducible audit trail only after every request and validation has completed.
   await writeFile(resolve(outputPath, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
   await writeFile(resolve(outputPath, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 
@@ -439,6 +472,7 @@ export async function probeCtanLocations(
 
 const invokedPath = process.argv[1];
 if (invokedPath !== undefined && import.meta.url === pathToFileURL(resolve(invokedPath)).href) {
+  // Permit importing parser and report helpers in offline tests without triggering live API calls.
   void probeCtanLocations()
     .then(({ outputPath, report }) => {
       console.log(

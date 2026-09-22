@@ -11,6 +11,7 @@ interface NetworkStatusPanelViewProps {
 
 /** Load the network asset for the page and pass its state to the reusable visual panel. */
 export function NetworkStatusPanel() {
+  // Loading stays in the data hook; this component only connects that state to the visual panel.
   return <NetworkStatusPanelView state={useNetworkDataset()} />;
 }
 
@@ -20,11 +21,13 @@ export function NetworkStatusPanelView({ state }: NetworkStatusPanelViewProps) {
 
   return (
     <Panel aria-labelledby="data-status-title">
+      {/* The visual treatment is shared; only the status-specific content inside the live region varies. */}
       <span className="grid size-11 place-items-center rounded-xl bg-surface-active text-accent">
         <Icon name="route" size={23} />
       </span>
       <p className="mt-6 text-xs font-[650] tracking-[1.8px] text-accent uppercase">{t('dataStatus.eyebrow')}</p>
       <div aria-live="polite">
+        {/* Each branch supplies the same heading ID so the panel keeps a stable accessible label. */}
         {state.status === 'loading' && (
           <>
             <h2 id="data-status-title" className="mt-3 text-[28px] leading-[1.15] font-[650] tracking-[-1px]">
@@ -58,6 +61,7 @@ export function NetworkStatusPanelView({ state }: NetworkStatusPanelViewProps) {
               })}
             </p>
             <dl className="mt-6 grid grid-cols-3 gap-3 border-y border-line-subtle py-4">
+              {/* Snapshot counts explain exactly what the currently loaded local file contains. */}
               <div>
                 <dt className="text-[10px] font-[650] tracking-[1.2px] text-muted uppercase">
                   {t('dataStatus.ready.routes')}
@@ -79,6 +83,7 @@ export function NetworkStatusPanelView({ state }: NetworkStatusPanelViewProps) {
             </dl>
             <h3 className="mt-6 text-sm font-[650]">{t('dataStatus.ready.previewTitle')}</h3>
             <ul className="mt-3 divide-y divide-line-subtle">
+              {/* This is a deterministic sample, rather than a claim that the list is exhaustive. */}
               {getRoutePreview(state.dataset.routes).map((route) => {
                 const label = getRouteLabel(route);
                 return (

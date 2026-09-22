@@ -10,17 +10,20 @@ export function useNetworkDataset(): NetworkDatasetState {
   const [state, setState] = useState<NetworkDatasetState>({ status: 'loading' });
 
   useEffect(() => {
+    // Tie the request to this mounted component so navigating away cannot update stale state.
     const controller = new AbortController();
 
     void loadNetworkDataset(controller.signal).then(
       (dataset) => setState({ status: 'ready', dataset }),
       (error: unknown) => {
+        // An abort is expected during unmount; every other failure becomes a user-visible state.
         if (!(error instanceof DOMException && error.name === 'AbortError')) {
           setState({ status: 'error' });
         }
       },
     );
 
+    // React calls this cleanup when the component unmounts.
     return () => controller.abort();
   }, []);
 

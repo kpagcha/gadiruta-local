@@ -7,6 +7,7 @@ type PanelProps = ComponentPropsWithRef<'section'>;
 
 /** Render a labelled page section on Gadiruta's shared elevated card surface. */
 export function Panel({ className, ...props }: PanelProps) {
+  // Keep the shared surface styles while allowing a caller to add spacing or layout classes.
   return (
     <section
       {...props}
