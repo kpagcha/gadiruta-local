@@ -12,9 +12,7 @@ export function HomePage() {
       tabIndex={-1}
     >
       <section className="desktop:py-8">
-        <p className="mb-5 text-xs font-[650] tracking-[1.8px] text-accent uppercase">
-          {t('hero.eyebrow')}
-        </p>
+        <p className="mb-5 text-xs font-[650] tracking-[1.8px] text-accent uppercase">{t('hero.eyebrow')}</p>
         <h1 className="text-[clamp(44px,7vw,76px)] leading-[1.05] font-[650] tracking-[-2.8px] whitespace-pre-line">
           {t('hero.title')}
         </h1>

@@ -168,8 +168,8 @@ function parseStop(value: unknown, index: number): NetworkStop {
 /** Validate an ordered route-stop sequence while preserving a nullable GTFS direction identifier. */
 function parsePattern(value: unknown, index: number): RoutePattern {
   const record = requiredRecord(value, `patterns[${index}]`);
-  const stopIds = requiredArray(record.stopIds, `patterns[${index}].stopIds`).map(
-    (stopId, stopIndex) => requiredString(stopId, `patterns[${index}].stopIds[${stopIndex}]`),
+  const stopIds = requiredArray(record.stopIds, `patterns[${index}].stopIds`).map((stopId, stopIndex) =>
+    requiredString(stopId, `patterns[${index}].stopIds[${stopIndex}]`),
   );
 
   if (stopIds.length === 0) {

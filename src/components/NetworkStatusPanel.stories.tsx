@@ -12,9 +12,7 @@ const readyState = {
       generatedAt: '2026-09-21T15:15:44.000Z',
       archiveSha256: 'a'.repeat(64),
     },
-    agencies: [
-      { id: 'CMTBC', name: 'Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz' },
-    ],
+    agencies: [{ id: 'CMTBC', name: 'Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz' }],
     routes: [
       {
         id: '2_13',
@@ -44,9 +42,7 @@ const readyState = {
         textColor: 'FFFFFF',
       },
     ],
-    stops: [
-      { id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null },
-    ],
+    stops: [{ id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null }],
     patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['cadiz'] }],
   },
 } satisfies NetworkDatasetState;

@@ -50,10 +50,7 @@ function fail(message: string): never {
 }
 
 /** Normalize a non-blank GTFS field while retaining the processor's established error wording. */
-const requiredGtfsText = z
-  .string({ error: 'is required.' })
-  .trim()
-  .min(1, { error: 'is required.' });
+const requiredGtfsText = z.string({ error: 'is required.' }).trim().min(1, { error: 'is required.' });
 
 /** Normalize absent and blank optional GTFS fields to the nulls used by the snapshot contract. */
 const optionalGtfsText = z
@@ -174,9 +171,7 @@ function compareText(first: string, second: string): number {
  * so the browser never receives a topology that cannot be queried reliably.
  */
 export function createNetworkDataset(tables: InputTables, archiveSha256: string): NetworkDataset {
-  const agency = tables.agency.find(
-    (row) => parseGtfsRow(row, 'agency', agencyIdSchema).agency_id === bahiaAgencyId,
-  );
+  const agency = tables.agency.find((row) => parseGtfsRow(row, 'agency', agencyIdSchema).agency_id === bahiaAgencyId);
   if (agency === undefined) {
     fail(`agency ${bahiaAgencyId} is not present.`);
   }
@@ -285,11 +280,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
       fail(`selected trip references missing stop ${stopId}.`);
     }
 
-    const { parent_station: parentStationId } = parseGtfsRow(
-      stop,
-      'stops',
-      stopParentStationSchema,
-    );
+    const { parent_station: parentStationId } = parseGtfsRow(stop, 'stops', stopParentStationSchema);
     if (parentStationId !== null) {
       selectedStopIds.add(parentStationId);
     }
@@ -373,9 +364,7 @@ async function downloadArchive(inputPath: string): Promise<Uint8Array> {
  * Normal development reads an already-downloaded file, so application startup and tests never
  * depend on CTAN availability.
  */
-export async function buildNetworkData(
-  arguments_: readonly string[] = process.argv.slice(2),
-): Promise<void> {
+export async function buildNetworkData(arguments_: readonly string[] = process.argv.slice(2)): Promise<void> {
   const { inputPath, download } = parseArguments(arguments_);
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
   const files = await readZipTextFiles(archive);

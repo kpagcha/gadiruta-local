@@ -66,9 +66,7 @@ export function parseCsv(text: string): CsvRow[] {
       fail(`CSV row ${rowIndex + 2} has ${valuesRow.length} fields; expected ${columns.length}.`);
     }
 
-    return Object.fromEntries(
-      columns.map((column, columnIndex) => [column, valuesRow[columnIndex] ?? '']),
-    );
+    return Object.fromEntries(columns.map((column, columnIndex) => [column, valuesRow[columnIndex] ?? '']));
   });
 }
 

@@ -27,10 +27,7 @@ test('creates a Bahía-only topology with stable deduplicated patterns', () => {
 test('rejects a selected trip that references an absent stop', () => {
   const brokenFixture = {
     ...topologyFixture,
-    stopTimes: [
-      ...topologyFixture.stopTimes,
-      { trip_id: 'inbound', stop_id: 'missing', stop_sequence: '3' },
-    ],
+    stopTimes: [...topologyFixture.stopTimes, { trip_id: 'inbound', stop_id: 'missing', stop_sequence: '3' }],
   };
 
   assert.throws(() => createNetworkDataset(brokenFixture, 'a'.repeat(64)), /missing stop/);
@@ -74,10 +71,7 @@ test('normalizes selected GTFS values with schemas and retains clear field error
 test('does not validate fields outside the selected GTFS slice', () => {
   const fixtureWithUnselectedMalformedRows = {
     ...topologyFixture,
-    routes: [
-      topologyFixture.routes[0],
-      { ...topologyFixture.routes[1], route_id: '', route_type: 'not-an-integer' },
-    ],
+    routes: [topologyFixture.routes[0], { ...topologyFixture.routes[1], route_id: '', route_type: 'not-an-integer' }],
     trips: [...topologyFixture.trips, { route_id: 'not-selected', trip_id: '', direction_id: '' }],
     stopTimes: [
       ...topologyFixture.stopTimes,
@@ -91,18 +85,13 @@ test('does not validate fields outside the selected GTFS slice', () => {
 });
 
 test("rejects invalid arguments through Node's strict parser", async () => {
-  await assert.rejects(
-    buildNetworkData(['--unknown']),
-    /GTFS data error: Unknown option '--unknown'/,
-  );
+  await assert.rejects(buildNetworkData(['--unknown']), /GTFS data error: Unknown option '--unknown'/);
 });
 
 test('reads CTAN CSV quirks from a ZIP archive without changing GTFS field values', async () => {
   const files = await readZipTextFiles(ctanMalformedQuoteArchiveFixture);
 
-  assert.deepEqual(readGtfsTable(files, 'stops.txt'), [
-    { stop_id: ' oasis ', stop_name: 'Oasis " Viveros " (V)' },
-  ]);
+  assert.deepEqual(readGtfsTable(files, 'stops.txt'), [{ stop_id: ' oasis ', stop_name: 'Oasis " Viveros " (V)' }]);
 });
 
 test('parses quoted GTFS CSV values and rejects malformed rows', () => {

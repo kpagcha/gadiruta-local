@@ -35,11 +35,7 @@ export function AppHeader() {
         >
           <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
         </button>
-        <div
-          className="flex items-center gap-0.5 text-[13px] font-bold"
-          role="group"
-          aria-label={t('language.label')}
-        >
+        <div className="flex items-center gap-0.5 text-[13px] font-bold" role="group" aria-label={t('language.label')}>
           <button
             type="button"
             lang="en"

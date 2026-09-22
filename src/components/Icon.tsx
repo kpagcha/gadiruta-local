@@ -44,12 +44,6 @@ export function Icon({ name, className, size = 24, strokeWidth = 1.6 }: IconProp
 
   const IconComponent = iconComponents[name];
   return (
-    <IconComponent
-      aria-hidden="true"
-      className={className}
-      focusable="false"
-      size={size}
-      strokeWidth={strokeWidth}
-    />
+    <IconComponent aria-hidden="true" className={className} focusable="false" size={size} strokeWidth={strokeWidth} />
   );
 }

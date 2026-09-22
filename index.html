@@ -13,8 +13,7 @@
           // Use the system preference when browser storage is unavailable.
         }
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme =
-          preference === 'dark' || (preference !== 'light' && prefersDark) ? 'dark' : 'light';
+        const theme = preference === 'dark' || (preference !== 'light' && prefersDark) ? 'dark' : 'light';
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
       })();
