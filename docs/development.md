@@ -84,8 +84,10 @@ committing them; see the architecture document for that future boundary.
 `just locations-probe` is separate from snapshot refresh. It reads the existing local GTFS ZIP,
 then explicitly contacts CTAN for its municipality, núcleo, and stop directory. It saves raw
 responses plus a manifest and coverage report below ignored `data/source/ctan-location-probe/`.
-It never changes `public/data/`, and exits unsuccessfully if CTAN does not cover every selected
-GTFS stop through its exact identifier relation. Do not use live CTAN requests in tests.
+When the CTAN stop collection omits a GTFS candidate, the command checks the corresponding
+individual CTAN stop endpoint before recording it as unmatched. It never changes `public/data/`,
+and exits unsuccessfully if CTAN does not cover every selected GTFS stop through its exact
+identifier relation. Do not use live CTAN requests in tests.
 
 ## Code and tests
 

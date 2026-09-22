@@ -66,6 +66,11 @@ interface CapturedResponse {
   text: string;
 }
 
+/** One captured CTAN stop-detail response, including an ordinary no-data response. */
+interface CtanStopDetailResponse extends CapturedResponse {
+  isMissing: boolean;
+}
+
 /** Metadata recorded beside raw responses so a report can be audited after the fact. */
 interface CaptureManifest {
   retrievedAt: string;
@@ -134,14 +139,19 @@ export function parseCtanNuclei(value: unknown): CtanNucleus[] {
 /** Parse CTAN's consortium-wide stops response and retain only authoritative hierarchy IDs. */
 export function parseCtanStops(value: unknown): CtanStop[] {
   const record = requiredRecord(value, 'stops response');
-  return requiredArray(record.paradas, 'stops response.paradas').map((item, index) => {
-    const stop = requiredRecord(item, `stops[${index}]`);
-    return {
-      id: requiredIdentifier(stop.idParada, `stops[${index}].idParada`),
-      municipalityId: requiredIdentifier(stop.idMunicipio, `stops[${index}].idMunicipio`),
-      nucleusId: requiredIdentifier(stop.idNucleo, `stops[${index}].idNucleo`),
-    };
-  });
+  return requiredArray(record.paradas, 'stops response.paradas').map((item, index) =>
+    parseCtanStop(item, `stops[${index}]`),
+  );
+}
+
+/** Parse a single CTAN stop response before it supplements an incomplete collection response. */
+export function parseCtanStop(value: unknown, label = 'stop response'): CtanStop {
+  const stop = requiredRecord(value, label);
+  return {
+    id: requiredIdentifier(stop.idParada, `${label}.idParada`),
+    municipalityId: requiredIdentifier(stop.idMunicipio, `${label}.idMunicipio`),
+    nucleusId: requiredIdentifier(stop.idNucleo, `${label}.idNucleo`),
+  };
 }
 
 /** Index identifiers and reject duplicates that would make a location membership ambiguous. */
@@ -161,6 +171,12 @@ function uniqueById<T extends { id: string }>(items: readonly T[], label: string
 /** Convert CTAN's consortium-scoped stop identifier into its matching raw GTFS stop identifier. */
 export function getGtfsStopId(ctanStopId: string): string {
   return `2_${ctanStopId}`;
+}
+
+/** Recover CTAN's numeric stop identifier only from the verified Bahia GTFS ID namespace. */
+export function getCtanStopId(gtfsStopId: string): string | null {
+  const match = /^2_(\d+)$/.exec(gtfsStopId);
+  return match?.[1] ?? null;
 }
 
 /** Sort text deterministically for reports that are reviewed outside the API's response ordering. */
@@ -238,6 +254,35 @@ async function fetchJson(url: string): Promise<CapturedResponse> {
   }
 
   return { url, text: await response.text() };
+}
+
+/** Identify CTAN's ordinary response for an individual stop identifier that has no record. */
+export function isMissingCtanStopResponse(status: number, text: string): boolean {
+  if (status === 404) {
+    return true;
+  }
+  if (status !== 400) {
+    return false;
+  }
+
+  try {
+    const value: unknown = JSON.parse(text);
+    return isRecord(value) && value.error === 'No se encuentran los datos';
+  } catch {
+    return false;
+  }
+}
+
+/** Fetch and retain a detail response whose absent resource is unresolved-stop evidence, not a crash. */
+async function fetchCtanStopDetail(url: string): Promise<CtanStopDetailResponse> {
+  const response = await fetch(url);
+  const text = await response.text();
+  const isMissing = isMissingCtanStopResponse(response.status, text);
+  if (!response.ok && !isMissing) {
+    fail(`could not load ${url} (${response.status}).`);
+  }
+
+  return { url, text, isMissing };
 }
 
 /** Parse one captured response as JSON without losing the original text written to disk. */
@@ -327,6 +372,8 @@ function parseProbeArguments(arguments_: readonly string[]): ProbeArguments {
 /**
  * Capture CTAN's official location directory and report whether it fully covers selected GTFS stops.
  *
+ * CTAN's `/paradas` collection can omit records available at `/paradas/<idParada>`, so candidates
+ * absent from the collection receive one exact detail lookup before they are reported unmatched.
  * This is intentionally separate from `just data-refresh`: it downloads evidence only into ignored
  * source data and never changes the reviewed browser dataset.
  */
@@ -363,6 +410,25 @@ export async function probeCtanLocations(
   const stopsResponse = await fetchJson(getCtanUrl('paradas'));
   await writeCapture(resolve(outputPath, 'paradas.json'), stopsResponse, manifest);
   const stops = parseCtanStops(parseCapturedJson(stopsResponse));
+  const collectionReport = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
+  for (const gtfsStopId of collectionReport.unmatchedGtfsStopIds) {
+    const ctanStopId = getCtanStopId(gtfsStopId);
+    if (ctanStopId === null) {
+      continue;
+    }
+
+    const response = await fetchCtanStopDetail(getCtanUrl(`paradas/${ctanStopId}`));
+    await writeCapture(resolve(outputPath, `parada-${ctanStopId}.json`), response, manifest);
+    if (response.isMissing) {
+      continue;
+    }
+    const stop = parseCtanStop(parseCapturedJson(response));
+    if (stop.id !== ctanStopId) {
+      fail(`stop detail ${ctanStopId} returned ${stop.id}.`);
+    }
+    stops.push(stop);
+  }
+
   const report = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
 
   await writeFile(resolve(outputPath, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);

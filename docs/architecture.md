@@ -70,10 +70,18 @@ municipality -> núcleo -> stop relationship and succeeds only when every select
 has exactly one such CTAN record. Names and coordinates are intentionally excluded. An incomplete
 report is a source-data finding, not permission to infer or hand-maintain location membership.
 
-The first probe against archive `05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844`
-found 15 municipalities, 44 núcleos, and 190 CTAN stops. Only 152 of the snapshot's 263 CMTBC
-GTFS stops matched, so the official relation is currently incomplete. The browser dataset therefore
-continues to contain no user-facing location membership.
+CTAN's `/Consorcios/2/paradas` collection omits some records that its
+`/Consorcios/2/paradas/<idParada>` endpoint returns. For every collection-missing GTFS candidate,
+the probe performs that exact detail lookup. The final report's `unmatchedGtfsStopIds` therefore
+contains only IDs whose individual official CTAN record also could not be loaded. This fallback
+remains identifier-only; it does not introduce name or coordinate matching.
+
+Against archive `05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844`, the collection
+returned 15 municipalities, 44 núcleos, and 190 stops, initially matching 152 of the snapshot's
+263 CMTBC GTFS stops. The detail fallback added 109 unique CTAN records, yielding 261 matches from
+299 CTAN stops. The individual endpoints for `2_349` and `2_350` returned CTAN's no-data response,
+so the official relation remains incomplete. The browser dataset therefore continues to contain no
+user-facing location membership.
 
 ## Future automated production refreshes
 

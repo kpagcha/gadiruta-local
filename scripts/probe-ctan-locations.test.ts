@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   createCtanLocationProbeReport,
+  getCtanStopId,
   getGtfsStopId,
+  isMissingCtanStopResponse,
+  parseCtanStop,
   parseCtanMunicipalities,
   parseCtanNuclei,
   parseCtanStops,
@@ -40,6 +43,23 @@ test('reports unmatched GTFS stops without creating a heuristic location assignm
   assert.equal(report.status, 'incomplete');
   assert.equal(report.matchedGtfsStopCount, 1);
   assert.deepEqual(report.unmatchedGtfsStopIds, ['2_999']);
+});
+
+test('recovers the only CTAN stop detail ID that can supplement an incomplete collection result', () => {
+  assert.equal(getCtanStopId('2_303'), '303');
+  assert.equal(getCtanStopId('station-303'), null);
+  assert.deepEqual(parseCtanStop(ctanLocationFixture.stops[0]), {
+    id: '303',
+    municipalityId: '1',
+    nucleusId: '1',
+  });
+});
+
+test("recognizes CTAN's not-found responses without hiding other failed detail requests", () => {
+  assert.equal(isMissingCtanStopResponse(404, '<html>not found</html>'), true);
+  assert.equal(isMissingCtanStopResponse(400, '{"error":"No se encuentran los datos"}'), true);
+  assert.equal(isMissingCtanStopResponse(400, '{"error":"invalid request"}'), false);
+  assert.equal(isMissingCtanStopResponse(500, '{"error":"No se encuentran los datos"}'), false);
 });
 
 test('rejects a stop whose declared municipality disagrees with its CTAN nucleus', () => {
