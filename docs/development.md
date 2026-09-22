@@ -16,6 +16,22 @@ Install Node.js 24, npm 11, and [just](https://just.systems/). The project suppl
 - **ESLint** and **Prettier** check code quality and formatting.
 - **Node's test runner** runs the focused, dependency-free data tests.
 
+## Repository layout
+
+Keep this overview current when a tracked directory gains or changes a responsibility.
+
+```text
+src/           Browser application: components, pages, local-data code, translations, and styles.
+public/data/   Reviewed static network snapshot served to the browser.
+scripts/       Developer-only GTFS snapshot processor and its focused fixtures/tests.
+.storybook/    Storybook configuration; component stories live beside components in src/.
+docs/          Product, architecture, and contributor documentation.
+data/source/   Ignored local CTAN ZIP used only when rebuilding the reviewed snapshot.
+```
+
+`package.json` defines npm tasks and dependencies; `justfile` provides the project command aliases.
+Neither `scripts/` nor `data/source/` is part of the deployed application runtime.
+
 ## Start the app
 
 Run these commands from the repository root in PowerShell:

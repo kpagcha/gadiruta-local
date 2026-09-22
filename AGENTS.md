@@ -59,7 +59,10 @@ Keep the small documentation set concise and non-overlapping:
 - `README.md`: orientation, commands, and milestone checklist.
 - `docs/product.md`: user and scope definition.
 - `docs/architecture.md`: current boundaries, data direction, and durable technical choices.
-- `docs/development.md`: contributor workflow and tool explanation.
+- `docs/development.md`: contributor workflow, tool explanation, and repository layout.
+
+Keep the repository-layout overview in `docs/development.md` current when a tracked directory gains
+or changes a responsibility.
 
 ## Git
 
