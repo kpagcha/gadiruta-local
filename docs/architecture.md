@@ -77,12 +77,15 @@ the probe performs that exact detail lookup. It then checks the GTFS stop's know
 contains only IDs absent from all three official sources. Every step remains identifier-only; it
 does not introduce name or coordinate matching.
 
-CTAN's line-stop response can establish that an exact stop belongs to a line, but its `idNucleo`
-value is inconsistent with CTAN's núcleo directory (for example, it returns municipality `7` for
-Rota rather than Rota núcleo `15`). The probe records these matches in
-`lineFallbackGtfsStopIds` and also lists them in `unresolvedLocationGtfsStopIds`; they improve stop
-coverage but do not verify municipality or núcleo membership. `status` remains `incomplete` until
-both stop identity and the location hierarchy are verified.
+CTAN's line-stop response has a durable field-name quirk: its `idNucleo` value is actually the
+municipality ID. Across all 67 Bahía lines in the current snapshot, all 1,493 line-stop rows that
+could be compared with the stop directory matched `idMunicipio`; none matched only the directory's
+`idNucleo`. For example, the M-560 endpoint returns `idNucleo: "7"` for Rota stops, while Rota's
+actual núcleo ID is `15`. The probe deliberately treats that value as a municipality ID, validates
+it against the municipality directory, and records exact `{ gtfsStopId, municipalityId }` pairs in
+`lineFallbacks`. It still records those IDs in `unresolvedNucleusGtfsStopIds`: line data improves
+stop and municipality coverage but does not verify the lower-level núcleo. `status` remains
+`incomplete` until the full hierarchy is verified.
 
 Against archive `05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844`, the collection
 returned 15 municipalities, 44 núcleos, and 190 stops, initially matching 152 of the snapshot's
@@ -91,8 +94,8 @@ returned 15 municipalities, 44 núcleos, and 190 stops, initially matching 152 o
 CTAN's no-data response, but their M-560 line itinerary records resolve both stop IDs. The official
 location relation nevertheless remains incomplete for those two stops: the final report has
 263/263 matched stop IDs and an empty `unmatchedGtfsStopIds`, but lists both IDs as line-fallback
-and unresolved-location results. The browser dataset therefore continues to contain no user-facing
-location membership.
+municipality mappings and núcleo-unresolved results. The browser dataset therefore continues to
+contain no user-facing location membership.
 
 ## Future automated production refreshes
 

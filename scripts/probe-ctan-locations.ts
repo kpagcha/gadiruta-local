@@ -36,6 +36,18 @@ export interface CtanStop {
   nucleusId: string;
 }
 
+/** One line-itinerary stop with CTAN's municipality value carried in its mislabeled field. */
+export interface CtanLineStop {
+  id: string;
+  municipalityId: string;
+}
+
+/** One exact GTFS stop match resolved by CTAN's line itinerary endpoint. */
+export interface CtanLineFallback {
+  gtfsStopId: string;
+  municipalityId: string;
+}
+
 /** CTAN location records reduced to the identifiers needed to prove the GTFS relation. */
 export interface CtanLocationDirectory {
   municipalities: readonly CtanMunicipality[];
@@ -52,8 +64,8 @@ export interface CtanLocationProbeReport {
   ctanStopCount: number;
   matchedGtfsStopCount: number;
   unmatchedGtfsStopIds: string[];
-  lineFallbackGtfsStopIds: string[];
-  unresolvedLocationGtfsStopIds: string[];
+  lineFallbacks: CtanLineFallback[];
+  unresolvedNucleusGtfsStopIds: string[];
 }
 
 /** Parsed command-line settings for one explicit, developer-only probe run. */
@@ -163,12 +175,20 @@ export function parseCtanStop(value: unknown, label = 'stop response'): CtanStop
   };
 }
 
-/** Parse the stop IDs from a CTAN line itinerary without trusting its inconsistent hierarchy field. */
-export function parseCtanLineStopIds(value: unknown): string[] {
+/**
+ * Parse CTAN line stops, treating its `idNucleo` field as a municipality ID.
+ *
+ * The current Bahia API was checked across all selected line itineraries: 1,493 comparable stop
+ * rows matched their directory `idMunicipio` and none matched only `idNucleo`.
+ */
+export function parseCtanLineStops(value: unknown): CtanLineStop[] {
   const record = requiredRecord(value, 'line stops response');
   return requiredArray(record.paradas, 'line stops response.paradas').map((item, index) => {
     const stop = requiredRecord(item, `line stops[${index}]`);
-    return requiredIdentifier(stop.idParada, `line stops[${index}].idParada`);
+    return {
+      id: requiredIdentifier(stop.idParada, `line stops[${index}].idParada`),
+      municipalityId: requiredIdentifier(stop.idNucleo, `line stops[${index}].idNucleo`),
+    };
   });
 }
 
@@ -184,6 +204,21 @@ function uniqueById<T extends { id: string }>(items: readonly T[], label: string
   }
 
   return itemsById;
+}
+
+/** Index line-itinerary stops while rejecting a CTAN stop that claims two municipality IDs. */
+function indexCtanLineStops(stops: readonly CtanLineStop[]): Map<string, CtanLineStop> {
+  const stopsById = new Map<string, CtanLineStop>();
+
+  for (const stop of stops) {
+    const existing = stopsById.get(stop.id);
+    if (existing !== undefined && existing.municipalityId !== stop.municipalityId) {
+      fail(`line itinerary gives stop ${stop.id} conflicting municipality IDs.`);
+    }
+    stopsById.set(stop.id, stop);
+  }
+
+  return stopsById;
 }
 
 /** Convert CTAN's consortium-scoped stop identifier into its matching raw GTFS stop identifier. */
@@ -218,7 +253,7 @@ function compareText(first: string, second: string): number {
 export function createCtanLocationProbeReport(
   directory: CtanLocationDirectory,
   gtfsStopIds: readonly string[],
-  lineFallbackGtfsStopIds: readonly string[] = [],
+  lineFallbacks: readonly CtanLineFallback[] = [],
 ): CtanLocationProbeReport {
   // Index each CTAN level first, which both detects duplicate IDs and makes relationship checks direct.
   const municipalitiesById = uniqueById(directory.municipalities, 'municipalities');
@@ -261,17 +296,31 @@ export function createCtanLocationProbeReport(
     }
   }
 
-  // A line itinerary can prove an exact stop ID but not its place membership, so keep both facts.
-  const resolvedByLineFallback = new Set<string>();
-  for (const gtfsStopId of lineFallbackGtfsStopIds) {
-    if (uniqueGtfsStopIds.has(gtfsStopId) && !matchedGtfsStopIds.has(gtfsStopId)) {
-      matchedGtfsStopIds.add(gtfsStopId);
-      resolvedByLineFallback.add(gtfsStopId);
+  // A line itinerary proves both the exact stop and municipality; the núcleo remains unknown.
+  const resolvedByLineFallback = new Map<string, CtanLineFallback>();
+  for (const fallback of lineFallbacks) {
+    if (!municipalitiesById.has(fallback.municipalityId)) {
+      fail(`line fallback ${fallback.gtfsStopId} references unknown municipality ${fallback.municipalityId}.`);
+    }
+    if (!uniqueGtfsStopIds.has(fallback.gtfsStopId)) {
+      continue;
+    }
+
+    const existing = resolvedByLineFallback.get(fallback.gtfsStopId);
+    if (existing !== undefined) {
+      if (existing.municipalityId !== fallback.municipalityId) {
+        fail(`line fallback ${fallback.gtfsStopId} gives conflicting municipality IDs.`);
+      }
+      continue;
+    }
+    if (!matchedGtfsStopIds.has(fallback.gtfsStopId)) {
+      matchedGtfsStopIds.add(fallback.gtfsStopId);
+      resolvedByLineFallback.set(fallback.gtfsStopId, fallback);
     }
   }
 
   // These IDs remain evidence that CTAN did not supply a usable municipality -> núcleo relation.
-  const unresolvedLocationGtfsStopIds = [...resolvedByLineFallback].sort(compareText);
+  const unresolvedNucleusGtfsStopIds = [...resolvedByLineFallback.keys()].sort(compareText);
 
   // This final difference is the user-facing evidence of stop IDs CTAN did not supply by any source.
   const unmatchedGtfsStopIds = [...uniqueGtfsStopIds]
@@ -279,15 +328,17 @@ export function createCtanLocationProbeReport(
     .sort(compareText);
 
   return {
-    status: unmatchedGtfsStopIds.length === 0 && unresolvedLocationGtfsStopIds.length === 0 ? 'verified' : 'incomplete',
+    status: unmatchedGtfsStopIds.length === 0 && unresolvedNucleusGtfsStopIds.length === 0 ? 'verified' : 'incomplete',
     gtfsStopCount: uniqueGtfsStopIds.size,
     municipalityCount: municipalitiesById.size,
     nucleusCount: nucleiById.size,
     ctanStopCount: stopsById.size,
     matchedGtfsStopCount: matchedGtfsStopIds.size,
     unmatchedGtfsStopIds,
-    lineFallbackGtfsStopIds: unresolvedLocationGtfsStopIds,
-    unresolvedLocationGtfsStopIds,
+    lineFallbacks: [...resolvedByLineFallback.values()].sort((first, second) =>
+      compareText(first.gtfsStopId, second.gtfsStopId),
+    ),
+    unresolvedNucleusGtfsStopIds,
   };
 }
 
@@ -524,8 +575,8 @@ export async function probeCtanLocations(
 
   // Query each relevant line once for stop IDs absent from both stop-directory endpoints.
   const detailReport = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
-  const lineStopIdsByLineId = new Map<string, Set<string>>();
-  const lineFallbackGtfsStopIds = new Set<string>();
+  const lineStopsByLineId = new Map<string, Map<string, CtanLineStop>>();
+  const lineFallbacksByGtfsStopId = new Map<string, CtanLineFallback>();
   for (const gtfsStopId of detailReport.unmatchedGtfsStopIds) {
     const ctanStopId = getCtanStopId(gtfsStopId);
     if (ctanStopId === null) {
@@ -538,18 +589,22 @@ export async function probeCtanLocations(
         continue;
       }
 
-      let lineStopIds = lineStopIdsByLineId.get(ctanLineId);
-      if (lineStopIds === undefined) {
+      let lineStops = lineStopsByLineId.get(ctanLineId);
+      if (lineStops === undefined) {
         const response = await fetchOptionalCtanJson(getCtanUrl(`lineas/${ctanLineId}/paradas`));
         await writeCapture(resolve(outputPath, `linea-${ctanLineId}-paradas.json`), response, manifest);
-        lineStopIds = response.isMissing
-          ? new Set<string>()
-          : new Set(parseCtanLineStopIds(parseCapturedJson(response)));
-        lineStopIdsByLineId.set(ctanLineId, lineStopIds);
+        lineStops = response.isMissing
+          ? new Map<string, CtanLineStop>()
+          : indexCtanLineStops(parseCtanLineStops(parseCapturedJson(response)));
+        lineStopsByLineId.set(ctanLineId, lineStops);
       }
 
-      if (lineStopIds.has(ctanStopId)) {
-        lineFallbackGtfsStopIds.add(gtfsStopId);
+      const lineStop = lineStops.get(ctanStopId);
+      if (lineStop !== undefined) {
+        lineFallbacksByGtfsStopId.set(gtfsStopId, {
+          gtfsStopId,
+          municipalityId: lineStop.municipalityId,
+        });
         break;
       }
     }
@@ -557,7 +612,7 @@ export async function probeCtanLocations(
 
   // The final report separates all-source stop coverage from verified place membership.
   const report = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds, [
-    ...lineFallbackGtfsStopIds,
+    ...lineFallbacksByGtfsStopId.values(),
   ]);
 
   // Write the reproducible audit trail only after every request and validation has completed.
