@@ -85,9 +85,11 @@ committing them; see the architecture document for that future boundary.
 then explicitly contacts CTAN for its municipality, núcleo, and stop directory. It saves raw
 responses plus a manifest and coverage report below ignored `data/source/ctan-location-probe/`.
 When the CTAN stop collection omits a GTFS candidate, the command checks the corresponding
-individual CTAN stop endpoint before recording it as unmatched. It never changes `public/data/`,
-and exits unsuccessfully if CTAN does not cover every selected GTFS stop through its exact
-identifier relation. Do not use live CTAN requests in tests.
+individual CTAN stop endpoint, then the matching GTFS route's CTAN line-stop endpoint before
+recording it as unmatched. A line-only match verifies a stop ID but not its municipality/núcleo
+membership, so it remains a reported incomplete location crosswalk. The command never changes
+`public/data/`, and exits unsuccessfully until both exact stop coverage and location membership are
+verified. Do not use live CTAN requests in tests.
 
 ## Code and tests
 

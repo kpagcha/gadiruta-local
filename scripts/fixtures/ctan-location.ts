@@ -15,4 +15,13 @@ export const ctanLocationFixture = {
       nucleo: 'Cádiz',
     },
   ],
+  lineStops: [
+    {
+      idParada: '999',
+      idLinea: '32',
+      idNucleo: '7',
+      idZona: 'L',
+      nombre: 'Line-only stop',
+    },
+  ],
 } as const;
