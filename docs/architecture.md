@@ -53,6 +53,28 @@ archive already at that path. `just data-refresh` deliberately downloads CTAN's 
 replaces that ignored input, and regenerates the tracked JSON. Review the resulting data diff and
 run checks before committing a refresh. Normal development and tests never contact CTAN.
 
+## CTAN location crosswalk investigation
+
+The current CTAN GTFS `stops.txt` contains only `stop_id`, `stop_name`, latitude, and longitude:
+it has no municipality, núcleo, stop code, or parent-station fields. CTAN's separate Bahía API
+does expose municipalities, each municipality's núcleos, and stops with those hierarchy IDs.
+
+`just locations-probe` is an explicit developer-only investigation command. It reads the local
+GTFS archive, fetches those CTAN directory resources, and writes raw responses, their SHA-256
+hashes, and a coverage report to an ignored timestamped directory under `data/source/`. It never
+changes the reviewed browser snapshot or makes a browser request.
+
+The probe accepts only CTAN's deterministic identifier relation: a CTAN `idParada` maps to GTFS
+`stop_id` `2_<idParada>`, where `2` is the Bahía consortium identifier. It validates every
+municipality -> núcleo -> stop relationship and succeeds only when every selected CMTBC GTFS stop
+has exactly one such CTAN record. Names and coordinates are intentionally excluded. An incomplete
+report is a source-data finding, not permission to infer or hand-maintain location membership.
+
+The first probe against archive `05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844`
+found 15 municipalities, 44 núcleos, and 190 CTAN stops. Only 152 of the snapshot's 263 CMTBC
+GTFS stops matched, so the official relation is currently incomplete. The browser dataset therefore
+continues to contain no user-facing location membership.
+
 ## Future automated production refreshes
 
 When GTFS data needs automatic refreshes, a scheduled job (for example, GitHub Actions) will
@@ -68,7 +90,8 @@ deployment mechanics remain deliberately unspecified until automated refreshes a
 ## Deliberate boundaries
 
 - GTFS stops are physical boarding locations, not user-facing places. A verified place-to-stop
-  association has not been designed or inferred.
+  association has not yet been added to the app-facing snapshot. The CTAN crosswalk probe records
+  whether an official complete relation is available, without inferring one.
 - The snapshot deliberately excludes service calendars, trip times, shapes, fare data, and alerts.
   Add those only with the feature that needs them.
 - There is no IndexedDB schema, service worker, PWA caching policy, edge service, or backend.

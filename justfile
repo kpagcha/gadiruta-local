@@ -28,6 +28,10 @@ data:
 data-refresh:
     npm run data:refresh
 
+# Capture CTAN's municipality, nucleus, and stop directory, then check its GTFS stop coverage.
+locations-probe:
+    npm run locations:probe
+
 # Preview a completed production build locally.
 preview:
     npm run preview

@@ -23,10 +23,10 @@ Keep this overview current when a tracked directory gains or changes a responsib
 ```text
 src/           Browser application: components, pages, local-data code, translations, and styles.
 public/data/   Reviewed static network snapshot served to the browser.
-scripts/       Developer-only GTFS snapshot processor and its focused fixtures/tests.
+scripts/       Developer-only GTFS snapshot processor, CTAN crosswalk probe, and focused fixtures/tests.
 .storybook/    Storybook configuration; component stories live beside components in src/.
 docs/          Product, architecture, and contributor documentation.
-data/source/   Ignored local CTAN ZIP used only when rebuilding the reviewed snapshot.
+data/source/   Ignored local CTAN ZIP and explicit CTAN location-probe captures.
 ```
 
 `package.json` defines npm tasks and dependencies; `justfile` provides the project command aliases.
@@ -49,6 +49,7 @@ the page when source files change. Stop it with `Ctrl+C`.
 ```shell
 just data          # rebuild the checked-in snapshot from a local GTFS ZIP
 just data-refresh  # download CTAN GTFS, then rebuild that snapshot
+just locations-probe # capture CTAN location data and check its exact GTFS-stop coverage
 just storybook      # develop component stories at http://127.0.0.1:6006
 just storybook-build # build the separate static Storybook site
 just test          # local GTFS transformation and runtime-contract tests
@@ -79,6 +80,12 @@ production refresh mechanism.
 normal checks or application startup: it needs upstream access and refreshes a reviewed source
 snapshot. Later automated production refreshes will publish generated static datasets instead of
 committing them; see the architecture document for that future boundary.
+
+`just locations-probe` is separate from snapshot refresh. It reads the existing local GTFS ZIP,
+then explicitly contacts CTAN for its municipality, núcleo, and stop directory. It saves raw
+responses plus a manifest and coverage report below ignored `data/source/ctan-location-probe/`.
+It never changes `public/data/`, and exits unsuccessfully if CTAN does not cover every selected
+GTFS stop through its exact identifier relation. Do not use live CTAN requests in tests.
 
 ## Code and tests
 
