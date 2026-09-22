@@ -67,7 +67,8 @@ inspectable visual states; they do not call CTAN or replace the focused automate
 ## Network data
 
 The app runs from the checked-in `public/data/bahia-cadiz-network.json` snapshot. Its raw CTAN
-input is intentionally not committed.
+input is intentionally not committed. This is the current development workflow, not the planned
+production refresh mechanism.
 
 1. Download `https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip`.
 2. Save it unchanged as `data/source/ctan-gtfs.zip`.
@@ -76,7 +77,8 @@ input is intentionally not committed.
 
 `just data-refresh` performs the download and processing in one explicit command. Do not put it in
 normal checks or application startup: it needs upstream access and refreshes a reviewed source
-snapshot.
+snapshot. Later automated production refreshes will publish generated static datasets instead of
+committing them; see the architecture document for that future boundary.
 
 ## Code and tests
 

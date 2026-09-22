@@ -17,9 +17,9 @@ route preview.
 
 ## Local network data
 
-The committed `public/data/bahia-cadiz-network.json` is a reviewed source snapshot, not disposable
-build output. It is generated from CTAN's unified GTFS archive by `just data` and is intentionally
-tracked so a fresh checkout can run without upstream access.
+The committed `public/data/bahia-cadiz-network.json` is the current, simple development snapshot.
+It is generated from CTAN's unified GTFS archive by `just data` and is intentionally tracked for
+now so a fresh checkout can run without upstream access.
 
 ```text
 CTAN GTFS ZIP → local preprocessing → committed static JSON → browser-local queries
@@ -52,6 +52,18 @@ otherwise usable snapshot.
 archive already at that path. `just data-refresh` deliberately downloads CTAN's current archive,
 replaces that ignored input, and regenerates the tracked JSON. Review the resulting data diff and
 run checks before committing a refresh. Normal development and tests never contact CTAN.
+
+## Future automated production refreshes
+
+When GTFS data needs automatic refreshes, a scheduled job (for example, GitHub Actions) will
+download the upstream archive, validate/process/normalize it, generate the Gadiruta static
+dataset(s), and publish them to the same static host or CDN as the app. Clients will fetch those
+datasets and cache them locally with version checks.
+
+At that stage, raw GTFS archives and regularly regenerated production datasets should normally be
+generated deployment artifacts, not Git-tracked files. Version control should retain the source
+code, import/build tooling, schemas, and small fixtures or sample data. The scheduling and
+deployment mechanics remain deliberately unspecified until automated refreshes are needed.
 
 ## Deliberate boundaries
 
