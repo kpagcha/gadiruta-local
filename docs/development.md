@@ -14,7 +14,8 @@ Install Node.js 24, npm 11, and [just](https://just.systems/). The project suppl
 - **Tailwind CSS** supplies the styling classes used by components.
 - **Storybook** renders components and their saved visual states outside the application flow.
 - **ESLint** and **Prettier** check code quality and formatting.
-- **Node's test runner** runs the focused, dependency-free data tests.
+- **Zod** validates the small GTFS field subsets consumed by the offline snapshot processor.
+- **Node's test runner** runs the focused local data tests.
 
 ## Repository layout
 
