@@ -46,10 +46,6 @@ the normalized contract and validates it again at load time. The current feed ha
 with unescaped quotation marks; the processor preserves those labels rather than rejecting an
 otherwise usable snapshot.
 
-The processor uses small Zod schemas for only the GTFS columns it consumes. They trim and validate
-those values at the normalization boundary while retaining table-and-column errors; they are not a
-claim to support the rest of GTFS.
-
 ## Refreshing the snapshot
 
 `data/source/ctan-gtfs.zip` is ignored because it is a downloaded input. `just data` transforms an

@@ -3,7 +3,6 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { z } from 'zod';
 import { parseNetworkDataset, type NetworkDataset } from '../src/data/network-schema.ts';
 import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
 
@@ -49,99 +48,40 @@ function fail(message: string): never {
   throw new Error(`GTFS data error: ${message}`);
 }
 
-/** Normalize a non-blank GTFS field while retaining the processor's established error wording. */
-const requiredGtfsText = z.string({ error: 'is required.' }).trim().min(1, { error: 'is required.' });
-
-/** Normalize absent and blank optional GTFS fields to the nulls used by the snapshot contract. */
-const optionalGtfsText = z
-  .string()
-  .trim()
-  .transform((value) => (value === '' ? null : value))
-  .optional()
-  .transform((value) => value ?? null);
-
-/** Parse the number formats the processor already accepted for GTFS integer fields. */
-const requiredGtfsInteger = requiredGtfsText
-  .transform(Number)
-  .refine(Number.isInteger, { error: 'must be an integer.' });
-
-/** Parse a finite coordinate before it reaches the app-facing data contract. */
-const requiredGtfsCoordinate = requiredGtfsText
-  .transform(Number)
-  .refine(Number.isFinite, { error: 'must be a finite number.' });
-
-/** Schema for the consumed agency fields; other GTFS columns intentionally remain out of scope. */
-const agencyRowSchema = z.object({
-  agency_id: optionalGtfsText,
-  agency_name: requiredGtfsText,
-});
-
-/** Schema for the consumed route fields; the processor does not interpret other route metadata. */
-const routeRowSchema = z.object({
-  agency_id: optionalGtfsText,
-  route_id: requiredGtfsText,
-  route_short_name: optionalGtfsText,
-  route_long_name: optionalGtfsText,
-  route_type: requiredGtfsInteger,
-  route_color: optionalGtfsText,
-  route_text_color: optionalGtfsText,
-});
-
-/** Schema for the route relationship and identifiers needed to form a selected trip. */
-const tripRowSchema = z.object({
-  route_id: requiredGtfsText,
-  trip_id: requiredGtfsText,
-  direction_id: optionalGtfsText,
-});
-
-/** Schema for the stop-time relationship and order used to form a trip pattern. */
-const stopTimeRowSchema = z.object({
-  trip_id: requiredGtfsText,
-  stop_id: requiredGtfsText,
-  stop_sequence: requiredGtfsInteger,
-});
-
-/** Schema for the physical-stop fields exposed in the local topology snapshot. */
-const stopRowSchema = z.object({
-  stop_id: requiredGtfsText,
-  stop_name: requiredGtfsText,
-  stop_lat: requiredGtfsCoordinate,
-  stop_lon: requiredGtfsCoordinate,
-  parent_station: optionalGtfsText,
-});
-
-/** Parse the narrow field subset needed to select an agency without validating unrelated rows. */
-const agencyIdSchema = agencyRowSchema.pick({ agency_id: true });
-
-/** Parse the narrow field subset needed to select a route without validating unrelated rows. */
-const routeAgencyIdSchema = routeRowSchema.pick({ agency_id: true });
-
-/** Parse the optional route relationship needed to select a trip without validating unrelated rows. */
-const tripRouteIdSchema = z.object({ route_id: optionalGtfsText });
-
-/** Parse the optional trip relationship needed to select stop times without validating unrelated rows. */
-const stopTimeTripIdSchema = z.object({ trip_id: optionalGtfsText });
-
-/** Parse IDs for duplicate checks before the processor dereferences selected stops. */
-const stopIdSchema = stopRowSchema.pick({ stop_id: true });
-
-/** Parse parent-station references before the processor expands selected physical stops. */
-const stopParentStationSchema = stopRowSchema.pick({ parent_station: true });
-
-/** Validate a consumed GTFS row and retain the established table-and-column error context. */
-function parseGtfsRow<T>(row: CsvRow, table: string, schema: z.ZodType<T>): T {
-  const result = schema.safeParse(row);
-  if (result.success) {
-    return result.data;
+/** Read a required GTFS value after trimming transport-feed whitespace at the boundary. */
+function requiredValue(row: CsvRow, column: string, table: string): string {
+  const value = row[column]?.trim();
+  if (value === undefined || value === '') {
+    fail(`${table}.${column} is required.`);
   }
 
-  const issue = result.error.issues[0];
-  if (issue === undefined) {
-    fail(`${table} row is invalid.`);
+  return value;
+}
+
+/** Convert an absent or blank optional GTFS field to the snapshot's explicit null value. */
+function optionalValue(row: CsvRow, column: string): string | null {
+  const value = row[column]?.trim();
+  return value === undefined || value === '' ? null : value;
+}
+
+/** Parse a required integer without accepting a malformed GTFS identifier or sequence value. */
+function requiredInteger(row: CsvRow, column: string, table: string): number {
+  const value = Number(requiredValue(row, column, table));
+  if (!Number.isInteger(value)) {
+    fail(`${table}.${column} must be an integer.`);
   }
 
-  const column = issue.path.map(String).join('.');
-  fail(`${table}.${column} ${issue.message}`);
+  return value;
+}
+
+/** Parse a finite stop coordinate before it reaches the app-facing data contract. */
+function requiredCoordinate(row: CsvRow, column: string): number {
+  const value = Number(requiredValue(row, column, 'stops'));
+  if (!Number.isFinite(value)) {
+    fail(`stops.${column} must be a finite number.`);
+  }
+
+  return value;
 }
 
 /** Index external IDs while rejecting ambiguity that would invalidate reference checks. */
@@ -171,11 +111,11 @@ function compareText(first: string, second: string): number {
  * so the browser never receives a topology that cannot be queried reliably.
  */
 export function createNetworkDataset(tables: InputTables, archiveSha256: string): NetworkDataset {
-  const agency = tables.agency.find((row) => parseGtfsRow(row, 'agency', agencyIdSchema).agency_id === bahiaAgencyId);
+  const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
   if (agency === undefined) {
     fail(`agency ${bahiaAgencyId} is not present.`);
   }
-  if (parseGtfsRow(agency, 'agency', agencyRowSchema).agency_name !== bahiaAgencyName) {
+  if (requiredValue(agency, 'agency_name', 'agency') !== bahiaAgencyName) {
     fail(`agency ${bahiaAgencyId} no longer identifies Bahía de Cádiz.`);
   }
 
@@ -186,19 +126,16 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     },
   ];
   const routes = tables.routes
-    .filter((row) => parseGtfsRow(row, 'routes', routeAgencyIdSchema).agency_id === bahiaAgencyId)
-    .map((row) => {
-      const route = parseGtfsRow(row, 'routes', routeRowSchema);
-      return {
-        id: route.route_id,
-        agencyId: bahiaAgencyId,
-        shortName: route.route_short_name,
-        longName: route.route_long_name,
-        type: route.route_type,
-        color: route.route_color,
-        textColor: route.route_text_color,
-      };
-    })
+    .filter((row) => optionalValue(row, 'agency_id') === bahiaAgencyId)
+    .map((row) => ({
+      id: requiredValue(row, 'route_id', 'routes'),
+      agencyId: bahiaAgencyId,
+      shortName: optionalValue(row, 'route_short_name'),
+      longName: optionalValue(row, 'route_long_name'),
+      type: requiredInteger(row, 'route_type', 'routes'),
+      color: optionalValue(row, 'route_color'),
+      textColor: optionalValue(row, 'route_text_color'),
+    }))
     .sort((first, second) => compareText(first.id, second.id));
   const routeById = uniqueById(routes, 'routes');
   if (routes.length === 0) {
@@ -206,18 +143,15 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
   }
 
   const trips = tables.trips
-    .filter((row) => {
-      const { route_id: routeId } = parseGtfsRow(row, 'trips', tripRouteIdSchema);
-      return routeId !== null && routeById.has(routeId);
-    })
-    .map((row) => {
-      const trip = parseGtfsRow(row, 'trips', tripRowSchema);
-      return {
-        id: trip.trip_id,
-        routeId: trip.route_id,
-        directionId: trip.direction_id,
-      } satisfies SelectedTrip;
-    });
+    .filter((row) => routeById.has(optionalValue(row, 'route_id') ?? ''))
+    .map(
+      (row) =>
+        ({
+          id: requiredValue(row, 'trip_id', 'trips'),
+          routeId: requiredValue(row, 'route_id', 'trips'),
+          directionId: optionalValue(row, 'direction_id'),
+        }) satisfies SelectedTrip,
+    );
   const tripById = uniqueById(trips, 'trips');
   if (trips.length === 0) {
     fail('Bahía routes have no trips.');
@@ -225,16 +159,15 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
 
   const stopTimesByTrip = new Map<string, OrderedStopTime[]>();
   for (const row of tables.stopTimes) {
-    const { trip_id: tripId } = parseGtfsRow(row, 'stop_times', stopTimeTripIdSchema);
+    const tripId = optionalValue(row, 'trip_id');
     if (tripId === null || !tripById.has(tripId)) {
       continue;
     }
 
-    const stopTime = parseGtfsRow(row, 'stop_times', stopTimeRowSchema);
     const stopTimes = stopTimesByTrip.get(tripId) ?? [];
     stopTimes.push({
-      stopId: stopTime.stop_id,
-      sequence: stopTime.stop_sequence,
+      stopId: requiredValue(row, 'stop_id', 'stop_times'),
+      sequence: requiredInteger(row, 'stop_sequence', 'stop_times'),
     });
     stopTimesByTrip.set(tripId, stopTimes);
   }
@@ -266,7 +199,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
 
   const stopById = new Map<string, CsvRow>();
   for (const row of tables.stops) {
-    const { stop_id: id } = parseGtfsRow(row, 'stops', stopIdSchema);
+    const id = requiredValue(row, 'stop_id', 'stops');
     if (stopById.has(id)) {
       fail(`stops contains duplicate ID ${id}.`);
     }
@@ -280,7 +213,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
       fail(`selected trip references missing stop ${stopId}.`);
     }
 
-    const { parent_station: parentStationId } = parseGtfsRow(stop, 'stops', stopParentStationSchema);
+    const parentStationId = optionalValue(stop, 'parent_station');
     if (parentStationId !== null) {
       selectedStopIds.add(parentStationId);
     }
@@ -293,13 +226,12 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
         fail(`stop ${stopId} references a missing parent station.`);
       }
 
-      const selectedStop = parseGtfsRow(stop, 'stops', stopRowSchema);
       return {
         id: stopId,
-        name: selectedStop.stop_name,
-        latitude: selectedStop.stop_lat,
-        longitude: selectedStop.stop_lon,
-        parentStationId: selectedStop.parent_station,
+        name: requiredValue(stop, 'stop_name', 'stops'),
+        latitude: requiredCoordinate(stop, 'stop_lat'),
+        longitude: requiredCoordinate(stop, 'stop_lon'),
+        parentStationId: optionalValue(stop, 'parent_station'),
       };
     })
     .sort((first, second) => compareText(first.id, second.id));

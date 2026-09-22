@@ -33,7 +33,7 @@ test('rejects a selected trip that references an absent stop', () => {
   assert.throws(() => createNetworkDataset(brokenFixture, 'a'.repeat(64)), /missing stop/);
 });
 
-test('normalizes selected GTFS values with schemas and retains clear field errors', () => {
+test('normalizes selected GTFS values and retains clear field errors', () => {
   const normalizedFixture = {
     ...topologyFixture,
     routes: [
