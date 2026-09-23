@@ -14,20 +14,20 @@ export function AppHeader() {
   const themeLabel = theme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark');
 
   return (
-    <header className="flex min-h-25 items-center justify-between gap-5 border-b border-line">
+    <header className="flex min-h-20 items-center justify-between gap-2 border-b border-line desktop:min-h-25 desktop:gap-5">
       {/* The brand is also the simple route back to this single-page application's home view. */}
       <a
-        className="inline-flex items-center gap-2.75 text-[25px] font-[750] tracking-[-1.2px] text-ink no-underline"
+        className="inline-flex items-center gap-2 text-[20px] font-[750] tracking-[-1.2px] text-ink no-underline desktop:gap-2.75 desktop:text-[25px]"
         href="/"
         aria-label={t('app.home')}
       >
-        <span className="grid size-9.75 place-items-center rounded-xl bg-accent text-paper">
+        <span className="grid size-8 place-items-center rounded-xl bg-accent text-paper desktop:size-9.75">
           <Icon name="gadiruta" size={27} />
         </span>
         <span>{t('app.name')}</span>
       </a>
       {/* Appearance and language are independent persisted preferences. */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-1 desktop:gap-2.5">
         <button
           type="button"
           aria-label={themeLabel}

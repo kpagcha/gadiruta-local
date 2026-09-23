@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getRoutePreview } from './network.ts';
 import { NetworkDataError, parseNetworkDataset } from './network-schema.ts';
 
 const dataset = {
@@ -55,19 +54,4 @@ test('rejects malformed source provenance', () => {
   };
 
   assert.throws(() => parseNetworkDataset(invalid), /SHA-256/);
-});
-
-test('selects a numeric-aware route preview without changing input order', () => {
-  const route = dataset.routes[0];
-  assert.ok(route);
-  const routes = [
-    { ...route, id: 'route-10', shortName: 'M-100' },
-    { ...route, id: 'route-2', shortName: 'M-20' },
-  ];
-
-  assert.deepEqual(
-    getRoutePreview(routes).map((route) => route.id),
-    ['route-2', 'route-10'],
-  );
-  assert.equal(routes[0]?.id, 'route-10');
 });

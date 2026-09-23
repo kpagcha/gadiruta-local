@@ -12,8 +12,8 @@ Browser → React application → static files
 ```
 
 The browser owns language and theme preferences. It fetches the versioned network asset, validates
-it, and keeps it in memory for the current page. The home page uses one load for a route preview and
-local place/stop search.
+it, and keeps it in memory for the current page. The home page uses that load for local place/stop
+search; it no longer displays a static network preview.
 
 ## Local network data
 
@@ -67,6 +67,11 @@ separate and display their served line names. Search selection stores a typed ID
 state. The place list has no coordinates or stop membership yet. A stop's CTAN municipality or
 núcleo is not taken as evidence that riders would consider it part of a named place; geographic
 reach and eligible stops will be decided with direct journey search.
+
+The trip picker is the primary home-page content. On narrow screens it appears immediately below
+the header, while the introductory hero is visual only on desktop. Search suggestions and the
+origin/destination swap work locally. The visible time and journey controls are disabled previews
+until those features exist; they do not imply that a journey can already be found.
 
 ## CTAN location crosswalk investigation
 

@@ -8,7 +8,9 @@ requests.
 
 The app bundles a reviewed Bahía de Cádiz network-topology snapshot derived from CTAN GTFS. The
 home page loads that asset in the browser and lets people choose a place or an exact stop for the
-origin and destination. Journey results, timetables, maps, and offline persistence are still ahead.
+origin and destination. On mobile, search is visible directly below the header. The time and
+journey buttons are disabled previews: journey results, timetables, maps, and offline persistence
+are still ahead.
 
 ## Roadmap
 

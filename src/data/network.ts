@@ -28,26 +28,3 @@ export async function loadNetworkDataset(signal?: AbortSignal): Promise<NetworkD
 export function getRouteLabel(route: NetworkRoute): string {
   return route.shortName ?? route.longName ?? route.id;
 }
-
-/**
- * Format validated snapshot provenance for the current interface language.
- *
- * `parseNetworkDataset` rejects an invalid generation date before a component can call this.
- */
-export function formatNetworkSnapshotDate(value: string, language: string): string {
-  // The schema already verified this value is a date, so formatting cannot turn an invalid feed into UI text.
-  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(new Date(value));
-}
-
-/** Select a small deterministic sample for the landing-page network preview. */
-export function getRoutePreview(routes: readonly NetworkRoute[], limit = 6): NetworkRoute[] {
-  // Copy before sorting: callers may still use the source order elsewhere in the interface.
-  return [...routes]
-    .sort((first, second) =>
-      getRouteLabel(first).localeCompare(getRouteLabel(second), 'es', {
-        numeric: true,
-        sensitivity: 'base',
-      }),
-    )
-    .slice(0, limit);
-}

@@ -15,6 +15,7 @@ interface LocationFieldValue {
 interface LocationFieldProps {
   id: 'origin' | 'destination';
   label: string;
+  placeholder: string;
   options: readonly LocationOption[];
   disabled: boolean;
   value: LocationFieldValue;
@@ -22,7 +23,7 @@ interface LocationFieldProps {
 }
 
 /** Render a labelled search input with keyboard-accessible place and stop suggestions. */
-function LocationField({ id, label, options, disabled, value, onChange }: LocationFieldProps) {
+function LocationField({ id, label, placeholder, options, disabled, value, onChange }: LocationFieldProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,31 +67,43 @@ function LocationField({ id, label, options, disabled, value, onChange }: Locati
   }
 
   return (
-    <div className="relative" onBlur={handleBlur}>
-      <label className="mb-2 block text-sm font-[650]" htmlFor={`${id}-search`}>
+    <div className="relative focus-within:z-40" onBlur={handleBlur}>
+      <label className="mb-2 flex items-center gap-2.25 text-[13px] font-[650]" htmlFor={`${id}-search`}>
+        <span
+          aria-hidden="true"
+          className={id === 'origin' ? 'size-2.5 rounded-full border-2 border-accent' : 'size-2.5 rounded-sm bg-accent'}
+        />
         {label}
       </label>
-      <input
-        ref={inputRef}
-        aria-describedby="trip-search-hint"
-        autoComplete="off"
-        className="w-full rounded-xl border border-line-input bg-surface-input px-4 py-3 text-base text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={disabled}
-        id={`${id}-search`}
-        onChange={(event) => {
-          onChange({ text: event.target.value, choice: null });
-          setIsOpen(true);
-        }}
-        onFocus={() => {
-          if (value.choice === null && value.text.trim() !== '') {
+      <div className="relative">
+        <input
+          ref={inputRef}
+          autoComplete="off"
+          className="min-h-15 w-full rounded-xl border border-line-input bg-surface-card py-4.5 pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
+          disabled={disabled}
+          id={`${id}-search`}
+          onChange={(event) => {
+            onChange({ text: event.target.value, choice: null });
             setIsOpen(true);
-          }
-        }}
-        onKeyDown={handleInputKeyDown}
-        placeholder={t('search.placeholder')}
-        type="search"
-        value={value.text}
-      />
+          }}
+          onFocus={() => {
+            if (value.choice === null && value.text.trim() !== '') {
+              setIsOpen(true);
+            }
+          }}
+          onKeyDown={handleInputKeyDown}
+          placeholder={placeholder}
+          type="search"
+          value={value.text}
+        />
+        {value.text === '' && (
+          <Icon
+            name="stop"
+            className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-icon-muted"
+            size={19}
+          />
+        )}
+      </div>
       {showResults && (
         <div className="absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">
           <p className="sr-only" role="status">
@@ -122,16 +135,18 @@ function LocationField({ id, label, options, disabled, value, onChange }: Locati
                       </span>
                       <span className="min-w-0">
                         <span className="block text-sm font-[650]">{result.name}</span>
-                        <span className="block text-xs leading-5 text-muted">
-                          {t(`search.${result.kind}`)}
-                          {result.kind === 'stop' && result.routeLabels.length > 0 && (
-                            <>
-                              {' · '}
-                              {result.routeLabels.slice(0, 2).join(', ')}
-                              {extraLines > 0 && ` (+${extraLines})`}
-                            </>
-                          )}
-                        </span>
+                        {result.kind === 'stop' && (
+                          <span className="block text-xs leading-5 text-muted">
+                            {t('search.stop')}
+                            {result.routeLabels.length > 0 && (
+                              <>
+                                {' · '}
+                                {result.routeLabels.slice(0, 2).join(', ')}
+                                {extraLines > 0 && ` (+${extraLines})`}
+                              </>
+                            )}
+                          </span>
+                        )}
                       </span>
                     </button>
                   </li>
@@ -148,8 +163,10 @@ function LocationField({ id, label, options, disabled, value, onChange }: Locati
 /** Let a rider select a place or exact stop independently for each end of a future direct trip. */
 export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
   const { t } = useTranslation();
-  const [origin, setOrigin] = useState<LocationFieldValue>({ text: '', choice: null });
-  const [destination, setDestination] = useState<LocationFieldValue>({ text: '', choice: null });
+  const [endpoints, setEndpoints] = useState<{ origin: LocationFieldValue; destination: LocationFieldValue }>({
+    origin: { text: '', choice: null },
+    destination: { text: '', choice: null },
+  });
   const options = useMemo(
     () => (state.status === 'ready' ? createLocationOptions(places, state.dataset) : []),
     [state],
@@ -159,34 +176,77 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
   return (
     <section
       aria-labelledby="trip-search-title"
-      className="mt-10 rounded-2xl border border-line bg-surface-card p-5 shadow-[var(--shadow-card)] sm:p-6"
+      className="min-w-0 rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)] max-[380px]:p-4.5 desktop:p-8"
     >
-      <h2 id="trip-search-title" className="text-xl font-[650] tracking-[-0.5px]">
+      <h2 id="trip-search-title" className="sr-only">
         {t('search.title')}
       </h2>
-      <p className="mt-1.5 text-sm leading-6 text-muted">{t('search.description')}</p>
-      <div className="mt-6 grid gap-5">
+      <div>
         <LocationField
           disabled={disabled}
           id="origin"
           label={t('search.origin')}
-          onChange={setOrigin}
+          placeholder={t('search.originPlaceholder')}
+          onChange={(value) => setEndpoints((current) => ({ ...current, origin: value }))}
           options={options}
-          value={origin}
+          value={endpoints.origin}
         />
+        <div className="flex min-h-16 items-center justify-end gap-3">
+          <span className="h-px flex-1 translate-y-3.5 bg-line-subtle" aria-hidden="true" />
+          <button
+            aria-label={t('search.swap')}
+            className="grid size-11 shrink-0 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45"
+            disabled={disabled || (!endpoints.origin.text && !endpoints.destination.text)}
+            onClick={() => setEndpoints(({ origin, destination }) => ({ origin: destination, destination: origin }))}
+            title={t('search.swap')}
+            type="button"
+          >
+            <Icon name="swap" size={20} />
+          </button>
+        </div>
         <LocationField
           disabled={disabled}
           id="destination"
           label={t('search.destination')}
-          onChange={setDestination}
+          placeholder={t('search.destinationPlaceholder')}
+          onChange={(value) => setEndpoints((current) => ({ ...current, destination: value }))}
           options={options}
-          value={destination}
+          value={endpoints.destination}
         />
       </div>
-      <p className="mt-4 text-xs leading-5 text-muted" id="trip-search-hint">
-        {disabled ? t('search.waiting') : t('search.hint')}
-      </p>
-      <p className="mt-3 border-t border-line-subtle pt-3 text-xs leading-5 text-muted">{t('search.nextStep')}</p>
+      {state.status === 'loading' && (
+        <p className="mt-4 text-sm text-muted" role="status">
+          {t('search.loading')}
+        </p>
+      )}
+      {state.status === 'error' && (
+        <p className="mt-4 text-sm text-warning" role="alert">
+          {t('search.error')}
+        </p>
+      )}
+      <div className="mt-7 border-t border-line pt-5">
+        <p className="sr-only" id="trip-action-unavailable">
+          {t('search.unavailable')}
+        </p>
+        <button
+          aria-describedby="trip-action-unavailable"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-input bg-surface-input px-4 text-sm font-[650] disabled:opacity-80"
+          disabled
+          type="button"
+        >
+          <Icon name="clock" size={19} />
+          {t('search.now')}
+        </button>
+        <button
+          aria-describedby="trip-action-unavailable"
+          className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-[700] text-on-accent disabled:opacity-45"
+          disabled
+          type="button"
+        >
+          <Icon name="route" size={18} />
+          {t('search.findTransport')}
+        </button>
+      </div>
     </section>
   );
 }

@@ -18,7 +18,7 @@ export default function App() {
   }, [language, t]);
 
   return (
-    <div className="mx-auto w-[calc(100%-40px)] max-w-280 max-[380px]:w-[calc(100%-28px)]">
+    <div className="mx-auto flex min-h-screen w-[calc(100%-40px)] max-w-280 flex-col max-[380px]:w-[calc(100%-28px)]">
       {/* The first focusable control lets keyboard users bypass the persistent header. */}
       <a
         className="skip-link fixed top-3 left-3 z-100 rounded-lg bg-accent px-5 py-3 text-on-accent"
