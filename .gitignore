@@ -12,6 +12,9 @@ coverage/
 # Downloaded GTFS input; the reviewed static network snapshot in public/data is tracked instead.
 data/source/
 
+# Local working plans; project documentation remains in tracked docs files.
+docs/local/
+
 # PyCharm
 .idea/
 # OS
