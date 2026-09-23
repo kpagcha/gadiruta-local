@@ -81,6 +81,10 @@ normal checks or application startup: it needs upstream access and refreshes a r
 snapshot. Later automated production refreshes will publish generated static datasets instead of
 committing them; see the architecture document for that future boundary.
 
+The rider-facing place names in `src/data/places.ts` are curated separately from GTFS and CTAN
+administrative IDs. When refreshing the network snapshot, review whether these places still have
+relevant service; stop search itself uses the refreshed snapshot directly.
+
 `just locations-probe` is separate from snapshot refresh. It reads the existing local GTFS ZIP,
 then explicitly contacts CTAN for its municipality, núcleo, and stop directory. It saves raw
 responses plus a manifest and coverage report below ignored `data/source/ctan-location-probe/`.

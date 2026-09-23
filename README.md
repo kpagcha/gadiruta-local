@@ -7,8 +7,8 @@ requests.
 ## Current status
 
 The app bundles a reviewed Bahía de Cádiz network-topology snapshot derived from CTAN GTFS. The
-home page loads that asset in the browser, validates it, and previews a few routes. It does not yet
-offer place search, journey results, timetables, maps, or offline persistence.
+home page loads that asset in the browser and lets people choose a place or an exact stop for the
+origin and destination. Journey results, timetables, maps, and offline persistence are still ahead.
 
 ## Roadmap
 
@@ -16,7 +16,7 @@ offer place search, journey results, timetables, maps, or offline persistence.
       preference.
 - [x] **First local data slice:** A validated Bahía de Cádiz GTFS topology snapshot loads and is
       queried directly in the browser.
-- [ ] **Place search:** Let people select Cádiz-area places using local transit data.
+- [x] **Place search:** Let people select Cádiz-area places or exact stops using local transit data.
 - [ ] **Direct journeys:** Find date-aware direct services between selected places on-device.
 - [ ] **Network browsing:** Add line, stop, and timetable views.
 - [ ] **Offline experience:** Add local data persistence and deliberate PWA caching once real data

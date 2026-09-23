@@ -12,8 +12,8 @@ Browser → React application → static files
 ```
 
 The browser owns language and theme preferences. It fetches the versioned network asset, validates
-it, and keeps it in memory for the current page. The home page currently uses it for counts and a
-route preview.
+it, and keeps it in memory for the current page. The home page uses one load for a route preview and
+local place/stop search.
 
 ## Local network data
 
@@ -52,6 +52,21 @@ otherwise usable snapshot.
 archive already at that path. `just data-refresh` deliberately downloads CTAN's current archive,
 replaces that ignored input, and regenerates the tracked JSON. Review the resulting data diff and
 run checks before committing a refresh. Normal development and tests never contact CTAN.
+
+## Rider-facing location search
+
+`src/data/places.ts` is a small, reviewed list of recognizable place names with stable app IDs.
+The first list covers the 12 towns with stops in this network snapshot and eight selected smaller
+areas. It deliberately combines Costa Ballena into one rider-facing place. Barbate, Tarifa, and
+Vejer are absent because the selected network currently has no stops in them. Review this list when
+the network snapshot changes.
+
+The browser merges these names with physical stops from the validated static snapshot for a shared
+origin/destination search. Place and stop are separate result types; repeated stop names stay
+separate and display their served line names. Search selection stores a typed ID and label in page
+state. The place list has no coordinates or stop membership yet. A stop's CTAN municipality or
+núcleo is not taken as evidence that riders would consider it part of a named place; geographic
+reach and eligible stops will be decided with direct journey search.
 
 ## CTAN location crosswalk investigation
 
@@ -118,7 +133,7 @@ deployment mechanics remain deliberately unspecified until automated refreshes a
 
 - GTFS stops are physical boarding locations, not user-facing places. A verified place-to-stop
   association has not yet been added to the app-facing snapshot. The CTAN crosswalk probe records
-  whether an official complete relation is available, without inferring one.
+  upstream administrative evidence, without defining rider-facing place membership.
 - The snapshot deliberately excludes service calendars, trip times, shapes, fare data, and alerts.
   Add those only with the feature that needs them.
 - There is no IndexedDB schema, service worker, PWA caching policy, edge service, or backend.

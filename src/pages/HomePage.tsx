@@ -1,14 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import { NetworkStatusPanel } from '../components/NetworkStatusPanel';
+import { NetworkStatusPanelView } from '../components/NetworkStatusPanel';
+import { TripLocationPicker } from '../components/TripLocationPicker';
+import { useNetworkDataset } from '../data/use-network-dataset.ts';
 
 /** Render the landing page's product introduction and current local-data summary. */
 export function HomePage() {
   const { t } = useTranslation();
+  const networkState = useNetworkDataset();
 
   return (
     <main
       id="main-content"
-      className="grid gap-10 py-12 desktop:grid-cols-[0.86fr_1.14fr] desktop:items-center desktop:gap-16 desktop:py-20 desktop:pb-21.25"
+      className="grid gap-10 py-12 desktop:grid-cols-[0.86fr_1.14fr] desktop:items-start desktop:gap-16 desktop:py-20 desktop:pb-21.25"
       tabIndex={-1}
     >
       {/* This column is product context; the adjacent panel reports whether local data loaded. */}
@@ -20,10 +23,11 @@ export function HomePage() {
         <p className="mt-6 max-w-92.5 text-[17px] leading-[1.65] text-muted max-[380px]:text-base">
           {t('hero.description')}
         </p>
+        <TripLocationPicker state={networkState} />
       </section>
 
-      {/* Kept as a separate component because it owns its own loading, error, and ready states. */}
-      <NetworkStatusPanel />
+      {/* Both views use one validated local-network load and stay in the same ready/error state. */}
+      <NetworkStatusPanelView state={networkState} />
     </main>
   );
 }

@@ -1,18 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { formatNetworkSnapshotDate, getRouteLabel, getRoutePreview } from '../data/network.ts';
-import { useNetworkDataset, type NetworkDatasetState } from '../data/use-network-dataset.ts';
+import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { Panel } from './Panel';
 
 /** The explicit local-data state rendered by the presentational network-status panel. */
 interface NetworkStatusPanelViewProps {
   state: NetworkDatasetState;
-}
-
-/** Load the network asset for the page and pass its state to the reusable visual panel. */
-export function NetworkStatusPanel() {
-  // Loading stays in the data hook; this component only connects that state to the visual panel.
-  return <NetworkStatusPanelView state={useNetworkDataset()} />;
 }
 
 /** Render one injected local-network state without starting a request of its own. */

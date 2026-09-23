@@ -1,11 +1,13 @@
 /** Shared interface icons, including Gadiruta's custom brand mark. */
-import { Moon, Route, Sun, type LucideIcon } from 'lucide-react';
+import { Map, MapPin, Moon, Route, Sun, type LucideIcon } from 'lucide-react';
 
 /** Available decorative symbols; accessible names belong to their surrounding controls. */
-export type IconName = 'route' | 'gadiruta' | 'sun' | 'moon';
+export type IconName = 'route' | 'place' | 'stop' | 'gadiruta' | 'sun' | 'moon';
 
 const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   route: Route,
+  place: Map,
+  stop: MapPin,
   sun: Sun,
   moon: Moon,
 };

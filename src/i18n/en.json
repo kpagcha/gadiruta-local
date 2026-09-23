@@ -21,6 +21,21 @@
     "title": "Your way\naround Cádiz",
     "description": "Gadiruta Local is becoming a simple, local-first way to explore public transport around the Bay of Cádiz."
   },
+  "search": {
+    "title": "Choose your trip",
+    "description": "Search for a place or an exact stop.",
+    "origin": "From",
+    "destination": "To",
+    "placeholder": "Place or stop name",
+    "place": "Place",
+    "stop": "Stop",
+    "resultCount_one": "{{count}} suggestion",
+    "resultCount_other": "{{count}} suggestions",
+    "noResults": "No matching places or stops.",
+    "hint": "Type a name, then use Tab or the arrow keys to choose a suggestion.",
+    "waiting": "Search is available when the local network loads.",
+    "nextStep": "Direct journey results are coming next."
+  },
   "dataStatus": {
     "eyebrow": "Local network",
     "loading": {

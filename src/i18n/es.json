@@ -21,6 +21,21 @@
     "title": "Muévete\npor Cádiz",
     "description": "Gadiruta Local se está convirtiendo en una forma sencilla y local de descubrir el transporte público en la Bahía de Cádiz."
   },
+  "search": {
+    "title": "Elige tu viaje",
+    "description": "Busca un lugar o una parada concreta.",
+    "origin": "Desde",
+    "destination": "Hasta",
+    "placeholder": "Nombre de lugar o parada",
+    "place": "Lugar",
+    "stop": "Parada",
+    "resultCount_one": "{{count}} sugerencia",
+    "resultCount_other": "{{count}} sugerencias",
+    "noResults": "No hay lugares ni paradas que coincidan.",
+    "hint": "Escribe un nombre y usa Tab o las flechas para elegir una sugerencia.",
+    "waiting": "La búsqueda estará disponible cuando se cargue la red local.",
+    "nextStep": "Los trayectos directos estarán disponibles próximamente."
+  },
   "dataStatus": {
     "eyebrow": "Red local",
     "loading": {
