@@ -6,7 +6,7 @@ import { TripLocationPicker } from './TripLocationPicker';
 const readyState = {
   status: 'ready',
   dataset: {
-    formatVersion: 1,
+    formatVersion: 2,
     source: {
       url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
       generatedAt: '2026-09-21T15:15:44.000Z',
@@ -25,10 +25,45 @@ const readyState = {
       },
     ],
     stops: [
-      { id: '2_10', name: 'Estación de Autobuses Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null },
-      { id: '2_11', name: 'Estación de Autobuses Jerez', latitude: 36.69, longitude: -6.14, parentStationId: null },
+      {
+        id: '2_10',
+        name: 'Estación de Autobuses Cádiz',
+        latitude: 36.53,
+        longitude: -6.29,
+        parentStationId: null,
+        placeId: 'cadiz',
+      },
+      {
+        id: '2_11',
+        name: 'Estación de Autobuses Jerez',
+        latitude: 36.69,
+        longitude: -6.14,
+        parentStationId: null,
+        placeId: 'jerez-de-la-frontera',
+      },
     ],
     patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['2_10', '2_11'] }],
+    trips: [
+      {
+        id: 'sample',
+        routeId: '2_13',
+        serviceId: 'daily',
+        stopTimes: [
+          { stopId: '2_10', arrivalMinutes: 480, departureMinutes: 480, pickupType: 0, dropOffType: 0 },
+          { stopId: '2_11', arrivalMinutes: 540, departureMinutes: 540, pickupType: 0, dropOffType: 0 },
+        ],
+      },
+    ],
+    calendars: [
+      {
+        serviceId: 'daily',
+        startDate: '2026-09-01',
+        endDate: '2026-12-31',
+        weekdays: [true, true, true, true, true, true, true],
+      },
+    ],
+    calendarExceptions: [],
+    coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
   },
 } satisfies NetworkDatasetState;
 

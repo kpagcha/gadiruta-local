@@ -1,10 +1,10 @@
 /**
- * Describes the routes-and-stops JSON format and checks that a loaded file has the expected fields
- * and references.
+ * Describes the local network and timetable JSON and checks its fields and references.
  *
  * The data-building script uses the same checks before writing the file, and the browser checks it
  * again after loading it. This catches bad data before search code tries to use it.
  */
+import { places } from './places.ts';
 /** App-facing topology stored in Gadiruta Local's static network snapshot. */
 export interface NetworkAgency {
   id: string;
@@ -29,6 +29,39 @@ export interface NetworkStop {
   latitude: number;
   longitude: number;
   parentStationId: string | null;
+  placeId: string | null;
+}
+
+/** One stop visit with GTFS minutes measured from the trip's service date. */
+export interface NetworkStopTime {
+  stopId: string;
+  arrivalMinutes: number;
+  departureMinutes: number;
+  pickupType: number;
+  dropOffType: number;
+}
+
+/** One scheduled vehicle journey, including its ordered stop visits. */
+export interface NetworkTrip {
+  id: string;
+  routeId: string;
+  serviceId: string;
+  stopTimes: NetworkStopTime[];
+}
+
+/** GTFS weekdays run Monday through Sunday. */
+export interface NetworkCalendar {
+  serviceId: string;
+  startDate: string;
+  endDate: string;
+  weekdays: boolean[];
+}
+
+/** An added or removed service on one specific date. */
+export interface NetworkCalendarException {
+  serviceId: string;
+  date: string;
+  type: 1 | 2;
 }
 
 /** One unique ordered stop sequence used by a route and direction. */
@@ -45,14 +78,18 @@ export interface NetworkSource {
   archiveSha256: string;
 }
 
-/** The version-one local network topology contract. */
+/** The version-two local network and timetable contract. */
 export interface NetworkDataset {
-  formatVersion: 1;
+  formatVersion: 2;
   source: NetworkSource;
   agencies: NetworkAgency[];
   routes: NetworkRoute[];
   stops: NetworkStop[];
   patterns: RoutePattern[];
+  trips: NetworkTrip[];
+  calendars: NetworkCalendar[];
+  calendarExceptions: NetworkCalendarException[];
+  coverage: { startDate: string; endDate: string };
 }
 
 /** Describe a malformed local-data file without exposing an implementation-specific exception. */
@@ -96,6 +133,28 @@ function requiredNumber(value: unknown, label: string): number {
   }
 
   return value;
+}
+
+/** Require an integer within GTFS's supported non-negative minute range. */
+function requiredMinute(value: unknown, label: string): number {
+  const minute = requiredNumber(value, label);
+  if (!Number.isInteger(minute) || minute < 0 || minute > 143999) {
+    throw new NetworkDataError(`${label} must be a non-negative integer minute.`);
+  }
+  return minute;
+}
+
+/** Check date spelling and real Gregorian dates before lexical date comparisons. */
+function requiredDate(value: unknown, label: string): string {
+  const date = requiredString(value, label);
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    Number.isNaN(Date.parse(`${date}T00:00:00Z`)) ||
+    new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date
+  ) {
+    throw new NetworkDataError(`${label} must be a valid YYYY-MM-DD date.`);
+  }
+  return date;
 }
 
 /** Require an array while retaining unknown elements for each shape-specific parser. */
@@ -171,6 +230,78 @@ function parseStop(value: unknown, index: number): NetworkStop {
     latitude,
     longitude,
     parentStationId: optionalString(record.parentStationId, `stops[${index}].parentStationId`),
+    placeId: optionalString(record.placeId, `stops[${index}].placeId`),
+  };
+}
+
+/** Validate one trip and the timetable at each ordered stop visit. */
+function parseTrip(value: unknown, index: number): NetworkTrip {
+  const record = requiredRecord(value, `trips[${index}]`);
+  const stopTimes = requiredArray(record.stopTimes, `trips[${index}].stopTimes`).map((value, stopIndex) => {
+    const label = `trips[${index}].stopTimes[${stopIndex}]`;
+    const time = requiredRecord(value, label);
+    const arrivalMinutes = requiredMinute(time.arrivalMinutes, `${label}.arrivalMinutes`);
+    const departureMinutes = requiredMinute(time.departureMinutes, `${label}.departureMinutes`);
+    const pickupType = requiredNumber(time.pickupType, `${label}.pickupType`);
+    const dropOffType = requiredNumber(time.dropOffType, `${label}.dropOffType`);
+    if (
+      arrivalMinutes > departureMinutes ||
+      ![0, 1, 2, 3].includes(pickupType) ||
+      ![0, 1, 2, 3].includes(dropOffType)
+    ) {
+      throw new NetworkDataError(`${label} has invalid arrival, departure, pickup, or drop-off values.`);
+    }
+    return {
+      stopId: requiredString(time.stopId, `${label}.stopId`),
+      arrivalMinutes,
+      departureMinutes,
+      pickupType,
+      dropOffType,
+    };
+  });
+  if (
+    stopTimes.length < 2 ||
+    stopTimes.some(
+      (time, timeIndex) => timeIndex > 0 && time.arrivalMinutes < stopTimes[timeIndex - 1]!.departureMinutes,
+    )
+  ) {
+    throw new NetworkDataError(`trips[${index}].stopTimes must be ordered and contain at least two stops.`);
+  }
+  return {
+    id: requiredString(record.id, `trips[${index}].id`),
+    routeId: requiredString(record.routeId, `trips[${index}].routeId`),
+    serviceId: requiredString(record.serviceId, `trips[${index}].serviceId`),
+    stopTimes,
+  };
+}
+
+/** Validate the weekly service span and its seven weekday switches. */
+function parseCalendar(value: unknown, index: number): NetworkCalendar {
+  const record = requiredRecord(value, `calendars[${index}]`);
+  const startDate = requiredDate(record.startDate, `calendars[${index}].startDate`);
+  const endDate = requiredDate(record.endDate, `calendars[${index}].endDate`);
+  const weekdays = requiredArray(record.weekdays, `calendars[${index}].weekdays`);
+  if (startDate > endDate || weekdays.length !== 7 || weekdays.some((day) => typeof day !== 'boolean')) {
+    throw new NetworkDataError(`calendars[${index}] has invalid dates or weekdays.`);
+  }
+  return {
+    serviceId: requiredString(record.serviceId, `calendars[${index}].serviceId`),
+    startDate,
+    endDate,
+    weekdays: weekdays as boolean[],
+  };
+}
+
+/** Validate one GTFS added or removed service exception. */
+function parseCalendarException(value: unknown, index: number): NetworkCalendarException {
+  const record = requiredRecord(value, `calendarExceptions[${index}]`);
+  if (record.type !== 1 && record.type !== 2) {
+    throw new NetworkDataError(`calendarExceptions[${index}].type must be 1 or 2.`);
+  }
+  return {
+    serviceId: requiredString(record.serviceId, `calendarExceptions[${index}].serviceId`),
+    date: requiredDate(record.date, `calendarExceptions[${index}].date`),
+    type: record.type,
   };
 }
 
@@ -204,8 +335,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   // Validate the outer version before treating any file contents as the current contract.
   const record = requiredRecord(value, 'dataset');
 
-  if (record.formatVersion !== 1) {
-    throw new NetworkDataError('dataset.formatVersion must be 1.');
+  if (record.formatVersion !== 2) {
+    throw new NetworkDataError('dataset.formatVersion must be 2.');
   }
 
   const sourceRecord = requiredRecord(record.source, 'dataset.source');
@@ -229,15 +360,49 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   const routes = requiredArray(record.routes, 'dataset.routes').map(parseRoute);
   const stops = requiredArray(record.stops, 'dataset.stops').map(parseStop);
   const patterns = requiredArray(record.patterns, 'dataset.patterns').map(parsePattern);
+  const trips = requiredArray(record.trips, 'dataset.trips').map(parseTrip);
+  const calendars = requiredArray(record.calendars, 'dataset.calendars').map(parseCalendar);
+  const calendarExceptions = requiredArray(record.calendarExceptions, 'dataset.calendarExceptions').map(
+    parseCalendarException,
+  );
+  const coverageRecord = requiredRecord(record.coverage, 'dataset.coverage');
+  const coverage = {
+    startDate: requiredDate(coverageRecord.startDate, 'dataset.coverage.startDate'),
+    endDate: requiredDate(coverageRecord.endDate, 'dataset.coverage.endDate'),
+  };
+  if (coverage.startDate > coverage.endDate) {
+    throw new NetworkDataError('dataset.coverage has reversed dates.');
+  }
 
-  if (agencies.length === 0 || routes.length === 0 || stops.length === 0 || patterns.length === 0) {
-    throw new NetworkDataError('dataset must contain agencies, routes, stops, and patterns.');
+  if (
+    agencies.length === 0 ||
+    routes.length === 0 ||
+    stops.length === 0 ||
+    patterns.length === 0 ||
+    trips.length === 0 ||
+    calendars.length === 0
+  ) {
+    throw new NetworkDataError('dataset must contain agencies, routes, stops, patterns, trips, and calendars.');
   }
 
   // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
   const stopIds = uniqueIds(stops, 'dataset.stops');
+  const tripIds = uniqueIds(trips, 'dataset.trips');
+  const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
+  if (tripIds.size !== trips.length || serviceIds.size !== calendars.length) {
+    throw new NetworkDataError('dataset contains duplicate trips or calendars.');
+  }
+  const placeIds = new Set(places.map((place) => place.id));
+  if (
+    calendars.some((calendar) => calendar.startDate < coverage.startDate || calendar.endDate > coverage.endDate) ||
+    calendarExceptions.some(
+      (exception) => exception.type === 1 && (exception.date < coverage.startDate || exception.date > coverage.endDate),
+    )
+  ) {
+    throw new NetworkDataError('dataset.coverage does not include its service dates.');
+  }
 
   for (const route of routes) {
     if (!agencyIds.has(route.agencyId)) {
@@ -249,6 +414,9 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   for (const stop of stops) {
     if (stop.parentStationId !== null && !stopIds.has(stop.parentStationId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown parent station.`);
+    }
+    if (stop.placeId !== null && !placeIds.has(stop.placeId)) {
+      throw new NetworkDataError(`stop ${stop.id} references an unknown place.`);
     }
   }
 
@@ -265,5 +433,34 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
   }
 
-  return { formatVersion: 1, source, agencies, routes, stops, patterns };
+  for (const trip of trips) {
+    if (
+      !routeIds.has(trip.routeId) ||
+      !serviceIds.has(trip.serviceId) ||
+      trip.stopTimes.some((time) => !stopIds.has(time.stopId))
+    ) {
+      throw new NetworkDataError(`trip ${trip.id} references an unknown route, service, or stop.`);
+    }
+  }
+  const exceptionKeys = new Set<string>();
+  for (const exception of calendarExceptions) {
+    const key = `${exception.serviceId}:${exception.date}`;
+    if (!serviceIds.has(exception.serviceId) || exceptionKeys.has(key)) {
+      throw new NetworkDataError(`calendar exception ${key} is invalid or duplicated.`);
+    }
+    exceptionKeys.add(key);
+  }
+
+  return {
+    formatVersion: 2,
+    source,
+    agencies,
+    routes,
+    stops,
+    patterns,
+    trips,
+    calendars,
+    calendarExceptions,
+    coverage,
+  };
 }

@@ -35,9 +35,21 @@
     "noResults": "No hay lugares ni paradas que coincidan.",
     "loading": "Cargando paradas locales…",
     "error": "No se pudieron cargar las paradas. Actualiza la página para volver a intentarlo.",
-    "now": "Ahora",
-    "findTransport": "Buscar transporte",
-    "unavailable": "La selección de hora y la búsqueda de trayectos aún no están disponibles."
+    "travelDate": "Fecha de viaje",
+    "expiredData": "Los horarios de estos datos terminan el {{date}}. Elige una fecha cubierta para consultar el horario guardado.",
+    "sameStop": "Elige otra parada de destino.",
+    "findTransport": "Buscar transporte"
+  },
+  "journey": {
+    "results": "Trayectos directos",
+    "empty": "No hay servicios directos para esta fecha y estos lugares.",
+    "resultCount_one": "{{count}} servicio directo",
+    "resultCount_other": "{{count}} servicios directos",
+    "boardAt": "Sube en",
+    "alightAt": "Baja en",
+    "duration": "{{count}} min",
+    "nextDay": "Llega al día siguiente",
+    "showMore": "Mostrar más"
   },
   "footer": {
     "region": "Hecho para la Bahía de Cádiz.",

@@ -1,6 +1,5 @@
 /**
- * Reads the downloaded CTAN bus data and writes the JSON file the website uses to show routes and
- * stops around the Bay of Cádiz.
+ * Reads the downloaded CTAN bus data and writes the reviewed JSON for local Bay journey search.
  *
  * This script runs only when a developer runs `just data` or `just data-refresh`. It does not run in
  * the browser. The generated JSON is saved at `public/data/bahia-cadiz-network.json`.
@@ -11,6 +10,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parseNetworkDataset, type NetworkDataset } from '../src/data/network-schema.ts';
+import { places } from '../src/data/places.ts';
 import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
 
 /** The verified upstream archive; this is used only by the explicit refresh command. */
@@ -27,27 +27,62 @@ const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
 
 /** The reviewed static asset consumed by the browser. */
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
+/** Reviewed, single-place assignments that are separate from the ignored geographic audit report. */
+const placeAssignmentsPath = resolve('scripts/place-stop-assignments.json');
 
-/** GTFS tables needed for the current topology-only snapshot. */
+/** GTFS tables needed for the current direct-journey snapshot. */
 interface InputTables {
   agency: readonly CsvRow[];
   routes: readonly CsvRow[];
   stops: readonly CsvRow[];
   trips: readonly CsvRow[];
   stopTimes: readonly CsvRow[];
+  calendar: readonly CsvRow[];
+  calendarDates: readonly CsvRow[];
 }
 
-/** A Bay trip reduced to the fields needed to derive its stop pattern. */
+/** A Bay trip reduced to the fields needed for its timetable and route pattern. */
 interface SelectedTrip {
   id: string;
   routeId: string;
   directionId: string | null;
+  serviceId: string;
 }
 
 /** A stop occurrence whose sequence defines its position within one trip. */
 interface OrderedStopTime {
   stopId: string;
   sequence: number;
+  arrivalMinutes: number;
+  departureMinutes: number;
+  pickupType: number;
+  dropOffType: number;
+}
+
+/** Read GTFS HH:MM:SS, including times later than 24:00 on the service's following day. */
+function gtfsMinutes(value: string, label: string): number {
+  const match = /^(\d{1,3}):([0-5]\d):([0-5]\d)$/.exec(value);
+  if (match === null || match[3] !== '00') {
+    fail(`${label} must be an HH:MM:00 GTFS time.`);
+  }
+  return Number(match[1]) * 60 + Number(match[2]);
+}
+
+/** Convert GTFS YYYYMMDD to the date string used by the browser's native date input. */
+function gtfsDate(value: string, label: string): string {
+  if (!/^\d{8}$/.test(value)) {
+    fail(`${label} must be a YYYYMMDD date.`);
+  }
+  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+}
+
+/** GTFS uses zero for ordinary boarding/alighting and one for a prohibited action. */
+function gtfsStopPermission(row: CsvRow, column: string): number {
+  const value = optionalValue(row, column) ?? '0';
+  if (!/^[0-3]$/.test(value)) {
+    fail(`stop_times.${column} must be 0, 1, 2, or 3.`);
+  }
+  return Number(value);
 }
 
 /** Stop generation with a consistent, actionable description of an invalid upstream assumption. */
@@ -111,13 +146,16 @@ function compareText(first: string, second: string): number {
 }
 
 /**
- * Build the deliberately limited, app-facing Bahía network topology from parsed GTFS tables.
+ * Build the deliberately limited, app-facing Bahía network and timetable from parsed GTFS tables.
  *
- * This boundary intentionally excludes schedules, calendars, shapes, and every other GTFS table
- * until a user-facing feature requires them. It also checks references before emitting a snapshot
- * so the browser never receives a topology that cannot be queried reliably.
+ * This boundary excludes shapes, fares, and every other unused GTFS table. It checks references
+ * before emitting a snapshot so the browser never receives a timetable it cannot query reliably.
  */
-export function createNetworkDataset(tables: InputTables, archiveSha256: string): NetworkDataset {
+export function createNetworkDataset(
+  tables: InputTables,
+  archiveSha256: string,
+  placeAssignments: Record<string, string> = {},
+): NetworkDataset {
   // First lock the snapshot to the one agency this application is allowed to represent.
   const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
   if (agency === undefined) {
@@ -161,6 +199,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
           id: requiredValue(row, 'trip_id', 'trips'),
           routeId: requiredValue(row, 'route_id', 'trips'),
           directionId: optionalValue(row, 'direction_id'),
+          serviceId: requiredValue(row, 'service_id', 'trips'),
         }) satisfies SelectedTrip,
     );
   const tripById = uniqueById(trips, 'trips');
@@ -180,12 +219,17 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     stopTimes.push({
       stopId: requiredValue(row, 'stop_id', 'stop_times'),
       sequence: requiredInteger(row, 'stop_sequence', 'stop_times'),
+      arrivalMinutes: gtfsMinutes(requiredValue(row, 'arrival_time', 'stop_times'), 'stop_times.arrival_time'),
+      departureMinutes: gtfsMinutes(requiredValue(row, 'departure_time', 'stop_times'), 'stop_times.departure_time'),
+      pickupType: gtfsStopPermission(row, 'pickup_type'),
+      dropOffType: gtfsStopPermission(row, 'drop_off_type'),
     });
     stopTimesByTrip.set(tripId, stopTimes);
   }
 
   // Different trips with the same route, direction, and stops become one reusable route pattern.
   const patternsByKey = new Map<string, NetworkDataset['patterns'][number]>();
+  const scheduledTrips: NetworkDataset['trips'] = [];
   const referencedStopIds = new Set<string>();
   for (const trip of trips) {
     const stopTimes = stopTimesByTrip.get(trip.id);
@@ -202,6 +246,18 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     }
 
     const stopIds = stopTimes.map((stopTime) => stopTime.stopId);
+    scheduledTrips.push({
+      id: trip.id,
+      routeId: trip.routeId,
+      serviceId: trip.serviceId,
+      stopTimes: stopTimes.map(({ stopId, arrivalMinutes, departureMinutes, pickupType, dropOffType }) => ({
+        stopId,
+        arrivalMinutes,
+        departureMinutes,
+        pickupType,
+        dropOffType,
+      })),
+    });
     stopIds.forEach((stopId) => referencedStopIds.add(stopId));
     const key = [trip.routeId, trip.directionId ?? '', ...stopIds].join('\u001f');
     patternsByKey.set(key, {
@@ -249,6 +305,7 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
         latitude: requiredCoordinate(stop, 'stop_lat'),
         longitude: requiredCoordinate(stop, 'stop_lon'),
         parentStationId: optionalValue(stop, 'parent_station'),
+        placeId: placeAssignments[stopId] ?? null,
       };
     })
     .sort((first, second) => compareText(first.id, second.id));
@@ -259,9 +316,51 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     return compareText(firstKey, secondKey);
   });
 
+  // Calendars and exceptions are selected through trip service IDs, never by geographic guesswork.
+  const usedServiceIds = new Set(trips.map((trip) => trip.serviceId));
+  const calendars = tables.calendar
+    .filter((row) => usedServiceIds.has(optionalValue(row, 'service_id') ?? ''))
+    .map((row) => ({
+      serviceId: requiredValue(row, 'service_id', 'calendar'),
+      startDate: gtfsDate(requiredValue(row, 'start_date', 'calendar'), 'calendar.start_date'),
+      endDate: gtfsDate(requiredValue(row, 'end_date', 'calendar'), 'calendar.end_date'),
+      weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => {
+        const value = requiredValue(row, day, 'calendar');
+        if (value !== '0' && value !== '1') fail(`calendar.${day} must be 0 or 1.`);
+        return value === '1';
+      }),
+    }))
+    .sort((a, b) => compareText(a.serviceId, b.serviceId));
+  const calendarExceptions = tables.calendarDates
+    .filter((row) => usedServiceIds.has(optionalValue(row, 'service_id') ?? ''))
+    .map((row) => {
+      const type = requiredInteger(row, 'exception_type', 'calendar_dates');
+      if (type !== 1 && type !== 2) fail('calendar_dates.exception_type must be 1 or 2.');
+      return {
+        serviceId: requiredValue(row, 'service_id', 'calendar_dates'),
+        date: gtfsDate(requiredValue(row, 'date', 'calendar_dates'), 'calendar_dates.date'),
+        type: type as 1 | 2,
+      };
+    })
+    .sort((a, b) => compareText(`${a.serviceId}:${a.date}`, `${b.serviceId}:${b.date}`));
+  if (calendars.length === 0) fail('selected trips have no service calendars.');
+  const knownPlaceIds = new Set(places.map((place) => place.id));
+  for (const [stopId, placeId] of Object.entries(placeAssignments)) {
+    if (!selectedStopIds.has(stopId) || !knownPlaceIds.has(placeId))
+      fail(`place assignment ${stopId} -> ${placeId} is invalid.`);
+  }
+  const activeDates = [
+    ...calendars.flatMap((calendar) => [calendar.startDate, calendar.endDate]),
+    ...calendarExceptions.filter((exception) => exception.type === 1).map((exception) => exception.date),
+  ];
+  const coverage = {
+    startDate: activeDates.reduce((a, b) => (a < b ? a : b)),
+    endDate: activeDates.reduce((a, b) => (a > b ? a : b)),
+  };
+
   // Validate the generated shape through the same boundary the browser uses before returning it.
   return parseNetworkDataset({
-    formatVersion: 1,
+    formatVersion: 2,
     source: {
       url: sourceUrl,
       generatedAt: new Date().toISOString(),
@@ -271,6 +370,10 @@ export function createNetworkDataset(tables: InputTables, archiveSha256: string)
     routes,
     stops,
     patterns,
+    trips: scheduledTrips.sort((a, b) => compareText(a.id, b.id)),
+    calendars,
+    calendarExceptions,
+    coverage,
   });
 }
 
@@ -319,7 +422,7 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
   const { inputPath, download } = parseArguments(arguments_);
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
 
-  // Extract just the five GTFS tables needed for the current topology-only browser snapshot.
+  // Extract the seven GTFS tables needed for the current direct-journey snapshot.
   const files = await readZipTextFiles(archive);
   const tables: InputTables = {
     agency: readGtfsTable(files, 'agency.txt'),
@@ -327,11 +430,14 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
     stops: readGtfsTable(files, 'stops.txt'),
     trips: readGtfsTable(files, 'trips.txt'),
     stopTimes: readGtfsTable(files, 'stop_times.txt'),
+    calendar: readGtfsTable(files, 'calendar.txt'),
+    calendarDates: readGtfsTable(files, 'calendar_dates.txt'),
   };
 
   // Record input provenance, then build and validate the reduced app-facing dataset.
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
-  const dataset = createNetworkDataset(tables, archiveSha256);
+  const placeAssignments = JSON.parse(await readFile(placeAssignmentsPath, 'utf8')) as Record<string, string>;
+  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments);
 
   // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
   await mkdir(resolve(outputPath, '..'), { recursive: true });

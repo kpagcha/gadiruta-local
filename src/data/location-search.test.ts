@@ -10,7 +10,7 @@ import { createLocationOptions, searchLocations } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 
 const dataset: NetworkDataset = {
-  formatVersion: 1,
+  formatVersion: 2,
   source: { url: 'source', generatedAt: '2026-09-21T16:09:45.619Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [
@@ -18,16 +18,48 @@ const dataset: NetworkDataset = {
     { id: '2_11', agencyId: 'CMTBC', shortName: 'M-050', longName: null, type: 3, color: null, textColor: null },
   ],
   stops: [
-    { id: '2_1', name: 'Estación de Autobuses Rota', latitude: 36.62, longitude: -6.35, parentStationId: null },
-    { id: '2_2', name: 'Av. de María Auxiliadora', latitude: 36.63, longitude: -6.36, parentStationId: null },
-    { id: '2_3', name: 'Hospital Puerta Del Mar', latitude: 36.5, longitude: -6.27, parentStationId: null },
-    { id: '2_4', name: 'Hospital Puerta Del Mar', latitude: 36.51, longitude: -6.28, parentStationId: null },
+    {
+      id: '2_1',
+      name: 'Estación de Autobuses Rota',
+      latitude: 36.62,
+      longitude: -6.35,
+      parentStationId: null,
+      placeId: 'rota',
+    },
+    {
+      id: '2_2',
+      name: 'Av. de María Auxiliadora',
+      latitude: 36.63,
+      longitude: -6.36,
+      parentStationId: null,
+      placeId: 'rota',
+    },
+    {
+      id: '2_3',
+      name: 'Hospital Puerta Del Mar',
+      latitude: 36.5,
+      longitude: -6.27,
+      parentStationId: null,
+      placeId: 'cadiz',
+    },
+    {
+      id: '2_4',
+      name: 'Hospital Puerta Del Mar',
+      latitude: 36.51,
+      longitude: -6.28,
+      parentStationId: null,
+      placeId: 'cadiz',
+    },
   ],
   patterns: [
     { routeId: '2_10', directionId: '0', stopIds: ['2_1', '2_2', '2_3'] },
     { routeId: '2_10', directionId: '1', stopIds: ['2_1', '2_2', '2_3'] },
     { routeId: '2_11', directionId: '0', stopIds: ['2_4'] },
   ],
+  trips: [],
+  calendars: [],
+  calendarExceptions: [],
+  coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
 const options = createLocationOptions(

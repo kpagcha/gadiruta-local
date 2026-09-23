@@ -150,12 +150,16 @@ async function loadBahiaGtfsProbeInput(inputPath: string): Promise<BahiaGtfsProb
       stops: readGtfsTable(files, 'stops.txt'),
       trips: readGtfsTable(files, 'trips.txt'),
       stopTimes: readGtfsTable(files, 'stop_times.txt'),
+      calendar: readGtfsTable(files, 'calendar.txt'),
+      calendarDates: readGtfsTable(files, 'calendar_dates.txt'),
     } satisfies {
       agency: readonly CsvRow[];
       routes: readonly CsvRow[];
       stops: readonly CsvRow[];
       trips: readonly CsvRow[];
       stopTimes: readonly CsvRow[];
+      calendar: readonly CsvRow[];
+      calendarDates: readonly CsvRow[];
     },
     createHash('sha256').update(archive).digest('hex'),
   );

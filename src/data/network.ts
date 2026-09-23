@@ -1,5 +1,5 @@
 /**
- * Downloads the routes-and-stops JSON from the website's own `/data/` files and checks its contents
+ * Downloads the local timetable JSON from the website's own `/data/` files and checks its contents
  * before the page can use them.
  *
  * This browser code does not contact CTAN. It also provides the route names shown beside stops in

@@ -11,11 +11,13 @@ The step-by-step app flow and the commands that prepare the JSON are in the [dev
 ## Network data shape
 
 The browser-facing file, `public/data/bahia-cadiz-network.json`, contains the parts of GTFS needed by
-the current place and stop search:
+local search and direct journey results:
 
 - the selected transport agency and its routes;
 - physical stops and their coordinates; and
-- ordered stop lists showing which stops each route serves.
+- ordered stop lists showing which stops each route serves;
+- a reviewed single place assignment for each confidently located stop; and
+- timed trips, weekly service calendars, and date exceptions.
 
 The file also records its format version and the hash of the GTFS ZIP used to produce it. The
 processor and browser both check that the data has the expected fields and that routes and stops
@@ -24,8 +26,7 @@ needs to handle this smaller format.
 
 The processor selects agency `CMTBC` only when its name matches the expected Bahía de Cádiz
 Consortium. The agency ID defines which network is in scope; stop names and coordinates do not. The
-current file does not include service calendars, departure times, shapes, fares, or alerts; add them
-when a feature needs them.
+current file does not include shapes, fares, or alerts.
 
 The JSON is checked into Git so a fresh checkout can run without downloading CTAN data. The original
 downloaded ZIP stays ignored under `data/source/`. For where these files live and how to refresh
@@ -34,13 +35,34 @@ them, see the [development guide](development.md).
 ## Places and physical stops
 
 A place is a name people recognize, such as Cádiz or Rota. A stop is one exact bus boarding point.
-The app keeps them as separate search choices because the current source data does not reliably
-say which stops belong to each place. Choosing a place therefore does not yet expand into a set of
-stops for journey search.
+The app keeps them as separate search choices. The reviewed assignment in
+`scripts/place-stop-assignments.json` connects 204 of the 263 selected physical stops to one
+rider-facing place each. Named smaller areas such as Costa Ballena, Jédula, and Río San Pedro have
+their own assignments; a town choice covers its built-up core. Isolated and ambiguous roadside
+stops remain available by exact stop name. The ignored geographic report was used as a review
+checklist and is never browser input.
 
 The names in `src/data/places.ts` are maintained by the project. GTFS stop records do not contain
 the municipality or smaller-area IDs needed to connect every stop to those names. The separate CTAN
 location probe investigates that relationship, but its results are not part of the browser data.
+Rota stops `2_349` and `2_350` and the Cádiz and Rota ferry terminals are explicitly assigned;
+Venta El Cepo remains exact-stop-only because it lies outside the built-up core.
+
+## Direct journeys and coverage
+
+The browser checks the version-two snapshot before searching. A direct journey uses one trip, with
+boarding before alighting and GTFS pickup/drop-off permissions applied. The selected date covers the
+whole local day, including departures earlier today. Trips scheduled on the previous service date
+are also considered when their GTFS stop time is `24:00` or later. A calendar exception overrides
+the weekly rule. The result card offers alternative matching stops on the same trip. Its default is
+the earliest valid boarding and then the earliest reachable alighting.
+
+The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
+The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.
+The UI shows an expired-data message once the current Cádiz date passes the end. This is source
+coverage, not a promise that every date or location pair has a departure.
+All selected source stop times have whole-minute values; the generator rejects nonzero seconds so
+later feed changes cannot be rounded silently.
 
 ## CTAN location findings
 
@@ -50,8 +72,8 @@ municipality, but it does not establish the smaller area (nucleus) a stop belong
 probe report keeps those cases unresolved. Names and coordinates are not used to guess missing
 relationships.
 
-These findings explain why the app currently offers independent place and stop choices. They are
-source-data limitations, not part of the website's runtime request flow.
+These findings explain why place assignments are reviewed conservatively. They are source-data
+limitations, not part of the website's runtime request flow.
 
 ## Future boundaries
 

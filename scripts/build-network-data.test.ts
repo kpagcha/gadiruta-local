@@ -1,5 +1,5 @@
 /**
- * Checks that the data scripts can read GTFS examples and produce the website's routes-and-stops
+ * Checks that the data scripts can read GTFS examples and produce the website's network timetable
  * JSON correctly. These tests use saved examples and do not download data from CTAN.
  */
 import assert from 'node:assert/strict';
@@ -28,10 +28,44 @@ test('creates a Bahía-only topology with stable deduplicated patterns', () => {
   });
 });
 
+test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnight', () => {
+  const fixture = {
+    ...topologyFixture,
+    stopTimes: topologyFixture.stopTimes.map((time) =>
+      time.trip_id === 'outbound-two'
+        ? {
+            ...time,
+            arrival_time: time.stop_id === 'cadiz' ? '24:10:00' : '25:00:00',
+            departure_time: time.stop_id === 'cadiz' ? '24:10:00' : '25:00:00',
+          }
+        : time,
+    ),
+  };
+  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { cadiz: 'cadiz' });
+  assert.equal(dataset.formatVersion, 2);
+  assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.placeId, 'cadiz');
+  assert.equal(dataset.stops.find((stop) => stop.id === 'puerto')?.placeId, null);
+  assert.deepEqual(
+    dataset.trips.find((trip) => trip.id === 'outbound-two')?.stopTimes.map((time) => time.departureMinutes),
+    [1450, 1500],
+  );
+  assert.deepEqual(dataset.calendarExceptions, [{ serviceId: 'weekday', date: '2026-09-25', type: 2 }]);
+  assert.deepEqual(dataset.coverage, { startDate: '2026-09-01', endDate: '2026-12-31' });
+});
+
 test('rejects a selected trip that references an absent stop', () => {
   const brokenFixture = {
     ...topologyFixture,
-    stopTimes: [...topologyFixture.stopTimes, { trip_id: 'inbound', stop_id: 'missing', stop_sequence: '3' }],
+    stopTimes: [
+      ...topologyFixture.stopTimes,
+      {
+        trip_id: 'inbound',
+        stop_id: 'missing',
+        stop_sequence: '3',
+        arrival_time: '11:00:00',
+        departure_time: '11:00:00',
+      },
+    ],
   };
 
   assert.throws(() => createNetworkDataset(brokenFixture, 'a'.repeat(64)), /missing stop/);

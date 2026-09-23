@@ -1,5 +1,5 @@
 /**
- * Loads the routes-and-stops JSON for a page and tells the page whether it is loading, ready, or
+ * Loads the network timetable JSON for a page and tells the page whether it is loading, ready, or
  * unable to load the file.
  *
  * The page uses this hook to show the right state while the browser fetches and checks the local

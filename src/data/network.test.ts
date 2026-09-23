@@ -1,5 +1,5 @@
 /**
- * Checks that the browser data loader requests the website's local routes-and-stops JSON and rejects
+ * Checks that the browser data loader requests the website's local timetable JSON and rejects
  * files that do not match the expected format.
  *
  * The tests replace the browser fetch function with saved responses, so they use no network.
@@ -9,7 +9,7 @@ import test from 'node:test';
 import { loadNetworkDataset } from './network.ts';
 
 const dataset = {
-  formatVersion: 1,
+  formatVersion: 2,
   source: {
     url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
     generatedAt: '2026-09-21T16:09:45.619Z',
@@ -27,8 +27,32 @@ const dataset = {
       textColor: null,
     },
   ],
-  stops: [{ id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null }],
-  patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['cadiz'] }],
+  stops: [
+    { id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null, placeId: 'cadiz' },
+    { id: 'rota', name: 'Rota', latitude: 36.62, longitude: -6.35, parentStationId: null, placeId: 'rota' },
+  ],
+  patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['cadiz', 'rota'] }],
+  trips: [
+    {
+      id: 'sample',
+      routeId: '2_13',
+      serviceId: 'daily',
+      stopTimes: [
+        { stopId: 'cadiz', arrivalMinutes: 480, departureMinutes: 480, pickupType: 0, dropOffType: 0 },
+        { stopId: 'rota', arrivalMinutes: 540, departureMinutes: 540, pickupType: 0, dropOffType: 0 },
+      ],
+    },
+  ],
+  calendars: [
+    {
+      serviceId: 'daily',
+      startDate: '2026-09-01',
+      endDate: '2026-12-31',
+      weekdays: [true, true, true, true, true, true, true],
+    },
+  ],
+  calendarExceptions: [],
+  coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
 test('loads and validates the static network asset without an upstream request', async () => {

@@ -35,9 +35,21 @@
     "noResults": "No matching places or stops.",
     "loading": "Loading local stops…",
     "error": "Stops could not load. Refresh the page to try again.",
-    "now": "Now",
-    "findTransport": "Find transport",
-    "unavailable": "Time selection and journey search are not available yet."
+    "travelDate": "Travel date",
+    "expiredData": "Schedules in this snapshot end on {{date}}. Choose a covered date to view the saved timetable.",
+    "sameStop": "Choose a different destination stop.",
+    "findTransport": "Find transport"
+  },
+  "journey": {
+    "results": "Direct journeys",
+    "empty": "No direct services found for this date and these locations.",
+    "resultCount_one": "{{count}} direct service",
+    "resultCount_other": "{{count}} direct services",
+    "boardAt": "Board at",
+    "alightAt": "Get off at",
+    "duration": "{{count}} min",
+    "nextDay": "Arrives next day",
+    "showMore": "Show more"
   },
   "footer": {
     "region": "Made for the Bay of Cádiz.",
