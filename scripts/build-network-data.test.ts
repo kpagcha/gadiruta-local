@@ -1,3 +1,7 @@
+/**
+ * Checks that the data scripts can read GTFS examples and produce the website's routes-and-stops
+ * JSON correctly. These tests use saved examples and do not download data from CTAN.
+ */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildNetworkData, createNetworkDataset } from './build-network-data.ts';

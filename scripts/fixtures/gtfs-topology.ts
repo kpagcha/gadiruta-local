@@ -1,3 +1,9 @@
+/**
+ * Provides small example GTFS tables for tests of the data-building script.
+ *
+ * The examples include two transport agencies and route/stop details that let tests check how the
+ * script selects the Bay of Cádiz network without opening a real downloaded archive.
+ */
 /** A tiny GTFS table set that covers Bahía filtering, topology variants, and parent stations. */
 export const topologyFixture = {
   agency: [

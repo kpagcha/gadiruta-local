@@ -1,3 +1,10 @@
+/**
+ * Combines the project's place names with bus stops from the loaded JSON to make origin and
+ * destination search choices.
+ *
+ * It also matches what a person types against those names and adds the bus route names served by
+ * each stop. All of this work happens in the browser using local data.
+ */
 import { getRouteLabel } from './network.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import type { Place } from './places.ts';

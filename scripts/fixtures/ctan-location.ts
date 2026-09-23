@@ -1,3 +1,9 @@
+/**
+ * Provides small example replies from CTAN's municipality, smaller-area, and stop lists.
+ *
+ * Tests use these saved examples to check how location IDs are read and compared, without making
+ * requests to CTAN.
+ */
 /** A representative CTAN Bahía response chain captured from its municipality, núcleo, and stop endpoints. */
 export const ctanLocationFixture = {
   municipalities: [{ idMunicipio: '1', datos: 'Cádiz' }],

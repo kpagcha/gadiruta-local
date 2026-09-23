@@ -1,3 +1,9 @@
+/**
+ * Checks that the browser data loader requests the website's local routes-and-stops JSON and rejects
+ * files that do not match the expected format.
+ *
+ * The tests replace the browser fetch function with saved responses, so they use no network.
+ */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadNetworkDataset } from './network.ts';

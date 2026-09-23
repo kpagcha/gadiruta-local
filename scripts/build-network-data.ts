@@ -1,3 +1,10 @@
+/**
+ * Reads the downloaded CTAN bus data and writes the JSON file the website uses to show routes and
+ * stops around the Bay of Cádiz.
+ *
+ * This script runs only when a developer runs `just data` or `just data-refresh`. It does not run in
+ * the browser. The generated JSON is saved at `public/data/bahia-cadiz-network.json`.
+ */
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';

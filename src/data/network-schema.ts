@@ -1,3 +1,10 @@
+/**
+ * Describes the routes-and-stops JSON format and checks that a loaded file has the expected fields
+ * and references.
+ *
+ * The data-building script uses the same checks before writing the file, and the browser checks it
+ * again after loading it. This catches bad data before search code tries to use it.
+ */
 /** App-facing topology stored in Gadiruta Local's static network snapshot. */
 export interface NetworkAgency {
   id: string;

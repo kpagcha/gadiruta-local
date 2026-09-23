@@ -1,3 +1,9 @@
+/**
+ * Lists the place names people can search for, such as Cádiz and Rota.
+ *
+ * These names are maintained by the project and can be searched alongside exact bus stops. This
+ * list does not say which stops belong to each place.
+ */
 /** A reviewed, rider-facing place that can be selected independently of a physical stop. */
 export interface Place {
   id: string;

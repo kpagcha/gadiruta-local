@@ -1,3 +1,9 @@
+/**
+ * Checks that incomplete or inconsistent routes-and-stops JSON is rejected, including references to
+ * routes, stops, or agencies that are missing from the file.
+ *
+ * These examples are saved in the test file; no live data is needed.
+ */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NetworkDataError, parseNetworkDataset } from './network-schema.ts';

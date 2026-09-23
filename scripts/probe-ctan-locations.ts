@@ -1,3 +1,10 @@
+/**
+ * Checks whether CTAN's location lists can match GTFS stops to municipalities and smaller areas.
+ *
+ * A developer runs this investigation with `just locations-probe`. It contacts CTAN and saves the
+ * replies and a coverage report under ignored `data/source/ctan-location-probe/`; it never changes
+ * the JSON used by the website.
+ */
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';

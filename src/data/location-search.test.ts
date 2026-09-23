@@ -1,3 +1,9 @@
+/**
+ * Checks that place names and exact bus stops appear as separate search choices, and that typed
+ * searches find the expected names and route information.
+ *
+ * The tests use a small in-file example network and do not load data from CTAN.
+ */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createLocationOptions, searchLocations } from './location-search.ts';

@@ -1,3 +1,9 @@
+/**
+ * Reads CTAN municipality, area, and stop replies and checks whether their IDs match GTFS stop IDs.
+ *
+ * These checks are kept separate from the network-requesting probe so they can be tested with
+ * saved examples and do not need a live connection to CTAN.
+ */
 /** One municipality listed by CTAN's Bahia de Cadiz location API. */
 export interface CtanMunicipality {
   id: string;

@@ -1,146 +1,64 @@
 # Architecture
 
-## Runtime
+## Runtime boundary
 
-Gadiruta Local is a static web application. A web host serves ordinary files; there is no
-application server, database, runtime proxy, or direct CTAN request.
+Gadiruta Local is a static website. The browser downloads the app and its network JSON from a static
+host, then searches the loaded data on-device. There is no Gadiruta application server, database,
+runtime proxy, or browser request to CTAN.
 
-```text
-Browser → React application → static files
-                 ↓
-      /data/bahia-cadiz-network.json
-```
+The step-by-step app flow and the commands that prepare the JSON are in the [development guide](development.md).
 
-The browser owns language and theme preferences. It fetches the versioned network asset, validates
-it, and keeps it in memory for the current page. The home page uses that load for local place/stop
-search; it no longer displays a static network preview.
+## Network data shape
 
-## Local network data
+The browser-facing file, `public/data/bahia-cadiz-network.json`, contains the parts of GTFS needed by
+the current place and stop search:
 
-The committed `public/data/bahia-cadiz-network.json` is the current, simple development snapshot.
-It is generated from CTAN's unified GTFS archive by `just data` and is intentionally tracked for
-now so a fresh checkout can run without upstream access.
+- the selected transport agency and its routes;
+- physical stops and their coordinates; and
+- ordered stop lists showing which stops each route serves.
 
-```text
-CTAN GTFS ZIP → local preprocessing → committed static JSON → browser-local queries
-```
+The file also records its format version and the hash of the GTFS ZIP used to produce it. The
+processor and browser both check that the data has the expected fields and that routes and stops
+refer to entries that exist. ZIP and CSV details stay in developer scripts, so browser code only
+needs to handle this smaller format.
 
-The processor reads only `agency.txt`, `routes.txt`, `stops.txt`, `trips.txt`, and
-`stop_times.txt`. It selects `agency_id = CMTBC` only after verifying that the feed labels it
-“Red de Consorcios de Transporte de Andalucía - Bahía de Cádiz.” It fails on absent data,
-inconsistent references, empty selections, malformed rows, or an agency-name change. It does not
-use display names or coordinates to define the Bay boundary.
+The processor selects agency `CMTBC` only when its name matches the expected Bahía de Cádiz
+Consortium. The agency ID defines which network is in scope; stop names and coordinates do not. The
+current file does not include service calendars, departure times, shapes, fares, or alerts; add them
+when a feature needs them.
 
-Version 1 of the app-facing asset contains:
+The JSON is checked into Git so a fresh checkout can run without downloading CTAN data. The original
+downloaded ZIP stays ignored under `data/source/`. For where these files live and how to refresh
+them, see the [development guide](development.md).
 
-- source URL, generation time, and archive SHA-256;
-- the selected agency and routes;
-- physical stops with coordinates; and
-- deduplicated ordered route-stop patterns.
+## Places and physical stops
 
-GTFS ZIP/CSV details remain in the processor. `scripts/gtfs-archive.ts` uses `yauzl` for archive
-entries and `csv-parse` for CSV decoding; `scripts/build-network-data.ts` selects and normalizes
-the app-facing topology. This is a small responsibility split, not a reusable general-purpose GTFS
-importer. UI code receives only
-the normalized contract and validates it again at load time. The current feed has a few stop labels
-with unescaped quotation marks; the processor preserves those labels rather than rejecting an
-otherwise usable snapshot.
+A place is a name people recognize, such as Cádiz or Rota. A stop is one exact bus boarding point.
+The app keeps them as separate search choices because the current source data does not reliably
+say which stops belong to each place. Choosing a place therefore does not yet expand into a set of
+stops for journey search.
 
-## Refreshing the snapshot
+The names in `src/data/places.ts` are maintained by the project. GTFS stop records do not contain
+the municipality or smaller-area IDs needed to connect every stop to those names. The separate CTAN
+location probe investigates that relationship, but its results are not part of the browser data.
 
-`data/source/ctan-gtfs.zip` is ignored because it is a downloaded input. `just data` transforms an
-archive already at that path. `just data-refresh` deliberately downloads CTAN's current archive,
-replaces that ignored input, and regenerates the tracked JSON. Review the resulting data diff and
-run checks before committing a refresh. Normal development and tests never contact CTAN.
+## CTAN location findings
 
-## Rider-facing location search
+CTAN's all-stops list omits some stops that are available from individual stop lookups. Its line-stop
+response also uses a field named `idNucleo` to return a municipality ID. That value can identify a
+municipality, but it does not establish the smaller area (nucleus) a stop belongs to. The current
+probe report keeps those cases unresolved. Names and coordinates are not used to guess missing
+relationships.
 
-`src/data/places.ts` is a small, reviewed list of recognizable place names with stable app IDs.
-The first list covers the 12 towns with stops in this network snapshot and eight selected smaller
-areas. It deliberately combines Costa Ballena into one rider-facing place. Barbate, Tarifa, and
-Vejer are absent because the selected network currently has no stops in them. Review this list when
-the network snapshot changes.
+These findings explain why the app currently offers independent place and stop choices. They are
+source-data limitations, not part of the website's runtime request flow.
 
-The browser merges these names with physical stops from the validated static snapshot for a shared
-origin/destination search. Place and stop are separate result types; repeated stop names stay
-separate and display their served line names. Search selection stores a typed ID and label in page
-state. The place list has no coordinates or stop membership yet. A stop's CTAN municipality or
-núcleo is not taken as evidence that riders would consider it part of a named place; geographic
-reach and eligible stops will be decided with direct journey search.
+## Future boundaries
 
-The trip picker is the primary home-page content. On narrow screens it appears immediately below
-the header, while the introductory hero is visual only on desktop. Search suggestions and the
-origin/destination swap work locally. The visible time and journey controls are disabled previews
-until those features exist; they do not imply that a journey can already be found.
-
-## CTAN location crosswalk investigation
-
-The current CTAN GTFS `stops.txt` contains only `stop_id`, `stop_name`, latitude, and longitude:
-it has no municipality, núcleo, stop code, or parent-station fields. CTAN's separate Bahía API
-does expose municipalities, each municipality's núcleos, and stops with those hierarchy IDs.
-
-`just locations-probe` is an explicit developer-only investigation command. It reads the local
-GTFS archive, fetches those CTAN directory resources, and writes raw responses, their SHA-256
-hashes, and a coverage report to an ignored timestamped directory under `data/source/`. It never
-changes the reviewed browser snapshot or makes a browser request.
-
-The command-specific file, `scripts/probe-ctan-locations.ts`, is limited to loading local GTFS,
-fetching/capturing CTAN responses, and writing audit files. Its pure response parsing, identifier
-crosswalk, and report validation live in `scripts/ctan-location-crosswalk.ts`, where offline tests
-can exercise them without initiating network requests.
-
-The probe accepts only CTAN's deterministic identifier relation: a CTAN `idParada` maps to GTFS
-`stop_id` `2_<idParada>`, where `2` is the Bahía consortium identifier. It validates every
-municipality -> núcleo -> stop relationship and succeeds only when every selected CMTBC GTFS stop
-has exactly one such CTAN record. Names and coordinates are intentionally excluded. An incomplete
-report is a source-data finding, not permission to infer or hand-maintain location membership.
-
-CTAN's `/Consorcios/2/paradas` collection omits some records that its
-`/Consorcios/2/paradas/<idParada>` endpoint returns. For every collection-missing GTFS candidate,
-the probe performs that exact detail lookup. It then checks the GTFS stop's known route(s) through
-`/Consorcios/2/lineas/<idLinea>/paradas`. The final report's `unmatchedGtfsStopIds` therefore
-contains only IDs absent from all three official sources. Every step remains identifier-only; it
-does not introduce name or coordinate matching.
-
-CTAN's line-stop response has a durable field-name quirk: its `idNucleo` value is actually the
-municipality ID. Across all 67 Bahía lines in the current snapshot, all 1,493 line-stop rows that
-could be compared with the stop directory matched `idMunicipio`; none matched only the directory's
-`idNucleo`. For example, the M-560 endpoint returns `idNucleo: "7"` for Rota stops, while Rota's
-actual núcleo ID is `15`. The probe deliberately treats that value as a municipality ID, validates
-it against the municipality directory, and records exact `{ gtfsStopId, municipalityId }` pairs in
-`lineFallbacks`. It still records those IDs in `unresolvedNucleusGtfsStopIds`: line data improves
-stop and municipality coverage but does not verify the lower-level núcleo. `status` remains
-`incomplete` until the full hierarchy is verified.
-
-Against archive `05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844`, the collection
-returned 15 municipalities, 44 núcleos, and 190 stops, initially matching 152 of the snapshot's
-263 CMTBC GTFS stops. The detail fallback added 109 unique CTAN records, yielding 261 matches from
-299 hierarchy-bearing CTAN stops. The individual endpoints for `2_349` and `2_350` returned
-CTAN's no-data response, but their M-560 line itinerary records resolve both stop IDs. The official
-location relation nevertheless remains incomplete for those two stops: the final report has
-263/263 matched stop IDs and an empty `unmatchedGtfsStopIds`, but lists both IDs as line-fallback
-municipality mappings and núcleo-unresolved results. The browser dataset therefore continues to
-contain no user-facing location membership.
-
-## Future automated production refreshes
-
-When GTFS data needs automatic refreshes, a scheduled job (for example, GitHub Actions) will
-download the upstream archive, validate/process/normalize it, generate the Gadiruta static
-dataset(s), and publish them to the same static host or CDN as the app. Clients will fetch those
-datasets and cache them locally with version checks.
-
-At that stage, raw GTFS archives and regularly regenerated production datasets should normally be
-generated deployment artifacts, not Git-tracked files. Version control should retain the source
-code, import/build tooling, schemas, and small fixtures or sample data. The scheduling and
-deployment mechanics remain deliberately unspecified until automated refreshes are needed.
-
-## Deliberate boundaries
-
-- GTFS stops are physical boarding locations, not user-facing places. A verified place-to-stop
-  association has not yet been added to the app-facing snapshot. The CTAN crosswalk probe records
-  upstream administrative evidence, without defining rider-facing place membership.
-- The snapshot deliberately excludes service calendars, trip times, shapes, fare data, and alerts.
-  Add those only with the feature that needs them.
-- There is no IndexedDB schema, service worker, PWA caching policy, edge service, or backend.
-- Data parsing and validation live in focused TypeScript modules. Future normalization, indexing,
-  calendar handling, and journey logic should remain outside React components.
+- Keep browser data static and query it locally. Add a backend, database, or direct CTAN calls only
+  when a concrete feature requires them and the need is documented.
+- Keep parsing, validation, indexing, calendar rules, and journey calculations outside React
+  components as those features are added.
+- Keep tests offline. Save small examples for upstream data quirks that affect the code.
+- Add local persistence, a service worker, or automated data refresh only when a feature establishes
+  the need and its behavior can be specified.

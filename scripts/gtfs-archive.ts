@@ -1,3 +1,9 @@
+/**
+ * Opens the GTFS ZIP downloaded from CTAN and reads the text tables needed by the data scripts.
+ *
+ * It also handles a known issue in some CTAN CSV rows: quote marks inside stop names are not
+ * escaped correctly. This file is used by the commands under `scripts/`, not by the website.
+ */
 import { buffer } from 'node:stream/consumers';
 import { parse } from 'csv-parse/sync';
 import { fromBufferPromise, type Entry, type ZipFile } from 'yauzl';

@@ -1,3 +1,9 @@
+/**
+ * Checks how CTAN location replies are read and how the script reports which bus stops it could
+ * match.
+ *
+ * Tests use saved replies and do not contact CTAN.
+ */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {

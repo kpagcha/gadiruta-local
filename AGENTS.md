@@ -22,9 +22,17 @@ transit data and query it locally.
 - Prefer explicit control flow and ordinary TypeScript over cleverness. Keep modules cohesive by
   concept rather than arbitrary file length, and prefer pure functions for data transformations.
 - Use strict TypeScript. Do not use `any` without a concrete, documented reason.
+- Add a top-level TSDoc/JSDoc comment to each non-UI module/file, especially data and tooling
+  modules. Explain what the file is for in plain, familiar words a newcomer can understand. Include
+  when it runs and what it reads, changes, or produces when that context helps explain its purpose.
+  Avoid short labels or technical terms without explanation. Do not add module summaries to React
+  components or page files.
 - Write a concise TSDoc/JSDoc block for every function. State its contract; for non-obvious code,
   explain the invariant, assumption, external-data quirk, or reason behind the implementation
   instead of narrating syntax or mechanically repeating parameter types.
+- In non-trivial functions, add a few short inline comments at meaningful stages to help readers
+  scan the steps and understand the reasoning. Explain intent, invariants, or surprising choices;
+  do not comment obvious statements or every line.
 - Do not optimize or generalize before a real feature demonstrates the need.
 
 ## Frontend
