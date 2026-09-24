@@ -62,8 +62,8 @@ once even when it has several matching boarding stops.
 
 The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history on submit.
 It resolves those IDs against the checked-in place and stop choices when a link loads or browser
-history changes. `jerez` is the short public slug for the local `jerez-de-la-frontera` place ID;
-both forms are accepted. Invalid or incomplete links do not run a journey search.
+history changes. URLs use the stored place or stop IDs directly. Invalid or incomplete links do
+not run a journey search.
 
 The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
 The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.

@@ -21,16 +21,10 @@ export function isClockTime(value: string): boolean {
   return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 }
 
-/** Use the short public Jerez slug while accepting its original local place ID in old links. */
-function locationUrlId(option: LocationOption): string {
-  return option.kind === 'place' && option.id === 'jerez-de-la-frontera' ? 'jerez' : option.id;
-}
-
-/** Resolve a public place slug or an exact stop ID to the locally available selection. */
+/** Resolve a place or stop ID to the locally available selection. */
 function findUrlLocation(value: string | null, options: readonly LocationOption[]): LocationOption | null {
   if (value === null || value === '') return null;
-  const id = value === 'jerez' ? 'jerez-de-la-frontera' : value;
-  return options.find((option) => option.id === id) ?? null;
+  return options.find((option) => option.id === value) ?? null;
 }
 
 /** Read valid URL fields independently, but run a search only when all required fields are valid. */
@@ -77,8 +71,8 @@ export function searchQuery(
   departAfter: string,
 ): string {
   const parameters = new URLSearchParams({
-    from: locationUrlId(origin),
-    to: locationUrlId(destination),
+    from: origin.id,
+    to: destination.id,
     date,
   });
   if (departAfter !== '') parameters.set('depart_after', departAfter);
