@@ -334,20 +334,31 @@ export function TripLocationPicker({
             {recentSearches.map((search) => {
               const route = `${search.origin.name} → ${search.destination.name}`;
               return (
-                <button
-                  aria-label={t('search.repeatRecentSearch', {
-                    origin: search.origin.name,
-                    destination: search.destination.name,
-                  })}
-                  className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
+                <Tooltip.Root
                   key={`${search.origin.kind}:${search.origin.id}:${search.destination.kind}:${search.destination.id}`}
-                  onClick={() => onSelectRecentSearch(search)}
-                  title={route}
-                  type="button"
                 >
-                  <Icon name="search" className="shrink-0" size={17} />
-                  <span className="min-w-0 truncate">{route}</span>
-                </button>
+                  <Tooltip.Trigger
+                    aria-label={t('search.repeatRecentSearch', {
+                      origin: search.origin.name,
+                      destination: search.destination.name,
+                    })}
+                    className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
+                    delay={300}
+                    onClick={() => onSelectRecentSearch(search)}
+                    render={<button />}
+                    type="button"
+                  >
+                    <Icon name="search" className="shrink-0" size={17} />
+                    <span className="min-w-0 truncate">{route}</span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Positioner className="z-100" sideOffset={7}>
+                      <Tooltip.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
+                        {route}
+                      </Tooltip.Popup>
+                    </Tooltip.Positioner>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
               );
             })}
           </div>
