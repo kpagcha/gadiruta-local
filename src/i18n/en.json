@@ -69,6 +69,7 @@
     "noLater": "No departures at or after this time. Show earlier departures to see more.",
     "boardAt": "Board at",
     "alightAt": "Get off at",
+    "openStopInGoogleMaps": "Open {{stop}} in Google Maps (new tab)",
     "duration": "{{count}} min",
     "nextDay": "Arrives next day"
   },

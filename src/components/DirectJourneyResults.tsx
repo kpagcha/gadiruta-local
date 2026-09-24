@@ -9,7 +9,7 @@ import {
   type DirectJourney,
 } from '../data/direct-journeys.ts';
 import { getRouteLabel } from '../data/network.ts';
-import type { NetworkDataset } from '../data/network-schema.ts';
+import type { NetworkDataset, NetworkStop } from '../data/network-schema.ts';
 import { Icon, type IconName } from './Icon';
 import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
@@ -27,6 +27,11 @@ function routeIcon(type: number | undefined): IconName {
   if (type === 0) return 'tram';
   if (type === 1 || type === 2) return 'train';
   return 'route';
+}
+
+/** Point Google Maps at a physical stop using its reviewed snapshot coordinates. */
+function googleMapsStopUrl(stop: NetworkStop): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${stop.latitude},${stop.longitude}`)}`;
 }
 
 /** Show one stop visit and highlight it when it is selected on this trip. */
@@ -82,11 +87,13 @@ function JourneyCard({
   const initialBoarding = journey.boardings[defaultBoardingIndex]!;
   const [boardingIndex, setBoardingIndex] = useState(initialBoarding.index);
   const [alightingIndex, setAlightingIndex] = useState(initialBoarding.alightings[0]!.index);
-  const stopNames = new Map(dataset.stops.map((stop) => [stop.id, stop.name]));
+  const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
   const route = dataset.routes.find((route) => route.id === journey.routeId);
   const trip = dataset.trips.find((trip) => trip.id === journey.tripId)!;
   const boarding = trip.stopTimes[boardingIndex]!;
   const alighting = trip.stopTimes[alightingIndex]!;
+  const boardingStop = stopsById.get(boarding.stopId);
+  const alightingStop = stopsById.get(alighting.stopId);
   // The journey's recorded boarding time gives every trip visit the same service-day offset.
   const firstBoarding = journey.boardings[0]!;
   const minuteOffset = firstBoarding.departureMinute - trip.stopTimes[firstBoarding.index]!.departureMinutes;
@@ -148,47 +155,58 @@ function JourneyCard({
           ) : (
             <span className="block text-xs font-[650]">{t('journey.boardAt')}</span>
           )}
-          {boardableIndices.length > 1 ? (
-            <Select
-              items={trip.stopTimes.map((time, index) => ({
-                value: String(index),
-                label: stopNames.get(time.stopId) ?? time.stopId,
-              }))}
-              value={String(boardingIndex)}
-              onValueChange={(stopIndex) => {
-                if (stopIndex === null) return;
-                const nextBoardingIndex = Number(stopIndex);
-                if (!boardableIndices.includes(nextBoardingIndex)) return;
-                const nextAlightings = alightableTripStopIndices(trip, nextBoardingIndex);
-                setBoardingIndex(nextBoardingIndex);
-                if (!nextAlightings.includes(alightingIndex)) setAlightingIndex(nextAlightings[0]!);
-              }}
-            >
-              <SelectTrigger
-                id={`${journey.id}-board`}
-                className="-ml-2 min-h-6 w-[calc(100%+0.5rem)] rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
+          <div className="mt-1 flex min-w-0 items-center gap-1">
+            {boardableIndices.length > 1 ? (
+              <Select
+                items={trip.stopTimes.map((time, index) => ({
+                  value: String(index),
+                  label: stopsById.get(time.stopId)?.name ?? time.stopId,
+                }))}
+                value={String(boardingIndex)}
+                onValueChange={(stopIndex) => {
+                  if (stopIndex === null) return;
+                  const nextBoardingIndex = Number(stopIndex);
+                  if (!boardableIndices.includes(nextBoardingIndex)) return;
+                  const nextAlightings = alightableTripStopIndices(trip, nextBoardingIndex);
+                  setBoardingIndex(nextBoardingIndex);
+                  if (!nextAlightings.includes(alightingIndex)) setAlightingIndex(nextAlightings[0]!);
+                }}
               >
-                <SelectValue className="min-w-0 truncate">
-                  {stopNames.get(boarding.stopId) ?? boarding.stopId}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent wide>
-                {trip.stopTimes.map((time, index) => (
-                  <StopTimelineOption
-                    key={index}
-                    index={index}
-                    count={trip.stopTimes.length}
-                    time={clockTime(time.departureMinutes + minuteOffset)}
-                    name={stopNames.get(time.stopId) ?? time.stopId}
-                    selected={index === boardingIndex}
-                    selectable={boardableIndices.includes(index)}
-                  />
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <p className="mt-1 wrap-anywhere">{stopNames.get(boarding.stopId)}</p>
-          )}
+                <SelectTrigger
+                  id={`${journey.id}-board`}
+                  className="-ml-2 min-h-8 min-w-0 flex-1 rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
+                >
+                  <SelectValue className="min-w-0 truncate">{boardingStop?.name ?? boarding.stopId}</SelectValue>
+                </SelectTrigger>
+                <SelectContent wide>
+                  {trip.stopTimes.map((time, index) => (
+                    <StopTimelineOption
+                      key={index}
+                      index={index}
+                      count={trip.stopTimes.length}
+                      time={clockTime(time.departureMinutes + minuteOffset)}
+                      name={stopsById.get(time.stopId)?.name ?? time.stopId}
+                      selected={index === boardingIndex}
+                      selectable={boardableIndices.includes(index)}
+                    />
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <p className="min-w-0 flex-1 wrap-anywhere">{boardingStop?.name ?? boarding.stopId}</p>
+            )}
+            {boardingStop && (
+              <a
+                aria-label={t('journey.openStopInGoogleMaps', { stop: boardingStop.name })}
+                className="grid size-8 shrink-0 place-items-center rounded-lg text-icon-muted hover:bg-surface-hover hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                href={googleMapsStopUrl(boardingStop)}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Icon name="externalLink" size={14} />
+              </a>
+            )}
+          </div>
         </div>
         <div className="min-w-0">
           {alightableIndices.length > 1 ? (
@@ -198,44 +216,55 @@ function JourneyCard({
           ) : (
             <span className="block text-xs font-[650]">{t('journey.alightAt')}</span>
           )}
-          {alightableIndices.length > 1 ? (
-            <Select
-              items={trip.stopTimes.map((time, index) => ({
-                value: String(index),
-                label: stopNames.get(time.stopId) ?? time.stopId,
-              }))}
-              value={String(alightingIndex)}
-              onValueChange={(stopIndex) => {
-                if (stopIndex === null) return;
-                const nextAlightingIndex = Number(stopIndex);
-                if (alightableIndices.includes(nextAlightingIndex)) setAlightingIndex(nextAlightingIndex);
-              }}
-            >
-              <SelectTrigger
-                id={`${journey.id}-alight`}
-                className="-ml-2 min-h-6 w-[calc(100%+0.5rem)] rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
+          <div className="mt-1 flex min-w-0 items-center gap-1">
+            {alightableIndices.length > 1 ? (
+              <Select
+                items={trip.stopTimes.map((time, index) => ({
+                  value: String(index),
+                  label: stopsById.get(time.stopId)?.name ?? time.stopId,
+                }))}
+                value={String(alightingIndex)}
+                onValueChange={(stopIndex) => {
+                  if (stopIndex === null) return;
+                  const nextAlightingIndex = Number(stopIndex);
+                  if (alightableIndices.includes(nextAlightingIndex)) setAlightingIndex(nextAlightingIndex);
+                }}
               >
-                <SelectValue className="min-w-0 truncate">
-                  {stopNames.get(alighting.stopId) ?? alighting.stopId}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent wide>
-                {trip.stopTimes.map((time, index) => (
-                  <StopTimelineOption
-                    key={index}
-                    index={index}
-                    count={trip.stopTimes.length}
-                    time={clockTime(time.arrivalMinutes + minuteOffset)}
-                    name={stopNames.get(time.stopId) ?? time.stopId}
-                    selected={index === alightingIndex}
-                    selectable={alightableIndices.includes(index)}
-                  />
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <p className="mt-1 wrap-anywhere">{stopNames.get(alighting.stopId)}</p>
-          )}
+                <SelectTrigger
+                  id={`${journey.id}-alight`}
+                  className="-ml-2 min-h-8 min-w-0 flex-1 rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
+                >
+                  <SelectValue className="min-w-0 truncate">{alightingStop?.name ?? alighting.stopId}</SelectValue>
+                </SelectTrigger>
+                <SelectContent wide>
+                  {trip.stopTimes.map((time, index) => (
+                    <StopTimelineOption
+                      key={index}
+                      index={index}
+                      count={trip.stopTimes.length}
+                      time={clockTime(time.arrivalMinutes + minuteOffset)}
+                      name={stopsById.get(time.stopId)?.name ?? time.stopId}
+                      selected={index === alightingIndex}
+                      selectable={alightableIndices.includes(index)}
+                    />
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <p className="min-w-0 flex-1 wrap-anywhere">{alightingStop?.name ?? alighting.stopId}</p>
+            )}
+            {alightingStop && (
+              <a
+                aria-label={t('journey.openStopInGoogleMaps', { stop: alightingStop.name })}
+                className="grid size-8 shrink-0 place-items-center rounded-lg text-icon-muted hover:bg-surface-hover hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                href={googleMapsStopUrl(alightingStop)}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Icon name="externalLink" size={14} />
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </article>

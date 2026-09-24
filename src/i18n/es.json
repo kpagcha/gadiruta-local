@@ -69,6 +69,7 @@
     "noLater": "No hay salidas a partir de esta hora. Muestra salidas anteriores para ver más.",
     "boardAt": "Sube en",
     "alightAt": "Baja en",
+    "openStopInGoogleMaps": "Abrir {{stop}} en Google Maps (pestaña nueva)",
     "duration": "{{count}} min",
     "nextDay": "Llega al día siguiente"
   },
