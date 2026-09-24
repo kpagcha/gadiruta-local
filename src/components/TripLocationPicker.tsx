@@ -93,9 +93,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
         <input
           ref={inputRef}
           autoComplete="off"
-          className={`h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${
-            isInputFocused ? 'pl-11 max-[380px]:pl-10' : 'pl-4 max-[380px]:pl-3'
-          } ${isInputFocused && value.text === '' ? 'pr-4' : 'pr-12'}`}
+          className="h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
           disabled={disabled}
           id={`${id}-search`}
           onChange={(event) => {
@@ -123,13 +121,6 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
             {label}
           </span>
         )}
-        {isInputFocused && (
-          <Icon
-            name="search"
-            className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-accent max-[380px]:left-3"
-            size={18}
-          />
-        )}
         {value.text !== '' && !disabled ? (
           <button
             aria-label={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
@@ -144,10 +135,10 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
           >
             <Icon name="close" size={17} />
           </button>
-        ) : value.text === '' && !isInputFocused ? (
+        ) : value.text === '' ? (
           <Icon
-            name="stop"
-            className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-icon-muted"
+            name={isInputFocused ? 'search' : 'stop'}
+            className={`pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 ${isInputFocused ? 'text-accent' : 'text-icon-muted'}`}
             size={19}
           />
         ) : null}
