@@ -1,4 +1,3 @@
-import { Tooltip } from '@base-ui/react/tooltip';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +11,7 @@ import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { AppTooltip } from './ui/tooltip';
 
 /** Text being edited and the exact choice, if the rider selected one. */
 export interface LocationFieldValue {
@@ -299,30 +299,22 @@ export function TripLocationPicker({
               />
             </div>
           </div>
-          <Tooltip.Root disabled={swapDisabled}>
-            <Tooltip.Trigger
+          <AppTooltip content={t('search.swap')} disabled={swapDisabled}>
+            <button
               aria-label={t('search.swap')}
               className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-75 max-[380px]:size-9"
-              delay={0}
+              disabled={swapDisabled}
               onClick={() => {
                 changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
               }}
-              render={<button disabled={swapDisabled} />}
               type="button"
             >
               <span aria-hidden="true" className="relative block h-8 w-7">
                 <ArrowUp className="absolute top-0.5 left-0" size={18} strokeWidth={3.2} />
                 <ArrowDown className="absolute top-3.5 left-2" size={18} strokeWidth={3.2} />
               </span>
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-              <Tooltip.Positioner className="z-100" sideOffset={7}>
-                <Tooltip.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
-                  {t('search.swap')}
-                </Tooltip.Popup>
-              </Tooltip.Positioner>
-            </Tooltip.Portal>
-          </Tooltip.Root>
+            </button>
+          </AppTooltip>
         </div>
         {recentSearches.length > 0 && (
           <div
@@ -334,31 +326,23 @@ export function TripLocationPicker({
             {recentSearches.map((search) => {
               const route = `${search.origin.name} → ${search.destination.name}`;
               return (
-                <Tooltip.Root
+                <AppTooltip
+                  content={route}
                   key={`${search.origin.kind}:${search.origin.id}:${search.destination.kind}:${search.destination.id}`}
                 >
-                  <Tooltip.Trigger
+                  <button
                     aria-label={t('search.repeatRecentSearch', {
                       origin: search.origin.name,
                       destination: search.destination.name,
                     })}
                     className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
-                    delay={300}
                     onClick={() => onSelectRecentSearch(search)}
-                    render={<button />}
                     type="button"
                   >
                     <Icon name="search" className="shrink-0" size={17} />
                     <span className="min-w-0 truncate">{route}</span>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Positioner className="z-100" sideOffset={7}>
-                      <Tooltip.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
-                        {route}
-                      </Tooltip.Popup>
-                    </Tooltip.Positioner>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
+                  </button>
+                </AppTooltip>
               );
             })}
           </div>

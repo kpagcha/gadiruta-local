@@ -16,7 +16,7 @@ gadiruta-local/
 │   ├── config.ts                 Project-controlled browser settings such as recent-search count
 │   ├── pages/                    Full-page content (currently HomePage)
 │   ├── components/               Reusable interface pieces and their Storybook stories
-│   │   └── ui/                   Shared shadcn Base UI select parts and app styling
+│   │   └── ui/                   Shared Base UI select and tooltip wrappers with app styling
 │   ├── data/                     Browser-side network loading, journey search, recent history, URL and calendar helpers
 │   ├── i18n/                     English/Spanish text and language setup
 │   ├── styles/                   Global CSS and Tailwind entry point
