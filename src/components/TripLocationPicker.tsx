@@ -213,44 +213,43 @@ export function TripLocationPicker({
           event.preventDefault();
         }}
       >
-        <div>
-          <LocationField
-            disabled={disabled}
-            id="origin"
-            label={t('search.origin')}
-            placeholder={t('search.originPlaceholder')}
-            onChange={(value, committed) => {
-              changeDraft({ ...draft, origin: value }, committed);
-            }}
-            options={options}
-            value={draft.origin}
-          />
-          <div className="flex min-h-16 items-center justify-end gap-3">
-            <span className="h-px flex-1 translate-y-3.5 bg-line-subtle" aria-hidden="true" />
-            <button
-              aria-label={t('search.swap')}
-              className="grid size-11 shrink-0 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45"
-              disabled={disabled || (!draft.origin.text && !draft.destination.text)}
-              onClick={() => {
-                changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
+        <div className="grid grid-cols-[minmax(0,1fr)_2.75rem] items-center gap-2 max-[380px]:grid-cols-[minmax(0,1fr)_2.25rem] max-[380px]:gap-1">
+          <div className="grid min-w-0 gap-4">
+            <LocationField
+              disabled={disabled}
+              id="origin"
+              label={t('search.origin')}
+              placeholder={t('search.originPlaceholder')}
+              onChange={(value, committed) => {
+                changeDraft({ ...draft, origin: value }, committed);
               }}
-              title={t('search.swap')}
-              type="button"
-            >
-              <Icon name="swap" size={20} />
-            </button>
+              options={options}
+              value={draft.origin}
+            />
+            <LocationField
+              disabled={disabled}
+              id="destination"
+              label={t('search.destination')}
+              placeholder={t('search.destinationPlaceholder')}
+              onChange={(value, committed) => {
+                changeDraft({ ...draft, destination: value }, committed);
+              }}
+              options={options}
+              value={draft.destination}
+            />
           </div>
-          <LocationField
-            disabled={disabled}
-            id="destination"
-            label={t('search.destination')}
-            placeholder={t('search.destinationPlaceholder')}
-            onChange={(value, committed) => {
-              changeDraft({ ...draft, destination: value }, committed);
+          <button
+            aria-label={t('search.swap')}
+            className="grid size-11 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
+            disabled={disabled || (!draft.origin.text && !draft.destination.text)}
+            onClick={() => {
+              changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
             }}
-            options={options}
-            value={draft.destination}
-          />
+            title={t('search.swap')}
+            type="button"
+          >
+            <Icon name="swap" size={20} />
+          </button>
         </div>
         {state.status === 'loading' && (
           <p className="mt-4 text-sm text-muted" role="status">
