@@ -78,7 +78,7 @@ test('rejects invalid times, dates, and duplicate exceptions', () => {
     /duplicated/,
   );
   assert.throws(
-    () => parseNetworkDataset({ ...dataset, coverage: { startDate: '2026-09-02', endDate: '2026-12-31' } }),
+    () => parseNetworkDataset({ ...dataset, coverage: { startDate: '2026-09-03', endDate: '2026-12-31' } }),
     /coverage/,
   );
 });

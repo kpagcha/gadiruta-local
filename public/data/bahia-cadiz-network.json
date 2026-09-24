@@ -2,7 +2,7 @@
   "formatVersion": 2,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-23T15:41:16.602Z",
+    "generatedAt": "2026-09-24T16:34:43.230Z",
     "archiveSha256": "05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844"
   },
   "agencies": [
@@ -127167,7 +127167,7 @@
   "calendars": [
     {
       "serviceId": "2_1083_1840_6_26_2",
-      "startDate": "2021-06-01",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127181,7 +127181,7 @@
     },
     {
       "serviceId": "2_1083_2212_6_26_1",
-      "startDate": "2021-06-01",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127195,7 +127195,7 @@
     },
     {
       "serviceId": "2_1086_20_8_5_2",
-      "startDate": "2021-06-05",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127209,7 +127209,7 @@
     },
     {
       "serviceId": "2_1170_2420_8_28_1",
-      "startDate": "2021-11-29",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127223,7 +127223,7 @@
     },
     {
       "serviceId": "2_1274_2638_8_239_1",
-      "startDate": "2022-09-22",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127237,7 +127237,7 @@
     },
     {
       "serviceId": "2_1306_2737_8_155_7",
-      "startDate": "2023-06-16",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127251,7 +127251,7 @@
     },
     {
       "serviceId": "2_1380_2901_8_46_1",
-      "startDate": "2024-03-11",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127265,7 +127265,7 @@
     },
     {
       "serviceId": "2_1408_2959_6_7_1",
-      "startDate": "2024-05-06",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127279,7 +127279,7 @@
     },
     {
       "serviceId": "2_1408_2960_6_7_5",
-      "startDate": "2024-05-06",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127293,7 +127293,7 @@
     },
     {
       "serviceId": "2_1408_2961_6_7_4",
-      "startDate": "2024-05-06",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127307,7 +127307,7 @@
     },
     {
       "serviceId": "2_1417_1852_8_13_2",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127321,7 +127321,7 @@
     },
     {
       "serviceId": "2_1417_1858_8_177_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127335,7 +127335,7 @@
     },
     {
       "serviceId": "2_1417_1859_8_16_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127349,7 +127349,7 @@
     },
     {
       "serviceId": "2_1417_1860_8_16_2",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127363,7 +127363,7 @@
     },
     {
       "serviceId": "2_1417_1861_8_18_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127377,7 +127377,7 @@
     },
     {
       "serviceId": "2_1417_1863_8_17_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127391,7 +127391,7 @@
     },
     {
       "serviceId": "2_1417_1887_8_21_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127405,7 +127405,7 @@
     },
     {
       "serviceId": "2_1417_1888_8_19_2",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127419,7 +127419,7 @@
     },
     {
       "serviceId": "2_1417_2221_8_13_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127433,7 +127433,7 @@
     },
     {
       "serviceId": "2_1417_2223_8_19_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127447,7 +127447,7 @@
     },
     {
       "serviceId": "2_1417_2236_8_36_2",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127461,7 +127461,7 @@
     },
     {
       "serviceId": "2_1417_2481_8_36_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127475,7 +127475,7 @@
     },
     {
       "serviceId": "2_1417_2498_8_12_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127489,7 +127489,7 @@
     },
     {
       "serviceId": "2_1417_2736_8_14_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127503,7 +127503,7 @@
     },
     {
       "serviceId": "2_1417_3000_8_44_1",
-      "startDate": "2024-06-20",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127517,7 +127517,7 @@
     },
     {
       "serviceId": "2_1447_3049_8_20_1",
-      "startDate": "2024-10-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127531,7 +127531,7 @@
     },
     {
       "serviceId": "2_1449_2999_8_43_2",
-      "startDate": "2024-10-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127545,7 +127545,7 @@
     },
     {
       "serviceId": "2_1449_3051_8_43_1",
-      "startDate": "2024-10-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127559,7 +127559,7 @@
     },
     {
       "serviceId": "2_1459_3062_8_41_1",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127573,7 +127573,7 @@
     },
     {
       "serviceId": "2_1462_3061_8_48_1",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127587,7 +127587,7 @@
     },
     {
       "serviceId": "2_1465_2492_8_6_1",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127601,7 +127601,7 @@
     },
     {
       "serviceId": "2_1465_3069_8_6_5",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127615,7 +127615,7 @@
     },
     {
       "serviceId": "2_1465_3070_8_6_4",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         false,
@@ -127629,7 +127629,7 @@
     },
     {
       "serviceId": "2_1467_3066_8_11_1",
-      "startDate": "2025-01-07",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -127643,7 +127643,7 @@
     },
     {
       "serviceId": "2_1490_3077_8_38_1",
-      "startDate": "2025-02-03",
+      "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "weekdays": [
         true,
@@ -131645,7 +131645,7 @@
     }
   ],
   "coverage": {
-    "startDate": "2021-06-01",
+    "startDate": "2026-01-01",
     "endDate": "2026-12-31"
   }
 }

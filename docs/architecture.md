@@ -71,9 +71,13 @@ snapshot validator rejects token collisions, and links containing a raw stop ID 
 Invalid or incomplete links do not run a journey search.
 
 The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
-The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.
-The UI shows an expired-data message once the current Cádiz date passes the end. This is source
-coverage, not a promise that every date or location pair has a departure.
+Its Bay calendars span 2021-06-01 through 2026-12-31. The reviewed snapshot limits visible travel
+dates to 2026-01-01 through 2026-12-31: the project builder requests the current Cádiz year and
+the next, then clips that request to the source coverage. This feed has no Bay service in 2027.
+The builder keeps a preceding service day only for trips with after-midnight stop times, so journeys
+just after midnight on the first visible date remain searchable. The UI shows an expired-data
+message once the current Cádiz date passes the end. Coverage is not a promise that every date or
+location pair has a departure.
 The time pill keeps exact typed minutes. Its 15-minute arrows change the date at midnight and
 disable a step beyond the snapshot coverage. A first arrow press on an empty time fills the current
 Cádiz time rounded down to a quarter hour.

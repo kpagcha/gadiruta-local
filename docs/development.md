@@ -86,11 +86,17 @@ CTAN GTFS ZIP
   → browser loads and validates it as above
 ```
 
-`just data` rebuilds the snapshot from the local ZIP. `just data-refresh` downloads a new ZIP from
-CTAN and rebuilds it, so it needs network access and should be an intentional refresh. Review the
-JSON diff before committing. Review place assignments separately when changing geographic scope.
-The app can be developed from a fresh checkout without the ZIP because
-the reviewed JSON is already present.
+`just data` rebuilds the snapshot from the local ZIP for the current Cádiz calendar year and the
+next. It clips the requested end date to the Bay services actually present in the archive; it never
+extends an old timetable into a new year. `just data-refresh` downloads a new ZIP from CTAN and uses
+the same range, so it needs network access and should be an intentional refresh. Both commands fail
+if the feed has no service in that range. Review the JSON diff before committing. Review place
+assignments separately when changing geographic scope. The app can be developed from a fresh
+checkout without the ZIP because the reviewed JSON is already present.
+
+The underlying builder keeps the full source span when no range is given: `npm run data`. For an
+inclusive custom range, run `npm run data -- --start-date 2026-07-01 --end-date 2026-09-30`. These
+commands read the local ZIP; only the explicit `--download` option fetches CTAN data.
 
 `just locations-probe` is a separate investigation. It contacts CTAN location endpoints, compares
 their identifiers with stops in the local ZIP, and writes raw replies and a report under
@@ -115,8 +121,8 @@ available commands. Common commands:
 | `just dev`                        | Runs the website locally with Vite                           |
 | `just build`                      | Type-checks and builds static deployment files in `dist/`    |
 | `just preview`                    | Serves the existing `dist/` build locally                    |
-| `just data`                       | Builds the tracked network JSON from the local GTFS ZIP      |
-| `just data-refresh`               | Downloads GTFS from CTAN, then builds the network JSON       |
+| `just data`                       | Builds the rolling-year snapshot from the local GTFS ZIP     |
+| `just data-refresh`               | Downloads GTFS, then builds the rolling-year snapshot        |
 | `just locations-probe`            | Captures CTAN location evidence under ignored source data    |
 | `just test`                       | Runs focused offline data tests with Node's test runner      |
 | `just typecheck`                  | Checks TypeScript without writing build files                |

@@ -1,14 +1,15 @@
 /**
  * Reads the downloaded CTAN bus data and writes the reviewed JSON for local Bay journey search.
  *
- * This script runs only when a developer runs `just data` or `just data-refresh`. It does not run in
- * the browser. The generated JSON is saved at `public/data/bahia-cadiz-network.json`.
+ * This script runs when a developer builds or refreshes the local data. It does not run in the
+ * browser. The generated JSON is saved at `public/data/bahia-cadiz-network.json`.
  */
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
+import { isCalendarDate, shiftCalendarDate } from '../src/data/calendar-date.ts';
 import { parseNetworkDataset, type NetworkDataset } from '../src/data/network-schema.ts';
 import { places } from '../src/data/places.ts';
 import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
@@ -59,6 +60,12 @@ interface OrderedStopTime {
   dropOffType: number;
 }
 
+/** Inclusive dates the generated browser snapshot is allowed to show. */
+export interface SnapshotDateRange {
+  startDate: string;
+  endDate: string;
+}
+
 /** Read GTFS HH:MM:SS, including times later than 24:00 on the service's following day. */
 function gtfsMinutes(value: string, label: string): number {
   const match = /^(\d{1,3}):([0-5]\d):([0-5]\d)$/.exec(value);
@@ -68,7 +75,7 @@ function gtfsMinutes(value: string, label: string): number {
   return Number(match[1]) * 60 + Number(match[2]);
 }
 
-/** Convert GTFS YYYYMMDD to the date string used by the browser's native date input. */
+/** Convert GTFS YYYYMMDD to the ISO calendar date used by the browser. */
 function gtfsDate(value: string, label: string): string {
   if (!/^\d{8}$/.test(value)) {
     fail(`${label} must be a YYYYMMDD date.`);
@@ -145,16 +152,118 @@ function compareText(first: string, second: string): number {
   return first.localeCompare(second, 'en');
 }
 
+/** Keep only services usable in a requested window and the topology those services reference. */
+function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRange): NetworkDataset {
+  if (
+    !isCalendarDate(requested.startDate) ||
+    !isCalendarDate(requested.endDate) ||
+    requested.startDate > requested.endDate
+  ) {
+    fail('the requested date range must contain two ordered YYYY-MM-DD dates.');
+  }
+
+  const coverage = {
+    startDate: requested.startDate > dataset.coverage.startDate ? requested.startDate : dataset.coverage.startDate,
+    endDate: requested.endDate < dataset.coverage.endDate ? requested.endDate : dataset.coverage.endDate,
+  };
+  if (coverage.startDate > coverage.endDate) {
+    fail(`requested dates ${requested.startDate} to ${requested.endDate} do not overlap the Cádiz feed.`);
+  }
+
+  // Yesterday's service may board after midnight on the first visible date.
+  const serviceStart = shiftCalendarDate(coverage.startDate, -1);
+  const overnightServiceIds = new Set(
+    dataset.trips
+      .filter((trip) => trip.stopTimes.some((time) => time.departureMinutes >= 1440))
+      .map((trip) => trip.serviceId),
+  );
+  /** Only an overnight service needs its preceding day in the snapshot. */
+  function firstServiceDate(serviceId: string): string {
+    return overnightServiceIds.has(serviceId) ? serviceStart : coverage.startDate;
+  }
+  const additions = new Set(
+    dataset.calendarExceptions
+      .filter(
+        (exception) =>
+          exception.type === 1 &&
+          exception.date >= firstServiceDate(exception.serviceId) &&
+          exception.date <= coverage.endDate,
+      )
+      .map((exception) => exception.serviceId),
+  );
+  const calendars = dataset.calendars.flatMap((calendar) => {
+    const firstDate = firstServiceDate(calendar.serviceId);
+    const weeklyOverlap = calendar.endDate >= firstDate && calendar.startDate <= coverage.endDate;
+    if (!weeklyOverlap && !additions.has(calendar.serviceId)) return [];
+    const startDate = calendar.startDate > firstDate ? calendar.startDate : firstDate;
+    const endDate = calendar.endDate < coverage.endDate ? calendar.endDate : coverage.endDate;
+    return [
+      {
+        ...calendar,
+        startDate: weeklyOverlap ? startDate : coverage.startDate,
+        endDate: weeklyOverlap ? endDate : coverage.startDate,
+        weekdays: weeklyOverlap ? calendar.weekdays : [false, false, false, false, false, false, false],
+      },
+    ];
+  });
+  const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
+  const calendarExceptions = dataset.calendarExceptions.filter(
+    (exception) =>
+      serviceIds.has(exception.serviceId) &&
+      exception.date >= firstServiceDate(exception.serviceId) &&
+      exception.date <= coverage.endDate,
+  );
+  const trips = dataset.trips.filter((trip) => serviceIds.has(trip.serviceId));
+  if (
+    trips.length === 0 ||
+    (!calendars.some(
+      (calendar) =>
+        calendar.startDate <= coverage.endDate &&
+        calendar.endDate >= coverage.startDate &&
+        calendar.weekdays.some(Boolean),
+    ) &&
+      !calendarExceptions.some((exception) => exception.type === 1 && exception.date >= coverage.startDate))
+  ) {
+    fail(`requested dates ${requested.startDate} to ${requested.endDate} contain no Cádiz service.`);
+  }
+
+  // A range can remove entire services, so remove their unused route and stop records too.
+  const routeIds = new Set(trips.map((trip) => trip.routeId));
+  const patternKeys = new Set(
+    trips.map((trip) => [trip.routeId, ...trip.stopTimes.map((time) => time.stopId)].join('\u001f')),
+  );
+  const patterns = dataset.patterns.filter((pattern) =>
+    patternKeys.has([pattern.routeId, ...pattern.stopIds].join('\u001f')),
+  );
+  const stopIds = new Set(trips.flatMap((trip) => trip.stopTimes.map((time) => time.stopId)));
+  for (const stop of dataset.stops) {
+    if (stopIds.has(stop.id) && stop.parentStationId !== null) stopIds.add(stop.parentStationId);
+  }
+
+  return parseNetworkDataset({
+    ...dataset,
+    routes: dataset.routes.filter((route) => routeIds.has(route.id)),
+    stops: dataset.stops.filter((stop) => stopIds.has(stop.id)),
+    patterns,
+    trips,
+    calendars,
+    calendarExceptions,
+    coverage,
+  });
+}
+
 /**
  * Build the deliberately limited, app-facing Bahía network and timetable from parsed GTFS tables.
  *
  * This boundary excludes shapes, fares, and every other unused GTFS table. It checks references
  * before emitting a snapshot so the browser never receives a timetable it cannot query reliably.
+ * An optional date range clips the source calendar without extending it beyond known service.
  */
 export function createNetworkDataset(
   tables: InputTables,
   archiveSha256: string,
   placeAssignments: Record<string, string> = {},
+  dateRange?: SnapshotDateRange,
 ): NetworkDataset {
   // First lock the snapshot to the one agency this application is allowed to represent.
   const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
@@ -359,7 +468,7 @@ export function createNetworkDataset(
   };
 
   // Validate the generated shape through the same boundary the browser uses before returning it.
-  return parseNetworkDataset({
+  const dataset = parseNetworkDataset({
     formatVersion: 2,
     source: {
       url: sourceUrl,
@@ -375,27 +484,70 @@ export function createNetworkDataset(
     calendarExceptions,
     coverage,
   });
+  return dateRange === undefined ? dataset : limitNetworkDataset(dataset, dateRange);
 }
 
-/** Parse the deliberately small command interface with Node's strict built-in argument parser. */
-function parseArguments(arguments_: readonly string[]): { inputPath: string; download: boolean } {
+/** Resolve the current calendar year in Cádiz even when the build host uses another time zone. */
+function madridYear(now: Date): number {
+  return Number(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'Europe/Madrid' }).format(now));
+}
+
+/** Parse the optional date range and the deliberately small archive command interface. */
+function parseArguments(arguments_: readonly string[]): {
+  inputPath: string;
+  download: boolean;
+  dateRange?: SnapshotDateRange;
+} {
+  let values: {
+    download?: boolean;
+    input?: string;
+    'start-date'?: string;
+    'end-date'?: string;
+    'current-and-next-year'?: boolean;
+  };
   try {
-    const { values } = parseArgs({
+    values = parseArgs({
       args: [...arguments_],
       options: {
         download: { type: 'boolean' },
         input: { type: 'string' },
+        'start-date': { type: 'string' },
+        'end-date': { type: 'string' },
+        'current-and-next-year': { type: 'boolean' },
       },
       strict: true,
       allowPositionals: false,
-    });
-    return {
-      inputPath: values.input === undefined ? defaultInputPath : resolve(values.input),
-      download: values.download ?? false,
-    };
+    }).values;
   } catch (error: unknown) {
     fail(error instanceof Error ? error.message : String(error));
   }
+  const startDate = values['start-date'];
+  const endDate = values['end-date'];
+  const rolling = values['current-and-next-year'] ?? false;
+  if (rolling && (startDate !== undefined || endDate !== undefined)) {
+    fail('use either --current-and-next-year or explicit --start-date and --end-date.');
+  }
+  if ((startDate === undefined) !== (endDate === undefined)) {
+    fail('--start-date and --end-date must be provided together.');
+  }
+  if (
+    startDate !== undefined &&
+    endDate !== undefined &&
+    (!isCalendarDate(startDate) || !isCalendarDate(endDate) || startDate > endDate)
+  ) {
+    fail('--start-date and --end-date must be ordered YYYY-MM-DD dates.');
+  }
+  const year = madridYear(new Date());
+  const dateRange = rolling
+    ? { startDate: `${year}-01-01`, endDate: `${year + 1}-12-31` }
+    : startDate !== undefined && endDate !== undefined
+      ? { startDate, endDate }
+      : undefined;
+  return {
+    inputPath: values.input === undefined ? defaultInputPath : resolve(values.input),
+    download: values.download ?? false,
+    dateRange,
+  };
 }
 
 /** Download the archive only for the explicit refresh command and retain it as reviewable input. */
@@ -419,7 +571,7 @@ async function downloadArchive(inputPath: string): Promise<Uint8Array> {
  */
 export async function buildNetworkData(arguments_: readonly string[] = process.argv.slice(2)): Promise<void> {
   // Normal runs read an existing local input; only the explicit flag authorizes a network download.
-  const { inputPath, download } = parseArguments(arguments_);
+  const { inputPath, download, dateRange } = parseArguments(arguments_);
   const archive = download ? await downloadArchive(inputPath) : await readFile(inputPath);
 
   // Extract the seven GTFS tables needed for the current direct-journey snapshot.
@@ -437,15 +589,20 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
   // Record input provenance, then build and validate the reduced app-facing dataset.
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
   const placeAssignments = JSON.parse(await readFile(placeAssignmentsPath, 'utf8')) as Record<string, string>;
-  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments);
+  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments, dateRange);
 
   // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
   await mkdir(resolve(outputPath, '..'), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
   const inputStats = await stat(inputPath);
   console.log(
-    `Built ${outputPath} from ${inputPath} (${inputStats.size} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.patterns.length} patterns.`,
+    `Built ${outputPath} from ${inputPath} (${inputStats.size} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.patterns.length} patterns; coverage ${dataset.coverage.startDate} to ${dataset.coverage.endDate}.`,
   );
+  if (dateRange !== undefined && dataset.coverage.endDate < dateRange.endDate) {
+    console.warn(
+      `CTAN's Cádiz service ends before the requested ${dateRange.endDate}; no later journeys were generated.`,
+    );
+  }
 }
 
 const invokedPath = process.argv[1];

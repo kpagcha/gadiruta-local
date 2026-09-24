@@ -4,6 +4,7 @@
  * The data-building script uses the same checks before writing the file, and the browser checks it
  * again after loading it. This catches bad data before search code tries to use it.
  */
+import { shiftCalendarDate } from './calendar-date.ts';
 import { places } from './places.ts';
 import { stopUrlToken } from './stop-url.ts';
 
@@ -405,10 +406,13 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     throw new NetworkDataError('dataset contains duplicate trips or calendars.');
   }
   const placeIds = new Set(places.map((place) => place.id));
+  // A service dated yesterday can still board just after midnight on the first visible day.
+  const earliestServiceDate = shiftCalendarDate(coverage.startDate, -1);
   if (
-    calendars.some((calendar) => calendar.startDate < coverage.startDate || calendar.endDate > coverage.endDate) ||
+    calendars.some((calendar) => calendar.startDate < earliestServiceDate || calendar.endDate > coverage.endDate) ||
     calendarExceptions.some(
-      (exception) => exception.type === 1 && (exception.date < coverage.startDate || exception.date > coverage.endDate),
+      (exception) =>
+        exception.type === 1 && (exception.date < earliestServiceDate || exception.date > coverage.endDate),
     )
   ) {
     throw new NetworkDataError('dataset.coverage does not include its service dates.');

@@ -20,9 +20,9 @@ storybook:
 storybook-build:
     npm run storybook:build
 
-# Build the tracked local network snapshot from data/source/ctan-gtfs.zip.
+# Build this and next year's tracked snapshot from data/source/ctan-gtfs.zip.
 data:
-    npm run data
+    npm run data -- --current-and-next-year
 
 # Download the current CTAN archive, then rebuild the tracked local network snapshot.
 data-refresh:
