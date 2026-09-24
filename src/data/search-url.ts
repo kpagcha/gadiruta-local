@@ -5,6 +5,7 @@
 import { isCalendarDate } from './calendar-date.ts';
 import type { LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
+import { stopTokenFromUrl, stopUrlToken, stopUrlValue } from './stop-url.ts';
 
 /** Values shown in the form and whether a URL describes a runnable local search. */
 export interface ResolvedSearchUrl {
@@ -21,10 +22,15 @@ export function isClockTime(value: string): boolean {
   return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 }
 
-/** Resolve a place or stop ID to the locally available selection. */
+/** Resolve stored IDs and readable stop links against the current local selections. */
 function findUrlLocation(value: string | null, options: readonly LocationOption[]): LocationOption | null {
   if (value === null || value === '') return null;
-  return options.find((option) => option.id === value) ?? null;
+  const byId = options.find((option) => option.id === value);
+  if (byId) return byId;
+  const token = stopTokenFromUrl(value);
+  return token === null
+    ? null
+    : (options.find((option) => option.kind === 'stop' && stopUrlToken(option.id) === token) ?? null);
 }
 
 /** Read valid URL fields independently, but run a search only when all required fields are valid. */
@@ -71,8 +77,8 @@ export function searchQuery(
   departAfter: string,
 ): string {
   const parameters = new URLSearchParams({
-    from: origin.id,
-    to: destination.id,
+    from: origin.kind === 'stop' ? stopUrlValue(origin) : origin.id,
+    to: destination.kind === 'stop' ? stopUrlValue(destination) : destination.id,
     date,
   });
   if (departAfter !== '') parameters.set('depart_after', departAfter);

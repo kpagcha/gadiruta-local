@@ -5,6 +5,8 @@
  * again after loading it. This catches bad data before search code tries to use it.
  */
 import { places } from './places.ts';
+import { stopUrlToken } from './stop-url.ts';
+
 /** App-facing topology stored in Gadiruta Local's static network snapshot. */
 export interface NetworkAgency {
   id: string;
@@ -389,6 +391,14 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
   const stopIds = uniqueIds(stops, 'dataset.stops');
+  const stopUrlTokens = new Set<string>();
+  for (const stop of stops) {
+    const token = stopUrlToken(stop.id);
+    if (stopUrlTokens.has(token)) {
+      throw new NetworkDataError(`dataset.stops has a duplicate URL token: ${token}.`);
+    }
+    stopUrlTokens.add(token);
+  }
   const tripIds = uniqueIds(trips, 'dataset.trips');
   const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
   if (tripIds.size !== trips.length || serviceIds.size !== calendars.length) {

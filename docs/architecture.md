@@ -61,9 +61,10 @@ earlier and later controls reveal adjacent groups without another data request. 
 once even when it has several matching boarding stops.
 
 The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history on submit.
-It resolves those IDs against the checked-in place and stop choices when a link loads or browser
-history changes. URLs use the stored place or stop IDs directly. Invalid or incomplete links do
-not run a journey search.
+Place values use their maintained IDs. Stop values combine a readable name slug with an eight-character
+token derived from the source stop ID; the token identifies the stop even if its name changes. The
+snapshot validator rejects token collisions, and links containing a raw stop ID remain readable.
+Invalid or incomplete links do not run a journey search.
 
 The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
 The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.
