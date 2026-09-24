@@ -285,60 +285,60 @@ export function TripLocationPicker({
           </p>
         )}
         <div className="mt-7 border-t border-line pt-5">
-          <label className="mb-2 block text-[13px] font-[650]" htmlFor="departure-mode">
-            {t('search.departureMode')}
-          </label>
-          <div className="relative w-fit">
-            <select
-              className="min-h-11 appearance-none rounded-full border border-line-input bg-surface-card py-2 pr-11 pl-4 text-sm font-[650] text-ink focus:shadow-[var(--shadow-field-focus)] disabled:opacity-60"
-              disabled={disabled}
-              id="departure-mode"
-              onChange={(event) => {
-                const departureMode = event.target.value as DepartureMode;
-                const now = new Date();
-                changeDraft(
-                  {
-                    ...draft,
-                    departureMode,
-                    date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
-                    departAfter:
-                      departureMode === 'depart-at' && draft.departAfter === ''
-                        ? currentMadridQuarterHour(now)
-                        : draft.departAfter,
-                  },
-                  true,
-                );
-              }}
-              value={draft.departureMode}
-            >
-              <option value="leave-now">{t('search.leaveNow')}</option>
-              <option value="depart-at">{t('search.departAt')}</option>
-            </select>
-            <Icon
-              name="chevronDown"
-              className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
-              size={16}
-            />
-          </div>
-          {draft.departureMode === 'depart-at' && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              <JourneyDatePill
-                value={draft.date}
-                onChange={(date) => changeDraft({ ...draft, date }, true)}
-                minimum={coverage?.startDate ?? draft.date}
-                maximum={coverage?.endDate ?? draft.date}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative shrink-0">
+              <select
+                aria-label={t('search.departureMode')}
+                className="min-h-12 appearance-none rounded-full border border-line-input bg-surface-input py-2 pr-9 pl-4 text-sm font-[650] text-ink focus:shadow-[var(--shadow-field-focus)] disabled:opacity-60"
                 disabled={disabled}
-              />
-              <JourneyTimePill
-                date={draft.date}
-                value={draft.departAfter}
-                onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
-                minimum={coverage?.startDate ?? draft.date}
-                maximum={coverage?.endDate ?? draft.date}
-                disabled={disabled}
+                id="departure-mode"
+                onChange={(event) => {
+                  const departureMode = event.target.value as DepartureMode;
+                  const now = new Date();
+                  changeDraft(
+                    {
+                      ...draft,
+                      departureMode,
+                      date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
+                      departAfter:
+                        departureMode === 'depart-at' && draft.departAfter === ''
+                          ? currentMadridQuarterHour(now)
+                          : draft.departAfter,
+                    },
+                    true,
+                  );
+                }}
+                value={draft.departureMode}
+              >
+                <option value="leave-now">{t('search.leaveNow')}</option>
+                <option value="depart-at">{t('search.departAt')}</option>
+              </select>
+              <Icon
+                name="chevronDown"
+                className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
+                size={16}
               />
             </div>
-          )}
+            {draft.departureMode === 'depart-at' && (
+              <>
+                <JourneyDatePill
+                  value={draft.date}
+                  onChange={(date) => changeDraft({ ...draft, date }, true)}
+                  minimum={coverage?.startDate ?? draft.date}
+                  maximum={coverage?.endDate ?? draft.date}
+                  disabled={disabled}
+                />
+                <JourneyTimePill
+                  date={draft.date}
+                  value={draft.departAfter}
+                  onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
+                  minimum={coverage?.startDate ?? draft.date}
+                  maximum={coverage?.endDate ?? draft.date}
+                  disabled={disabled}
+                />
+              </>
+            )}
+          </div>
           {coverage !== null && madridToday() > coverage.endDate && (
             <p className="mt-3 text-sm text-warning" role="alert">
               {t('search.expiredData', { date: coverage.endDate })}
