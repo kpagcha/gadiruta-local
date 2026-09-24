@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { isCalendarDate } from '../data/calendar-date.ts';
-import { isClockTime } from '../data/search-url.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
@@ -203,7 +202,6 @@ export function TripLocationPicker({
   const canSearch =
     state.status === 'ready' &&
     dateValid &&
-    (draft.departAfter === '' || isClockTime(draft.departAfter)) &&
     draft.origin.choice !== null &&
     draft.destination.choice !== null &&
     !sameExactStop;
@@ -287,8 +285,11 @@ export function TripLocationPicker({
               disabled={disabled}
             />
             <JourneyTimePill
+              date={draft.date}
               value={draft.departAfter}
-              onChange={(departAfter) => onDraftChange({ ...draft, departAfter })}
+              onChange={(date, departAfter) => onDraftChange({ ...draft, date, departAfter })}
+              minimum={coverage?.startDate ?? draft.date}
+              maximum={coverage?.endDate ?? draft.date}
               disabled={disabled}
             />
           </div>

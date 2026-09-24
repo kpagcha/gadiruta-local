@@ -69,6 +69,11 @@ The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 use
 The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.
 The UI shows an expired-data message once the current Cádiz date passes the end. This is source
 coverage, not a promise that every date or location pair has a departure.
+The time pill keeps exact typed minutes. Its 15-minute arrows change the date at midnight and
+disable a step beyond the snapshot coverage. A first arrow press on an empty time fills the current
+Cádiz time rounded down to a quarter hour.
+The form normalizes compact clock entries before searching and omits an unrecognized time from
+`depart_after`, so the local journey filter always receives a valid clock time or no cutoff.
 All selected source stop times have whole-minute values; the generator rejects nonzero seconds so
 later feed changes cannot be rounded silently.
 

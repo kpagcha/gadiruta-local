@@ -1,67 +1,72 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { currentMadridQuarterHour, normalizeJourneyTime, stepJourneyTime } from '../data/journey-time.ts';
+import { isClockTime } from '../data/search-url.ts';
 import { Icon } from './Icon';
 
-/** Produce the available minute choices while retaining an exact minute from a shared URL. */
-function minuteChoices(step: 10 | 15, selected: string | null): string[] {
-  const minutes = Array.from({ length: 60 / step }, (_, index) => String(index * step).padStart(2, '0'));
-  if (selected !== null && !minutes.includes(selected)) minutes.push(selected);
-  return minutes.sort((first, second) => Number(first) - Number(second));
+const choices = Array.from({ length: 48 }, (_, index) => {
+  const minutes = index * 30;
+  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+});
+
+/** Find a nearby half-hour choice without rounding an exact typed time. */
+function nearestChoice(value: string): number {
+  if (!isClockTime(value)) return 0;
+  return Math.min(47, Math.round((Number(value.slice(0, 2)) * 60 + Number(value.slice(3))) / 30));
 }
 
-/** Let a rider choose an optional local departure time in a separate clock pill. */
+/** Let a rider type an exact departure time or select a half-hour shortcut. */
 export function JourneyTimePill({
+  date,
   value,
   onChange,
+  minimum,
+  maximum,
   disabled,
 }: {
+  date: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (date: string, time: string) => void;
+  minimum: string;
+  maximum: string;
   disabled: boolean;
 }) {
   const { t } = useTranslation();
-  const dialogId = useId();
+  const listId = useId();
   const pickerRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const selectedHourRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [minuteStep, setMinuteStep] = useState<10 | 15>(15);
-  const selectedHour = value === '' ? null : value.slice(0, 2);
-  const selectedMinute = value === '' ? null : value.slice(3, 5);
-  const hours = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'));
-  const minutes = minuteChoices(minuteStep, selectedMinute);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const normalizedTime = normalizeJourneyTime(value);
+  const dateCovered = date >= minimum && date <= maximum;
+  const earlier = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, -1, minimum, maximum);
+  const later = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, 1, minimum, maximum);
 
   useEffect(() => {
     if (!isOpen) return;
-    /** Dismiss the clock popover without changing its selected value. */
-    function dismiss(event: PointerEvent | KeyboardEvent) {
-      if (event instanceof KeyboardEvent) {
-        if (event.key === 'Escape') {
-          setIsOpen(false);
-          triggerRef.current?.focus();
-        }
-      } else if (!pickerRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+    /** Close the suggestions after a pointer press outside the picker. */
+    function dismiss(event: PointerEvent) {
+      if (!pickerRef.current?.contains(event.target as Node)) setIsOpen(false);
     }
-
     document.addEventListener('pointerdown', dismiss);
-    document.addEventListener('keydown', dismiss);
-    return () => {
-      document.removeEventListener('pointerdown', dismiss);
-      document.removeEventListener('keydown', dismiss);
-    };
+    return () => document.removeEventListener('pointerdown', dismiss);
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
-    // Bring both the chosen hour and a low mobile popover into view when opening.
+    // Keep a nearby shortcut visible inside the list; exact typed minutes stay intact.
     const frame = requestAnimationFrame(() => {
-      selectedHourRef.current?.scrollIntoView({ block: 'nearest' });
-      const popover = popoverRef.current;
-      if (popover === null) return;
-      const overflow = popover.getBoundingClientRect().bottom - (window.innerHeight - 16);
+      const list = listRef.current;
+      const option = list?.children[activeIndex ?? nearestChoice(normalizedTime)] as HTMLElement | undefined;
+      if (list && option) {
+        list.scrollTop = option.offsetTop - list.offsetTop - (list.clientHeight - option.clientHeight) / 2;
+      }
+      // Bring a low mobile popover into view.
+      const overflow = popoverRef.current
+        ? popoverRef.current.getBoundingClientRect().bottom - (window.innerHeight - 16)
+        : 0;
       if (overflow > 0) {
         window.scrollBy({
           top: overflow,
@@ -70,126 +75,149 @@ export function JourneyTimePill({
       }
     });
     return () => cancelAnimationFrame(frame);
-  }, [isOpen]);
+  }, [activeIndex, isOpen, normalizedTime]);
 
-  /** Select an hour and keep the current minute, or begin at its first minute. */
-  function chooseHour(hour: string) {
-    onChange(`${hour}:${selectedMinute ?? '00'}`);
+  /** Close when focus leaves the input, arrows, and list together. */
+  function handleBlur(event: FocusEvent<HTMLDivElement>) {
+    if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
   }
 
-  /** Complete the selected time and return focus to its pill. */
-  function chooseMinute(minute: string) {
-    if (selectedHour === null) return;
-    onChange(`${selectedHour}:${minute}`);
+  /** Navigate options explicitly; Enter otherwise keeps an exact typed time. */
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setIsOpen(false);
+      setActiveIndex(null);
+    } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      setActiveIndex((index) =>
+        Math.max(0, Math.min(47, (index ?? nearestChoice(normalizedTime) - direction) + direction)),
+      );
+      setIsOpen(true);
+    } else if (event.key === 'Enter' && isOpen) {
+      event.preventDefault();
+      const choice = activeIndex === null ? undefined : choices[activeIndex];
+      if (choice !== undefined) onChange(date, choice);
+      else if (value !== normalizedTime) onChange(date, normalizedTime);
+      setIsOpen(false);
+      setActiveIndex(null);
+    }
+  }
+
+  /** Start a blank time at the Cádiz quarter hour, then step by 15 minutes. */
+  function step(direction: -1 | 1) {
+    if (normalizedTime === '') {
+      onChange(date, currentMadridQuarterHour());
+    } else {
+      const next = direction === -1 ? earlier : later;
+      if (next) onChange(next.date, next.time);
+    }
     setIsOpen(false);
-    triggerRef.current?.focus();
+    setActiveIndex(null);
   }
 
   return (
-    <div ref={pickerRef} className="relative">
-      <div className="inline-flex min-h-12 items-center rounded-full border border-line-input bg-surface-input p-1 text-sm font-[650]">
-        <button
-          ref={triggerRef}
-          type="button"
-          className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink transition-colors hover:bg-surface-hover disabled:opacity-50"
-          aria-controls={isOpen ? dialogId : undefined}
+    <div ref={pickerRef} className="relative" onBlur={handleBlur}>
+      <div className="inline-flex min-h-12 items-center rounded-full border border-line-input bg-surface-input p-0.5 text-sm font-[650] focus-within:shadow-[var(--shadow-field-focus)]">
+        <Icon name="clock" size={16} className="ml-2 shrink-0 text-accent" />
+        <input
+          ref={inputRef}
+          aria-activedescendant={isOpen && activeIndex !== null ? `${listId}-${activeIndex}` : undefined}
+          aria-controls={isOpen ? listId : undefined}
           aria-expanded={isOpen}
-          aria-haspopup="dialog"
-          aria-label={`${t('search.departAfter')}: ${value || t('search.anyTime')}`}
+          aria-haspopup="listbox"
+          aria-label={t('search.departAfter')}
+          autoComplete="off"
+          className={`min-h-10 min-w-0 bg-transparent px-1.5 text-sm font-[650] text-ink tabular-nums outline-none placeholder:text-muted disabled:opacity-50 ${
+            value === '' ? 'w-[4.75rem]' : 'w-[3.5rem]'
+          }`}
           disabled={disabled}
-          onClick={() => setIsOpen((open) => !open)}
-        >
-          <Icon name="clock" size={17} className="text-accent" />
-          <span className={value ? 'tabular-nums' : undefined}>{value || t('search.anyTime')}</span>
-        </button>
+          maxLength={5}
+          onChange={(event) => {
+            onChange(date, event.target.value);
+            setActiveIndex(null);
+            setIsOpen(true);
+          }}
+          onClick={() => setIsOpen(true)}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => {
+            if (value !== normalizedTime) onChange(date, normalizedTime);
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder={t('search.anyTime')}
+          role="combobox"
+          type="text"
+          value={value}
+        />
         {value !== '' && !disabled && (
           <button
-            type="button"
-            className="grid size-10 place-items-center rounded-full text-muted hover:bg-surface-hover"
             aria-label={t('search.clearTime')}
-            title={t('search.clearTime')}
+            className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-ink"
             onClick={() => {
-              onChange('');
+              onChange(date, '');
               setIsOpen(false);
+              setActiveIndex(null);
             }}
+            title={t('search.clearTime')}
+            type="button"
           >
-            <Icon name="close" size={16} />
+            <Icon name="close" size={14} />
           </button>
         )}
+        <span className="mx-0.5 h-4 w-px bg-line-input" aria-hidden="true" />
+        {([-1, 1] as const).map((direction) => (
+          <button
+            key={direction}
+            aria-label={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
+            className="grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
+            disabled={
+              disabled || (normalizedTime === '' ? !dateCovered : direction === -1 ? earlier === null : later === null)
+            }
+            onClick={() => step(direction)}
+            title={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
+            type="button"
+          >
+            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={16} />
+          </button>
+        ))}
       </div>
 
-      {isOpen && (
+      {isOpen && !disabled && (
         <div
-          id={dialogId}
           ref={popoverRef}
           className="absolute top-[calc(100%+8px)] left-0 z-50 w-52 rounded-xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
-          role="dialog"
-          aria-label={t('search.departAfter')}
         >
-          <div
-            className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-surface-input p-1"
-            role="group"
-            aria-label={t('search.minuteStep')}
+          <ul
+            id={listId}
+            ref={listRef}
+            aria-label={t('search.timeChoices')}
+            className="relative max-h-48 overflow-y-auto overscroll-contain"
+            role="listbox"
           >
-            {([10, 15] as const).map((step) => (
-              <button
-                key={step}
-                type="button"
-                className={`rounded-md px-2 py-1 text-xs font-[650] transition-colors ${
-                  minuteStep === step ? 'bg-surface-card text-ink shadow-sm' : 'text-muted hover:text-ink'
+            {choices.map((choice, index) => (
+              <li
+                key={choice}
+                id={`${listId}-${index}`}
+                aria-selected={value === choice}
+                className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-[650] tabular-nums ${
+                  activeIndex === index || value === choice
+                    ? 'bg-accent text-on-accent'
+                    : 'text-ink hover:bg-surface-hover'
                 }`}
-                aria-pressed={minuteStep === step}
-                onClick={() => setMinuteStep(step)}
+                onClick={() => {
+                  onChange(date, choice);
+                  setIsOpen(false);
+                  setActiveIndex(null);
+                  inputRef.current?.focus();
+                }}
+                onMouseDown={(event) => event.preventDefault()}
+                role="option"
               >
-                {step === 10 ? t('search.tenMinutes') : t('search.fifteenMinutes')}
-              </button>
+                {choice}
+              </li>
             ))}
-          </div>
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-1.5">
-            <div
-              className="grid max-h-44 gap-0.5 overflow-y-auto overscroll-contain p-0.5"
-              role="group"
-              aria-label={t('search.hours')}
-            >
-              {hours.map((hour) => (
-                <button
-                  key={hour}
-                  ref={selectedHour === hour ? selectedHourRef : undefined}
-                  type="button"
-                  className={`rounded-lg px-2 py-1.5 text-sm font-[650] tabular-nums transition-colors hover:bg-surface-hover ${
-                    selectedHour === hour ? 'bg-accent text-on-accent hover:bg-accent' : ''
-                  }`}
-                  aria-pressed={selectedHour === hour}
-                  onClick={() => chooseHour(hour)}
-                >
-                  {hour}
-                </button>
-              ))}
-            </div>
-            <span className="text-sm font-[700] text-muted" aria-hidden="true">
-              :
-            </span>
-            <div
-              className="grid max-h-44 gap-0.5 overflow-y-auto overscroll-contain p-0.5"
-              role="group"
-              aria-label={t('search.minutes')}
-            >
-              {minutes.map((minute) => (
-                <button
-                  key={minute}
-                  type="button"
-                  className={`rounded-lg px-2 py-1.5 text-sm font-[650] tabular-nums transition-colors hover:bg-surface-hover disabled:opacity-35 ${
-                    selectedMinute === minute ? 'bg-accent text-on-accent hover:bg-accent' : ''
-                  }`}
-                  aria-pressed={selectedMinute === minute}
-                  disabled={selectedHour === null}
-                  onClick={() => chooseMinute(minute)}
-                >
-                  {minute}
-                </button>
-              ))}
-            </div>
-          </div>
+          </ul>
         </div>
       )}
     </div>

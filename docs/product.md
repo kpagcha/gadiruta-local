@@ -43,3 +43,7 @@ cards visible and asks the rider to search again.
 Search URLs preserve the selected places or stops, date, and optional departure time so a link can
 open the same local results. The date and time controls are separate pills, and the results card
 reveals earlier or later journeys in small groups without leaving the page.
+The time pill accepts an exact typed time or a choice from a full list of half-hour times. Its
+arrows move by 15 minutes and update the selected date when they cross midnight. Compact entries
+such as `3` and `1330` become `15:00` and `13:30` when the field loses focus; an unrecognized
+entry leaves departure time unset.

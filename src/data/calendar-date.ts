@@ -33,6 +33,13 @@ export function shiftMonth(value: string, amount: number): string {
   return monthKey(formatCalendarDate(shifted));
 }
 
+/** Move an ISO calendar day without using the browser's local time zone. */
+export function shiftCalendarDate(value: string, days: number): string {
+  const date = parseCalendarDate(value);
+  date.setUTCDate(date.getUTCDate() + days);
+  return formatCalendarDate(date);
+}
+
 /** List one month in Monday-first rows, with nulls before its first day. */
 export function calendarDays(value: string): Array<string | null> {
   const [year = 0, month = 1] = value.split('-').map(Number);

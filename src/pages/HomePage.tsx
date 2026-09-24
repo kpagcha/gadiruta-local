@@ -5,6 +5,7 @@ import { DirectJourneyResults, type JourneySearchResult } from '../components/Di
 import { Icon } from '../components/Icon';
 import { TripLocationPicker, type TripSearchDraft } from '../components/TripLocationPicker';
 import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
+import { normalizeJourneyTime } from '../data/journey-time.ts';
 import { createLocationOptions, type LocationOption } from '../data/location-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { places } from '../data/places.ts';
@@ -90,14 +91,15 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
   /** Search local data and animate the first switch from introduction to results when supported. */
   function handleSearch() {
     if (networkState.status !== 'ready' || draft.origin.choice === null || draft.destination.choice === null) return;
+    const departAfter = normalizeJourneyTime(draft.departAfter);
     const nextResult = localSearch(
       networkState.dataset,
       draft.date,
       draft.origin.choice,
       draft.destination.choice,
-      draft.departAfter,
+      departAfter,
     );
-    const query = searchQuery(draft.origin.choice, draft.destination.choice, draft.date, draft.departAfter);
+    const query = searchQuery(draft.origin.choice, draft.destination.choice, draft.date, departAfter);
     if (query !== window.location.search) {
       window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
     }
@@ -105,6 +107,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
 
     /** Commit all related state together so the browser captures one complete new layout. */
     function showResult() {
+      if (departAfter !== draft.departAfter) setDraft({ ...draft, departAfter });
       setResult(nextResult);
       setHasSearched(true);
       setSearchNumber((number) => number + 1);
