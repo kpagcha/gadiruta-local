@@ -40,7 +40,7 @@ introductory copy. Desktop can pair that search with a larger editorial introduc
 The compact location fields have origin and destination markers connected by dots to their left.
 An empty field shows its From or To label inside; focus replaces the label with a search icon and
 a location hint. Entered text takes the label's place, and an inline control clears it. A staggered
-up/down arrow beside the fields swaps their values.
+up/down arrow beside the fields swaps their values and explains the action on hover or focus.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
 follow the form, and an off-screen results card scrolls into view. Results update when both
 locations are selected or a date or departure time is committed. Editing a location keeps the

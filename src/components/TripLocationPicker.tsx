@@ -1,3 +1,5 @@
+import { Tooltip } from '@base-ui/react/tooltip';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { searchLocations, type LocationOption } from '../data/location-search.ts';
@@ -222,6 +224,7 @@ export function TripLocationPicker({
 }) {
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
+  const swapDisabled = disabled || (!draft.origin.text && !draft.destination.text);
   const coverage = state.status === 'ready' ? state.dataset.coverage : null;
   const today = madridToday();
   const earliestDate = coverage === null ? draft.date : coverage.startDate > today ? coverage.startDate : today;
@@ -290,18 +293,30 @@ export function TripLocationPicker({
               />
             </div>
           </div>
-          <button
-            aria-label={t('search.swap')}
-            className="grid size-11 place-items-center rounded-full border border-line bg-paper text-accent transition-colors enabled:hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
-            disabled={disabled || (!draft.origin.text && !draft.destination.text)}
-            onClick={() => {
-              changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
-            }}
-            title={t('search.swap')}
-            type="button"
-          >
-            <Icon name="swap" size={20} />
-          </button>
+          <Tooltip.Root disabled={swapDisabled}>
+            <Tooltip.Trigger
+              aria-label={t('search.swap')}
+              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-75 max-[380px]:size-9"
+              delay={0}
+              onClick={() => {
+                changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
+              }}
+              render={<button disabled={swapDisabled} />}
+              type="button"
+            >
+              <span aria-hidden="true" className="relative block h-8 w-7">
+                <ArrowUp className="absolute top-0.5 left-0" size={18} strokeWidth={3.2} />
+                <ArrowDown className="absolute top-3.5 left-2" size={18} strokeWidth={3.2} />
+              </span>
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Positioner className="z-100" sideOffset={7}>
+                <Tooltip.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
+                  {t('search.swap')}
+                </Tooltip.Popup>
+              </Tooltip.Positioner>
+            </Tooltip.Portal>
+          </Tooltip.Root>
         </div>
         {state.status === 'loading' && (
           <p className="mt-4 text-sm text-muted" role="status">
