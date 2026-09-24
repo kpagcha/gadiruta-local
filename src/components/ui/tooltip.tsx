@@ -3,10 +3,13 @@ import type { ReactElement, ReactNode } from 'react';
 
 /** Show a consistently styled hint for a single interactive element. */
 export function AppTooltip({
+  side = 'top',
+  align = 'center',
   children,
   content,
   disabled = false,
 }: {
+  align?: 'start' | 'center' | 'end';
   children: ReactElement;
   content: ReactNode;
   disabled?: boolean;
@@ -15,7 +18,7 @@ export function AppTooltip({
     <TooltipPrimitive.Root disabled={disabled}>
       <TooltipPrimitive.Trigger delay={300} render={children} />
       <TooltipPrimitive.Portal>
-        <TooltipPrimitive.Positioner className="z-100" sideOffset={7}>
+        <TooltipPrimitive.Positioner side={side} align={align} className="z-100" sideOffset={7}>
           <TooltipPrimitive.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
             {content}
           </TooltipPrimitive.Popup>

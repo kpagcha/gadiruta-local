@@ -3,12 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { clockTime, splitDirectJourneys, type DirectJourney } from '../data/direct-journeys.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
+import { Icon, type IconName } from './Icon';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { AppTooltip } from './ui/tooltip';
 
 /** A submitted search and the departure cutoff used to divide its journeys. */
 export interface JourneySearchResult {
   departAfter: string;
   journeys: DirectJourney[];
+}
+
+/** Match the usual GTFS route types to the transport symbols used by the result badge. */
+function routeIcon(type: number | undefined): IconName {
+  if (type === 3) return 'bus';
+  if (type === 4) return 'boat';
+  if (type === 0) return 'tram';
+  if (type === 1 || type === 2) return 'train';
+  return 'route';
 }
 
 /** Show one trip and allow a rider to choose another reachable stop pair on that trip. */
@@ -29,19 +40,52 @@ function JourneyCard({
   const stopNames = new Map(dataset.stops.map((stop) => [stop.id, stop.name]));
   const route = dataset.routes.find((route) => route.id === journey.routeId);
   const duration = alighting.arrivalMinute - boarding.departureMinute;
+  const hasLongNameTooltip = Boolean(route?.shortName && route.longName);
+  const lineChip = (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-md bg-surface-active px-2 py-1 text-xs font-[700] text-accent ${hasLongNameTooltip ? 'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent' : ''}`}
+      tabIndex={hasLongNameTooltip ? 0 : undefined}
+    >
+      <Icon name={routeIcon(route?.type)} size={15} strokeWidth={1.8} />
+      {t('journey.line', { line: route === undefined ? journey.routeId : getRouteLabel(route) })}
+    </span>
+  );
 
   return (
-    <article className="journey-card min-w-0 rounded-2xl border border-line-subtle bg-surface-input p-5">
-      <h3 className="text-base font-[700]">{route === undefined ? journey.routeId : getRouteLabel(route)}</h3>
-      {route?.shortName && route.longName && <p className="mt-1 text-sm text-muted">{route.longName}</p>}
+    <article className="journey-card min-w-0 rounded-xl border border-line-subtle bg-surface-input px-4 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h3>
+          {hasLongNameTooltip && route?.longName ? (
+            <AppTooltip
+              side="right"
+              content={<span className="block max-w-[min(20rem,calc(100vw-3rem))]">{route.longName}</span>}
+            >
+              {lineChip}
+            </AppTooltip>
+          ) : (
+            lineChip
+          )}
+        </h3>
+        <span className="text-xs text-muted">{t('journey.duration', { count: duration })}</span>
+      </div>
+      <div className="mt-3 flex items-center gap-3 tabular-nums">
+        <time className="text-[25px] font-[700] tracking-[-0.8px]" dateTime={clockTime(boarding.departureMinute)}>
+          {clockTime(boarding.departureMinute)}
+        </time>
+        <Icon name="arrow" className="size-5 shrink-0 text-icon-muted" />
+        <time className="text-[25px] font-[700] tracking-[-0.8px]" dateTime={clockTime(alighting.arrivalMinute)}>
+          {clockTime(alighting.arrivalMinute)}
+        </time>
+      </div>
+      {alighting.arrivalMinute >= 1440 && <p className="mt-1 text-xs text-muted">{t('journey.nextDay')}</p>}
       <div className="journey-card-fields mt-4 grid gap-3 text-sm">
         <div className="min-w-0">
           {journey.boardings.length > 1 ? (
-            <label className="block font-[650]" htmlFor={`${journey.id}-board`}>
+            <label className="block text-xs font-[650]" htmlFor={`${journey.id}-board`}>
               {t('journey.boardAt')}
             </label>
           ) : (
-            <span className="block font-[650]">{t('journey.boardAt')}</span>
+            <span className="block text-xs font-[650]">{t('journey.boardAt')}</span>
           )}
           {journey.boardings.length > 1 ? (
             <Select
@@ -58,9 +102,11 @@ function JourneyCard({
             >
               <SelectTrigger
                 id={`${journey.id}-board`}
-                className="mt-1 min-h-11 w-full rounded-xl border border-line-input bg-surface-card px-2 text-left focus:shadow-[var(--shadow-field-focus)]"
+                className="-ml-2 min-h-6 w-[calc(100%+0.5rem)] rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
               >
-                <SelectValue className="truncate" />
+                <SelectValue className="min-w-0 truncate">
+                  {stopNames.get(boarding.stopId) ?? boarding.stopId}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {journey.boardings.map((choice, index) => (
@@ -71,18 +117,16 @@ function JourneyCard({
               </SelectContent>
             </Select>
           ) : (
-            <p className="mt-1 wrap-anywhere">
-              {clockTime(boarding.departureMinute)} · {stopNames.get(boarding.stopId)}
-            </p>
+            <p className="mt-1 wrap-anywhere">{stopNames.get(boarding.stopId)}</p>
           )}
         </div>
         <div className="min-w-0">
           {boarding.alightings.length > 1 ? (
-            <label className="block font-[650]" htmlFor={`${journey.id}-alight`}>
+            <label className="block text-xs font-[650]" htmlFor={`${journey.id}-alight`}>
               {t('journey.alightAt')}
             </label>
           ) : (
-            <span className="block font-[650]">{t('journey.alightAt')}</span>
+            <span className="block text-xs font-[650]">{t('journey.alightAt')}</span>
           )}
           {boarding.alightings.length > 1 ? (
             <Select
@@ -97,9 +141,11 @@ function JourneyCard({
             >
               <SelectTrigger
                 id={`${journey.id}-alight`}
-                className="mt-1 min-h-11 w-full rounded-xl border border-line-input bg-surface-card px-2 text-left focus:shadow-[var(--shadow-field-focus)]"
+                className="-ml-2 min-h-6 w-[calc(100%+0.5rem)] rounded-lg px-2 text-left hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:shadow-[var(--shadow-field-focus)]"
               >
-                <SelectValue className="truncate" />
+                <SelectValue className="min-w-0 truncate">
+                  {stopNames.get(alighting.stopId) ?? alighting.stopId}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {boarding.alightings.map((choice, index) => (
@@ -110,16 +156,10 @@ function JourneyCard({
               </SelectContent>
             </Select>
           ) : (
-            <p className="mt-1 wrap-anywhere">
-              {clockTime(alighting.arrivalMinute)} · {stopNames.get(alighting.stopId)}
-            </p>
+            <p className="mt-1 wrap-anywhere">{stopNames.get(alighting.stopId)}</p>
           )}
         </div>
       </div>
-      <p className="mt-4 text-sm text-muted">
-        {t('journey.duration', { count: duration })}
-        {alighting.arrivalMinute >= 1440 && ` · ${t('journey.nextDay')}`}
-      </p>
     </article>
   );
 }

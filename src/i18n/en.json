@@ -61,6 +61,7 @@
   },
   "journey": {
     "results": "Direct journeys",
+    "line": "Line {{line}}",
     "chooseLocations": "Choose an origin and destination to see journeys.",
     "empty": "No direct services found for this date and these locations.",
     "earlierDepartures": "Earlier departures",

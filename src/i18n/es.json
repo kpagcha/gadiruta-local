@@ -61,6 +61,7 @@
   },
   "journey": {
     "results": "Trayectos directos",
+    "line": "Línea {{line}}",
     "chooseLocations": "Elige un origen y un destino para ver los trayectos.",
     "empty": "No hay servicios directos para esta fecha y estos lugares.",
     "earlierDepartures": "Salidas anteriores",

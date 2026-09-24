@@ -1,5 +1,7 @@
 /** Shared interface icons, including Gadiruta's custom brand mark. */
 import {
+  ArrowRight,
+  BusFront,
   CalendarDays,
   ChevronLeft,
   ChevronDown,
@@ -10,7 +12,10 @@ import {
   Moon,
   Route,
   Search,
+  Ship,
   Sun,
+  TrainFront,
+  TramFront,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -18,6 +23,11 @@ import {
 /** Available decorative symbols; accessible names belong to their surrounding controls. */
 export type IconName =
   | 'route'
+  | 'arrow'
+  | 'bus'
+  | 'train'
+  | 'tram'
+  | 'boat'
   | 'place'
   | 'stop'
   | 'gadiruta'
@@ -33,6 +43,11 @@ export type IconName =
 
 const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   route: Route,
+  arrow: ArrowRight,
+  bus: BusFront,
+  train: TrainFront,
+  tram: TramFront,
+  boat: Ship,
   place: Map,
   stop: MapPin,
   sun: Sun,
