@@ -54,7 +54,7 @@
     "laterTime": "15 minutes later",
     "timeChoices": "Departure times every 30 minutes",
     "invalidLink": "This search link has an invalid place, stop, departure option, date, or time. Check the form to see journeys.",
-    "expiredData": "Schedules in this snapshot end on {{date}}. Choose a covered date to view the saved timetable.",
+    "expiredData": "Available schedules end on {{date}}. New journey dates will appear when schedules are updated.",
     "sameStop": "Choose a different destination stop."
   },
   "journey": {

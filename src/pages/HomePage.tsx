@@ -101,9 +101,10 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     const destination = nextDraft.destination.choice;
     if (networkState.status !== 'ready' || origin === null || destination === null) return;
     const now = new Date();
-    const date = nextDraft.departureMode === 'leave-now' ? madridToday(now) : nextDraft.date;
+    const today = madridToday(now);
+    const date = nextDraft.departureMode === 'leave-now' ? today : nextDraft.date;
     const { startDate, endDate } = networkState.dataset.coverage;
-    if (!isCalendarDate(date) || date < startDate || date > endDate) return;
+    if (!isCalendarDate(date) || date < today || date < startDate || date > endDate) return;
     if (origin.kind === 'stop' && destination.kind === 'stop' && origin.id === destination.id) return;
 
     const departAfter =

@@ -62,8 +62,10 @@ once even when it has several matching boarding stops.
 
 The home page writes `from`, `to`, and `mode=now` for Leave now, or `from`, `to`, `date`, and optional
 `depart_after` for Depart at. A Leave now search applies the current Cádiz minute as its departure
-cutoff. Existing links with a date restore Depart at. Typed times update results on commit, rather
-than after every keystroke.
+cutoff. Existing links with a current or future date restore Depart at; past dates cannot start a
+search. The calendar disables past days and months, and its year choices start at the later of the
+current Cádiz year and the snapshot's first year. Typed times update results on commit, rather than
+after every keystroke.
 
 Place values use their maintained IDs. Stop values combine a readable name slug with an eight-character
 token derived from the source stop ID; the token identifies the stop even if its name changes. The

@@ -207,6 +207,9 @@ export function TripLocationPicker({
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
   const coverage = state.status === 'ready' ? state.dataset.coverage : null;
+  const today = madridToday();
+  const earliestDate = coverage === null ? draft.date : coverage.startDate > today ? coverage.startDate : today;
+  const departureDisabled = disabled || (coverage !== null && earliestDate > coverage.endDate);
   const sameExactStop =
     draft.origin.choice?.kind === 'stop' &&
     draft.destination.choice?.kind === 'stop' &&
@@ -300,7 +303,10 @@ export function TripLocationPicker({
                   {
                     ...draft,
                     departureMode,
-                    date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
+                    date:
+                      departureMode === 'depart-at' && (draft.departAfter === '' || draft.date < earliestDate)
+                        ? earliestDate
+                        : draft.date,
                     departAfter:
                       departureMode === 'depart-at' && draft.departAfter === ''
                         ? currentMadridQuarterHour(now)
@@ -328,17 +334,17 @@ export function TripLocationPicker({
                 <JourneyDatePill
                   value={draft.date}
                   onChange={(date) => changeDraft({ ...draft, date }, true)}
-                  minimum={coverage?.startDate ?? draft.date}
+                  minimum={earliestDate}
                   maximum={coverage?.endDate ?? draft.date}
-                  disabled={disabled}
+                  disabled={departureDisabled}
                 />
                 <JourneyTimePill
                   date={draft.date}
                   value={draft.departAfter}
                   onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
-                  minimum={coverage?.startDate ?? draft.date}
+                  minimum={earliestDate}
                   maximum={coverage?.endDate ?? draft.date}
-                  disabled={disabled}
+                  disabled={departureDisabled}
                 />
               </div>
             )}

@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { madridToday } from '../data/direct-journeys.ts';
 import { currentMadridQuarterHour, normalizeJourneyTime, stepJourneyTime } from '../data/journey-time.ts';
 import { isClockTime } from '../data/search-url.ts';
 import { Icon } from './Icon';
@@ -42,9 +43,11 @@ export function JourneyTimePill({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const normalizedTime = normalizeJourneyTime(value);
-  const dateCovered = date >= minimum && date <= maximum;
-  const earlier = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, -1, minimum, maximum);
-  const later = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, 1, minimum, maximum);
+  const today = madridToday();
+  const earliestDate = minimum > today ? minimum : today;
+  const dateCovered = date >= earliestDate && date <= maximum;
+  const earlier = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, -1, earliestDate, maximum);
+  const later = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, 1, earliestDate, maximum);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -116,10 +119,12 @@ export function JourneyTimePill({
 
   /** Start a blank time at the Cádiz quarter hour, then step by 15 minutes. */
   function step(direction: -1 | 1) {
+    const currentToday = madridToday();
+    const currentEarliest = minimum > currentToday ? minimum : currentToday;
     if (normalizedTime === '') {
-      onChange(date, currentMadridQuarterHour(), true);
+      if (date >= currentEarliest && date <= maximum) onChange(date, currentMadridQuarterHour(), true);
     } else {
-      const next = direction === -1 ? earlier : later;
+      const next = stepJourneyTime(date, normalizedTime, direction, currentEarliest, maximum);
       if (next) onChange(next.date, next.time, true);
     }
     setIsOpen(false);

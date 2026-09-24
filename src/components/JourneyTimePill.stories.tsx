@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { shiftCalendarDate } from '../data/calendar-date.ts';
+import { madridToday } from '../data/direct-journeys.ts';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
+
+const today = madridToday();
+const maximum = `${Number(today.slice(0, 4)) + 1}-12-31`;
 
 /** Show the date beside the time so midnight changes are visible in Storybook. */
 function TimePillStory({ initialDate, initialTime }: { initialDate: string; initialTime: string }) {
@@ -10,7 +15,7 @@ function TimePillStory({ initialDate, initialTime }: { initialDate: string; init
   return (
     <div className="w-fit rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)]">
       <div className="flex flex-wrap gap-2">
-        <JourneyDatePill value={date} onChange={setDate} minimum="2026-09-01" maximum="2026-12-31" disabled={false} />
+        <JourneyDatePill value={date} onChange={setDate} minimum={today} maximum={maximum} disabled={false} />
         <JourneyTimePill
           date={date}
           value={time}
@@ -18,8 +23,8 @@ function TimePillStory({ initialDate, initialTime }: { initialDate: string; init
             setDate(nextDate);
             setTime(nextTime);
           }}
-          minimum="2026-09-01"
-          maximum="2026-12-31"
+          minimum={today}
+          maximum={maximum}
           disabled={false}
         />
       </div>
@@ -32,10 +37,10 @@ const meta = {
   component: JourneyTimePill,
   render: ({ date, value }) => <TimePillStory initialDate={date} initialTime={value} />,
   args: {
-    date: '2026-09-24',
+    date: today,
     value: '',
-    minimum: '2026-09-01',
-    maximum: '2026-12-31',
+    minimum: today,
+    maximum,
     disabled: false,
     onChange: ignoreStoryChange,
   },
@@ -49,4 +54,4 @@ function ignoreStoryChange() {}
 
 export const Blank: Story = {};
 export const ExactMinute: Story = { args: { value: '17:07' } };
-export const NearMidnight: Story = { args: { date: '2026-09-25', value: '23:50' } };
+export const NearMidnight: Story = { args: { date: shiftCalendarDate(today, 1), value: '23:50' } };

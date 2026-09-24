@@ -54,7 +54,7 @@
     "laterTime": "15 minutos después",
     "timeChoices": "Horas de salida cada 30 minutos",
     "invalidLink": "Este enlace de búsqueda contiene un lugar, una parada, una opción de salida, una fecha o una hora no válidos. Revisa el formulario para ver los trayectos.",
-    "expiredData": "Los horarios de estos datos terminan el {{date}}. Elige una fecha cubierta para consultar el horario guardado.",
+    "expiredData": "Los horarios disponibles terminan el {{date}}. Habrá nuevas fechas de viaje cuando se actualicen los horarios.",
     "sameStop": "Elige otra parada de destino."
   },
   "journey": {

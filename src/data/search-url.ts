@@ -53,7 +53,11 @@ export function resolveSearchUrl(
   const destination = findUrlLocation(to, options);
   // Preserve valid parts of a partial link in the form; one bad supplied value blocks auto-search.
   const dateValid =
-    rawDate !== null && isCalendarDate(rawDate) && rawDate >= coverage.startDate && rawDate <= coverage.endDate;
+    rawDate !== null &&
+    isCalendarDate(rawDate) &&
+    rawDate >= today &&
+    rawDate >= coverage.startDate &&
+    rawDate <= coverage.endDate;
   const todayCovered = today >= coverage.startDate && today <= coverage.endDate;
   const timeValid = rawTime === null || rawTime === '' || isClockTime(rawTime);
   const sameStop = origin?.kind === 'stop' && destination?.kind === 'stop' && origin.id === destination.id;

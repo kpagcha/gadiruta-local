@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
+import { madridToday } from '../data/direct-journeys.ts';
 import { createLocationOptions } from '../data/location-search.ts';
 import { places } from '../data/places.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { TripLocationPicker, type TripSearchDraft } from './TripLocationPicker';
+
+const today = madridToday();
+const maximum = `${Number(today.slice(0, 4)) + 1}-12-31`;
 
 /** A small valid local network for inspecting the picker without a request. */
 const readyState = {
@@ -60,13 +64,13 @@ const readyState = {
     calendars: [
       {
         serviceId: 'daily',
-        startDate: '2026-09-01',
-        endDate: '2026-12-31',
+        startDate: today,
+        endDate: maximum,
         weekdays: [true, true, true, true, true, true, true],
       },
     ],
     calendarExceptions: [],
-    coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
+    coverage: { startDate: today, endDate: maximum },
   },
 } satisfies NetworkDatasetState;
 
@@ -78,7 +82,7 @@ const meta = {
     draft: {
       origin: { text: '', choice: null },
       destination: { text: '', choice: null },
-      date: '2026-09-24',
+      date: today,
       departAfter: '',
       departureMode: 'leave-now',
     },
@@ -97,7 +101,7 @@ function PickerStory({ state }: { state: NetworkDatasetState }) {
   const [draft, setDraft] = useState<TripSearchDraft>({
     origin: { text: '', choice: null },
     destination: { text: '', choice: null },
-    date: '2026-09-24',
+    date: today,
     departAfter: '',
     departureMode: 'leave-now',
   });

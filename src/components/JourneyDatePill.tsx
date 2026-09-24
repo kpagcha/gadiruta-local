@@ -6,7 +6,7 @@ import { Icon } from './Icon';
 import { JourneyPickerPill } from './JourneyPickerPill';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
-/** Keep the visible month inside the dates supplied by the checked-in timetable. */
+/** Keep the visible month inside the dates available for travel. */
 function clampMonth(month: string, minimum: string, maximum: string): string {
   return month < minimum ? minimum : month > maximum ? maximum : month;
 }
@@ -28,15 +28,18 @@ export function JourneyDatePill({
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? 'en';
   const today = madridToday();
+  const earliestDate = minimum > today ? minimum : today;
+  const hasAvailableDates = earliestDate <= maximum;
+  const pickerDisabled = disabled || !hasAvailableDates;
   const dialogId = useId();
   const pickerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(monthKey(value));
-  const minimumMonth = monthKey(minimum);
+  const minimumMonth = monthKey(earliestDate);
   const maximumMonth = monthKey(maximum);
-  const dateCovered = value >= minimum && value <= maximum;
+  const dateCovered = value >= earliestDate && value <= maximum;
   const dateLabel =
     value === today
       ? t('search.today')
@@ -51,10 +54,12 @@ export function JourneyDatePill({
       new Date(Date.UTC(2024, 0, index + 1)),
     ),
   );
-  const years = Array.from(
-    { length: Number(maximum.slice(0, 4)) - Number(minimum.slice(0, 4)) + 1 },
-    (_, index) => Number(minimum.slice(0, 4)) + index,
-  );
+  const years = hasAvailableDates
+    ? Array.from(
+        { length: Number(maximum.slice(0, 4)) - Number(earliestDate.slice(0, 4)) + 1 },
+        (_, index) => Number(earliestDate.slice(0, 4)) + index,
+      )
+    : [];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -98,12 +103,17 @@ export function JourneyDatePill({
 
   /** Open at the selected month, or close without changing the selected date. */
   function togglePicker() {
-    if (!isOpen) setVisibleMonth(clampMonth(monthKey(value), minimumMonth, maximumMonth));
+    if (!isOpen) {
+      const currentToday = madridToday();
+      const currentEarliest = minimum > currentToday ? minimum : currentToday;
+      setVisibleMonth(clampMonth(monthKey(value), monthKey(currentEarliest), maximumMonth));
+    }
     setIsOpen((open) => !open);
   }
 
-  /** Apply one covered day and return focus to the date pill. */
+  /** Apply a current or future covered day and return focus to the date pill. */
   function selectDate(date: string) {
+    if (date < minimum || date < madridToday() || date > maximum) return;
     onChange(date);
     setIsOpen(false);
     triggerRef.current?.focus();
@@ -114,13 +124,19 @@ export function JourneyDatePill({
       <JourneyPickerPill
         previous={{
           label: t('search.previousDay'),
-          disabled: disabled || !dateCovered || value <= minimum,
-          onClick: () => onChange(shiftCalendarDate(value, -1)),
+          disabled: pickerDisabled || !dateCovered || value <= earliestDate,
+          onClick: () => {
+            const previous = shiftCalendarDate(value, -1);
+            if (previous >= minimum && previous >= madridToday()) onChange(previous);
+          },
         }}
         next={{
           label: t('search.nextDay'),
-          disabled: disabled || !dateCovered || value >= maximum,
-          onClick: () => onChange(shiftCalendarDate(value, 1)),
+          disabled: pickerDisabled || !dateCovered || value >= maximum,
+          onClick: () => {
+            const next = shiftCalendarDate(value, 1);
+            if (next >= madridToday() && next <= maximum) onChange(next);
+          },
         }}
       >
         <button
@@ -131,7 +147,7 @@ export function JourneyDatePill({
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           aria-label={`${t('search.travelDate')}: ${dateLabel}`}
-          disabled={disabled}
+          disabled={pickerDisabled}
           onClick={togglePicker}
         >
           <Icon name="calendar" size={18} className="text-accent" />
@@ -150,7 +166,7 @@ export function JourneyDatePill({
           <div className="mb-3 flex items-center justify-between gap-2 max-[380px]:gap-1">
             <button
               type="button"
-              className="grid size-10 shrink-0 place-items-center rounded-full hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
+              className="grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
               aria-label={t('search.previousMonth')}
               disabled={visibleMonth <= minimumMonth}
               onClick={() => setVisibleMonth((month) => shiftMonth(month, -1))}
@@ -184,7 +200,7 @@ export function JourneyDatePill({
             </div>
             <button
               type="button"
-              className="grid size-10 shrink-0 place-items-center rounded-full hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
+              className="grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
               aria-label={t('search.nextMonth')}
               disabled={visibleMonth >= maximumMonth}
               onClick={() => setVisibleMonth((month) => shiftMonth(month, 1))}
@@ -207,8 +223,8 @@ export function JourneyDatePill({
                 <button
                   key={day}
                   type="button"
-                  className={`grid aspect-square w-full max-w-9 place-items-center rounded-full text-[13px] font-[650] transition-colors hover:bg-surface-hover disabled:opacity-30 ${
-                    day === value
+                  className={`grid aspect-square w-full max-w-9 place-items-center rounded-full text-[13px] font-[650] transition-colors enabled:hover:bg-surface-hover disabled:opacity-30 ${
+                    day === value && day >= earliestDate
                       ? 'bg-accent text-on-accent hover:bg-accent'
                       : day === today
                         ? 'border border-accent text-accent'
@@ -223,7 +239,7 @@ export function JourneyDatePill({
                   }).format(parseCalendarDate(day))}
                   aria-current={day === today ? 'date' : undefined}
                   aria-pressed={day === value}
-                  disabled={day < minimum || day > maximum}
+                  disabled={day < earliestDate || day > maximum}
                   onClick={() => selectDate(day)}
                 >
                   {parseCalendarDate(day).getUTCDate()}
