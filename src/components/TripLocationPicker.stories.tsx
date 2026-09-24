@@ -85,7 +85,6 @@ const meta = {
     onSearch: ignoreStorySearch,
     onDraftChange: ignoreStoryDraft,
     urlError: false,
-    isSearching: false,
   },
   render: ({ state }) => <PickerStory state={state} />,
 } satisfies Meta<typeof TripLocationPicker>;
@@ -114,7 +113,6 @@ function PickerStory({ state }: { state: NetworkDatasetState }) {
       onSearch={ignoreStorySearch}
       onDraftChange={setDraft}
       urlError={false}
-      isSearching={false}
     />
   );
 }

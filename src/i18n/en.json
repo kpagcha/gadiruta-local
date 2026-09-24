@@ -34,8 +34,6 @@
     "departureMode": "When would you like to leave?",
     "leaveNow": "Leave now",
     "departAt": "Depart at",
-    "submit": "Search transport",
-    "searching": "Searching…",
     "stop": "Stop",
     "resultCount_one": "{{count}} suggestion",
     "resultCount_other": "{{count}} suggestions",

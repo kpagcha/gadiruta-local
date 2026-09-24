@@ -34,8 +34,6 @@
     "departureMode": "¿Cuándo quieres salir?",
     "leaveNow": "Salir ahora",
     "departAt": "Salir a las",
-    "submit": "Buscar transporte",
-    "searching": "Buscando…",
     "stop": "Parada",
     "resultCount_one": "{{count}} sugerencia",
     "resultCount_other": "{{count}} sugerencias",

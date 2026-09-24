@@ -78,15 +78,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
       : null,
   );
   const [searchNumber, setSearchNumber] = useState(0);
-  const [isSearching, setIsSearching] = useState(false);
-  const searchSequence = useRef(0);
   const resultsRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    return () => {
-      searchSequence.current += 1;
-    };
-  }, []);
 
   /** Bring the first results card into view when it is below the viewport. */
   function revealResults() {
@@ -103,7 +95,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     });
   }
 
-  /** Search after a committed change or form submit, allowing one paint for loading feedback. */
+  /** Search immediately after a committed location, departure mode, date, or time change. */
   function handleSearch(nextDraft: TripSearchDraft) {
     const origin = nextDraft.origin.choice;
     const destination = nextDraft.destination.choice;
@@ -116,51 +108,39 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
 
     const departAfter =
       nextDraft.departureMode === 'leave-now' ? currentMadridTime(now) : normalizeJourneyTime(nextDraft.departAfter);
-    const sequence = ++searchSequence.current;
-    setIsSearching(true);
+    const nextResult = localSearch(networkState.dataset, date, origin, destination, departAfter);
+    const query = searchQuery(origin, destination, nextDraft.departureMode, date, departAfter);
+    if (query !== window.location.search) {
+      window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
+    }
+    setUrlError(false);
 
-    // Two animation frames let the busy button paint before the local calculation begins.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (sequence !== searchSequence.current) return;
-        const nextResult = localSearch(networkState.dataset, date, origin, destination, departAfter);
-        const query = searchQuery(origin, destination, nextDraft.departureMode, date, departAfter);
-        if (query !== window.location.search) {
-          window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
-        }
-        setUrlError(false);
-
-        /** Commit all related state together so the first layout transition has complete results. */
-        function showResult() {
-          setDraft({
-            ...nextDraft,
-            departAfter: nextDraft.departureMode === 'depart-at' ? departAfter : nextDraft.departAfter,
-          });
-          setResult(nextResult);
-          setHasSearched(true);
-          setSearchNumber((number) => number + 1);
-          setIsSearching(false);
-        }
-
-        const canAnimate =
-          !hasSearched &&
-          typeof document.startViewTransition === 'function' &&
-          !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (canAnimate) {
-          const transition = document.startViewTransition(() => flushSync(showResult));
-          void transition.finished.then(revealResults);
-        } else {
-          showResult();
-          if (!hasSearched) revealResults();
-        }
+    /** Commit related state together so the first layout transition has complete results. */
+    function showResult() {
+      setDraft({
+        ...nextDraft,
+        departAfter: nextDraft.departureMode === 'depart-at' ? departAfter : nextDraft.departAfter,
       });
-    });
+      setResult(nextResult);
+      setHasSearched(true);
+      setSearchNumber((number) => number + 1);
+    }
+
+    const canAnimate =
+      !hasSearched &&
+      typeof document.startViewTransition === 'function' &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (canAnimate) {
+      const transition = document.startViewTransition(() => flushSync(showResult));
+      void transition.finished.then(revealResults);
+    } else {
+      showResult();
+      if (!hasSearched) revealResults();
+    }
   }
 
   /** Keep current results while editing time, but clear them when a location is unresolved. */
   function handleDraftChange(nextDraft: TripSearchDraft) {
-    searchSequence.current += 1;
-    setIsSearching(false);
     setDraft(nextDraft);
     if (
       nextDraft.origin.choice === null ||
@@ -206,7 +186,6 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
           state={networkState}
           options={options}
           draft={draft}
-          isSearching={isSearching}
           onSearch={handleSearch}
           onDraftChange={handleDraftChange}
           urlError={urlError}

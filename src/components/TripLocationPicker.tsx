@@ -195,7 +195,6 @@ export function TripLocationPicker({
   onSearch,
   onDraftChange,
   urlError,
-  isSearching,
 }: {
   state: NetworkDatasetState;
   options: readonly LocationOption[];
@@ -203,7 +202,6 @@ export function TripLocationPicker({
   onSearch: (draft: TripSearchDraft) => void;
   onDraftChange: (draft: TripSearchDraft) => void;
   urlError: boolean;
-  isSearching: boolean;
 }) {
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
@@ -212,15 +210,6 @@ export function TripLocationPicker({
     draft.origin.choice?.kind === 'stop' &&
     draft.destination.choice?.kind === 'stop' &&
     draft.origin.choice.id === draft.destination.choice.id;
-  const searchDate = draft.departureMode === 'leave-now' ? madridToday() : draft.date;
-  const canSearch =
-    !disabled &&
-    draft.origin.choice !== null &&
-    draft.destination.choice !== null &&
-    !sameExactStop &&
-    coverage !== null &&
-    searchDate >= coverage.startDate &&
-    searchDate <= coverage.endDate;
 
   /** Update edited text immediately, and search once a choice or time is committed. */
   function changeDraft(nextDraft: TripSearchDraft, committed: boolean) {
@@ -239,7 +228,6 @@ export function TripLocationPicker({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (canSearch && !isSearching) onSearch(draft);
         }}
       >
         <div className="grid grid-cols-[minmax(0,1fr)_2.75rem] items-center gap-2 max-[380px]:grid-cols-[minmax(0,1fr)_2.25rem] max-[380px]:gap-1">
@@ -357,15 +345,6 @@ export function TripLocationPicker({
           )}
           {sameExactStop && <p className="mt-3 text-sm text-warning">{t('search.sameStop')}</p>}
         </div>
-        <button
-          aria-busy={isSearching}
-          className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-on-accent transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!canSearch || isSearching}
-          type="submit"
-        >
-          <Icon name={isSearching ? 'spinner' : 'search'} className={isSearching ? 'animate-spin' : ''} size={19} />
-          {t(isSearching ? 'search.searching' : 'search.submit')}
-        </button>
       </form>
     </section>
   );

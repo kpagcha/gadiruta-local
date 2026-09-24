@@ -8,10 +8,8 @@ import {
   Clock3,
   Map,
   MapPin,
-  LoaderCircle,
   Moon,
   Route,
-  Search,
   Sun,
   X,
   type LucideIcon,
@@ -31,9 +29,7 @@ export type IconName =
   | 'chevronLeft'
   | 'chevronDown'
   | 'chevronRight'
-  | 'close'
-  | 'search'
-  | 'spinner';
+  | 'close';
 
 const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   route: Route,
@@ -48,8 +44,6 @@ const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   chevronDown: ChevronDown,
   chevronRight: ChevronRight,
   close: X,
-  search: Search,
-  spinner: LoaderCircle,
 };
 
 /** Properties shared by the custom mark and the imported decorative icons. */
