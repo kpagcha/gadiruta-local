@@ -255,9 +255,10 @@ export function TripLocationPicker({
               value={draft.destination}
             />
           </div>
+          {/* The labels raise the row midpoint; offset the swap control to sit between the input boxes. */}
           <button
             aria-label={t('search.swap')}
-            className="grid size-11 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
+            className="grid size-11 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors enabled:hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
             disabled={disabled || (!draft.origin.text && !draft.destination.text)}
             onClick={() => {
               changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
