@@ -45,7 +45,9 @@ Up to three recent route searches appear in equal-width pills beneath the fields
 with an ellipsis, and selecting a pill reruns that route with its latest saved departure choice.
 If its chosen date has passed, the pill uses Leave now.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
-follow the form, and an off-screen results card scrolls into view. Results update when both
+follow the form, and an off-screen results card scrolls into view. The first search gently moves the
+form into place and reveals the results card; direct links and later updates appear immediately.
+People who prefer reduced motion see the final layout without an entrance animation. Results update when both
 locations are selected or a date or departure time is committed. Editing a location keeps the
 results card visible while the next selection is incomplete.
 Search URLs preserve the selected places or stops and departure mode, with a date and optional time

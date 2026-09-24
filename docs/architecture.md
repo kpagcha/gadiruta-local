@@ -50,6 +50,10 @@ Venta El Cepo remains exact-stop-only because it lies outside the built-up core.
 
 ## Direct journeys and coverage
 
+The home page uses Motion's layout animation for the first fresh search: the introduction fades,
+the persistent form moves into its searched position, and the results card enters. Restored links,
+browser history, later searches, and reduced-motion preferences use the final layout directly.
+
 The browser checks the version-two snapshot before searching. A direct journey uses one trip, with
 boarding before alighting and GTFS pickup/drop-off permissions applied. The selected date covers the
 whole local day, including departures earlier today. Trips scheduled on the previous service date

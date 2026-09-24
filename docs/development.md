@@ -67,7 +67,8 @@ Browser opens index.html
 ```
 
 After a search, `HomePage` places the persistent form next to a separate `DirectJourneyResults`
-card on desktop, or above it on mobile. `search-url.ts` maps shareable browser URLs to local places,
+card on desktop, or above it on mobile. Motion animates only the first fresh search transition.
+`search-url.ts` maps shareable browser URLs to local places,
 stops, dates, and times; `direct-journeys.ts` supplies and divides the local journey list.
 
 The `public/data` URL is served by Vite in development and by any ordinary static host in

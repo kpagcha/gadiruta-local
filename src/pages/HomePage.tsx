@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { DirectJourneyResults, type JourneySearchResult } from '../components/DirectJourneyResults';
 import { Icon } from '../components/Icon';
@@ -53,6 +53,7 @@ export function HomePage() {
 /** Put the search beside the introduction at first, then beside its own results card. */
 function SearchContent({ networkState }: { networkState: NetworkDatasetState }) {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [restoredNow] = useState(() => new Date());
   const options = useMemo(
     () => (networkState.status === 'ready' ? createLocationOptions(places, networkState.dataset) : []),
@@ -103,6 +104,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     return saved;
   });
   const resultsRef = useRef<HTMLElement>(null);
+  const revealAfterEntrance = useRef(false);
 
   useEffect(() => {
     if (networkState.status === 'ready') persistRecentSearches(recentSearches);
@@ -151,7 +153,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     }
     setUrlError(false);
 
-    /** Commit related state together so the first layout transition has complete results. */
+    /** Commit related state together so the new layout has complete results. */
     function showResult() {
       setDraft({
         ...nextDraft,
@@ -163,17 +165,10 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
       setRecentSearches((current) => prependRecentSearch(current, recentSearch));
     }
 
-    const canAnimate =
-      !hasSearched &&
-      typeof document.startViewTransition === 'function' &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (canAnimate) {
-      const transition = document.startViewTransition(() => flushSync(showResult));
-      void transition.finished.then(revealResults);
-    } else {
-      showResult();
-      if (!hasSearched) revealResults();
-    }
+    // Only a fresh search waits for the results card entrance before scrolling to it.
+    revealAfterEntrance.current = !hasSearched && !reducedMotion;
+    showResult();
+    if (!hasSearched && reducedMotion) revealResults();
   }
 
   /** Apply a recent route through the same validation and URL update as a new search. */
@@ -207,46 +202,87 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
   return (
     <main
       id="main-content"
-      className={`grid flex-1 gap-8 pt-4 pb-12 desktop:items-start desktop:py-20 ${
+      className={`relative grid flex-1 gap-8 pt-4 pb-12 desktop:items-start desktop:py-20 ${
         hasSearched
           ? 'desktop:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] desktop:gap-8'
           : 'desktop:grid-cols-[1fr_1.12fr] desktop:gap-16'
       }`}
       tabIndex={-1}
     >
-      {/* Keep a real page heading for assistive technology without pushing search below the mobile fold. */}
-      <section className={hasSearched ? 'sr-only' : 'home-intro-transition sr-only desktop:not-sr-only desktop:pt-8'}>
-        <p className="mb-5 text-xs font-[650] tracking-[1.8px] text-accent uppercase">{t('hero.eyebrow')}</p>
-        <h1 className="text-[clamp(44px,7vw,76px)] leading-[1.05] font-[650] tracking-[-2.8px] whitespace-pre-line">
-          {t('hero.title')}
-        </h1>
-        <p className="mt-6 max-w-92.5 text-[17px] leading-[1.65] text-muted">{t('hero.description')}</p>
-        <p className="mt-8.5 flex items-center gap-3 text-[13px] text-muted">
-          <span
-            className="grid size-9 place-items-center rounded-full border border-line-brand text-accent"
-            aria-hidden="true"
+      {/* The heading stays available after the visible introduction leaves. */}
+      <h1 className="sr-only">{t('hero.title')}</h1>
+      <AnimatePresence initial={false} mode="popLayout">
+        {!hasSearched && (
+          <motion.section
+            key="intro"
+            className="sr-only desktop:not-sr-only desktop:pt-8"
+            exit={reducedMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.18 }}
           >
-            <Icon name="gadiruta" size={21} />
-          </span>
-          {t('hero.footnote')}
-        </p>
-      </section>
+            <p className="mb-5 text-xs font-[650] tracking-[1.8px] text-accent uppercase">{t('hero.eyebrow')}</p>
+            <p
+              aria-hidden="true"
+              className="text-[clamp(44px,7vw,76px)] leading-[1.05] font-[650] tracking-[-2.8px] whitespace-pre-line"
+            >
+              {t('hero.title')}
+            </p>
+            <p className="mt-6 max-w-92.5 text-[17px] leading-[1.65] text-muted">{t('hero.description')}</p>
+            <p className="mt-8.5 flex items-center gap-3 text-[13px] text-muted">
+              <span
+                className="grid size-9 place-items-center rounded-full border border-line-brand text-accent"
+                aria-hidden="true"
+              >
+                <Icon name="gadiruta" size={21} />
+              </span>
+              {t('hero.footnote')}
+            </p>
+          </motion.section>
+        )}
 
-      <div className="journey-search-transition min-w-0">
-        <TripLocationPicker
-          state={networkState}
-          options={options}
-          draft={draft}
-          onSearch={handleSearch}
-          onDraftChange={handleDraftChange}
-          recentSearches={recentSearches}
-          onSelectRecentSearch={handleRecentSearch}
-          urlError={urlError}
-        />
-      </div>
-      {hasSearched && networkState.status === 'ready' && (
-        <DirectJourneyResults key={searchNumber} dataset={networkState.dataset} result={result} panelRef={resultsRef} />
-      )}
+        <motion.div
+          key="search"
+          className="relative z-1 min-w-0"
+          layout={!reducedMotion}
+          transition={{ layout: { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 } }}
+        >
+          <motion.div layout={!reducedMotion}>
+            <TripLocationPicker
+              state={networkState}
+              options={options}
+              draft={draft}
+              onSearch={handleSearch}
+              onDraftChange={handleDraftChange}
+              recentSearches={recentSearches}
+              onSelectRecentSearch={handleRecentSearch}
+              urlError={urlError}
+            />
+          </motion.div>
+        </motion.div>
+        {hasSearched && networkState.status === 'ready' && (
+          <motion.div
+            key="results"
+            className="min-w-0"
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              y: { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 },
+              opacity: { duration: 0.26, delay: 0.08 },
+            }}
+            onAnimationComplete={() => {
+              if (!revealAfterEntrance.current) return;
+              revealAfterEntrance.current = false;
+              revealResults();
+            }}
+          >
+            <DirectJourneyResults
+              key={searchNumber}
+              dataset={networkState.dataset}
+              result={result}
+              panelRef={resultsRef}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

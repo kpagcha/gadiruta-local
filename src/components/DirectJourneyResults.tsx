@@ -150,7 +150,7 @@ export function DirectJourneyResults({
     <section
       ref={panelRef}
       aria-labelledby="journey-results-title"
-      className="journey-results-transition min-w-0 rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)] max-[380px]:p-4.5 desktop:p-8"
+      className="min-w-0 rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)] max-[380px]:p-4.5 desktop:p-8"
     >
       <h2 id="journey-results-title" className="text-xl font-[700]">
         {t('journey.results')}
