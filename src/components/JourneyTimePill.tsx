@@ -173,12 +173,12 @@ export function JourneyTimePill({
             <Icon name="close" size={14} />
           </button>
         )}
-        <span className="mx-0.5 h-4 w-px bg-line-input" aria-hidden="true" />
+        <span className="mx-1 h-4 w-px bg-line-input" aria-hidden="true" />
         {([-1, 1] as const).map((direction) => (
           <button
             key={direction}
             aria-label={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
-            className="grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
+            className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
             disabled={
               disabled || (normalizedTime === '' ? !dateCovered : direction === -1 ? earlier === null : later === null)
             }
@@ -186,7 +186,7 @@ export function JourneyTimePill({
             title={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
             type="button"
           >
-            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={16} />
+            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={14} />
           </button>
         ))}
       </div>
