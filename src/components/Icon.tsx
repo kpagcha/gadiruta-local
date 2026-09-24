@@ -1,6 +1,6 @@
 /** Shared interface icons, including Gadiruta's custom brand mark. */
 import {
-  ArrowDownUp,
+  ArrowUpDown,
   CalendarDays,
   ChevronLeft,
   ChevronDown,
@@ -10,6 +10,7 @@ import {
   MapPin,
   Moon,
   Route,
+  Search,
   Sun,
   X,
   type LucideIcon,
@@ -24,6 +25,7 @@ export type IconName =
   | 'sun'
   | 'moon'
   | 'swap'
+  | 'search'
   | 'clock'
   | 'calendar'
   | 'chevronLeft'
@@ -37,7 +39,8 @@ const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   stop: MapPin,
   sun: Sun,
   moon: Moon,
-  swap: ArrowDownUp,
+  swap: ArrowUpDown,
+  search: Search,
   clock: Clock3,
   calendar: CalendarDays,
   chevronLeft: ChevronLeft,

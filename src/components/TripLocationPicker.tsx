@@ -39,6 +39,7 @@ interface LocationFieldProps {
 function LocationField({ id, label, placeholder, options, disabled, value, onChange }: LocationFieldProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const results = value.choice === null && isOpen ? searchLocations(options, value.text) : [];
@@ -80,36 +81,51 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
   }
 
   return (
-    <div className="relative focus-within:z-40" onBlur={handleBlur}>
-      <label className="mb-2 flex items-center gap-2.25 text-[13px] font-[650]" htmlFor={`${id}-search`}>
-        <span
-          aria-hidden="true"
-          className={id === 'origin' ? 'size-2.5 rounded-full border-2 border-accent' : 'size-2.5 rounded-sm bg-accent'}
-        />
+    <div className="relative min-w-0 focus-within:z-40" onBlur={handleBlur}>
+      <label className="sr-only" htmlFor={`${id}-search`}>
         {label}
       </label>
       <div className="relative">
         <input
           ref={inputRef}
           autoComplete="off"
-          className="min-h-15 w-full rounded-xl border border-line-input bg-surface-card py-4.5 pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
+          className={`h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${
+            isInputFocused ? 'pl-11 max-[380px]:pl-10' : 'pl-4 max-[380px]:pl-3'
+          } ${isInputFocused && value.text === '' ? 'pr-4' : 'pr-12'}`}
           disabled={disabled}
           id={`${id}-search`}
           onChange={(event) => {
             onChange({ text: event.target.value, choice: null }, false);
             setIsOpen(true);
           }}
+          onBlur={() => setIsInputFocused(false)}
           onFocus={() => {
+            setIsInputFocused(true);
             if (value.choice === null && value.text.trim() !== '') {
               setIsOpen(true);
             }
           }}
           onKeyDown={handleInputKeyDown}
-          placeholder={placeholder}
+          placeholder={isInputFocused ? placeholder : ''}
           role="searchbox"
           type="text"
           value={value.text}
         />
+        {!isInputFocused && value.text === '' && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[17px] font-[700] text-accent max-[380px]:left-3 max-[380px]:text-base"
+          >
+            {label}
+          </span>
+        )}
+        {isInputFocused && (
+          <Icon
+            name="search"
+            className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-accent max-[380px]:left-3"
+            size={18}
+          />
+        )}
         {value.text !== '' && !disabled ? (
           <button
             aria-label={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
@@ -124,7 +140,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
           >
             <Icon name="close" size={17} />
           </button>
-        ) : value.text === '' ? (
+        ) : value.text === '' && !isInputFocused ? (
           <Icon
             name="stop"
             className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-icon-muted"
@@ -235,34 +251,48 @@ export function TripLocationPicker({
         }}
       >
         <div className="grid grid-cols-[minmax(0,1fr)_2.75rem] items-center gap-2 max-[380px]:grid-cols-[minmax(0,1fr)_2.25rem] max-[380px]:gap-1">
-          <div className="grid min-w-0 gap-4">
-            <LocationField
-              disabled={disabled}
-              id="origin"
-              label={t('search.origin')}
-              placeholder={t('search.originPlaceholder')}
-              onChange={(value, committed) => {
-                changeDraft({ ...draft, origin: value }, committed);
-              }}
-              options={options}
-              value={draft.origin}
-            />
-            <LocationField
-              disabled={disabled}
-              id="destination"
-              label={t('search.destination')}
-              placeholder={t('search.destinationPlaceholder')}
-              onChange={(value, committed) => {
-                changeDraft({ ...draft, destination: value }, committed);
-              }}
-              options={options}
-              value={draft.destination}
-            />
+          <div className="grid min-w-0 grid-cols-[1.25rem_minmax(0,1fr)] gap-2 max-[380px]:gap-1.5">
+            <div className="relative grid grid-rows-2 gap-2" aria-hidden="true">
+              <span className="grid h-15 place-items-center">
+                <span className="size-2.5 rounded-full border-2 border-accent" />
+              </span>
+              <span className="grid h-15 place-items-center">
+                <span className="size-2.5 rounded-sm bg-accent" />
+              </span>
+              <span className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1">
+                <span className="size-0.75 rounded-full bg-icon-muted" />
+                <span className="size-0.75 rounded-full bg-icon-muted" />
+                <span className="size-0.75 rounded-full bg-icon-muted" />
+              </span>
+            </div>
+            <div className="grid min-w-0 gap-2">
+              <LocationField
+                disabled={disabled}
+                id="origin"
+                label={t('search.origin')}
+                placeholder={t('search.originPlaceholder')}
+                onChange={(value, committed) => {
+                  changeDraft({ ...draft, origin: value }, committed);
+                }}
+                options={options}
+                value={draft.origin}
+              />
+              <LocationField
+                disabled={disabled}
+                id="destination"
+                label={t('search.destination')}
+                placeholder={t('search.destinationPlaceholder')}
+                onChange={(value, committed) => {
+                  changeDraft({ ...draft, destination: value }, committed);
+                }}
+                options={options}
+                value={draft.destination}
+              />
+            </div>
           </div>
-          {/* The labels raise the row midpoint; offset the swap control to sit between the input boxes. */}
           <button
             aria-label={t('search.swap')}
-            className="grid size-11 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors enabled:hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
+            className="grid size-11 place-items-center rounded-full border border-line bg-paper text-accent transition-colors enabled:hover:bg-surface-hover disabled:opacity-45 max-[380px]:size-9"
             disabled={disabled || (!draft.origin.text && !draft.destination.text)}
             onClick={() => {
               changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
