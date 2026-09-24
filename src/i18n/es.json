@@ -41,6 +41,8 @@
     "chooseDate": "Elegir fecha de viaje",
     "previousMonth": "Mes anterior",
     "nextMonth": "Mes siguiente",
+    "previousDay": "Día anterior",
+    "nextDay": "Día siguiente",
     "calendarYear": "Año del calendario",
     "departAfter": "Salir después de",
     "anyTime": "Sin hora",

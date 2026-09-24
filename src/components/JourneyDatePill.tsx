@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calendarDays, monthKey, parseCalendarDate, shiftMonth } from '../data/calendar-date.ts';
+import { calendarDays, monthKey, parseCalendarDate, shiftCalendarDate, shiftMonth } from '../data/calendar-date.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { Icon } from './Icon';
 
@@ -35,6 +35,7 @@ export function JourneyDatePill({
   const minimumMonth = monthKey(minimum);
   const maximumMonth = monthKey(maximum);
   const canReset = value !== today && today >= minimum && today <= maximum;
+  const dateCovered = value >= minimum && value <= maximum;
   const dateLabel =
     value === today
       ? t('search.today')
@@ -135,6 +136,20 @@ export function JourneyDatePill({
             <Icon name="close" size={16} />
           </button>
         )}
+        <span className="mx-0.5 h-4 w-px bg-line-input" aria-hidden="true" />
+        {([-1, 1] as const).map((direction) => (
+          <button
+            key={direction}
+            type="button"
+            className="grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
+            aria-label={t(direction === -1 ? 'search.previousDay' : 'search.nextDay')}
+            title={t(direction === -1 ? 'search.previousDay' : 'search.nextDay')}
+            disabled={disabled || !dateCovered || (direction === -1 ? value <= minimum : value >= maximum)}
+            onClick={() => onChange(shiftCalendarDate(value, direction))}
+          >
+            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={16} />
+          </button>
+        ))}
       </div>
 
       {isOpen && (

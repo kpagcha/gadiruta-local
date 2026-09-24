@@ -41,6 +41,8 @@
     "chooseDate": "Choose travel date",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
     "calendarYear": "Calendar year",
     "departAfter": "Depart after",
     "anyTime": "Any time",
