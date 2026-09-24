@@ -103,16 +103,31 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
           }}
           onKeyDown={handleInputKeyDown}
           placeholder={placeholder}
-          type="search"
+          role="searchbox"
+          type="text"
           value={value.text}
         />
-        {value.text === '' && (
+        {value.text !== '' && !disabled ? (
+          <button
+            aria-label={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
+            className="absolute inset-y-0 right-1 grid w-11 place-items-center rounded-lg text-muted transition-colors hover:text-ink"
+            onClick={() => {
+              onChange({ text: '', choice: null }, false);
+              setIsOpen(false);
+              inputRef.current?.focus();
+            }}
+            title={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
+            type="button"
+          >
+            <Icon name="close" size={17} />
+          </button>
+        ) : value.text === '' ? (
           <Icon
             name="stop"
             className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-icon-muted"
             size={19}
           />
-        )}
+        ) : null}
       </div>
       {showResults && (
         <div className="absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">

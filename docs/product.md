@@ -38,6 +38,7 @@ controls, restrained colour, and one clear task at a time. The inspiration from
 On mobile, the origin and destination search must be visible on arrival without scrolling past
 introductory copy. Desktop can pair that search with a larger editorial introduction.
 The swap control sits beside the paired location fields so the form stays compact.
+Each location field has an inline clear control when it contains text.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
 follow the form, and an off-screen results card scrolls into view. Results update when both
 locations are selected or a date or departure time is committed. Editing a location keeps the

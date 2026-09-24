@@ -29,6 +29,8 @@
     "originPlaceholder": "¿Desde dónde sales?",
     "destinationPlaceholder": "¿Adónde quieres ir?",
     "swap": "Intercambiar origen y destino",
+    "clearOrigin": "Quitar el origen",
+    "clearDestination": "Quitar el destino",
     "stop": "Parada",
     "resultCount_one": "{{count}} sugerencia",
     "resultCount_other": "{{count}} sugerencias",
