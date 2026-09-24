@@ -285,7 +285,7 @@ export function TripLocationPicker({
           </p>
         )}
         <div className="mt-7 border-t border-line pt-5">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             <div className="relative shrink-0">
               <select
                 aria-label={t('search.departureMode')}
@@ -320,7 +320,7 @@ export function TripLocationPicker({
               />
             </div>
             {draft.departureMode === 'depart-at' && (
-              <>
+              <div className="flex w-max max-w-full shrink-0 flex-wrap items-center gap-1.5">
                 <JourneyDatePill
                   value={draft.date}
                   onChange={(date) => changeDraft({ ...draft, date }, true)}
@@ -336,7 +336,7 @@ export function TripLocationPicker({
                   maximum={coverage?.endDate ?? draft.date}
                   disabled={disabled}
                 />
-              </>
+              </div>
             )}
           </div>
           {coverage !== null && madridToday() > coverage.endDate && (

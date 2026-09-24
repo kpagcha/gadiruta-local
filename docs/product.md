@@ -46,9 +46,11 @@ results card visible while the next selection is incomplete.
 Search URLs preserve the selected places or stops and departure mode, with a date and optional time
 for Depart at, so a link can open the same local results. Leave now is the default and uses the
 current Cádiz time; Depart at reveals matching date and time pills beside the selector when space
-permits. The results card reveals earlier or later journeys in small groups without leaving the page.
-The date pill can move one day at a time within the saved timetable. The time pill accepts an
-exact typed time or a choice from a full list of half-hour times. Its
-arrows move by 15 minutes and update the selected date when they cross midnight. Compact entries
-such as `3` and `1330` become `15:00` and `13:30` when the field loses focus; an unrecognized
-entry leaves departure time unset.
+permits. When they cannot fit beside it, both pills move to the next row together; they can wrap
+within that row on narrow screens. The results card reveals earlier or later journeys in small groups
+without leaving the page.
+The date and time pills keep a stable width as their values change. The date pill can move one day at
+a time within the saved timetable. The time pill accepts an exact typed time or a choice from a full
+list of half-hour times. Its arrows move by 15 minutes and update the selected date when they cross
+midnight. Compact entries such as `3` and `1330` become `15:00` and `13:30` when the field loses
+focus; an unrecognized entry leaves departure time unset.

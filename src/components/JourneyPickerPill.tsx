@@ -21,7 +21,7 @@ export function JourneyPickerPill({
   return (
     <div className="inline-flex min-h-12 items-center rounded-full border border-line-input bg-surface-input p-1 text-sm font-[650] focus-within:shadow-[var(--shadow-field-focus)]">
       {children}
-      <span className="mx-1.5 h-4 w-px bg-line-input" aria-hidden="true" />
+      <span className="mx-1 h-4 w-px bg-line-input" aria-hidden="true" />
       <span className="inline-flex items-center gap-0.5">
         {([previous, next] as const).map((step, index) => (
           <button

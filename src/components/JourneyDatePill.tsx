@@ -125,7 +125,7 @@ export function JourneyDatePill({
         <button
           ref={triggerRef}
           type="button"
-          className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-50"
+          className="inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-50"
           aria-controls={isOpen ? dialogId : undefined}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
@@ -134,7 +134,7 @@ export function JourneyDatePill({
           onClick={togglePicker}
         >
           <Icon name="calendar" size={18} className="text-accent" />
-          {dateLabel}
+          <span className="w-14 text-left whitespace-nowrap tabular-nums">{dateLabel}</span>
         </button>
       </JourneyPickerPill>
 

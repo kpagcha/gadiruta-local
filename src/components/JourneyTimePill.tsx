@@ -141,7 +141,7 @@ export function JourneyTimePill({
           onClick: () => step(1),
         }}
       >
-        <span className="inline-flex min-h-10 items-center gap-2 px-3">
+        <span className="inline-flex min-h-10 items-center gap-2 px-2.5">
           <Icon name="clock" size={18} className="shrink-0 text-accent" />
           <input
             ref={inputRef}
@@ -151,9 +151,7 @@ export function JourneyTimePill({
             aria-haspopup="listbox"
             aria-label={t('search.departAfter')}
             autoComplete="off"
-            className={`min-h-10 min-w-0 bg-transparent p-0 text-sm font-[650] text-ink tabular-nums outline-none placeholder:text-muted disabled:opacity-50 ${
-              value === '' ? 'w-[4.75rem]' : 'w-[3.5rem]'
-            }`}
+            className="min-h-10 w-11 min-w-0 bg-transparent p-0 text-sm font-[650] text-ink tabular-nums outline-none placeholder:text-muted disabled:opacity-50"
             disabled={disabled}
             maxLength={5}
             onChange={(event) => {
@@ -165,7 +163,7 @@ export function JourneyTimePill({
             onClick={() => setIsOpen(true)}
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder={t('search.anyTime')}
+            placeholder={t('search.timePlaceholder')}
             role="combobox"
             type="text"
             value={value}

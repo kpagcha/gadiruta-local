@@ -49,7 +49,7 @@
     "nextDay": "Next day",
     "calendarYear": "Calendar year",
     "departAfter": "Depart after",
-    "anyTime": "Any time",
+    "timePlaceholder": "--:--",
     "earlierTime": "15 minutes earlier",
     "laterTime": "15 minutes later",
     "timeChoices": "Departure times every 30 minutes",

@@ -49,7 +49,7 @@
     "nextDay": "Día siguiente",
     "calendarYear": "Año del calendario",
     "departAfter": "Salir después de",
-    "anyTime": "Sin hora",
+    "timePlaceholder": "--:--",
     "earlierTime": "15 minutos antes",
     "laterTime": "15 minutos después",
     "timeChoices": "Horas de salida cada 30 minutos",
