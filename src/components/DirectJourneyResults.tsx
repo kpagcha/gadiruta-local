@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { clockTime, splitDirectJourneys, type DirectJourney } from '../data/direct-journeys.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 /** A submitted search and the departure cutoff used to divide its journeys. */
 export interface JourneySearchResult {
@@ -43,21 +44,32 @@ function JourneyCard({
             <span className="block font-[650]">{t('journey.boardAt')}</span>
           )}
           {journey.boardings.length > 1 ? (
-            <select
-              id={`${journey.id}-board`}
-              className="mt-1 min-h-11 w-full rounded-lg border border-line-input bg-surface-card px-2"
-              value={boardingIndex}
-              onChange={(event) => {
-                setBoardingIndex(Number(event.target.value));
+            <Select
+              items={journey.boardings.map((choice, index) => ({
+                value: String(index),
+                label: `${clockTime(choice.departureMinute)} · ${stopNames.get(choice.stopId) ?? choice.stopId}`,
+              }))}
+              value={String(boardingIndex)}
+              onValueChange={(index) => {
+                if (index === null) return;
+                setBoardingIndex(Number(index));
                 setAlightingIndex(0);
               }}
             >
-              {journey.boardings.map((choice, index) => (
-                <option key={choice.index} value={index}>
-                  {clockTime(choice.departureMinute)} · {stopNames.get(choice.stopId)}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger
+                id={`${journey.id}-board`}
+                className="mt-1 min-h-11 w-full rounded-xl border border-line-input bg-surface-card px-2 text-left focus:shadow-[var(--shadow-field-focus)]"
+              >
+                <SelectValue className="truncate" />
+              </SelectTrigger>
+              <SelectContent>
+                {journey.boardings.map((choice, index) => (
+                  <SelectItem key={choice.index} value={String(index)}>
+                    {clockTime(choice.departureMinute)} · {stopNames.get(choice.stopId) ?? choice.stopId}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : (
             <p className="mt-1 wrap-anywhere">
               {clockTime(boarding.departureMinute)} · {stopNames.get(boarding.stopId)}
@@ -73,18 +85,30 @@ function JourneyCard({
             <span className="block font-[650]">{t('journey.alightAt')}</span>
           )}
           {boarding.alightings.length > 1 ? (
-            <select
-              id={`${journey.id}-alight`}
-              className="mt-1 min-h-11 w-full rounded-lg border border-line-input bg-surface-card px-2"
-              value={alightingIndex}
-              onChange={(event) => setAlightingIndex(Number(event.target.value))}
+            <Select
+              items={boarding.alightings.map((choice, index) => ({
+                value: String(index),
+                label: `${clockTime(choice.arrivalMinute)} · ${stopNames.get(choice.stopId) ?? choice.stopId}`,
+              }))}
+              value={String(alightingIndex)}
+              onValueChange={(index) => {
+                if (index !== null) setAlightingIndex(Number(index));
+              }}
             >
-              {boarding.alightings.map((choice, index) => (
-                <option key={choice.index} value={index}>
-                  {clockTime(choice.arrivalMinute)} · {stopNames.get(choice.stopId)}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger
+                id={`${journey.id}-alight`}
+                className="mt-1 min-h-11 w-full rounded-xl border border-line-input bg-surface-card px-2 text-left focus:shadow-[var(--shadow-field-focus)]"
+              >
+                <SelectValue className="truncate" />
+              </SelectTrigger>
+              <SelectContent>
+                {boarding.alightings.map((choice, index) => (
+                  <SelectItem key={choice.index} value={String(index)}>
+                    {clockTime(choice.arrivalMinute)} · {stopNames.get(choice.stopId) ?? choice.stopId}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : (
             <p className="mt-1 wrap-anywhere">
               {clockTime(alighting.arrivalMinute)} · {stopNames.get(alighting.stopId)}

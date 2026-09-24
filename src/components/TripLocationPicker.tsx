@@ -7,6 +7,7 @@ import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 /** Text being edited and the exact choice, if the rider selected one. */
 export interface LocationFieldValue {
@@ -286,39 +287,42 @@ export function TripLocationPicker({
         )}
         <div className="mt-7 border-t border-line pt-5">
           <div className="flex flex-wrap items-center gap-1.5">
-            <div className="relative shrink-0">
-              <select
+            <Select
+              items={[
+                { value: 'leave-now', label: t('search.leaveNow') },
+                { value: 'depart-at', label: t('search.departAt') },
+              ]}
+              value={draft.departureMode}
+              onValueChange={(departureMode) => {
+                if (departureMode !== 'leave-now' && departureMode !== 'depart-at') return;
+                const now = new Date();
+                changeDraft(
+                  {
+                    ...draft,
+                    departureMode,
+                    date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
+                    departAfter:
+                      departureMode === 'depart-at' && draft.departAfter === ''
+                        ? currentMadridQuarterHour(now)
+                        : draft.departAfter,
+                  },
+                  true,
+                );
+              }}
+            >
+              <SelectTrigger
                 aria-label={t('search.departureMode')}
-                className="min-h-12 appearance-none rounded-full border border-line-input bg-surface-input py-2 pr-9 pl-4 text-sm font-[650] text-ink focus:shadow-[var(--shadow-field-focus)] disabled:opacity-60"
+                className="min-h-12 shrink-0 rounded-full border border-line-input bg-surface-input py-2 pr-3 pl-4 text-sm font-[650] focus:shadow-[var(--shadow-field-focus)]"
                 disabled={disabled}
                 id="departure-mode"
-                onChange={(event) => {
-                  const departureMode = event.target.value as DepartureMode;
-                  const now = new Date();
-                  changeDraft(
-                    {
-                      ...draft,
-                      departureMode,
-                      date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
-                      departAfter:
-                        departureMode === 'depart-at' && draft.departAfter === ''
-                          ? currentMadridQuarterHour(now)
-                          : draft.departAfter,
-                    },
-                    true,
-                  );
-                }}
-                value={draft.departureMode}
               >
-                <option value="leave-now">{t('search.leaveNow')}</option>
-                <option value="depart-at">{t('search.departAt')}</option>
-              </select>
-              <Icon
-                name="chevronDown"
-                className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
-                size={16}
-              />
-            </div>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="leave-now">{t('search.leaveNow')}</SelectItem>
+                <SelectItem value="depart-at">{t('search.departAt')}</SelectItem>
+              </SelectContent>
+            </Select>
             {draft.departureMode === 'depart-at' && (
               <div className="flex w-max max-w-full shrink-0 flex-wrap items-center gap-1.5">
                 <JourneyDatePill

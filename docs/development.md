@@ -15,6 +15,7 @@ gadiruta-local/
 │   ├── App.tsx                   Shared header/footer shell and page metadata
 │   ├── pages/                    Full-page content (currently HomePage)
 │   ├── components/               Reusable interface pieces and their Storybook stories
+│   │   └── ui/                   Shared shadcn Base UI select parts and app styling
 │   ├── data/                     Browser-side network loading, journey search, URL and calendar helpers
 │   ├── i18n/                     English/Spanish text and language setup
 │   ├── styles/                   Global CSS and Tailwind entry point

@@ -4,6 +4,7 @@ import { calendarDays, monthKey, parseCalendarDate, shiftCalendarDate, shiftMont
 import { madridToday } from '../data/direct-journeys.ts';
 import { Icon } from './Icon';
 import { JourneyPickerPill } from './JourneyPickerPill';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 /** Keep the visible month inside the dates supplied by the checked-in timetable. */
 function clampMonth(month: string, minimum: string, maximum: string): string {
@@ -158,22 +159,28 @@ export function JourneyDatePill({
             </button>
             <div className="flex min-w-0 items-center gap-1 text-sm font-[700] max-[380px]:text-xs">
               <span className="truncate capitalize">{monthLabel}</span>
-              <select
-                className="min-h-10 rounded-lg bg-surface-card px-1 text-sm font-[700] max-[380px]:min-h-8 max-[380px]:text-xs"
-                aria-label={t('search.calendarYear')}
+              <Select
+                items={years.map((year) => ({ value: String(year), label: String(year) }))}
                 value={visibleMonth.slice(0, 4)}
-                onChange={(event) =>
-                  setVisibleMonth(
-                    clampMonth(`${event.target.value}-${visibleMonth.slice(5)}`, minimumMonth, maximumMonth),
-                  )
-                }
+                onValueChange={(year) => {
+                  if (year === null) return;
+                  setVisibleMonth(clampMonth(`${year}-${visibleMonth.slice(5)}`, minimumMonth, maximumMonth));
+                }}
               >
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  aria-label={t('search.calendarYear')}
+                  className="min-h-10 rounded-lg bg-surface-card px-2 text-sm font-[700] focus:shadow-[var(--shadow-field-focus)] max-[380px]:min-h-8 max-[380px]:text-xs"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent portalContainer={popoverRef}>
+                  {years.map((year) => (
+                    <SelectItem key={year} value={String(year)}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <button
               type="button"
