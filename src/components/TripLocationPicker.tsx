@@ -2,7 +2,6 @@ import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
-import { isCalendarDate } from '../data/calendar-date.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
@@ -30,7 +29,7 @@ interface LocationFieldProps {
   options: readonly LocationOption[];
   disabled: boolean;
   value: LocationFieldValue;
-  onChange: (value: LocationFieldValue) => void;
+  onChange: (value: LocationFieldValue, committed: boolean) => void;
 }
 
 /** Render a labelled search input with keyboard-accessible place and stop suggestions. */
@@ -94,7 +93,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
           disabled={disabled}
           id={`${id}-search`}
           onChange={(event) => {
-            onChange({ text: event.target.value, choice: null });
+            onChange({ text: event.target.value, choice: null }, false);
             setIsOpen(true);
           }}
           onFocus={() => {
@@ -134,7 +133,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
                       }}
                       className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-hover focus-visible:bg-surface-hover"
                       onClick={() => {
-                        onChange({ text: result.name, choice: result });
+                        onChange({ text: result.name, choice: result }, true);
                         inputRef.current?.focus();
                         setIsOpen(false);
                       }}
@@ -183,28 +182,23 @@ export function TripLocationPicker({
   state: NetworkDatasetState;
   options: readonly LocationOption[];
   draft: TripSearchDraft;
-  onSearch: () => void;
+  onSearch: (draft: TripSearchDraft) => void;
   onDraftChange: (draft: TripSearchDraft) => void;
   urlError: boolean;
 }) {
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
   const coverage = state.status === 'ready' ? state.dataset.coverage : null;
-  const dateValid =
-    coverage !== null &&
-    isCalendarDate(draft.date) &&
-    draft.date >= coverage.startDate &&
-    draft.date <= coverage.endDate;
   const sameExactStop =
     draft.origin.choice?.kind === 'stop' &&
     draft.destination.choice?.kind === 'stop' &&
     draft.origin.choice.id === draft.destination.choice.id;
-  const canSearch =
-    state.status === 'ready' &&
-    dateValid &&
-    draft.origin.choice !== null &&
-    draft.destination.choice !== null &&
-    !sameExactStop;
+
+  /** Update edited text immediately, and search once a choice or time is committed. */
+  function changeDraft(nextDraft: TripSearchDraft, committed: boolean) {
+    onDraftChange(nextDraft);
+    if (committed) onSearch(nextDraft);
+  }
 
   return (
     <section
@@ -217,7 +211,6 @@ export function TripLocationPicker({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (canSearch) onSearch();
         }}
       >
         <div>
@@ -226,8 +219,8 @@ export function TripLocationPicker({
             id="origin"
             label={t('search.origin')}
             placeholder={t('search.originPlaceholder')}
-            onChange={(value) => {
-              onDraftChange({ ...draft, origin: value });
+            onChange={(value, committed) => {
+              changeDraft({ ...draft, origin: value }, committed);
             }}
             options={options}
             value={draft.origin}
@@ -239,7 +232,7 @@ export function TripLocationPicker({
               className="grid size-11 shrink-0 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45"
               disabled={disabled || (!draft.origin.text && !draft.destination.text)}
               onClick={() => {
-                onDraftChange({ ...draft, origin: draft.destination, destination: draft.origin });
+                changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
               }}
               title={t('search.swap')}
               type="button"
@@ -252,8 +245,8 @@ export function TripLocationPicker({
             id="destination"
             label={t('search.destination')}
             placeholder={t('search.destinationPlaceholder')}
-            onChange={(value) => {
-              onDraftChange({ ...draft, destination: value });
+            onChange={(value, committed) => {
+              changeDraft({ ...draft, destination: value }, committed);
             }}
             options={options}
             value={draft.destination}
@@ -278,7 +271,7 @@ export function TripLocationPicker({
           <div className="flex flex-wrap gap-2">
             <JourneyDatePill
               value={draft.date}
-              onChange={(date) => onDraftChange({ ...draft, date })}
+              onChange={(date) => changeDraft({ ...draft, date }, true)}
               minimum={coverage?.startDate ?? draft.date}
               maximum={coverage?.endDate ?? draft.date}
               disabled={disabled}
@@ -286,7 +279,7 @@ export function TripLocationPicker({
             <JourneyTimePill
               date={draft.date}
               value={draft.departAfter}
-              onChange={(date, departAfter) => onDraftChange({ ...draft, date, departAfter })}
+              onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
               minimum={coverage?.startDate ?? draft.date}
               maximum={coverage?.endDate ?? draft.date}
               disabled={disabled}
@@ -298,14 +291,6 @@ export function TripLocationPicker({
             </p>
           )}
           {sameExactStop && <p className="mt-3 text-sm text-warning">{t('search.sameStop')}</p>}
-          <button
-            className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-[700] text-on-accent disabled:opacity-45"
-            disabled={!canSearch}
-            type="submit"
-          >
-            <Icon name="route" size={18} />
-            {t('search.findTransport')}
-          </button>
         </div>
       </form>
     </section>

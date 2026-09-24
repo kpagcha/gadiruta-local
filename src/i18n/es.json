@@ -48,14 +48,13 @@
     "earlierTime": "15 minutos antes",
     "laterTime": "15 minutos después",
     "timeChoices": "Horas de salida cada 30 minutos",
-    "invalidLink": "Este enlace de búsqueda contiene un lugar, una parada, una fecha o una hora no válidos. Revisa el formulario y busca de nuevo.",
+    "invalidLink": "Este enlace de búsqueda contiene un lugar, una parada, una fecha o una hora no válidos. Revisa el formulario para ver los trayectos.",
     "expiredData": "Los horarios de estos datos terminan el {{date}}. Elige una fecha cubierta para consultar el horario guardado.",
-    "sameStop": "Elige otra parada de destino.",
-    "findTransport": "Buscar transporte"
+    "sameStop": "Elige otra parada de destino."
   },
   "journey": {
     "results": "Trayectos directos",
-    "searchAgain": "Busca de nuevo para ver los trayectos actualizados.",
+    "chooseLocations": "Elige un origen y un destino para ver los trayectos.",
     "empty": "No hay servicios directos para esta fecha y estos lugares.",
     "earlierDepartures": "Salidas anteriores",
     "laterDepartures": "Salidas posteriores",

@@ -48,14 +48,13 @@
     "earlierTime": "15 minutes earlier",
     "laterTime": "15 minutes later",
     "timeChoices": "Departure times every 30 minutes",
-    "invalidLink": "This search link has an invalid place, stop, date, or time. Check the form and search again.",
+    "invalidLink": "This search link has an invalid place, stop, date, or time. Check the form to see journeys.",
     "expiredData": "Schedules in this snapshot end on {{date}}. Choose a covered date to view the saved timetable.",
-    "sameStop": "Choose a different destination stop.",
-    "findTransport": "Find transport"
+    "sameStop": "Choose a different destination stop."
   },
   "journey": {
     "results": "Direct journeys",
-    "searchAgain": "Search again to see updated journeys.",
+    "chooseLocations": "Choose an origin and destination to see journeys.",
     "empty": "No direct services found for this date and these locations.",
     "earlierDepartures": "Earlier departures",
     "laterDepartures": "Later departures",

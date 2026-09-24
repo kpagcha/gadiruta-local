@@ -38,8 +38,9 @@ controls, restrained colour, and one clear task at a time. The inspiration from
 On mobile, the origin and destination search must be visible on arrival without scrolling past
 introductory copy. Desktop can pair that search with a larger editorial introduction.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
-follow the form, and an off-screen results card scrolls into view. Editing the search keeps the two
-cards visible and asks the rider to search again.
+follow the form, and an off-screen results card scrolls into view. Results update when both
+locations are selected or a date or departure time is committed. Editing a location keeps the
+results card visible while the next selection is incomplete.
 Search URLs preserve the selected places or stops, date, and optional departure time so a link can
 open the same local results. The date and time controls are separate pills, and the results card
 reveals earlier or later journeys in small groups without leaving the page.

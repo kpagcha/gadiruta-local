@@ -133,7 +133,7 @@ export function DirectJourneyResults({
       </h2>
       {result === null ? (
         <p className="mt-4 text-sm text-muted" role="status">
-          {t('journey.searchAgain')}
+          {t('journey.chooseLocations')}
         </p>
       ) : total === 0 ? (
         <p className="mt-4 text-sm text-muted" role="status">

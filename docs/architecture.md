@@ -60,7 +60,9 @@ by the earliest reachable alighting. The full local result is split into four-ca
 earlier and later controls reveal adjacent groups without another data request. A trip appears only
 once even when it has several matching boarding stops.
 
-The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history on submit.
+The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history when
+both locations and a covered date are selected. Typed times update results on commit, rather than
+after every keystroke.
 Place values use their maintained IDs. Stop values combine a readable name slug with an eight-character
 token derived from the source stop ID; the token identifies the stop even if its name changes. The
 snapshot validator rejects token collisions, and links containing a raw stop ID remain readable.

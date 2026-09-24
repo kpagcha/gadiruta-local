@@ -26,7 +26,7 @@ export function JourneyTimePill({
 }: {
   date: string;
   value: string;
-  onChange: (date: string, time: string) => void;
+  onChange: (date: string, time: string, committed: boolean) => void;
   minimum: string;
   maximum: string;
   disabled: boolean;
@@ -39,6 +39,7 @@ export function JourneyTimePill({
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const normalizedTime = normalizeJourneyTime(value);
   const dateCovered = date >= minimum && date <= maximum;
   const earlier = normalizedTime === '' ? null : stepJourneyTime(date, normalizedTime, -1, minimum, maximum);
@@ -79,7 +80,13 @@ export function JourneyTimePill({
 
   /** Close when focus leaves the input, arrows, and list together. */
   function handleBlur(event: FocusEvent<HTMLDivElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsOpen(false);
+      if (isEditing) {
+        onChange(date, normalizedTime, true);
+        setIsEditing(false);
+      }
+    }
   }
 
   /** Navigate options explicitly; Enter otherwise keeps an exact typed time. */
@@ -98,23 +105,25 @@ export function JourneyTimePill({
     } else if (event.key === 'Enter' && isOpen) {
       event.preventDefault();
       const choice = activeIndex === null ? undefined : choices[activeIndex];
-      if (choice !== undefined) onChange(date, choice);
-      else if (value !== normalizedTime) onChange(date, normalizedTime);
+      if (choice !== undefined) onChange(date, choice, true);
+      else if (isEditing) onChange(date, normalizedTime, true);
       setIsOpen(false);
       setActiveIndex(null);
+      setIsEditing(false);
     }
   }
 
   /** Start a blank time at the Cádiz quarter hour, then step by 15 minutes. */
   function step(direction: -1 | 1) {
     if (normalizedTime === '') {
-      onChange(date, currentMadridQuarterHour());
+      onChange(date, currentMadridQuarterHour(), true);
     } else {
       const next = direction === -1 ? earlier : later;
-      if (next) onChange(next.date, next.time);
+      if (next) onChange(next.date, next.time, true);
     }
     setIsOpen(false);
     setActiveIndex(null);
+    setIsEditing(false);
   }
 
   return (
@@ -135,15 +144,13 @@ export function JourneyTimePill({
           disabled={disabled}
           maxLength={5}
           onChange={(event) => {
-            onChange(date, event.target.value);
+            onChange(date, event.target.value, false);
             setActiveIndex(null);
             setIsOpen(true);
+            setIsEditing(true);
           }}
           onClick={() => setIsOpen(true)}
           onFocus={() => setIsOpen(true)}
-          onBlur={() => {
-            if (value !== normalizedTime) onChange(date, normalizedTime);
-          }}
           onKeyDown={handleKeyDown}
           placeholder={t('search.anyTime')}
           role="combobox"
@@ -155,9 +162,10 @@ export function JourneyTimePill({
             aria-label={t('search.clearTime')}
             className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-ink"
             onClick={() => {
-              onChange(date, '');
+              onChange(date, '', true);
               setIsOpen(false);
               setActiveIndex(null);
+              setIsEditing(false);
             }}
             title={t('search.clearTime')}
             type="button"
@@ -206,9 +214,10 @@ export function JourneyTimePill({
                     : 'text-ink hover:bg-surface-hover'
                 }`}
                 onClick={() => {
-                  onChange(date, choice);
+                  onChange(date, choice, true);
                   setIsOpen(false);
                   setActiveIndex(null);
+                  setIsEditing(false);
                   inputRef.current?.focus();
                 }}
                 onMouseDown={(event) => event.preventDefault()}

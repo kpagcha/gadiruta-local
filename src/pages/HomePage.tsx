@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DirectJourneyResults, type JourneySearchResult } from '../components/DirectJourneyResults';
 import { Icon } from '../components/Icon';
 import { TripLocationPicker, type TripSearchDraft } from '../components/TripLocationPicker';
+import { isCalendarDate } from '../data/calendar-date.ts';
 import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
 import { normalizeJourneyTime } from '../data/journey-time.ts';
 import { createLocationOptions, type LocationOption } from '../data/location-search.ts';
@@ -12,7 +13,7 @@ import { places } from '../data/places.ts';
 import { resolveSearchUrl, searchQuery } from '../data/search-url.ts';
 import { useNetworkDataset, type NetworkDatasetState } from '../data/use-network-dataset.ts';
 
-/** Search the checked-in timetable and retain the criteria needed by the result card. */
+/** Search the checked-in timetable and retain the cutoff needed by the result card. */
 function localSearch(
   dataset: NetworkDataset,
   date: string,
@@ -71,7 +72,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
   const [searchNumber, setSearchNumber] = useState(0);
   const resultsRef = useRef<HTMLElement>(null);
 
-  /** Bring the results heading into view when the newly submitted card is below the viewport. */
+  /** Bring the first results card into view when it is below the viewport. */
   function revealResults() {
     requestAnimationFrame(() => {
       const panel = resultsRef.current;
@@ -86,26 +87,36 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     });
   }
 
-  /** Search local data and animate the first switch from introduction to results when supported. */
-  function handleSearch() {
-    if (networkState.status !== 'ready' || draft.origin.choice === null || draft.destination.choice === null) return;
-    const departAfter = normalizeJourneyTime(draft.departAfter);
+  /** Search after a committed change once both locations and the date are usable. */
+  function handleSearch(nextDraft: TripSearchDraft) {
+    if (networkState.status !== 'ready' || nextDraft.origin.choice === null || nextDraft.destination.choice === null)
+      return;
+    const { startDate, endDate } = networkState.dataset.coverage;
+    if (!isCalendarDate(nextDraft.date) || nextDraft.date < startDate || nextDraft.date > endDate) return;
+    if (
+      nextDraft.origin.choice.kind === 'stop' &&
+      nextDraft.destination.choice.kind === 'stop' &&
+      nextDraft.origin.choice.id === nextDraft.destination.choice.id
+    )
+      return;
+
+    const departAfter = normalizeJourneyTime(nextDraft.departAfter);
     const nextResult = localSearch(
       networkState.dataset,
-      draft.date,
-      draft.origin.choice,
-      draft.destination.choice,
+      nextDraft.date,
+      nextDraft.origin.choice,
+      nextDraft.destination.choice,
       departAfter,
     );
-    const query = searchQuery(draft.origin.choice, draft.destination.choice, draft.date, departAfter);
+    const query = searchQuery(nextDraft.origin.choice, nextDraft.destination.choice, nextDraft.date, departAfter);
     if (query !== window.location.search) {
       window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
     }
     setUrlError(false);
 
-    /** Commit all related state together so the browser captures one complete new layout. */
+    /** Commit all related state together so the first layout transition has complete results. */
     function showResult() {
-      if (departAfter !== draft.departAfter) setDraft({ ...draft, departAfter });
+      setDraft({ ...nextDraft, departAfter });
       setResult(nextResult);
       setHasSearched(true);
       setSearchNumber((number) => number + 1);
@@ -120,14 +131,21 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
       void transition.finished.then(revealResults);
     } else {
       showResult();
-      revealResults();
+      if (!hasSearched) revealResults();
     }
   }
 
-  /** Keep both cards after an edit while asking for another deliberate submission. */
+  /** Keep current results while editing time, but clear them when a location is unresolved. */
   function handleDraftChange(nextDraft: TripSearchDraft) {
     setDraft(nextDraft);
-    setResult(null);
+    if (
+      nextDraft.origin.choice === null ||
+      nextDraft.destination.choice === null ||
+      (nextDraft.origin.choice.kind === 'stop' &&
+        nextDraft.destination.choice.kind === 'stop' &&
+        nextDraft.origin.choice.id === nextDraft.destination.choice.id)
+    )
+      setResult(null);
     setUrlError(false);
   }
 
