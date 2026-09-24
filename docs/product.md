@@ -12,7 +12,9 @@ The app should be fast, friendly, mobile-first, and easy to scan. Its core tasks
 
 - choose origin and destination places such as Cádiz, San Fernando, El Puerto de Santa María, or
   Jerez, or choose an exact physical stop;
-- find scheduled direct services for a chosen date and optional departure time;
+- find scheduled direct services for a chosen date and optional departure time, then browse them in
+  manageable groups;
+- revisit recent routes or share a search URL;
 - browse lines, stops, and timetables;
 - view useful network information and relevant service notices.
 
@@ -35,31 +37,10 @@ general-purpose routing algorithm.
 The visual language is spacious and calm: strong typography, generous whitespace, comfortable
 controls, restrained colour, and one clear task at a time. The inspiration from
 [clicks.coffee](https://clicks.coffee/) is directional, not a template to copy.
+
 On mobile, the origin and destination search must be visible on arrival without scrolling past
 introductory copy. Desktop can pair that search with a larger editorial introduction.
-The compact location fields have origin and destination markers connected by dots to their left.
-An empty field shows its From or To label inside and a pin icon on the right. Focus hides the label
-and shows a location hint. A search icon takes the pin's place, while a subtle teal shadow marks the
-focused field. Entered text replaces the label, and an inline control clears it. A staggered up/down
-arrow beside the fields swaps their values and explains the action on hover or focus.
-Recent route searches appear in equal-width pills beneath the fields. Long names end with an
-ellipsis; hovering over or focusing a pill shows the full route. Selecting a pill reruns that route
-with its latest saved departure choice.
-If its chosen date has passed, the pill uses Leave now.
-After a search, the form stays visible beside a separate results card on desktop. On mobile, results
-follow the form, and an off-screen results card scrolls into view. The first search gently moves the
-form into place and reveals the results card; direct links and later updates appear immediately.
-People who prefer reduced motion see the final layout without an entrance animation. Results update when both
-locations are selected or a date or departure time is committed. Editing a location keeps the
-results card visible while the next selection is incomplete.
-Search URLs preserve the selected places or stops and departure mode, with a date and optional time
-for Depart at, so a link can open the same local results. Leave now is the default and uses the
-current Cádiz time; Depart at reveals matching date and time pills beside the selector when space
-permits. When they cannot fit beside it, both pills move to the next row together; they can wrap
-within that row on narrow screens. The results card reveals earlier or later journeys in small groups
-without leaving the page.
-The date and time pills keep a stable width as their values change. The date pill can move one day at
-a time within the saved timetable. The time pill accepts an exact typed time or a choice from a full
-list of half-hour times. Its arrows move by 15 minutes and update the selected date when they cross
-midnight. Compact entries such as `3` and `1330` become `15:00` and `13:30` when the field loses
-focus; an unrecognized entry leaves departure time unset.
+
+The search form stays visible when results appear, beside the results card on desktop and above it
+on mobile. Controls should work with keyboard and touch. Transitions should respect reduced-motion
+preferences.

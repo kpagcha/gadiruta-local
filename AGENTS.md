@@ -6,8 +6,10 @@ Gadiruta Local is a Cádiz-focused, local-first static React application. Its pr
 ## Workflow
 
 Before changing code, inspect the relevant source and documentation, then run `git status`. Work in
-small vertical slices: implement, run relevant checks, review the diff, update documentation, and
-create a focused Conventional Commit.
+small vertical slices: implement, run relevant checks, review the diff, and create a focused
+Conventional Commit. Update documentation only when a change affects product capabilities or scope,
+durable technical decisions or data assumptions, or contributor workflow. Do not record minor
+control styling and interaction details in documentation.
 
 Do not retain or introduce a permanent application backend, database, or direct CTAN REST calls
 without a concrete, documented need. The browser should eventually consume preprocessed static
@@ -65,7 +67,7 @@ ignored; this is the narrow exception to the generated-output rule below.
 Keep the small documentation set concise and non-overlapping:
 
 - `README.md`: orientation, commands, and milestone checklist.
-- `docs/product.md`: user and scope definition.
+- `docs/product.md`: user goals, capabilities, scope, and broad design direction.
 - `docs/architecture.md`: current boundaries, data direction, and durable technical choices.
 - `docs/development.md`: contributor workflow, tool explanation, and repository layout.
 

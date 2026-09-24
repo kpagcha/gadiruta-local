@@ -50,10 +50,6 @@ Venta El Cepo remains exact-stop-only because it lies outside the built-up core.
 
 ## Direct journeys and coverage
 
-The home page uses Motion's layout animation for the first fresh search: the introduction fades,
-the persistent form moves into its searched position, and the results card enters. Restored links,
-browser history, later searches, and reduced-motion preferences use the final layout directly.
-
 The browser checks the version-two snapshot before searching. A direct journey uses one trip, with
 boarding before alighting and GTFS pickup/drop-off permissions applied. The selected date covers the
 whole local day, including departures earlier today. Trips scheduled on the previous service date
@@ -67,9 +63,8 @@ once even when it has several matching boarding stops.
 The home page writes `from`, `to`, and `mode=now` for Leave now, or `from`, `to`, `date`, and optional
 `depart_after` for Depart at. A Leave now search applies the current Cádiz minute as its departure
 cutoff. Existing links with a current or future date restore Depart at; past dates cannot start a
-search. The calendar disables past days and months, and its year choices start at the later of the
-current Cádiz year and the snapshot's first year. Typed times update results on commit, rather than
-after every keystroke.
+search. The form normalizes compact clock entries before searching and omits an unrecognized time
+from `depart_after`, so the local journey filter receives a valid clock time or no cutoff.
 
 Place values use their maintained IDs. Stop values combine a readable name slug with an eight-character
 token derived from the source stop ID; the token identifies the stop even if its name changes. The
@@ -77,7 +72,7 @@ snapshot validator rejects token collisions, and links containing a raw stop ID 
 Invalid or incomplete links do not run a journey search.
 
 The browser keeps the most recent distinct origin-to-destination searches in local storage as
-shareable search queries. The project-controlled limit, currently three, is in `src/config.ts`. Saved queries are
+shareable search queries. The project-controlled limit is in `src/config.ts`. Saved queries are
 resolved against the current network snapshot before display; unavailable places or stops are
 discarded, and a past Depart at date becomes Leave now. Selecting a recent search uses the same
 local search and URL update as a new selection. Browser storage errors do not block searching.
@@ -90,11 +85,7 @@ The builder keeps a preceding service day only for trips with after-midnight sto
 just after midnight on the first visible date remain searchable. The UI shows an expired-data
 message once the current Cádiz date passes the end. Coverage is not a promise that every date or
 location pair has a departure.
-The time pill keeps exact typed minutes. Its 15-minute arrows change the date at midnight and
-disable a step beyond the snapshot coverage. A first arrow press on an empty time fills the current
-Cádiz time rounded down to a quarter hour.
-The form normalizes compact clock entries before searching and omits an unrecognized time from
-`depart_after`, so the local journey filter always receives a valid clock time or no cutoff.
+
 All selected source stop times have whole-minute values; the generator rejects nonzero seconds so
 later feed changes cannot be rounded silently.
 
