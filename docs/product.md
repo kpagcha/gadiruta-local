@@ -41,6 +41,9 @@ The compact location fields have origin and destination markers connected by dot
 An empty field shows its From or To label inside; focus replaces the label with a search icon and
 a location hint. Entered text takes the label's place, and an inline control clears it. A staggered
 up/down arrow beside the fields swaps their values and explains the action on hover or focus.
+Up to three recent route searches appear in equal-width pills beneath the fields. Long names end
+with an ellipsis, and selecting a pill reruns that route with its latest saved departure choice.
+If its chosen date has passed, the pill uses Leave now.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
 follow the form, and an off-screen results card scrolls into view. Results update when both
 locations are selected or a date or departure time is committed. Editing a location keeps the

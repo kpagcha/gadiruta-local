@@ -88,6 +88,8 @@ const meta = {
     },
     onSearch: ignoreStorySearch,
     onDraftChange: ignoreStoryDraft,
+    recentSearches: [],
+    onSelectRecentSearch: ignoreStoryRecentSearch,
     urlError: false,
   },
   render: ({ state }) => <PickerStory state={state} />,
@@ -116,6 +118,8 @@ function PickerStory({ state }: { state: NetworkDatasetState }) {
       draft={draft}
       onSearch={ignoreStorySearch}
       onDraftChange={setDraft}
+      recentSearches={[]}
+      onSelectRecentSearch={ignoreStoryRecentSearch}
       urlError={false}
     />
   );
@@ -126,6 +130,9 @@ function ignoreStorySearch() {}
 
 /** Supply a complete default callback for the component's Storybook controls. */
 function ignoreStoryDraft() {}
+
+/** The isolated picker story has no recent searches to reopen. */
+function ignoreStoryRecentSearch() {}
 
 export const Ready: Story = { args: { state: readyState } };
 export const Loading: Story = { args: { state: { status: 'loading' } } };

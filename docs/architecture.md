@@ -72,6 +72,12 @@ token derived from the source stop ID; the token identifies the stop even if its
 snapshot validator rejects token collisions, and links containing a raw stop ID remain readable.
 Invalid or incomplete links do not run a journey search.
 
+The browser keeps the most recent distinct origin-to-destination searches in local storage as
+shareable search queries. The project-controlled limit, currently three, is in `src/config.ts`. Saved queries are
+resolved against the current network snapshot before display; unavailable places or stops are
+discarded, and a past Depart at date becomes Leave now. Selecting a recent search uses the same
+local search and URL update as a new selection. Browser storage errors do not block searching.
+
 The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
 Its Bay calendars span 2021-06-01 through 2026-12-31. The reviewed snapshot limits visible travel
 dates to 2026-01-01 through 2026-12-31: the project builder requests the current Cádiz year and

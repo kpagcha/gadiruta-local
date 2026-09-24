@@ -2,9 +2,11 @@ import { Tooltip } from '@base-ui/react/tooltip';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RECENT_SEARCH_LIMIT } from '../config.ts';
 import { searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { currentMadridQuarterHour, type DepartureMode } from '../data/journey-time.ts';
+import type { RecentSearch } from '../data/recent-searches.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
@@ -213,6 +215,8 @@ export function TripLocationPicker({
   draft,
   onSearch,
   onDraftChange,
+  recentSearches,
+  onSelectRecentSearch,
   urlError,
 }: {
   state: NetworkDatasetState;
@@ -220,6 +224,8 @@ export function TripLocationPicker({
   draft: TripSearchDraft;
   onSearch: (draft: TripSearchDraft) => void;
   onDraftChange: (draft: TripSearchDraft) => void;
+  recentSearches: readonly RecentSearch[];
+  onSelectRecentSearch: (search: RecentSearch) => void;
   urlError: boolean;
 }) {
   const { t } = useTranslation();
@@ -318,6 +324,34 @@ export function TripLocationPicker({
             </Tooltip.Portal>
           </Tooltip.Root>
         </div>
+        {recentSearches.length > 0 && (
+          <div
+            aria-label={t('search.recentSearches')}
+            className="mt-4 grid min-w-0 gap-2 max-[380px]:gap-1.5"
+            role="group"
+            style={{ gridTemplateColumns: `repeat(${RECENT_SEARCH_LIMIT}, minmax(0, 1fr))` }}
+          >
+            {recentSearches.map((search) => {
+              const route = `${search.origin.name} → ${search.destination.name}`;
+              return (
+                <button
+                  aria-label={t('search.repeatRecentSearch', {
+                    origin: search.origin.name,
+                    destination: search.destination.name,
+                  })}
+                  className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
+                  key={`${search.origin.kind}:${search.origin.id}:${search.destination.kind}:${search.destination.id}`}
+                  onClick={() => onSelectRecentSearch(search)}
+                  title={route}
+                  type="button"
+                >
+                  <Icon name="search" className="shrink-0" size={17} />
+                  <span className="min-w-0 truncate">{route}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
         {state.status === 'loading' && (
           <p className="mt-4 text-sm text-muted" role="status">
             {t('search.loading')}

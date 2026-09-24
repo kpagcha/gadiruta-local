@@ -13,10 +13,11 @@ gadiruta-local/
 ├── src/                          Browser application source
 │   ├── main.tsx                  Mounts React, translations, and global styles
 │   ├── App.tsx                   Shared header/footer shell and page metadata
+│   ├── config.ts                 Project-controlled browser settings such as recent-search count
 │   ├── pages/                    Full-page content (currently HomePage)
 │   ├── components/               Reusable interface pieces and their Storybook stories
 │   │   └── ui/                   Shared shadcn Base UI select parts and app styling
-│   ├── data/                     Browser-side network loading, journey search, URL and calendar helpers
+│   ├── data/                     Browser-side network loading, journey search, recent history, URL and calendar helpers
 │   ├── i18n/                     English/Spanish text and language setup
 │   ├── styles/                   Global CSS and Tailwind entry point
 │   └── theme.ts                  Browser theme preference and document synchronization
@@ -71,8 +72,8 @@ stops, dates, and times; `direct-journeys.ts` supplies and divides the local jou
 
 The `public/data` URL is served by Vite in development and by any ordinary static host in
 production. Browser code never imports `scripts/`, reads `data/source/`, or calls CTAN. There is no
-Gadiruta server process or runtime database. Language and theme preferences are handled in the
-browser and may be saved in local storage.
+Gadiruta server process or runtime database. Language and theme preferences and recent searches are
+handled in the browser and may be saved in local storage.
 
 ## How the network JSON is made
 

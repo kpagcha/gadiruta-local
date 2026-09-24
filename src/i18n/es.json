@@ -29,6 +29,8 @@
     "originPlaceholder": "¿Desde dónde sales?",
     "destinationPlaceholder": "¿Adónde quieres ir?",
     "swap": "Intercambiar origen y destino",
+    "recentSearches": "Búsquedas recientes",
+    "repeatRecentSearch": "Buscar de nuevo de {{origin}} a {{destination}}",
     "clearOrigin": "Quitar el origen",
     "clearDestination": "Quitar el destino",
     "departureMode": "Opción de salida",

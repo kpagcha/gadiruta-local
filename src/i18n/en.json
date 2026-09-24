@@ -29,6 +29,8 @@
     "originPlaceholder": "Where are you starting?",
     "destinationPlaceholder": "Where would you like to go?",
     "swap": "Swap start and destination",
+    "recentSearches": "Recent searches",
+    "repeatRecentSearch": "Search again from {{origin}} to {{destination}}",
     "clearOrigin": "Clear origin",
     "clearDestination": "Clear destination",
     "departureMode": "Departure option",
