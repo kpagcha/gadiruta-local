@@ -1,6 +1,6 @@
 import { useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
-import { clockTime, type DirectJourney } from '../data/direct-journeys.ts';
+import { clockTime, splitDirectJourneys, type DirectJourney } from '../data/direct-journeys.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 
@@ -8,13 +8,22 @@ import type { NetworkDataset } from '../data/network-schema.ts';
 export interface JourneySearchResult {
   originName: string;
   destinationName: string;
+  departAfter: string;
   journeys: DirectJourney[];
 }
 
 /** Show one trip and allow a rider to choose another reachable stop pair on that trip. */
-function JourneyCard({ journey, dataset }: { journey: DirectJourney; dataset: NetworkDataset }) {
+function JourneyCard({
+  journey,
+  dataset,
+  defaultBoardingIndex,
+}: {
+  journey: DirectJourney;
+  dataset: NetworkDataset;
+  defaultBoardingIndex: number;
+}) {
   const { t } = useTranslation();
-  const [boardingIndex, setBoardingIndex] = useState(0);
+  const [boardingIndex, setBoardingIndex] = useState(defaultBoardingIndex);
   const [alightingIndex, setAlightingIndex] = useState(0);
   const boarding = journey.boardings[boardingIndex]!;
   const alighting = boarding.alightings[alightingIndex]!;
@@ -104,7 +113,16 @@ export function DirectJourneyResults({
   panelRef: RefObject<HTMLElement | null>;
 }) {
   const { t } = useTranslation();
-  const [visibleCount, setVisibleCount] = useState(20);
+  const [earlierCount, setEarlierCount] = useState(0);
+  const [laterCount, setLaterCount] = useState(4);
+  const split = result === null ? { earlier: [], later: [] } : splitDirectJourneys(result.journeys, result.departAfter);
+  const visible = [
+    ...split.earlier.slice(Math.max(0, split.earlier.length - earlierCount)),
+    ...split.later.slice(0, laterCount),
+  ];
+  const total = split.earlier.length + split.later.length;
+  const hasEarlier = earlierCount < split.earlier.length;
+  const hasLater = laterCount < split.later.length;
 
   return (
     <section
@@ -124,27 +142,49 @@ export function DirectJourneyResults({
           <p className="mt-1 text-sm wrap-anywhere text-muted">
             {t('journey.resultsRoute', { origin: result.originName, destination: result.destinationName })}
           </p>
-          {result.journeys.length === 0 ? (
+          {total === 0 ? (
             <p className="mt-4 text-sm text-muted" role="status">
               {t('journey.empty')}
             </p>
           ) : (
             <>
               <p className="mt-2 text-sm text-muted" role="status">
-                {t('journey.resultCount', { count: result.journeys.length })}
+                {t('journey.showingCount', { visible: visible.length, total })}
               </p>
-              <div className="mt-4 grid gap-4">
-                {result.journeys.slice(0, visibleCount).map((journey) => (
-                  <JourneyCard key={journey.id} journey={journey} dataset={dataset} />
-                ))}
-              </div>
-              {visibleCount < result.journeys.length && (
+              {hasEarlier && (
                 <button
                   type="button"
-                  className="mt-5 min-h-11 rounded-xl border border-line-input px-5 text-sm font-[650]"
-                  onClick={() => setVisibleCount((count) => count + 20)}
+                  className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
+                  onClick={() => setEarlierCount((count) => count + 4)}
                 >
-                  {t('journey.showMore')}
+                  <span aria-hidden="true">↑</span>
+                  {t('journey.earlierDepartures')}
+                </button>
+              )}
+              {visible.length === 0 ? (
+                <p className="mt-4 text-sm text-muted" role="status">
+                  {t('journey.noLater')}
+                </p>
+              ) : (
+                <div className="mt-4 grid gap-4">
+                  {visible.map(({ journey, boardingIndex }) => (
+                    <JourneyCard
+                      key={journey.id}
+                      journey={journey}
+                      dataset={dataset}
+                      defaultBoardingIndex={boardingIndex}
+                    />
+                  ))}
+                </div>
+              )}
+              {hasLater && (
+                <button
+                  type="button"
+                  className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
+                  onClick={() => setLaterCount((count) => count + 4)}
+                >
+                  {t('journey.laterDepartures')}
+                  <span aria-hidden="true">↓</span>
                 </button>
               )}
             </>

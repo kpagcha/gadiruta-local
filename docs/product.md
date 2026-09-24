@@ -40,3 +40,6 @@ introductory copy. Desktop can pair that search with a larger editorial introduc
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
 follow the form, and an off-screen results card scrolls into view. Editing the search keeps the two
 cards visible and asks the rider to search again.
+Search URLs preserve the selected places or stops, date, and optional departure time so a link can
+open the same local results. The date and time controls are separate pills, and the results card
+reveals earlier or later journeys in small groups without leaving the page.

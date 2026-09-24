@@ -55,7 +55,15 @@ boarding before alighting and GTFS pickup/drop-off permissions applied. The sele
 whole local day, including departures earlier today. Trips scheduled on the previous service date
 are also considered when their GTFS stop time is `24:00` or later. A calendar exception overrides
 the weekly rule. The result card offers alternative matching stops on the same trip. Its default is
-the earliest valid boarding and then the earliest reachable alighting.
+the earliest valid boarding, or the first boarding at or after an optional departure time, followed
+by the earliest reachable alighting. The full local result is split into four-card visual pages:
+earlier and later controls reveal adjacent groups without another data request. A trip appears only
+once even when it has several matching boarding stops.
+
+The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history on submit.
+It resolves those IDs against the checked-in place and stop choices when a link loads or browser
+history changes. `jerez` is the short public slug for the local `jerez-de-la-frontera` place ID;
+both forms are accepted. Invalid or incomplete links do not run a journey search.
 
 The current local ZIP has 1,249 Bay trips, 16,150 timed stop visits, and 114 used weekly calendars.
 The weekly calendars span 2021-06-01 through 2026-12-31; that span bounds the travel date input.

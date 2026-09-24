@@ -30,6 +30,13 @@ export interface DirectJourney {
   boardings: BoardingChoice[];
 }
 
+/** One trip card with the boarding that places it in a time-anchored result list. */
+export interface TimedJourney {
+  journey: DirectJourney;
+  boardingIndex: number;
+  departureMinute: number;
+}
+
 /** Return today's calendar date in Cádiz even when the browser is in another time zone. */
 export function madridToday(now = new Date()): string {
   const parts = new Intl.DateTimeFormat('en', {
@@ -138,6 +145,34 @@ export function findDirectJourneys(
   return journeys.sort(
     (a, b) => a.boardings[0]!.departureMinute - b.boardings[0]!.departureMinute || a.id.localeCompare(b.id),
   );
+}
+
+/** Split complete local results around an empty or validated HH:mm time without duplicating a trip card. */
+export function splitDirectJourneys(
+  journeys: readonly DirectJourney[],
+  departAfter: string,
+): { earlier: TimedJourney[]; later: TimedJourney[] } {
+  const cutoff = departAfter === '' ? 0 : Number(departAfter.slice(0, 2)) * 60 + Number(departAfter.slice(3, 5));
+  const earlier: TimedJourney[] = [];
+  const later: TimedJourney[] = [];
+
+  for (const journey of journeys) {
+    // A place can include several boarding stops on one trip. Display the first one at or after
+    // the requested time, but retain the other choices inside the same card.
+    const boardingIndex = journey.boardings.findIndex((boarding) => boarding.departureMinute >= cutoff);
+    if (boardingIndex >= 0) {
+      later.push({ journey, boardingIndex, departureMinute: journey.boardings[boardingIndex]!.departureMinute });
+    } else {
+      earlier.push({ journey, boardingIndex: 0, departureMinute: journey.boardings[0]!.departureMinute });
+    }
+  }
+
+  /** Order the cards by their displayed default boarding, then by their stable trip ID. */
+  function byDeparture(first: TimedJourney, second: TimedJourney): number {
+    return first.departureMinute - second.departureMinute || first.journey.id.localeCompare(second.journey.id);
+  }
+
+  return { earlier: earlier.sort(byDeparture), later: later.sort(byDeparture) };
 }
 
 /** Display an absolute trip minute as a clock time, wrapping at midnight. */

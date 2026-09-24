@@ -1,19 +1,74 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { DirectJourneyResults, type JourneySearchResult } from '../components/DirectJourneyResults';
 import { Icon } from '../components/Icon';
-import { TripLocationPicker } from '../components/TripLocationPicker';
-import { findDirectJourneys } from '../data/direct-journeys.ts';
-import type { LocationOption } from '../data/location-search.ts';
-import { useNetworkDataset } from '../data/use-network-dataset.ts';
+import { TripLocationPicker, type TripSearchDraft } from '../components/TripLocationPicker';
+import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
+import { createLocationOptions, type LocationOption } from '../data/location-search.ts';
+import type { NetworkDataset } from '../data/network-schema.ts';
+import { places } from '../data/places.ts';
+import { resolveSearchUrl, searchQuery } from '../data/search-url.ts';
+import { useNetworkDataset, type NetworkDatasetState } from '../data/use-network-dataset.ts';
+
+/** Search the checked-in timetable and retain the criteria needed by the result card. */
+function localSearch(
+  dataset: NetworkDataset,
+  date: string,
+  origin: LocationOption,
+  destination: LocationOption,
+  departAfter: string,
+): JourneySearchResult {
+  return {
+    originName: origin.name,
+    destinationName: destination.name,
+    departAfter,
+    journeys: findDirectJourneys(dataset, date, origin, destination),
+  };
+}
+
+/** Remount search state only when the network loads or browser history selects another URL. */
+export function HomePage() {
+  const networkState = useNetworkDataset();
+  const [historyVersion, setHistoryVersion] = useState(0);
+
+  useEffect(() => {
+    /** Restore the URL's submitted criteria when browser Back or Forward is used. */
+    function restoreHistorySearch() {
+      setHistoryVersion((version) => version + 1);
+    }
+    window.addEventListener('popstate', restoreHistorySearch);
+    return () => window.removeEventListener('popstate', restoreHistorySearch);
+  }, []);
+
+  return <SearchContent key={`${networkState.status}:${historyVersion}`} networkState={networkState} />;
+}
 
 /** Put the search beside the introduction at first, then beside its own results card. */
-export function HomePage() {
+function SearchContent({ networkState }: { networkState: NetworkDatasetState }) {
   const { t } = useTranslation();
-  const networkState = useNetworkDataset();
-  const [hasSearched, setHasSearched] = useState(false);
-  const [result, setResult] = useState<JourneySearchResult | null>(null);
+  const options = useMemo(
+    () => (networkState.status === 'ready' ? createLocationOptions(places, networkState.dataset) : []),
+    [networkState],
+  );
+  // This component remounts after data loading or history navigation, so URL values seed state once.
+  const restored =
+    networkState.status === 'ready'
+      ? resolveSearchUrl(window.location.search, options, networkState.dataset.coverage, madridToday())
+      : null;
+  const [draft, setDraft] = useState<TripSearchDraft>(() => ({
+    origin: { text: restored?.origin?.name ?? '', choice: restored?.origin ?? null },
+    destination: { text: restored?.destination?.name ?? '', choice: restored?.destination ?? null },
+    date: restored?.date ?? madridToday(),
+    departAfter: restored?.departAfter ?? '',
+  }));
+  const [urlError, setUrlError] = useState(restored?.invalid ?? false);
+  const [hasSearched, setHasSearched] = useState(restored?.complete ?? false);
+  const [result, setResult] = useState<JourneySearchResult | null>(() =>
+    restored?.complete && restored.origin !== null && restored.destination !== null && networkState.status === 'ready'
+      ? localSearch(networkState.dataset, restored.date, restored.origin, restored.destination, restored.departAfter)
+      : null,
+  );
   const [searchNumber, setSearchNumber] = useState(0);
   const resultsRef = useRef<HTMLElement>(null);
 
@@ -33,13 +88,20 @@ export function HomePage() {
   }
 
   /** Search local data and animate the first switch from introduction to results when supported. */
-  function handleSearch(date: string, origin: LocationOption, destination: LocationOption) {
-    if (networkState.status !== 'ready') return;
-    const nextResult: JourneySearchResult = {
-      originName: origin.name,
-      destinationName: destination.name,
-      journeys: findDirectJourneys(networkState.dataset, date, origin, destination),
-    };
+  function handleSearch() {
+    if (networkState.status !== 'ready' || draft.origin.choice === null || draft.destination.choice === null) return;
+    const nextResult = localSearch(
+      networkState.dataset,
+      draft.date,
+      draft.origin.choice,
+      draft.destination.choice,
+      draft.departAfter,
+    );
+    const query = searchQuery(draft.origin.choice, draft.destination.choice, draft.date, draft.departAfter);
+    if (query !== window.location.search) {
+      window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
+    }
+    setUrlError(false);
 
     /** Commit all related state together so the browser captures one complete new layout. */
     function showResult() {
@@ -59,6 +121,13 @@ export function HomePage() {
       showResult();
       revealResults();
     }
+  }
+
+  /** Keep both cards after an edit while asking for another deliberate submission. */
+  function handleDraftChange(nextDraft: TripSearchDraft) {
+    setDraft(nextDraft);
+    setResult(null);
+    setUrlError(false);
   }
 
   return (
@@ -90,7 +159,14 @@ export function HomePage() {
       </section>
 
       <div className="journey-search-transition min-w-0">
-        <TripLocationPicker state={networkState} onSearch={handleSearch} onDraftChange={() => setResult(null)} />
+        <TripLocationPicker
+          state={networkState}
+          options={options}
+          draft={draft}
+          onSearch={handleSearch}
+          onDraftChange={handleDraftChange}
+          urlError={urlError}
+        />
       </div>
       {hasSearched && networkState.status === 'ready' && (
         <DirectJourneyResults key={searchNumber} dataset={networkState.dataset} result={result} panelRef={resultsRef} />

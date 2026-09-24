@@ -43,6 +43,8 @@
 
 @layer components {
   .journey-search-transition {
+    position: relative;
+    z-index: 1;
     view-transition-name: journey-search;
   }
 

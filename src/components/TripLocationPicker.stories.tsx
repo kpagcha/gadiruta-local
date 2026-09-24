@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useMemo, useState } from 'react';
+import { createLocationOptions } from '../data/location-search.ts';
+import { places } from '../data/places.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
-import { TripLocationPicker } from './TripLocationPicker';
+import { TripLocationPicker, type TripSearchDraft } from './TripLocationPicker';
 
 /** A small valid local network for inspecting the picker without a request. */
 const readyState = {
@@ -70,20 +73,54 @@ const readyState = {
 const meta = {
   title: 'Components/Trip location picker',
   component: TripLocationPicker,
+  args: {
+    options: [],
+    draft: {
+      origin: { text: '', choice: null },
+      destination: { text: '', choice: null },
+      date: '2026-09-24',
+      departAfter: '',
+    },
+    onSearch: ignoreStorySearch,
+    onDraftChange: ignoreStoryDraft,
+    urlError: false,
+  },
+  render: ({ state }) => <PickerStory state={state} />,
 } satisfies Meta<typeof TripLocationPicker>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Keep the isolated form story interactive without changing page-level results. */
-function ignoreStoryInteraction() {}
+/** Keep a standalone form story interactive without running a page search. */
+function PickerStory({ state }: { state: NetworkDatasetState }) {
+  const [draft, setDraft] = useState<TripSearchDraft>({
+    origin: { text: '', choice: null },
+    destination: { text: '', choice: null },
+    date: '2026-09-24',
+    departAfter: '',
+  });
+  const options = useMemo(
+    () => (state.status === 'ready' ? createLocationOptions(places, state.dataset) : []),
+    [state],
+  );
+  return (
+    <TripLocationPicker
+      state={state}
+      options={options}
+      draft={draft}
+      onSearch={ignoreStorySearch}
+      onDraftChange={setDraft}
+      urlError={false}
+    />
+  );
+}
 
-export const Ready: Story = {
-  args: { state: readyState, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
-};
-export const Loading: Story = {
-  args: { state: { status: 'loading' }, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
-};
-export const Error: Story = {
-  args: { state: { status: 'error' }, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
-};
+/** Storybook cannot show a page-level result from its isolated picker. */
+function ignoreStorySearch() {}
+
+/** Supply a complete default callback for the component's Storybook controls. */
+function ignoreStoryDraft() {}
+
+export const Ready: Story = { args: { state: readyState } };
+export const Loading: Story = { args: { state: { status: 'loading' } } };
+export const Error: Story = { args: { state: { status: 'error' } } };

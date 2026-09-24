@@ -1,15 +1,26 @@
-import { useMemo, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
+import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { createLocationOptions, searchLocations, type LocationOption } from '../data/location-search.ts';
+import { searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
-import { places } from '../data/places.ts';
+import { isCalendarDate } from '../data/calendar-date.ts';
+import { isClockTime } from '../data/search-url.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
+import { JourneyDatePill } from './JourneyDatePill';
+import { JourneyTimePill } from './JourneyTimePill';
 
 /** Text being edited and the exact choice, if the rider selected one. */
-interface LocationFieldValue {
+export interface LocationFieldValue {
   text: string;
   choice: LocationOption | null;
+}
+
+/** The editable inputs for one direct-journey search. */
+export interface TripSearchDraft {
+  origin: LocationFieldValue;
+  destination: LocationFieldValue;
+  date: string;
+  departAfter: string;
 }
 
 /** One of the two identical search controls in the trip picker. */
@@ -164,35 +175,37 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
 /** Let a rider select a place or exact stop independently for each end of a future direct trip. */
 export function TripLocationPicker({
   state,
+  options,
+  draft,
   onSearch,
   onDraftChange,
+  urlError,
 }: {
   state: NetworkDatasetState;
-  onSearch: (date: string, origin: LocationOption, destination: LocationOption) => void;
-  onDraftChange: () => void;
+  options: readonly LocationOption[];
+  draft: TripSearchDraft;
+  onSearch: () => void;
+  onDraftChange: (draft: TripSearchDraft) => void;
+  urlError: boolean;
 }) {
   const { t } = useTranslation();
-  const [endpoints, setEndpoints] = useState<{ origin: LocationFieldValue; destination: LocationFieldValue }>({
-    origin: { text: '', choice: null },
-    destination: { text: '', choice: null },
-  });
-  const [travelDate, setTravelDate] = useState(madridToday);
-  const options = useMemo(
-    () => (state.status === 'ready' ? createLocationOptions(places, state.dataset) : []),
-    [state],
-  );
   const disabled = state.status !== 'ready';
   const coverage = state.status === 'ready' ? state.dataset.coverage : null;
-  const dateValid = coverage !== null && travelDate >= coverage.startDate && travelDate <= coverage.endDate;
+  const dateValid =
+    coverage !== null &&
+    isCalendarDate(draft.date) &&
+    draft.date >= coverage.startDate &&
+    draft.date <= coverage.endDate;
   const sameExactStop =
-    endpoints.origin.choice?.kind === 'stop' &&
-    endpoints.destination.choice?.kind === 'stop' &&
-    endpoints.origin.choice.id === endpoints.destination.choice.id;
+    draft.origin.choice?.kind === 'stop' &&
+    draft.destination.choice?.kind === 'stop' &&
+    draft.origin.choice.id === draft.destination.choice.id;
   const canSearch =
     state.status === 'ready' &&
     dateValid &&
-    endpoints.origin.choice !== null &&
-    endpoints.destination.choice !== null &&
+    (draft.departAfter === '' || isClockTime(draft.departAfter)) &&
+    draft.origin.choice !== null &&
+    draft.destination.choice !== null &&
     !sameExactStop;
 
   return (
@@ -206,14 +219,7 @@ export function TripLocationPicker({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (
-            !canSearch ||
-            state.status !== 'ready' ||
-            endpoints.origin.choice === null ||
-            endpoints.destination.choice === null
-          )
-            return;
-          onSearch(travelDate, endpoints.origin.choice, endpoints.destination.choice);
+          if (canSearch) onSearch();
         }}
       >
         <div>
@@ -223,21 +229,19 @@ export function TripLocationPicker({
             label={t('search.origin')}
             placeholder={t('search.originPlaceholder')}
             onChange={(value) => {
-              setEndpoints((current) => ({ ...current, origin: value }));
-              onDraftChange();
+              onDraftChange({ ...draft, origin: value });
             }}
             options={options}
-            value={endpoints.origin}
+            value={draft.origin}
           />
           <div className="flex min-h-16 items-center justify-end gap-3">
             <span className="h-px flex-1 translate-y-3.5 bg-line-subtle" aria-hidden="true" />
             <button
               aria-label={t('search.swap')}
               className="grid size-11 shrink-0 translate-y-3.5 place-items-center rounded-full border border-line bg-paper text-accent transition-colors hover:bg-surface-hover disabled:opacity-45"
-              disabled={disabled || (!endpoints.origin.text && !endpoints.destination.text)}
+              disabled={disabled || (!draft.origin.text && !draft.destination.text)}
               onClick={() => {
-                setEndpoints(({ origin, destination }) => ({ origin: destination, destination: origin }));
-                onDraftChange();
+                onDraftChange({ ...draft, origin: draft.destination, destination: draft.origin });
               }}
               title={t('search.swap')}
               type="button"
@@ -251,11 +255,10 @@ export function TripLocationPicker({
             label={t('search.destination')}
             placeholder={t('search.destinationPlaceholder')}
             onChange={(value) => {
-              setEndpoints((current) => ({ ...current, destination: value }));
-              onDraftChange();
+              onDraftChange({ ...draft, destination: value });
             }}
             options={options}
-            value={endpoints.destination}
+            value={draft.destination}
           />
         </div>
         {state.status === 'loading' && (
@@ -268,23 +271,27 @@ export function TripLocationPicker({
             {t('search.error')}
           </p>
         )}
+        {urlError && state.status === 'ready' && (
+          <p className="mt-4 text-sm text-warning" role="alert">
+            {t('search.invalidLink')}
+          </p>
+        )}
         <div className="mt-7 border-t border-line pt-5">
-          <label className="block text-sm font-[650]" htmlFor="travel-date">
-            {t('search.travelDate')}
-          </label>
-          <input
-            id="travel-date"
-            type="date"
-            className="mt-2 min-h-11 w-full rounded-xl border border-line-input bg-surface-input px-4 text-ink"
-            min={coverage?.startDate}
-            max={coverage?.endDate}
-            value={travelDate}
-            onChange={(event) => {
-              setTravelDate(event.target.value);
-              onDraftChange();
-            }}
-            disabled={disabled}
-          />
+          <p className="block text-sm font-[650]">{t('search.travelDate')}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <JourneyDatePill
+              value={draft.date}
+              onChange={(date) => onDraftChange({ ...draft, date })}
+              minimum={coverage?.startDate ?? draft.date}
+              maximum={coverage?.endDate ?? draft.date}
+              disabled={disabled}
+            />
+            <JourneyTimePill
+              value={draft.departAfter}
+              onChange={(departAfter) => onDraftChange({ ...draft, departAfter })}
+              disabled={disabled}
+            />
+          </div>
           {coverage !== null && madridToday() > coverage.endDate && (
             <p className="mt-3 text-sm text-warning" role="alert">
               {t('search.expiredData', { date: coverage.endDate })}
