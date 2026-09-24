@@ -275,8 +275,7 @@ export function TripLocationPicker({
           </p>
         )}
         <div className="mt-7 border-t border-line pt-5">
-          <p className="block text-sm font-[650]">{t('search.travelDate')}</p>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             <JourneyDatePill
               value={draft.date}
               onChange={(date) => onDraftChange({ ...draft, date })}

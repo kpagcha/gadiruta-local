@@ -21,8 +21,6 @@ function localSearch(
   departAfter: string,
 ): JourneySearchResult {
   return {
-    originName: origin.name,
-    destinationName: destination.name,
     departAfter,
     journeys: findDirectJourneys(dataset, date, origin, destination),
   };

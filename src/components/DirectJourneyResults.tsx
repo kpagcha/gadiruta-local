@@ -4,10 +4,8 @@ import { clockTime, splitDirectJourneys, type DirectJourney } from '../data/dire
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 
-/** A submitted search and the labels needed to identify its results. */
+/** A submitted search and the departure cutoff used to divide its journeys. */
 export interface JourneySearchResult {
-  originName: string;
-  destinationName: string;
   departAfter: string;
   journeys: DirectJourney[];
 }
@@ -137,57 +135,47 @@ export function DirectJourneyResults({
         <p className="mt-4 text-sm text-muted" role="status">
           {t('journey.searchAgain')}
         </p>
+      ) : total === 0 ? (
+        <p className="mt-4 text-sm text-muted" role="status">
+          {t('journey.empty')}
+        </p>
       ) : (
         <>
-          <p className="mt-1 text-sm wrap-anywhere text-muted">
-            {t('journey.resultsRoute', { origin: result.originName, destination: result.destinationName })}
-          </p>
-          {total === 0 ? (
+          {hasEarlier && (
+            <button
+              type="button"
+              className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
+              onClick={() => setEarlierCount((count) => count + 4)}
+            >
+              <span aria-hidden="true">↑</span>
+              {t('journey.earlierDepartures')}
+            </button>
+          )}
+          {visible.length === 0 ? (
             <p className="mt-4 text-sm text-muted" role="status">
-              {t('journey.empty')}
+              {t('journey.noLater')}
             </p>
           ) : (
-            <>
-              <p className="mt-2 text-sm text-muted" role="status">
-                {t('journey.showingCount', { visible: visible.length, total })}
-              </p>
-              {hasEarlier && (
-                <button
-                  type="button"
-                  className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
-                  onClick={() => setEarlierCount((count) => count + 4)}
-                >
-                  <span aria-hidden="true">↑</span>
-                  {t('journey.earlierDepartures')}
-                </button>
-              )}
-              {visible.length === 0 ? (
-                <p className="mt-4 text-sm text-muted" role="status">
-                  {t('journey.noLater')}
-                </p>
-              ) : (
-                <div className="mt-4 grid gap-4">
-                  {visible.map(({ journey, boardingIndex }) => (
-                    <JourneyCard
-                      key={journey.id}
-                      journey={journey}
-                      dataset={dataset}
-                      defaultBoardingIndex={boardingIndex}
-                    />
-                  ))}
-                </div>
-              )}
-              {hasLater && (
-                <button
-                  type="button"
-                  className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
-                  onClick={() => setLaterCount((count) => count + 4)}
-                >
-                  {t('journey.laterDepartures')}
-                  <span aria-hidden="true">↓</span>
-                </button>
-              )}
-            </>
+            <div className="mt-4 grid gap-4">
+              {visible.map(({ journey, boardingIndex }) => (
+                <JourneyCard
+                  key={journey.id}
+                  journey={journey}
+                  dataset={dataset}
+                  defaultBoardingIndex={boardingIndex}
+                />
+              ))}
+            </div>
+          )}
+          {hasLater && (
+            <button
+              type="button"
+              className="mt-3 flex min-h-11 items-center gap-1 text-sm font-[650] text-accent hover:underline"
+              onClick={() => setLaterCount((count) => count + 4)}
+            >
+              {t('journey.laterDepartures')}
+              <span aria-hidden="true">↓</span>
+            </button>
           )}
         </>
       )}

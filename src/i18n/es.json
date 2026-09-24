@@ -55,10 +55,8 @@
   },
   "journey": {
     "results": "Trayectos directos",
-    "resultsRoute": "{{origin}} a {{destination}}",
     "searchAgain": "Busca de nuevo para ver los trayectos actualizados.",
     "empty": "No hay servicios directos para esta fecha y estos lugares.",
-    "showingCount": "Mostrando {{visible}} de {{total}} servicios directos",
     "earlierDepartures": "Salidas anteriores",
     "laterDepartures": "Salidas posteriores",
     "noLater": "No hay salidas a partir de esta hora. Muestra salidas anteriores para ver más.",

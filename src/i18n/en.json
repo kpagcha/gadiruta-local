@@ -55,10 +55,8 @@
   },
   "journey": {
     "results": "Direct journeys",
-    "resultsRoute": "{{origin}} to {{destination}}",
     "searchAgain": "Search again to see updated journeys.",
     "empty": "No direct services found for this date and these locations.",
-    "showingCount": "Showing {{visible}} of {{total}} direct services",
     "earlierDepartures": "Earlier departures",
     "laterDepartures": "Later departures",
     "noLater": "No departures at or after this time. Show earlier departures to see more.",
