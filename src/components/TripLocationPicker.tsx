@@ -1,9 +1,7 @@
 import { useMemo, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createLocationOptions, searchLocations, type LocationOption } from '../data/location-search.ts';
-import { clockTime, findDirectJourneys, madridToday, type DirectJourney } from '../data/direct-journeys.ts';
-import { getRouteLabel } from '../data/network.ts';
-import type { NetworkDataset } from '../data/network-schema.ts';
+import { madridToday } from '../data/direct-journeys.ts';
 import { places } from '../data/places.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
@@ -23,88 +21,6 @@ interface LocationFieldProps {
   disabled: boolean;
   value: LocationFieldValue;
   onChange: (value: LocationFieldValue) => void;
-}
-
-/** Show one trip and allow a rider to choose another reachable stop pair on that trip. */
-function JourneyCard({ journey, dataset }: { journey: DirectJourney; dataset: NetworkDataset }) {
-  const { t } = useTranslation();
-  const [boardingIndex, setBoardingIndex] = useState(0);
-  const [alightingIndex, setAlightingIndex] = useState(0);
-  const boarding = journey.boardings[boardingIndex]!;
-  const alighting = boarding.alightings[alightingIndex]!;
-  const stopNames = new Map(dataset.stops.map((stop) => [stop.id, stop.name]));
-  const route = dataset.routes.find((route) => route.id === journey.routeId);
-  const duration = alighting.arrivalMinute - boarding.departureMinute;
-
-  return (
-    <article className="rounded-2xl border border-line bg-surface-card p-5 shadow-[var(--shadow-card)]">
-      <h4 className="text-base font-[700]">{route === undefined ? journey.routeId : getRouteLabel(route)}</h4>
-      {route?.shortName && route.longName && <p className="mt-1 text-sm text-muted">{route.longName}</p>}
-      <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-        <div>
-          {journey.boardings.length > 1 ? (
-            <label className="block font-[650]" htmlFor={`${journey.id}-board`}>
-              {t('journey.boardAt')}
-            </label>
-          ) : (
-            <span className="block font-[650]">{t('journey.boardAt')}</span>
-          )}
-          {journey.boardings.length > 1 ? (
-            <select
-              id={`${journey.id}-board`}
-              className="mt-1 min-h-11 w-full rounded-lg border border-line-input bg-surface-input px-2"
-              value={boardingIndex}
-              onChange={(event) => {
-                setBoardingIndex(Number(event.target.value));
-                setAlightingIndex(0);
-              }}
-            >
-              {journey.boardings.map((choice, index) => (
-                <option key={choice.index} value={index}>
-                  {clockTime(choice.departureMinute)} · {stopNames.get(choice.stopId)}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p className="mt-1">
-              {clockTime(boarding.departureMinute)} · {stopNames.get(boarding.stopId)}
-            </p>
-          )}
-        </div>
-        <div>
-          {boarding.alightings.length > 1 ? (
-            <label className="block font-[650]" htmlFor={`${journey.id}-alight`}>
-              {t('journey.alightAt')}
-            </label>
-          ) : (
-            <span className="block font-[650]">{t('journey.alightAt')}</span>
-          )}
-          {boarding.alightings.length > 1 ? (
-            <select
-              id={`${journey.id}-alight`}
-              className="mt-1 min-h-11 w-full rounded-lg border border-line-input bg-surface-input px-2"
-              value={alightingIndex}
-              onChange={(event) => setAlightingIndex(Number(event.target.value))}
-            >
-              {boarding.alightings.map((choice, index) => (
-                <option key={choice.index} value={index}>
-                  {clockTime(choice.arrivalMinute)} · {stopNames.get(choice.stopId)}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p className="mt-1">
-              {clockTime(alighting.arrivalMinute)} · {stopNames.get(alighting.stopId)}
-            </p>
-          )}
-        </div>
-      </div>
-      <p className="mt-4 text-sm text-muted">
-        {t('journey.duration', { count: duration })}
-        {alighting.arrivalMinute >= 1440 && ` · ${t('journey.nextDay')}`}
-      </p>
-    </article>
-  );
 }
 
 /** Render a labelled search input with keyboard-accessible place and stop suggestions. */
@@ -246,15 +162,21 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
 }
 
 /** Let a rider select a place or exact stop independently for each end of a future direct trip. */
-export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
+export function TripLocationPicker({
+  state,
+  onSearch,
+  onDraftChange,
+}: {
+  state: NetworkDatasetState;
+  onSearch: (date: string, origin: LocationOption, destination: LocationOption) => void;
+  onDraftChange: () => void;
+}) {
   const { t } = useTranslation();
   const [endpoints, setEndpoints] = useState<{ origin: LocationFieldValue; destination: LocationFieldValue }>({
     origin: { text: '', choice: null },
     destination: { text: '', choice: null },
   });
   const [travelDate, setTravelDate] = useState(madridToday);
-  const [journeys, setJourneys] = useState<DirectJourney[] | null>(null);
-  const [visibleCount, setVisibleCount] = useState(20);
   const options = useMemo(
     () => (state.status === 'ready' ? createLocationOptions(places, state.dataset) : []),
     [state],
@@ -272,12 +194,6 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
     endpoints.origin.choice !== null &&
     endpoints.destination.choice !== null &&
     !sameExactStop;
-
-  /** Clear the submitted list whenever a location, direction, or date changes. */
-  function clearJourneys() {
-    setJourneys(null);
-    setVisibleCount(20);
-  }
 
   return (
     <section
@@ -297,10 +213,7 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
             endpoints.destination.choice === null
           )
             return;
-          setJourneys(
-            findDirectJourneys(state.dataset, travelDate, endpoints.origin.choice, endpoints.destination.choice),
-          );
-          setVisibleCount(20);
+          onSearch(travelDate, endpoints.origin.choice, endpoints.destination.choice);
         }}
       >
         <div>
@@ -311,7 +224,7 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
             placeholder={t('search.originPlaceholder')}
             onChange={(value) => {
               setEndpoints((current) => ({ ...current, origin: value }));
-              clearJourneys();
+              onDraftChange();
             }}
             options={options}
             value={endpoints.origin}
@@ -324,7 +237,7 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
               disabled={disabled || (!endpoints.origin.text && !endpoints.destination.text)}
               onClick={() => {
                 setEndpoints(({ origin, destination }) => ({ origin: destination, destination: origin }));
-                clearJourneys();
+                onDraftChange();
               }}
               title={t('search.swap')}
               type="button"
@@ -339,7 +252,7 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
             placeholder={t('search.destinationPlaceholder')}
             onChange={(value) => {
               setEndpoints((current) => ({ ...current, destination: value }));
-              clearJourneys();
+              onDraftChange();
             }}
             options={options}
             value={endpoints.destination}
@@ -368,7 +281,7 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
             value={travelDate}
             onChange={(event) => {
               setTravelDate(event.target.value);
-              clearJourneys();
+              onDraftChange();
             }}
             disabled={disabled}
           />
@@ -388,34 +301,6 @@ export function TripLocationPicker({ state }: { state: NetworkDatasetState }) {
           </button>
         </div>
       </form>
-      {journeys !== null && state.status === 'ready' && (
-        <section className="mt-8" aria-live="polite" aria-labelledby="journey-results-title">
-          <h3 id="journey-results-title" className="text-xl font-[700]">
-            {t('journey.results')}
-          </h3>
-          {journeys.length === 0 ? (
-            <p className="mt-4 text-sm text-muted">{t('journey.empty')}</p>
-          ) : (
-            <>
-              <p className="mt-2 text-sm text-muted">{t('journey.resultCount', { count: journeys.length })}</p>
-              <div className="mt-4 grid gap-4">
-                {journeys.slice(0, visibleCount).map((journey) => (
-                  <JourneyCard key={journey.id} journey={journey} dataset={state.dataset} />
-                ))}
-              </div>
-              {visibleCount < journeys.length && (
-                <button
-                  type="button"
-                  className="mt-5 min-h-11 rounded-xl border border-line-input px-5 text-sm font-[650]"
-                  onClick={() => setVisibleCount((count) => count + 20)}
-                >
-                  {t('journey.showMore')}
-                </button>
-              )}
-            </>
-          )}
-        </section>
-      )}
     </section>
   );
 }

@@ -42,6 +42,30 @@
 }
 
 @layer components {
+  .journey-search-transition {
+    view-transition-name: journey-search;
+  }
+
+  .journey-results-transition {
+    view-transition-name: journey-results;
+  }
+
+  .journey-card {
+    container-type: inline-size;
+  }
+
+  @container (min-width: 28rem) {
+    .journey-card-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 53.125rem) {
+    .home-intro-transition {
+      view-transition-name: home-intro;
+    }
+  }
+
   .skip-link {
     transform: translateY(-200%);
     transition: transform 150ms ease;
@@ -49,6 +73,50 @@
 
   .skip-link:focus {
     transform: translateY(0);
+  }
+}
+
+@keyframes journey-results-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(journey-search) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(home-intro) {
+  animation: 180ms ease-out both fade-out;
+}
+
+::view-transition-new(journey-results) {
+  animation: 320ms 90ms ease-out both journey-results-enter;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(journey-search),
+  ::view-transition-old(home-intro),
+  ::view-transition-new(journey-results) {
+    animation: none;
   }
 }
 

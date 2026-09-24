@@ -75,6 +75,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Ready: Story = { args: { state: readyState } };
-export const Loading: Story = { args: { state: { status: 'loading' } } };
-export const Error: Story = { args: { state: { status: 'error' } } };
+/** Keep the isolated form story interactive without changing page-level results. */
+function ignoreStoryInteraction() {}
+
+export const Ready: Story = {
+  args: { state: readyState, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
+};
+export const Loading: Story = {
+  args: { state: { status: 'loading' }, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
+};
+export const Error: Story = {
+  args: { state: { status: 'error' }, onSearch: ignoreStoryInteraction, onDraftChange: ignoreStoryInteraction },
+};

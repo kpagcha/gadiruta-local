@@ -37,3 +37,6 @@ controls, restrained colour, and one clear task at a time. The inspiration from
 [clicks.coffee](https://clicks.coffee/) is directional, not a template to copy.
 On mobile, the origin and destination search must be visible on arrival without scrolling past
 introductory copy. Desktop can pair that search with a larger editorial introduction.
+After a search, the form stays visible beside a separate results card on desktop. On mobile, results
+follow the form, and an off-screen results card scrolls into view. Editing the search keeps the two
+cards visible and asks the rider to search again.

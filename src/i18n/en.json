@@ -42,6 +42,8 @@
   },
   "journey": {
     "results": "Direct journeys",
+    "resultsRoute": "{{origin}} to {{destination}}",
+    "searchAgain": "Search again to see updated journeys.",
     "empty": "No direct services found for this date and these locations.",
     "resultCount_one": "{{count}} direct service",
     "resultCount_other": "{{count}} direct services",

@@ -42,6 +42,8 @@
   },
   "journey": {
     "results": "Trayectos directos",
+    "resultsRoute": "{{origin}} a {{destination}}",
+    "searchAgain": "Busca de nuevo para ver los trayectos actualizados.",
     "empty": "No hay servicios directos para esta fecha y estos lugares.",
     "resultCount_one": "{{count}} servicio directo",
     "resultCount_other": "{{count}} servicios directos",

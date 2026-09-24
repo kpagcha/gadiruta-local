@@ -64,6 +64,9 @@ Browser opens index.html
   → direct-journeys.ts searches trips and calendars after date/location selection
 ```
 
+After a search, `HomePage` places the persistent form next to a separate `DirectJourneyResults`
+card on desktop, or above it on mobile. The checked-in search module still supplies the journeys.
+
 The `public/data` URL is served by Vite in development and by any ordinary static host in
 production. Browser code never imports `scripts/`, reads `data/source/`, or calls CTAN. There is no
 Gadiruta server process or runtime database. Language and theme preferences are handled in the
