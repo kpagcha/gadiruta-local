@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { calendarDays, monthKey, parseCalendarDate, shiftCalendarDate, shiftMonth } from '../data/calendar-date.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { Icon } from './Icon';
+import { JourneyPickerPill } from './JourneyPickerPill';
 
 /** Keep the visible month inside the dates supplied by the checked-in timetable. */
 function clampMonth(month: string, minimum: string, maximum: string): string {
@@ -34,7 +35,6 @@ export function JourneyDatePill({
   const [visibleMonth, setVisibleMonth] = useState(monthKey(value));
   const minimumMonth = monthKey(minimum);
   const maximumMonth = monthKey(maximum);
-  const canReset = value !== today && today >= minimum && today <= maximum;
   const dateCovered = value >= minimum && value <= maximum;
   const dateLabel =
     value === today
@@ -110,11 +110,22 @@ export function JourneyDatePill({
 
   return (
     <div ref={pickerRef} className="relative">
-      <div className="inline-flex min-h-12 items-center rounded-full border border-line-input bg-surface-input p-1 text-sm font-[650]">
+      <JourneyPickerPill
+        previous={{
+          label: t('search.previousDay'),
+          disabled: disabled || !dateCovered || value <= minimum,
+          onClick: () => onChange(shiftCalendarDate(value, -1)),
+        }}
+        next={{
+          label: t('search.nextDay'),
+          disabled: disabled || !dateCovered || value >= maximum,
+          onClick: () => onChange(shiftCalendarDate(value, 1)),
+        }}
+      >
         <button
           ref={triggerRef}
           type="button"
-          className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink transition-colors hover:bg-surface-hover disabled:opacity-50"
+          className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-50"
           aria-controls={isOpen ? dialogId : undefined}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
@@ -122,35 +133,10 @@ export function JourneyDatePill({
           disabled={disabled}
           onClick={togglePicker}
         >
-          <Icon name="calendar" size={17} className="text-accent" />
+          <Icon name="calendar" size={18} className="text-accent" />
           {dateLabel}
         </button>
-        {canReset && !disabled && (
-          <button
-            type="button"
-            className="grid size-10 place-items-center rounded-full text-muted hover:bg-surface-hover"
-            aria-label={t('search.resetDate')}
-            title={t('search.resetDate')}
-            onClick={() => onChange(today)}
-          >
-            <Icon name="close" size={16} />
-          </button>
-        )}
-        <span className="mx-0.5 h-4 w-px bg-line-input" aria-hidden="true" />
-        {([-1, 1] as const).map((direction) => (
-          <button
-            key={direction}
-            type="button"
-            className="grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
-            aria-label={t(direction === -1 ? 'search.previousDay' : 'search.nextDay')}
-            title={t(direction === -1 ? 'search.previousDay' : 'search.nextDay')}
-            disabled={disabled || !dateCovered || (direction === -1 ? value <= minimum : value >= maximum)}
-            onClick={() => onChange(shiftCalendarDate(value, direction))}
-          >
-            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={16} />
-          </button>
-        ))}
-      </div>
+      </JourneyPickerPill>
 
       {isOpen && (
         <div

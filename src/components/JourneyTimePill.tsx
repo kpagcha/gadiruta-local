@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { currentMadridQuarterHour, normalizeJourneyTime, stepJourneyTime } from '../data/journey-time.ts';
 import { isClockTime } from '../data/search-url.ts';
 import { Icon } from './Icon';
+import { JourneyPickerPill } from './JourneyPickerPill';
 
 const choices = Array.from({ length: 48 }, (_, index) => {
   const minutes = index * 30;
@@ -128,68 +129,49 @@ export function JourneyTimePill({
 
   return (
     <div ref={pickerRef} className="relative" onBlur={handleBlur}>
-      <div className="inline-flex min-h-12 items-center rounded-full border border-line-input bg-surface-input p-0.5 text-sm font-[650] focus-within:shadow-[var(--shadow-field-focus)]">
-        <Icon name="clock" size={16} className="ml-2 shrink-0 text-accent" />
-        <input
-          ref={inputRef}
-          aria-activedescendant={isOpen && activeIndex !== null ? `${listId}-${activeIndex}` : undefined}
-          aria-controls={isOpen ? listId : undefined}
-          aria-expanded={isOpen}
-          aria-haspopup="listbox"
-          aria-label={t('search.departAfter')}
-          autoComplete="off"
-          className={`min-h-10 min-w-0 bg-transparent px-1.5 text-sm font-[650] text-ink tabular-nums outline-none placeholder:text-muted disabled:opacity-50 ${
-            value === '' ? 'w-[4.75rem]' : 'w-[3.5rem]'
-          }`}
-          disabled={disabled}
-          maxLength={5}
-          onChange={(event) => {
-            onChange(date, event.target.value, false);
-            setActiveIndex(null);
-            setIsOpen(true);
-            setIsEditing(true);
-          }}
-          onClick={() => setIsOpen(true)}
-          onFocus={() => setIsOpen(true)}
-          onKeyDown={handleKeyDown}
-          placeholder={t('search.anyTime')}
-          role="combobox"
-          type="text"
-          value={value}
-        />
-        {value !== '' && !disabled && (
-          <button
-            aria-label={t('search.clearTime')}
-            className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-ink"
-            onClick={() => {
-              onChange(date, '', true);
-              setIsOpen(false);
+      <JourneyPickerPill
+        previous={{
+          label: t('search.earlierTime'),
+          disabled: disabled || (normalizedTime === '' ? !dateCovered : earlier === null),
+          onClick: () => step(-1),
+        }}
+        next={{
+          label: t('search.laterTime'),
+          disabled: disabled || (normalizedTime === '' ? !dateCovered : later === null),
+          onClick: () => step(1),
+        }}
+      >
+        <span className="inline-flex min-h-10 items-center gap-2 px-3">
+          <Icon name="clock" size={18} className="shrink-0 text-accent" />
+          <input
+            ref={inputRef}
+            aria-activedescendant={isOpen && activeIndex !== null ? `${listId}-${activeIndex}` : undefined}
+            aria-controls={isOpen ? listId : undefined}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
+            aria-label={t('search.departAfter')}
+            autoComplete="off"
+            className={`min-h-10 min-w-0 bg-transparent p-0 text-sm font-[650] text-ink tabular-nums outline-none placeholder:text-muted disabled:opacity-50 ${
+              value === '' ? 'w-[4.75rem]' : 'w-[3.5rem]'
+            }`}
+            disabled={disabled}
+            maxLength={5}
+            onChange={(event) => {
+              onChange(date, event.target.value, false);
               setActiveIndex(null);
-              setIsEditing(false);
+              setIsOpen(true);
+              setIsEditing(true);
             }}
-            title={t('search.clearTime')}
-            type="button"
-          >
-            <Icon name="close" size={14} />
-          </button>
-        )}
-        <span className="mx-1 h-4 w-px bg-line-input" aria-hidden="true" />
-        {([-1, 1] as const).map((direction) => (
-          <button
-            key={direction}
-            aria-label={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
-            className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition-colors hover:text-accent disabled:opacity-35"
-            disabled={
-              disabled || (normalizedTime === '' ? !dateCovered : direction === -1 ? earlier === null : later === null)
-            }
-            onClick={() => step(direction)}
-            title={t(direction === -1 ? 'search.earlierTime' : 'search.laterTime')}
-            type="button"
-          >
-            <Icon name={direction === -1 ? 'chevronLeft' : 'chevronRight'} size={14} />
-          </button>
-        ))}
-      </div>
+            onClick={() => setIsOpen(true)}
+            onFocus={() => setIsOpen(true)}
+            onKeyDown={handleKeyDown}
+            placeholder={t('search.anyTime')}
+            role="combobox"
+            type="text"
+            value={value}
+          />
+        </span>
+      </JourneyPickerPill>
 
       {isOpen && !disabled && (
         <div
