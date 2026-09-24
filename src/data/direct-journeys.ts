@@ -4,7 +4,7 @@
  * no network requests and leaves display formatting to the interface.
  */
 import type { LocationOption } from './location-search.ts';
-import type { NetworkDataset, NetworkStopTime } from './network-schema.ts';
+import type { NetworkDataset, NetworkStopTime, NetworkTrip } from './network-schema.ts';
 
 /** A reachable destination on the same trip after one chosen boarding visit. */
 export interface AlightingChoice {
@@ -79,6 +79,24 @@ function matchesLocation(location: LocationOption, stopId: string, placeByStop: 
 /** A GTFS pickup or drop-off value of one forbids the corresponding action. */
 function permitsAction(time: NetworkStopTime, action: 'pickup' | 'dropOff'): boolean {
   return (action === 'pickup' ? time.pickupType : time.dropOffType) !== 1;
+}
+
+/** List the stops where this trip can end after the chosen boarding visit. */
+export function alightableTripStopIndices(trip: NetworkTrip, boardingIndex: number): number[] {
+  const boarding = trip.stopTimes[boardingIndex];
+  if (boarding === undefined) return [];
+  return trip.stopTimes.flatMap((time, index) =>
+    index > boardingIndex && permitsAction(time, 'dropOff') && time.arrivalMinutes >= boarding.departureMinutes
+      ? [index]
+      : [],
+  );
+}
+
+/** List pickup stops that have at least one later stop where the rider can leave the trip. */
+export function boardableTripStopIndices(trip: NetworkTrip): number[] {
+  return trip.stopTimes.flatMap((time, index) =>
+    permitsAction(time, 'pickup') && alightableTripStopIndices(trip, index).length > 0 ? [index] : [],
+  );
 }
 
 /** Find each direct trip occurrence whose boarding lies within the selected full calendar day. */

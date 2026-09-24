@@ -1,10 +1,17 @@
+import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
-import { clockTime, splitDirectJourneys, type DirectJourney } from '../data/direct-journeys.ts';
+import {
+  alightableTripStopIndices,
+  boardableTripStopIndices,
+  clockTime,
+  splitDirectJourneys,
+  type DirectJourney,
+} from '../data/direct-journeys.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { Icon, type IconName } from './Icon';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
 
 /** A submitted search and the departure cutoff used to divide its journeys. */
@@ -22,6 +29,45 @@ function routeIcon(type: number | undefined): IconName {
   return 'route';
 }
 
+/** Show one stop visit and highlight it when it is selected on this trip. */
+function StopTimelineOption({
+  index,
+  count,
+  time,
+  name,
+  selected,
+  selectable,
+}: {
+  index: number;
+  count: number;
+  time: string;
+  name: string;
+  selected: boolean;
+  selectable: boolean;
+}) {
+  return (
+    <SelectPrimitive.Item
+      value={String(index)}
+      label={name}
+      disabled={!selectable}
+      className={`flex min-h-9 w-full items-stretch rounded-lg px-2 py-1.5 outline-none ${selected ? 'font-[700] text-accent' : ''} ${selectable ? 'cursor-pointer hover:text-accent-strong data-[highlighted]:text-accent-strong' : 'cursor-default text-muted'}`}
+    >
+      <SelectPrimitive.ItemText className="grid min-w-0 flex-1 grid-cols-[3rem_1rem_minmax(0,1fr)] items-start gap-x-2 leading-5">
+        <span className="tabular-nums">{time}</span>
+        <span aria-hidden="true" className="relative self-stretch">
+          <span
+            className={`absolute left-1/2 w-0.5 -translate-x-1/2 bg-line-brand ${index === 0 ? 'top-2.5' : '-top-2'} ${index === count - 1 ? 'bottom-[calc(100%-0.625rem)]' : '-bottom-2'}`}
+          />
+          <span
+            className={`absolute top-[5px] left-1/2 size-2.5 -translate-x-1/2 rounded-full border-2 ${selected ? 'border-accent bg-accent' : 'border-icon-muted bg-surface-card'}`}
+          />
+        </span>
+        <span className="min-w-0 wrap-anywhere">{name}</span>
+      </SelectPrimitive.ItemText>
+    </SelectPrimitive.Item>
+  );
+}
+
 /** Show one trip and allow a rider to choose another reachable stop pair on that trip. */
 function JourneyCard({
   journey,
@@ -33,13 +79,20 @@ function JourneyCard({
   defaultBoardingIndex: number;
 }) {
   const { t } = useTranslation();
-  const [boardingIndex, setBoardingIndex] = useState(defaultBoardingIndex);
-  const [alightingIndex, setAlightingIndex] = useState(0);
-  const boarding = journey.boardings[boardingIndex]!;
-  const alighting = boarding.alightings[alightingIndex]!;
+  const initialBoarding = journey.boardings[defaultBoardingIndex]!;
+  const [boardingIndex, setBoardingIndex] = useState(initialBoarding.index);
+  const [alightingIndex, setAlightingIndex] = useState(initialBoarding.alightings[0]!.index);
   const stopNames = new Map(dataset.stops.map((stop) => [stop.id, stop.name]));
   const route = dataset.routes.find((route) => route.id === journey.routeId);
-  const duration = alighting.arrivalMinute - boarding.departureMinute;
+  const trip = dataset.trips.find((trip) => trip.id === journey.tripId)!;
+  const boarding = trip.stopTimes[boardingIndex]!;
+  const alighting = trip.stopTimes[alightingIndex]!;
+  // The journey's recorded boarding time gives every trip visit the same service-day offset.
+  const firstBoarding = journey.boardings[0]!;
+  const minuteOffset = firstBoarding.departureMinute - trip.stopTimes[firstBoarding.index]!.departureMinutes;
+  const boardableIndices = boardableTripStopIndices(trip);
+  const alightableIndices = alightableTripStopIndices(trip, boardingIndex);
+  const duration = alighting.arrivalMinutes - boarding.departureMinutes;
   const hasLongNameTooltip = Boolean(route?.shortName && route.longName);
   const lineChip = (
     <span
@@ -69,35 +122,46 @@ function JourneyCard({
         <span className="text-xs text-muted">{t('journey.duration', { count: duration })}</span>
       </div>
       <div className="mt-3 flex items-center gap-3 tabular-nums">
-        <time className="text-[25px] font-[700] tracking-[-0.8px]" dateTime={clockTime(boarding.departureMinute)}>
-          {clockTime(boarding.departureMinute)}
+        <time
+          className="text-[25px] font-[700] tracking-[-0.8px]"
+          dateTime={clockTime(boarding.departureMinutes + minuteOffset)}
+        >
+          {clockTime(boarding.departureMinutes + minuteOffset)}
         </time>
         <Icon name="arrow" className="size-5 shrink-0 text-icon-muted" />
-        <time className="text-[25px] font-[700] tracking-[-0.8px]" dateTime={clockTime(alighting.arrivalMinute)}>
-          {clockTime(alighting.arrivalMinute)}
+        <time
+          className="text-[25px] font-[700] tracking-[-0.8px]"
+          dateTime={clockTime(alighting.arrivalMinutes + minuteOffset)}
+        >
+          {clockTime(alighting.arrivalMinutes + minuteOffset)}
         </time>
       </div>
-      {alighting.arrivalMinute >= 1440 && <p className="mt-1 text-xs text-muted">{t('journey.nextDay')}</p>}
+      {alighting.arrivalMinutes + minuteOffset >= 1440 && (
+        <p className="mt-1 text-xs text-muted">{t('journey.nextDay')}</p>
+      )}
       <div className="journey-card-fields mt-4 grid gap-3 text-sm">
         <div className="min-w-0">
-          {journey.boardings.length > 1 ? (
+          {boardableIndices.length > 1 ? (
             <label className="block text-xs font-[650]" htmlFor={`${journey.id}-board`}>
               {t('journey.boardAt')}
             </label>
           ) : (
             <span className="block text-xs font-[650]">{t('journey.boardAt')}</span>
           )}
-          {journey.boardings.length > 1 ? (
+          {boardableIndices.length > 1 ? (
             <Select
-              items={journey.boardings.map((choice, index) => ({
+              items={trip.stopTimes.map((time, index) => ({
                 value: String(index),
-                label: `${clockTime(choice.departureMinute)} · ${stopNames.get(choice.stopId) ?? choice.stopId}`,
+                label: stopNames.get(time.stopId) ?? time.stopId,
               }))}
               value={String(boardingIndex)}
-              onValueChange={(index) => {
-                if (index === null) return;
-                setBoardingIndex(Number(index));
-                setAlightingIndex(0);
+              onValueChange={(stopIndex) => {
+                if (stopIndex === null) return;
+                const nextBoardingIndex = Number(stopIndex);
+                if (!boardableIndices.includes(nextBoardingIndex)) return;
+                const nextAlightings = alightableTripStopIndices(trip, nextBoardingIndex);
+                setBoardingIndex(nextBoardingIndex);
+                if (!nextAlightings.includes(alightingIndex)) setAlightingIndex(nextAlightings[0]!);
               }}
             >
               <SelectTrigger
@@ -108,11 +172,17 @@ function JourneyCard({
                   {stopNames.get(boarding.stopId) ?? boarding.stopId}
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent>
-                {journey.boardings.map((choice, index) => (
-                  <SelectItem key={choice.index} value={String(index)}>
-                    {clockTime(choice.departureMinute)} · {stopNames.get(choice.stopId) ?? choice.stopId}
-                  </SelectItem>
+              <SelectContent wide>
+                {trip.stopTimes.map((time, index) => (
+                  <StopTimelineOption
+                    key={index}
+                    index={index}
+                    count={trip.stopTimes.length}
+                    time={clockTime(time.departureMinutes + minuteOffset)}
+                    name={stopNames.get(time.stopId) ?? time.stopId}
+                    selected={index === boardingIndex}
+                    selectable={boardableIndices.includes(index)}
+                  />
                 ))}
               </SelectContent>
             </Select>
@@ -121,22 +191,24 @@ function JourneyCard({
           )}
         </div>
         <div className="min-w-0">
-          {boarding.alightings.length > 1 ? (
+          {alightableIndices.length > 1 ? (
             <label className="block text-xs font-[650]" htmlFor={`${journey.id}-alight`}>
               {t('journey.alightAt')}
             </label>
           ) : (
             <span className="block text-xs font-[650]">{t('journey.alightAt')}</span>
           )}
-          {boarding.alightings.length > 1 ? (
+          {alightableIndices.length > 1 ? (
             <Select
-              items={boarding.alightings.map((choice, index) => ({
+              items={trip.stopTimes.map((time, index) => ({
                 value: String(index),
-                label: `${clockTime(choice.arrivalMinute)} · ${stopNames.get(choice.stopId) ?? choice.stopId}`,
+                label: stopNames.get(time.stopId) ?? time.stopId,
               }))}
               value={String(alightingIndex)}
-              onValueChange={(index) => {
-                if (index !== null) setAlightingIndex(Number(index));
+              onValueChange={(stopIndex) => {
+                if (stopIndex === null) return;
+                const nextAlightingIndex = Number(stopIndex);
+                if (alightableIndices.includes(nextAlightingIndex)) setAlightingIndex(nextAlightingIndex);
               }}
             >
               <SelectTrigger
@@ -147,11 +219,17 @@ function JourneyCard({
                   {stopNames.get(alighting.stopId) ?? alighting.stopId}
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent>
-                {boarding.alightings.map((choice, index) => (
-                  <SelectItem key={choice.index} value={String(index)}>
-                    {clockTime(choice.arrivalMinute)} · {stopNames.get(choice.stopId) ?? choice.stopId}
-                  </SelectItem>
+              <SelectContent wide>
+                {trip.stopTimes.map((time, index) => (
+                  <StopTimelineOption
+                    key={index}
+                    index={index}
+                    count={trip.stopTimes.length}
+                    time={clockTime(time.arrivalMinutes + minuteOffset)}
+                    name={stopNames.get(time.stopId) ?? time.stopId}
+                    selected={index === alightingIndex}
+                    selectable={alightableIndices.includes(index)}
+                  />
                 ))}
               </SelectContent>
             </Select>

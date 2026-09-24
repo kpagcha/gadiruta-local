@@ -9,6 +9,7 @@ export function AppTooltip({
   content,
   disabled = false,
 }: {
+  side?: 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
   align?: 'start' | 'center' | 'end';
   children: ReactElement;
   content: ReactNode;

@@ -54,9 +54,11 @@ The browser checks the version-two snapshot before searching. A direct journey u
 boarding before alighting and GTFS pickup/drop-off permissions applied. The selected date covers the
 whole local day, including departures earlier today. Trips scheduled on the previous service date
 are also considered when their GTFS stop time is `24:00` or later. A calendar exception overrides
-the weekly rule. The result card offers alternative matching stops on the same trip. Its default is
-the earliest valid boarding, or the first boarding at or after an optional departure time, followed
-by the earliest reachable alighting. The full local result is split into four-card visual pages:
+the weekly rule. The result card starts with stops matching the search, then lets riders choose any
+pair on the same trip where boarding and alighting are permitted in that order. These card choices
+do not change the search URL. The initial pair uses the earliest valid boarding, or the first
+boarding at or after an optional departure time, followed by the earliest reachable alighting. The
+full local result is split into four-card visual pages:
 earlier and later controls reveal adjacent groups without another data request. A trip appears only
 once even when it has several matching boarding stops.
 
