@@ -5,6 +5,9 @@
 import { shiftCalendarDate } from './calendar-date.ts';
 import { isClockTime } from './search-url.ts';
 
+/** The departure choices currently supported by local journey search. */
+export type DepartureMode = 'leave-now' | 'depart-at';
+
 /** Accept compact clock entry and clear values that cannot describe a time of day. */
 export function normalizeJourneyTime(value: string): string {
   const input = value.trim();
@@ -32,8 +35,8 @@ export interface SteppedJourneyTime {
   time: string;
 }
 
-/** Return the current Cádiz clock time rounded down to the previous quarter hour. */
-export function currentMadridQuarterHour(now: Date = new Date()): string {
+/** Return the current Cádiz clock time at exact whole-minute precision. */
+export function currentMadridTime(now: Date = new Date()): string {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/Madrid',
     hour: '2-digit',
@@ -42,7 +45,14 @@ export function currentMadridQuarterHour(now: Date = new Date()): string {
   }).formatToParts(now);
   const hour = Number(parts.find((part) => part.type === 'hour')?.value);
   const minute = Number(parts.find((part) => part.type === 'minute')?.value);
-  return `${String(hour).padStart(2, '0')}:${String(Math.floor(minute / 15) * 15).padStart(2, '0')}`;
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
+
+/** Return the current Cádiz clock time rounded down to the previous quarter hour. */
+export function currentMadridQuarterHour(now: Date = new Date()): string {
+  const time = currentMadridTime(now);
+  const minute = Number(time.slice(3));
+  return `${time.slice(0, 3)}${String(Math.floor(minute / 15) * 15).padStart(2, '0')}`;
 }
 
 /** Preview a 15-minute step, or reject it when it would leave the saved timetable. */

@@ -2,6 +2,7 @@ import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
+import { currentMadridQuarterHour, type DepartureMode } from '../data/journey-time.ts';
 import type { NetworkDatasetState } from '../data/use-network-dataset.ts';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
@@ -19,6 +20,7 @@ export interface TripSearchDraft {
   destination: LocationFieldValue;
   date: string;
   departAfter: string;
+  departureMode: DepartureMode;
 }
 
 /** One of the two identical search controls in the trip picker. */
@@ -193,6 +195,7 @@ export function TripLocationPicker({
   onSearch,
   onDraftChange,
   urlError,
+  isSearching,
 }: {
   state: NetworkDatasetState;
   options: readonly LocationOption[];
@@ -200,6 +203,7 @@ export function TripLocationPicker({
   onSearch: (draft: TripSearchDraft) => void;
   onDraftChange: (draft: TripSearchDraft) => void;
   urlError: boolean;
+  isSearching: boolean;
 }) {
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
@@ -208,6 +212,15 @@ export function TripLocationPicker({
     draft.origin.choice?.kind === 'stop' &&
     draft.destination.choice?.kind === 'stop' &&
     draft.origin.choice.id === draft.destination.choice.id;
+  const searchDate = draft.departureMode === 'leave-now' ? madridToday() : draft.date;
+  const canSearch =
+    !disabled &&
+    draft.origin.choice !== null &&
+    draft.destination.choice !== null &&
+    !sameExactStop &&
+    coverage !== null &&
+    searchDate >= coverage.startDate &&
+    searchDate <= coverage.endDate;
 
   /** Update edited text immediately, and search once a choice or time is committed. */
   function changeDraft(nextDraft: TripSearchDraft, committed: boolean) {
@@ -226,6 +239,7 @@ export function TripLocationPicker({
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          if (canSearch && !isSearching) onSearch(draft);
         }}
       >
         <div className="grid grid-cols-[minmax(0,1fr)_2.75rem] items-center gap-2 max-[380px]:grid-cols-[minmax(0,1fr)_2.25rem] max-[380px]:gap-1">
@@ -282,23 +296,60 @@ export function TripLocationPicker({
           </p>
         )}
         <div className="mt-7 border-t border-line pt-5">
-          <div className="flex flex-wrap gap-2">
-            <JourneyDatePill
-              value={draft.date}
-              onChange={(date) => changeDraft({ ...draft, date }, true)}
-              minimum={coverage?.startDate ?? draft.date}
-              maximum={coverage?.endDate ?? draft.date}
+          <label className="mb-2 block text-[13px] font-[650]" htmlFor="departure-mode">
+            {t('search.departureMode')}
+          </label>
+          <div className="relative w-fit">
+            <select
+              className="min-h-11 appearance-none rounded-full border border-line-input bg-surface-card py-2 pr-11 pl-4 text-sm font-[650] text-ink focus:shadow-[var(--shadow-field-focus)] disabled:opacity-60"
               disabled={disabled}
-            />
-            <JourneyTimePill
-              date={draft.date}
-              value={draft.departAfter}
-              onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
-              minimum={coverage?.startDate ?? draft.date}
-              maximum={coverage?.endDate ?? draft.date}
-              disabled={disabled}
+              id="departure-mode"
+              onChange={(event) => {
+                const departureMode = event.target.value as DepartureMode;
+                const now = new Date();
+                changeDraft(
+                  {
+                    ...draft,
+                    departureMode,
+                    date: departureMode === 'depart-at' && draft.departAfter === '' ? madridToday(now) : draft.date,
+                    departAfter:
+                      departureMode === 'depart-at' && draft.departAfter === ''
+                        ? currentMadridQuarterHour(now)
+                        : draft.departAfter,
+                  },
+                  true,
+                );
+              }}
+              value={draft.departureMode}
+            >
+              <option value="leave-now">{t('search.leaveNow')}</option>
+              <option value="depart-at">{t('search.departAt')}</option>
+            </select>
+            <Icon
+              name="chevronDown"
+              className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
+              size={16}
             />
           </div>
+          {draft.departureMode === 'depart-at' && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <JourneyDatePill
+                value={draft.date}
+                onChange={(date) => changeDraft({ ...draft, date }, true)}
+                minimum={coverage?.startDate ?? draft.date}
+                maximum={coverage?.endDate ?? draft.date}
+                disabled={disabled}
+              />
+              <JourneyTimePill
+                date={draft.date}
+                value={draft.departAfter}
+                onChange={(date, departAfter, committed) => changeDraft({ ...draft, date, departAfter }, committed)}
+                minimum={coverage?.startDate ?? draft.date}
+                maximum={coverage?.endDate ?? draft.date}
+                disabled={disabled}
+              />
+            </div>
+          )}
           {coverage !== null && madridToday() > coverage.endDate && (
             <p className="mt-3 text-sm text-warning" role="alert">
               {t('search.expiredData', { date: coverage.endDate })}
@@ -306,6 +357,15 @@ export function TripLocationPicker({
           )}
           {sameExactStop && <p className="mt-3 text-sm text-warning">{t('search.sameStop')}</p>}
         </div>
+        <button
+          aria-busy={isSearching}
+          className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-on-accent transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!canSearch || isSearching}
+          type="submit"
+        >
+          <Icon name={isSearching ? 'spinner' : 'search'} className={isSearching ? 'animate-spin' : ''} size={19} />
+          {t(isSearching ? 'search.searching' : 'search.submit')}
+        </button>
       </form>
     </section>
   );

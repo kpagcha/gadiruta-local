@@ -6,7 +6,7 @@ import { Icon } from '../components/Icon';
 import { TripLocationPicker, type TripSearchDraft } from '../components/TripLocationPicker';
 import { isCalendarDate } from '../data/calendar-date.ts';
 import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
-import { normalizeJourneyTime } from '../data/journey-time.ts';
+import { currentMadridTime, normalizeJourneyTime } from '../data/journey-time.ts';
 import { createLocationOptions, type LocationOption } from '../data/location-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { places } from '../data/places.ts';
@@ -47,6 +47,7 @@ export function HomePage() {
 /** Put the search beside the introduction at first, then beside its own results card. */
 function SearchContent({ networkState }: { networkState: NetworkDatasetState }) {
   const { t } = useTranslation();
+  const restoredNow = new Date();
   const options = useMemo(
     () => (networkState.status === 'ready' ? createLocationOptions(places, networkState.dataset) : []),
     [networkState],
@@ -54,23 +55,38 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
   // This component remounts after data loading or history navigation, so URL values seed state once.
   const restored =
     networkState.status === 'ready'
-      ? resolveSearchUrl(window.location.search, options, networkState.dataset.coverage, madridToday())
+      ? resolveSearchUrl(window.location.search, options, networkState.dataset.coverage, madridToday(restoredNow))
       : null;
   const [draft, setDraft] = useState<TripSearchDraft>(() => ({
     origin: { text: restored?.origin?.name ?? '', choice: restored?.origin ?? null },
     destination: { text: restored?.destination?.name ?? '', choice: restored?.destination ?? null },
     date: restored?.date ?? madridToday(),
     departAfter: restored?.departAfter ?? '',
+    departureMode: restored?.departureMode ?? 'leave-now',
   }));
   const [urlError, setUrlError] = useState(restored?.invalid ?? false);
   const [hasSearched, setHasSearched] = useState(restored?.complete ?? false);
   const [result, setResult] = useState<JourneySearchResult | null>(() =>
     restored?.complete && restored.origin !== null && restored.destination !== null && networkState.status === 'ready'
-      ? localSearch(networkState.dataset, restored.date, restored.origin, restored.destination, restored.departAfter)
+      ? localSearch(
+          networkState.dataset,
+          restored.departureMode === 'leave-now' ? madridToday(restoredNow) : restored.date,
+          restored.origin,
+          restored.destination,
+          restored.departureMode === 'leave-now' ? currentMadridTime(restoredNow) : restored.departAfter,
+        )
       : null,
   );
   const [searchNumber, setSearchNumber] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchSequence = useRef(0);
   const resultsRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    return () => {
+      searchSequence.current += 1;
+    };
+  }, []);
 
   /** Bring the first results card into view when it is below the viewport. */
   function revealResults() {
@@ -87,56 +103,64 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     });
   }
 
-  /** Search after a committed change once both locations and the date are usable. */
+  /** Search after a committed change or form submit, allowing one paint for loading feedback. */
   function handleSearch(nextDraft: TripSearchDraft) {
-    if (networkState.status !== 'ready' || nextDraft.origin.choice === null || nextDraft.destination.choice === null)
-      return;
+    const origin = nextDraft.origin.choice;
+    const destination = nextDraft.destination.choice;
+    if (networkState.status !== 'ready' || origin === null || destination === null) return;
+    const now = new Date();
+    const date = nextDraft.departureMode === 'leave-now' ? madridToday(now) : nextDraft.date;
     const { startDate, endDate } = networkState.dataset.coverage;
-    if (!isCalendarDate(nextDraft.date) || nextDraft.date < startDate || nextDraft.date > endDate) return;
-    if (
-      nextDraft.origin.choice.kind === 'stop' &&
-      nextDraft.destination.choice.kind === 'stop' &&
-      nextDraft.origin.choice.id === nextDraft.destination.choice.id
-    )
-      return;
+    if (!isCalendarDate(date) || date < startDate || date > endDate) return;
+    if (origin.kind === 'stop' && destination.kind === 'stop' && origin.id === destination.id) return;
 
-    const departAfter = normalizeJourneyTime(nextDraft.departAfter);
-    const nextResult = localSearch(
-      networkState.dataset,
-      nextDraft.date,
-      nextDraft.origin.choice,
-      nextDraft.destination.choice,
-      departAfter,
-    );
-    const query = searchQuery(nextDraft.origin.choice, nextDraft.destination.choice, nextDraft.date, departAfter);
-    if (query !== window.location.search) {
-      window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
-    }
-    setUrlError(false);
+    const departAfter =
+      nextDraft.departureMode === 'leave-now' ? currentMadridTime(now) : normalizeJourneyTime(nextDraft.departAfter);
+    const sequence = ++searchSequence.current;
+    setIsSearching(true);
 
-    /** Commit all related state together so the first layout transition has complete results. */
-    function showResult() {
-      setDraft({ ...nextDraft, departAfter });
-      setResult(nextResult);
-      setHasSearched(true);
-      setSearchNumber((number) => number + 1);
-    }
+    // Two animation frames let the busy button paint before the local calculation begins.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (sequence !== searchSequence.current) return;
+        const nextResult = localSearch(networkState.dataset, date, origin, destination, departAfter);
+        const query = searchQuery(origin, destination, nextDraft.departureMode, date, departAfter);
+        if (query !== window.location.search) {
+          window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
+        }
+        setUrlError(false);
 
-    const canAnimate =
-      !hasSearched &&
-      typeof document.startViewTransition === 'function' &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (canAnimate) {
-      const transition = document.startViewTransition(() => flushSync(showResult));
-      void transition.finished.then(revealResults);
-    } else {
-      showResult();
-      if (!hasSearched) revealResults();
-    }
+        /** Commit all related state together so the first layout transition has complete results. */
+        function showResult() {
+          setDraft({
+            ...nextDraft,
+            departAfter: nextDraft.departureMode === 'depart-at' ? departAfter : nextDraft.departAfter,
+          });
+          setResult(nextResult);
+          setHasSearched(true);
+          setSearchNumber((number) => number + 1);
+          setIsSearching(false);
+        }
+
+        const canAnimate =
+          !hasSearched &&
+          typeof document.startViewTransition === 'function' &&
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (canAnimate) {
+          const transition = document.startViewTransition(() => flushSync(showResult));
+          void transition.finished.then(revealResults);
+        } else {
+          showResult();
+          if (!hasSearched) revealResults();
+        }
+      });
+    });
   }
 
   /** Keep current results while editing time, but clear them when a location is unresolved. */
   function handleDraftChange(nextDraft: TripSearchDraft) {
+    searchSequence.current += 1;
+    setIsSearching(false);
     setDraft(nextDraft);
     if (
       nextDraft.origin.choice === null ||
@@ -182,6 +206,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
           state={networkState}
           options={options}
           draft={draft}
+          isSearching={isSearching}
           onSearch={handleSearch}
           onDraftChange={handleDraftChange}
           urlError={urlError}

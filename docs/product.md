@@ -41,10 +41,12 @@ The swap control sits beside the paired location fields so the form stays compac
 Each location field has an inline clear control when it contains text.
 After a search, the form stays visible beside a separate results card on desktop. On mobile, results
 follow the form, and an off-screen results card scrolls into view. Results update when both
-locations are selected or a date or departure time is committed. Editing a location keeps the
+locations are selected or a date or departure time is committed. A Search transport button also
+reruns the current selection and shows a short loading state. Editing a location keeps the
 results card visible while the next selection is incomplete.
-Search URLs preserve the selected places or stops, date, and optional departure time so a link can
-open the same local results. The date and time controls are separate pills, and the results card
+Search URLs preserve the selected places or stops and departure mode, with a date and optional time
+for Depart at, so a link can open the same local results. Leave now is the default and uses the
+current Cádiz time; Depart at reveals separate date and time pills. The results card
 reveals earlier or later journeys in small groups without leaving the page.
 The date pill can move one day at a time within the saved timetable. The time pill accepts an
 exact typed time or a choice from a full list of half-hour times. Its

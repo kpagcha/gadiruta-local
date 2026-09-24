@@ -60,9 +60,12 @@ by the earliest reachable alighting. The full local result is split into four-ca
 earlier and later controls reveal adjacent groups without another data request. A trip appears only
 once even when it has several matching boarding stops.
 
-The home page writes `from`, `to`, `date`, and optional `depart_after` into browser history when
-both locations and a covered date are selected. Typed times update results on commit, rather than
-after every keystroke.
+The home page writes `from`, `to`, and `mode=now` for Leave now, or `from`, `to`, `date`, and optional
+`depart_after` for Depart at. A Leave now search applies the current Cádiz minute as its departure
+cutoff. Existing links with a date restore Depart at. Typed times update results on commit, rather
+than after every keystroke. The Search transport button can rerun the same criteria; its spinner
+paints before the local calculation starts.
+
 Place values use their maintained IDs. Stop values combine a readable name slug with an eight-character
 token derived from the source stop ID; the token identifies the stop even if its name changes. The
 snapshot validator rejects token collisions, and links containing a raw stop ID remain readable.

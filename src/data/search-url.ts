@@ -3,6 +3,7 @@
  * already loaded local place and stop options; it never requests a server or changes browser history.
  */
 import { isCalendarDate } from './calendar-date.ts';
+import type { DepartureMode } from './journey-time.ts';
 import type { LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import { stopTokenFromUrl, stopUrlToken, stopUrlValue } from './stop-url.ts';
@@ -13,6 +14,7 @@ export interface ResolvedSearchUrl {
   destination: LocationOption | null;
   date: string;
   departAfter: string;
+  departureMode: DepartureMode;
   invalid: boolean;
   complete: boolean;
 }
@@ -45,17 +47,21 @@ export function resolveSearchUrl(
   const to = parameters.get('to');
   const rawDate = parameters.get('date');
   const rawTime = parameters.get('depart_after');
+  const rawMode = parameters.get('mode');
+  const departureMode: DepartureMode = rawDate !== null || rawTime !== null ? 'depart-at' : 'leave-now';
   const origin = findUrlLocation(from, options);
   const destination = findUrlLocation(to, options);
   // Preserve valid parts of a partial link in the form; one bad supplied value blocks auto-search.
   const dateValid =
     rawDate !== null && isCalendarDate(rawDate) && rawDate >= coverage.startDate && rawDate <= coverage.endDate;
+  const todayCovered = today >= coverage.startDate && today <= coverage.endDate;
   const timeValid = rawTime === null || rawTime === '' || isClockTime(rawTime);
   const sameStop = origin?.kind === 'stop' && destination?.kind === 'stop' && origin.id === destination.id;
   const invalid =
     (from !== null && origin === null) ||
     (to !== null && destination === null) ||
-    (rawDate !== null && !dateValid) ||
+    (departureMode === 'depart-at' && !dateValid) ||
+    (rawMode !== null && (rawMode !== 'now' || departureMode !== 'leave-now')) ||
     !timeValid ||
     sameStop;
 
@@ -64,23 +70,30 @@ export function resolveSearchUrl(
     destination,
     date: dateValid ? rawDate : today,
     departAfter: timeValid ? (rawTime ?? '') : '',
+    departureMode,
     invalid,
-    complete: !invalid && origin !== null && destination !== null && dateValid,
+    complete:
+      !invalid && origin !== null && destination !== null && (departureMode === 'leave-now' ? todayCovered : dateValid),
   };
 }
 
-/** Produce the canonical search query, omitting an unset departure time. */
+/** Produce a shareable query for either current departures or a chosen day and time. */
 export function searchQuery(
   origin: LocationOption,
   destination: LocationOption,
+  departureMode: DepartureMode,
   date: string,
   departAfter: string,
 ): string {
   const parameters = new URLSearchParams({
     from: origin.kind === 'stop' ? stopUrlValue(origin) : origin.id,
     to: destination.kind === 'stop' ? stopUrlValue(destination) : destination.id,
-    date,
   });
-  if (departAfter !== '') parameters.set('depart_after', departAfter);
+  if (departureMode === 'leave-now') {
+    parameters.set('mode', 'now');
+  } else {
+    parameters.set('date', date);
+    if (departAfter !== '') parameters.set('depart_after', departAfter);
+  }
   return `?${parameters.toString()}`;
 }

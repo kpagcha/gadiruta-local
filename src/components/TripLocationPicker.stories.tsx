@@ -80,10 +80,12 @@ const meta = {
       destination: { text: '', choice: null },
       date: '2026-09-24',
       departAfter: '',
+      departureMode: 'leave-now',
     },
     onSearch: ignoreStorySearch,
     onDraftChange: ignoreStoryDraft,
     urlError: false,
+    isSearching: false,
   },
   render: ({ state }) => <PickerStory state={state} />,
 } satisfies Meta<typeof TripLocationPicker>;
@@ -98,6 +100,7 @@ function PickerStory({ state }: { state: NetworkDatasetState }) {
     destination: { text: '', choice: null },
     date: '2026-09-24',
     departAfter: '',
+    departureMode: 'leave-now',
   });
   const options = useMemo(
     () => (state.status === 'ready' ? createLocationOptions(places, state.dataset) : []),
@@ -111,6 +114,7 @@ function PickerStory({ state }: { state: NetworkDatasetState }) {
       onSearch={ignoreStorySearch}
       onDraftChange={setDraft}
       urlError={false}
+      isSearching={false}
     />
   );
 }
