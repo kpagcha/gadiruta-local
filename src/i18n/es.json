@@ -74,6 +74,6 @@
   },
   "footer": {
     "region": "Hecho para la Bahía de Cádiz.",
-    "disclosure": "Datos de transporte procedentes de <ctanLink>los datos abiertos de CTAN</ctanLink>. Un proyecto independiente. No es un servicio oficial de CTAN ni de la Junta de Andalucía."
+    "disclosure": "Datos de <ctanLink>CTAN</ctanLink>. Proyecto independiente."
   }
 }

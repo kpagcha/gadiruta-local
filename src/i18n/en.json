@@ -74,6 +74,6 @@
   },
   "footer": {
     "region": "Made for the Bay of Cádiz.",
-    "disclosure": "Transport data sourced from <ctanLink>CTAN open data</ctanLink>. An independent project. Not an official CTAN or Junta de Andalucía service."
+    "disclosure": "Data from <ctanLink>CTAN</ctanLink>. An independent project."
   }
 }
