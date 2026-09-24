@@ -39,8 +39,9 @@ On mobile, the origin and destination search must be visible on arrival without 
 introductory copy. Desktop can pair that search with a larger editorial introduction.
 The compact location fields have origin and destination markers connected by dots to their left.
 An empty field shows its From or To label inside; focus replaces the label with a search icon and
-a location hint. Entered text takes the label's place, and an inline control clears it. A staggered
-up/down arrow beside the fields swaps their values and explains the action on hover or focus.
+a location hint, with a subtle teal shadow around the field. Entered text takes the label's place,
+and an inline control clears it. A staggered up/down arrow beside the fields swaps their values
+and explains the action on hover or focus.
 Recent route searches appear in equal-width pills beneath the fields. Long names end with an
 ellipsis; hovering over or focusing a pill shows the full route. Selecting a pill reruns that route
 with its latest saved departure choice.

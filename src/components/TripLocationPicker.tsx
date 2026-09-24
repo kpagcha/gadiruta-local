@@ -93,7 +93,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
         <input
           ref={inputRef}
           autoComplete="off"
-          className={`h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${
+          className={`h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${
             isInputFocused ? 'pl-11 max-[380px]:pl-10' : 'pl-4 max-[380px]:pl-3'
           } ${isInputFocused && value.text === '' ? 'pr-4' : 'pr-12'}`}
           disabled={disabled}
