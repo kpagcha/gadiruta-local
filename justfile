@@ -32,6 +32,10 @@ data-refresh:
 locations-probe:
     npm run locations:probe
 
+# Derive reviewable local-area coordinates from the tracked network stops.
+locations-coordinates:
+    npm run locations:coordinates
+
 # Preview a completed production build locally.
 preview:
     npm run preview

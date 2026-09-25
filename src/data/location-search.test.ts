@@ -8,15 +8,19 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createLocationOptions, searchLocations } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
+import { places } from './places.ts';
+import { searchQuery } from './search-url.ts';
 
 const dataset: NetworkDataset = {
-  formatVersion: 2,
+  formatVersion: 4,
   source: { url: 'source', generatedAt: '2026-09-21T16:09:45.619Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [
     { id: '2_10', agencyId: 'CMTBC', shortName: 'M-032', longName: null, type: 3, color: null, textColor: null },
     { id: '2_11', agencyId: 'CMTBC', shortName: 'M-050', longName: null, type: 3, color: null, textColor: null },
   ],
+  municipalities: [],
+  nuclei: [],
   stops: [
     {
       id: '2_1',
@@ -25,6 +29,8 @@ const dataset: NetworkDataset = {
       longitude: -6.35,
       parentStationId: null,
       placeId: 'rota',
+      municipalityId: null,
+      nucleusId: null,
     },
     {
       id: '2_2',
@@ -33,6 +39,8 @@ const dataset: NetworkDataset = {
       longitude: -6.36,
       parentStationId: null,
       placeId: 'rota',
+      municipalityId: null,
+      nucleusId: null,
     },
     {
       id: '2_3',
@@ -41,6 +49,8 @@ const dataset: NetworkDataset = {
       longitude: -6.27,
       parentStationId: null,
       placeId: 'cadiz',
+      municipalityId: null,
+      nucleusId: null,
     },
     {
       id: '2_4',
@@ -49,6 +59,8 @@ const dataset: NetworkDataset = {
       longitude: -6.28,
       parentStationId: null,
       placeId: 'cadiz',
+      municipalityId: null,
+      nucleusId: null,
     },
   ],
   patterns: [
@@ -104,4 +116,13 @@ test('returns no suggestions for blank or unmatched input and respects the resul
   assert.deepEqual(searchLocations(options, '   '), []);
   assert.deepEqual(searchLocations(options, 'nowhere'), []);
   assert.equal(searchLocations(options, 'a', 2).length, 2);
+});
+
+test('keeps the Costa Ballena URL identity while identifying only Rota as its local area', () => {
+  const costaBallena = createLocationOptions(places, dataset).find((option) => option.id === 'costa-ballena');
+  assert.deepEqual(costaBallena, { kind: 'place', id: 'costa-ballena', name: 'Costa Ballena (Rota)', nucleusId: '17' });
+  assert.equal(
+    searchQuery(costaBallena!, options[0]!, 'leave-now', '2026-09-25', ''),
+    '?from=costa-ballena&to=rota&mode=now',
+  );
 });

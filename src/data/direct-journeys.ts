@@ -4,13 +4,14 @@
  * no network requests and leaves display formatting to the interface.
  */
 import type { LocationOption } from './location-search.ts';
-import type { NetworkDataset, NetworkStopTime, NetworkTrip } from './network-schema.ts';
+import type { NetworkDataset, NetworkStop, NetworkStopTime, NetworkTrip } from './network-schema.ts';
 
 /** A reachable destination on the same trip after one chosen boarding visit. */
 export interface AlightingChoice {
   index: number;
   stopId: string;
   arrivalMinute: number;
+  distanceKm: number;
 }
 
 /** One boardable visit and all later alighting visits matching the destination. */
@@ -18,10 +19,11 @@ export interface BoardingChoice {
   index: number;
   stopId: string;
   departureMinute: number;
+  distanceKm: number;
   alightings: AlightingChoice[];
 }
 
-/** One trip occurrence on a service date, with its default earliest matching pair. */
+/** One trip occurrence on a service date, with all legal matching stop pairs. */
 export interface DirectJourney {
   id: string;
   tripId: string;
@@ -34,6 +36,7 @@ export interface DirectJourney {
 export interface TimedJourney {
   journey: DirectJourney;
   boardingIndex: number;
+  alightingIndex: number;
   departureMinute: number;
 }
 
@@ -71,9 +74,56 @@ function runsOnDate(
   return calendar.weekdays[weekday] ?? false;
 }
 
-/** Decide whether a selected place or exact stop contains this stop visit. */
-function matchesLocation(location: LocationOption, stopId: string, placeByStop: Map<string, string | null>): boolean {
-  return location.kind === 'stop' ? location.id === stopId : placeByStop.get(stopId) === location.id;
+/** Fold accents and case before comparing official municipality and nucleus names. */
+function normalizedName(name: string): string {
+  return name.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es').trim().replace(/\s+/g, ' ');
+}
+
+/** Find the unique same-named or shortened town nucleus within one municipality. */
+function townNucleusId(dataset: NetworkDataset, municipalityId: string): string | null {
+  const municipality = dataset.municipalities.find((item) => item.id === municipalityId);
+  if (municipality === undefined) return null;
+  const name = normalizedName(municipality.name);
+  const nuclei = dataset.nuclei.filter((nucleus) => nucleus.municipalityId === municipalityId);
+  const exact = nuclei.filter((nucleus) => normalizedName(nucleus.name) === name);
+  if (exact.length > 0) return exact.length === 1 ? exact[0]!.id : null;
+  const shorter = nuclei.filter((nucleus) => name.startsWith(`${normalizedName(nucleus.name)} `));
+  return shorter.length === 1 ? shorter[0]!.id : null;
+}
+
+/** Locate the reviewed point used to rank stops for a place, if one exists. */
+function locationReferencePoint(
+  dataset: NetworkDataset,
+  location: LocationOption,
+  stopsById: Map<string, NetworkStop>,
+): { latitude: number; longitude: number } | null {
+  if (location.kind === 'stop') return stopsById.get(location.id) ?? null;
+  const nucleusId =
+    location.municipalityId === undefined ? location.nucleusId : townNucleusId(dataset, location.municipalityId);
+  return dataset.nuclei.find((nucleus) => nucleus.id === nucleusId)?.referencePoint ?? null;
+}
+
+/** Measure straight-line distance between two coordinates in kilometres. */
+function distanceKm(
+  first: { latitude: number; longitude: number },
+  second: { latitude: number; longitude: number } | null,
+): number {
+  if (second === null) return 0;
+  const radians = Math.PI / 180;
+  const latitudeDifference = (second.latitude - first.latitude) * radians;
+  const longitudeDifference = (second.longitude - first.longitude) * radians;
+  const arc =
+    Math.sin(latitudeDifference / 2) ** 2 +
+    Math.cos(first.latitude * radians) * Math.cos(second.latitude * radians) * Math.sin(longitudeDifference / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(Math.min(1, arc)));
+}
+
+/** Decide whether a selected place or exact stop contains this physical stop. */
+function matchesLocation(location: LocationOption, stop: NetworkStop): boolean {
+  if (location.kind === 'stop') return location.id === stop.id;
+  if (location.municipalityId !== undefined) return location.municipalityId === stop.municipalityId;
+  if (location.nucleusId !== undefined) return stop.nucleusId === location.nucleusId;
+  return stop.placeId === location.id;
 }
 
 /** A GTFS pickup or drop-off value of one forbids the corresponding action. */
@@ -113,7 +163,9 @@ export function findDirectJourneys(
   )
     return [];
 
-  const placeByStop = new Map(dataset.stops.map((stop) => [stop.id, stop.placeId]));
+  const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
+  const originPoint = locationReferencePoint(dataset, origin, stopsById);
+  const destinationPoint = locationReferencePoint(dataset, destination, stopsById);
   const calendars = new Map(dataset.calendars.map((calendar) => [calendar.serviceId, calendar]));
   const exceptions = new Map(
     dataset.calendarExceptions.map((exception) => [`${exception.serviceId}:${exception.date}`, exception.type]),
@@ -128,27 +180,37 @@ export function findDirectJourneys(
       const boardings: BoardingChoice[] = [];
       for (const [index, time] of trip.stopTimes.entries()) {
         const departureMinute = time.departureMinutes + offset;
+        const boardingStop = stopsById.get(time.stopId)!;
         if (
           departureMinute < 0 ||
           departureMinute >= 1440 ||
           !permitsAction(time, 'pickup') ||
-          !matchesLocation(origin, time.stopId, placeByStop)
+          !matchesLocation(origin, boardingStop)
         )
           continue;
-        const alightings = trip.stopTimes.slice(index + 1).flatMap((later, relativeIndex) =>
-          permitsAction(later, 'dropOff') &&
-          matchesLocation(destination, later.stopId, placeByStop) &&
-          later.arrivalMinutes >= time.departureMinutes
+        const alightings = trip.stopTimes.slice(index + 1).flatMap((later, relativeIndex) => {
+          const alightingStop = stopsById.get(later.stopId)!;
+          return permitsAction(later, 'dropOff') &&
+            matchesLocation(destination, alightingStop) &&
+            later.arrivalMinutes >= time.departureMinutes
             ? [
                 {
                   index: index + relativeIndex + 1,
                   stopId: later.stopId,
                   arrivalMinute: later.arrivalMinutes + offset,
+                  distanceKm: distanceKm(alightingStop, destinationPoint),
                 },
               ]
-            : [],
-        );
-        if (alightings.length > 0) boardings.push({ index, stopId: time.stopId, departureMinute, alightings });
+            : [];
+        });
+        if (alightings.length > 0)
+          boardings.push({
+            index,
+            stopId: time.stopId,
+            departureMinute,
+            distanceKm: distanceKm(boardingStop, originPoint),
+            alightings,
+          });
       }
       if (boardings.length > 0)
         journeys.push({
@@ -175,14 +237,45 @@ export function splitDirectJourneys(
   const later: TimedJourney[] = [];
 
   for (const journey of journeys) {
-    // A place can include several boarding stops on one trip. Display the first one at or after
-    // the requested time, but retain the other choices inside the same card.
-    const boardingIndex = journey.boardings.findIndex((boarding) => boarding.departureMinute >= cutoff);
-    if (boardingIndex >= 0) {
-      later.push({ journey, boardingIndex, departureMinute: journey.boardings[boardingIndex]!.departureMinute });
-    } else {
-      earlier.push({ journey, boardingIndex: 0, departureMinute: journey.boardings[0]!.departureMinute });
+    // The time cutoff determines the result group before proximity chooses a pair.
+    const hasLaterBoarding = journey.boardings.some((boarding) => boarding.departureMinute >= cutoff);
+    let selected: {
+      boardingIndex: number;
+      alightingIndex: number;
+      departureMinute: number;
+      arrivalMinute: number;
+      distanceKm: number;
+    } | null = null;
+    for (const [boardingIndex, boarding] of journey.boardings.entries()) {
+      if (hasLaterBoarding && boarding.departureMinute < cutoff) continue;
+      for (const alighting of boarding.alightings) {
+        // Both endpoint distances count equally; an unavailable reference contributes zero.
+        const totalDistanceKm = boarding.distanceKm + alighting.distanceKm;
+        if (
+          selected === null ||
+          totalDistanceKm < selected.distanceKm ||
+          (totalDistanceKm === selected.distanceKm &&
+            (boarding.departureMinute < selected.departureMinute ||
+              (boarding.departureMinute === selected.departureMinute &&
+                alighting.arrivalMinute < selected.arrivalMinute)))
+        ) {
+          selected = {
+            boardingIndex,
+            alightingIndex: alighting.index,
+            departureMinute: boarding.departureMinute,
+            arrivalMinute: alighting.arrivalMinute,
+            distanceKm: totalDistanceKm,
+          };
+        }
+      }
     }
+    if (selected === null) continue;
+    (hasLaterBoarding ? later : earlier).push({
+      journey,
+      boardingIndex: selected.boardingIndex,
+      alightingIndex: selected.alightingIndex,
+      departureMinute: selected.departureMinute,
+    });
   }
 
   /** Order the cards by their displayed default boarding, then by their stable trip ID. */

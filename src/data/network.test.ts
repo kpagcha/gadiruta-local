@@ -9,7 +9,7 @@ import test from 'node:test';
 import { loadNetworkDataset } from './network.ts';
 
 const dataset = {
-  formatVersion: 2,
+  formatVersion: 4,
   source: {
     url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
     generatedAt: '2026-09-21T16:09:45.619Z',
@@ -27,9 +27,29 @@ const dataset = {
       textColor: null,
     },
   ],
+  municipalities: [],
+  nuclei: [],
   stops: [
-    { id: 'cadiz', name: 'Cádiz', latitude: 36.53, longitude: -6.29, parentStationId: null, placeId: 'cadiz' },
-    { id: 'rota', name: 'Rota', latitude: 36.62, longitude: -6.35, parentStationId: null, placeId: 'rota' },
+    {
+      id: 'cadiz',
+      name: 'Cádiz',
+      latitude: 36.53,
+      longitude: -6.29,
+      parentStationId: null,
+      placeId: 'cadiz',
+      municipalityId: null,
+      nucleusId: null,
+    },
+    {
+      id: 'rota',
+      name: 'Rota',
+      latitude: 36.62,
+      longitude: -6.35,
+      parentStationId: null,
+      placeId: 'rota',
+      municipalityId: null,
+      nucleusId: null,
+    },
   ],
   patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['cadiz', 'rota'] }],
   trips: [

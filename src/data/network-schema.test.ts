@@ -4,13 +4,33 @@ import test from 'node:test';
 import { parseNetworkDataset } from './network-schema.ts';
 
 const dataset = {
-  formatVersion: 2,
+  formatVersion: 4,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [{ id: 'route', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
+  municipalities: [],
+  nuclei: [],
   stops: [
-    { id: 'a', name: 'A', latitude: 36.5, longitude: -6.2, parentStationId: null, placeId: 'cadiz' },
-    { id: 'b', name: 'B', latitude: 36.6, longitude: -6.3, parentStationId: null, placeId: null },
+    {
+      id: 'a',
+      name: 'A',
+      latitude: 36.5,
+      longitude: -6.2,
+      parentStationId: null,
+      placeId: 'cadiz',
+      municipalityId: null,
+      nucleusId: null,
+    },
+    {
+      id: 'b',
+      name: 'B',
+      latitude: 36.6,
+      longitude: -6.3,
+      parentStationId: null,
+      placeId: null,
+      municipalityId: null,
+      nucleusId: null,
+    },
   ],
   patterns: [{ routeId: 'route', directionId: '0', stopIds: ['a', 'b'] }],
   trips: [
@@ -36,8 +56,9 @@ const dataset = {
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
-test('accepts the version-two timetable contract', () => {
+test('accepts the version-four timetable contract', () => {
   assert.deepEqual(parseNetworkDataset(dataset), dataset);
+  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 3 }), /formatVersion must be 4/);
 });
 
 test('rejects broken stop, route, service, and place references', () => {
@@ -52,6 +73,51 @@ test('rejects broken stop, route, service, and place references', () => {
   assert.throws(
     () => parseNetworkDataset({ ...dataset, patterns: [{ routeId: 'missing', directionId: null, stopIds: ['a'] }] }),
     /unknown route/,
+  );
+});
+
+test('validates municipality and nucleus relationships while allowing an unresolved nucleus', () => {
+  const withLocations = {
+    ...dataset,
+    municipalities: [{ id: 'municipality', name: 'Municipality' }],
+    nuclei: [{ id: 'nucleus', municipalityId: 'municipality', name: 'Town', referencePoint: null }],
+    stops: [
+      { ...dataset.stops[0], municipalityId: 'municipality', nucleusId: 'nucleus' },
+      { ...dataset.stops[1], municipalityId: 'municipality', nucleusId: null },
+    ],
+  };
+  assert.deepEqual(parseNetworkDataset(withLocations), withLocations);
+  assert.throws(
+    () =>
+      parseNetworkDataset({
+        ...withLocations,
+        nuclei: [{ id: 'nucleus', municipalityId: 'municipality', name: 'Town' }],
+      }),
+    /referencePoint must be an object/,
+  );
+  assert.throws(
+    () =>
+      parseNetworkDataset({
+        ...withLocations,
+        nuclei: [{ ...withLocations.nuclei[0], referencePoint: { latitude: 91, longitude: 0 } }],
+      }),
+    /invalid reference coordinates/,
+  );
+  assert.throws(
+    () =>
+      parseNetworkDataset({
+        ...withLocations,
+        stops: [{ ...withLocations.stops[0], municipalityId: 'other' }, withLocations.stops[1]],
+      }),
+    /unknown municipality/,
+  );
+  assert.throws(
+    () =>
+      parseNetworkDataset({
+        ...withLocations,
+        stops: [{ ...withLocations.stops[0], nucleusId: 'other' }, withLocations.stops[1]],
+      }),
+    /nucleus outside its municipality/,
   );
 });
 

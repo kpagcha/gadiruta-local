@@ -29,6 +29,8 @@ gadiruta-local/
 │   ├── gtfs-archive.ts           Reads ZIP entries and parses GTFS CSV tables
 │   ├── build-network-data.ts     Selects and writes the browser network snapshot
 │   ├── place-stop-assignments.json Reviewed stop-to-place IDs used during snapshot generation
+│   ├── ctan-location-directory.json Reviewed CTAN hierarchy used during snapshot generation
+│   ├── derive-location-coordinates.ts Writes candidate local-area points from tracked network stops
 │   ├── ctan-location-crosswalk.ts Parses CTAN location replies and checks stop coverage
 │   ├── probe-ctan-locations.ts   Explicit live CTAN investigation; saves audit evidence
 │   ├── *.test.ts                 Offline tests for data tooling
@@ -84,6 +86,7 @@ CTAN GTFS ZIP
   → scripts/gtfs-archive.ts reads ZIP and CSV
   → scripts/build-network-data.ts selects Bahía routes, stops, trips, and calendars
   → scripts/place-stop-assignments.json adds reviewed place IDs
+  → scripts/ctan-location-directory.json adds reviewed CTAN location IDs and local-area reference points
   → public/data/bahia-cadiz-network.json (reviewed and tracked)
   → browser loads and validates it as above
 ```
@@ -92,8 +95,9 @@ CTAN GTFS ZIP
 next. It clips the requested end date to the Bay services actually present in the archive; it never
 extends an old timetable into a new year. `just data-refresh` downloads a new ZIP from CTAN and uses
 the same range, so it needs network access and should be an intentional refresh. Both commands fail
-if the feed has no service in that range. Review the JSON diff before committing. Review place
-assignments separately when changing geographic scope. The app can be developed from a fresh
+if the feed has no service in that range or a selected stop lacks a reviewed CTAN location. Review
+the JSON diff before committing. Update the tracked location directory from a new probe capture
+when CTAN adds stops or changes its hierarchy. The app can be developed from a fresh
 checkout without the ZIP because the reviewed JSON is already present.
 
 The underlying builder keeps the full source span when no range is given: `npm run data`. For an
@@ -103,7 +107,15 @@ commands read the local ZIP; only the explicit `--download` option fetches CTAN 
 `just locations-probe` is a separate investigation. It contacts CTAN location endpoints, compares
 their identifiers with stops in the local ZIP, and writes raw replies and a report under
 `data/source/ctan-location-probe/`. It never edits the browser JSON. The corresponding parser and
-crosswalk rules are tested offline; tests do not contact transit services.
+crosswalk rules are tested offline; tests do not contact transit services. Review its captured
+hierarchy before updating the tracked directory that the snapshot builder reads.
+
+`just locations-coordinates` uses the checked-in network snapshot to write two candidate points
+for each local area with selected stops into the reviewed location directory: the average stop
+position and the stop nearest to the others overall. It omits points for areas without selected
+stops and removes older municipality candidates. It makes no network requests. Review the directory
+diff after running it. The snapshot builder uses each representative stop as the local area's
+reference point for default journey stop selection.
 
 ## Setup and commands
 
@@ -126,6 +138,7 @@ available commands. Common commands:
 | `just data`                       | Builds the rolling-year snapshot from the local GTFS ZIP     |
 | `just data-refresh`               | Downloads GTFS, then builds the rolling-year snapshot        |
 | `just locations-probe`            | Captures CTAN location evidence under ignored source data    |
+| `just locations-coordinates`      | Derives candidate local-area points from tracked stops       |
 | `just test`                       | Runs focused offline data tests with Node's test runner      |
 | `just typecheck`                  | Checks TypeScript without writing build files                |
 | `just lint` / `just format-check` | Checks code rules / formatting                               |

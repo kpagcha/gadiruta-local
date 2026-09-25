@@ -11,7 +11,8 @@ import type { Place } from './places.ts';
 
 /** One selectable place or exact physical stop in the shared origin/destination search. */
 export type LocationOption =
-  { kind: 'place'; id: string; name: string } | { kind: 'stop'; id: string; name: string; routeLabels: string[] };
+  | { kind: 'place'; id: string; name: string; municipalityId?: string; nucleusId?: string }
+  | { kind: 'stop'; id: string; name: string; routeLabels: string[] };
 
 /** Fold accents, case, and repeated spaces for forgiving local name searches. */
 function normalizeSearchText(value: string): string {
@@ -32,7 +33,7 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
     }
   }
 
-  const placeOptions: LocationOption[] = places.map((place) => ({ kind: 'place', id: place.id, name: place.name }));
+  const placeOptions: LocationOption[] = places.map((place) => ({ kind: 'place', ...place }));
   const stopOptions: LocationOption[] = dataset.stops.map((stop) => ({
     kind: 'stop',
     id: stop.id,

@@ -1,0 +1,1641 @@
+{
+  "retrievedAt": "2026-09-22T16:36:30.037Z",
+  "municipalities": [
+    {
+      "id": "1",
+      "name": "Cádiz"
+    },
+    {
+      "id": "10",
+      "name": "Arcos de la Frontera"
+    },
+    {
+      "id": "11",
+      "name": "Sanlucar de Barrameda"
+    },
+    {
+      "id": "15",
+      "name": "Chipiona"
+    },
+    {
+      "id": "16",
+      "name": "Conil de la Frontera"
+    },
+    {
+      "id": "17",
+      "name": "Vejer de la Frontera"
+    },
+    {
+      "id": "18",
+      "name": "Barbate"
+    },
+    {
+      "id": "19",
+      "name": "Tarifa"
+    },
+    {
+      "id": "2",
+      "name": "San Fernando"
+    },
+    {
+      "id": "3",
+      "name": "Chiclana"
+    },
+    {
+      "id": "4",
+      "name": "Puerto Real"
+    },
+    {
+      "id": "5",
+      "name": "El Puerto de Santa María"
+    },
+    {
+      "id": "6",
+      "name": "Jerez de la Frontera"
+    },
+    {
+      "id": "7",
+      "name": "Rota"
+    },
+    {
+      "id": "8",
+      "name": "Medina Sidonia"
+    }
+  ],
+  "nuclei": [
+    {
+      "id": "1",
+      "municipalityId": "1",
+      "name": "Cádiz",
+      "derivedCoordinates": {
+        "stopCount": 39,
+        "average": {
+          "latitude": 36.520074,
+          "longitude": -6.284948
+        },
+        "representativeStop": {
+          "stopId": "2_12",
+          "latitude": 36.521701,
+          "longitude": -6.285631
+        }
+      }
+    },
+    {
+      "id": "11",
+      "municipalityId": "4",
+      "name": "Barrio Jarana",
+      "derivedCoordinates": {
+        "stopCount": 3,
+        "average": {
+          "latitude": 36.499227,
+          "longitude": -6.143263
+        },
+        "representativeStop": {
+          "stopId": "2_101",
+          "latitude": 36.502844,
+          "longitude": -6.143829
+        }
+      }
+    },
+    {
+      "id": "12",
+      "municipalityId": "4",
+      "name": "Río San Pedro",
+      "derivedCoordinates": {
+        "stopCount": 4,
+        "average": {
+          "latitude": 36.524534,
+          "longitude": -6.225393
+        },
+        "representativeStop": {
+          "stopId": "2_78",
+          "latitude": 36.525028,
+          "longitude": -6.22286
+        }
+      }
+    },
+    {
+      "id": "13",
+      "municipalityId": "5",
+      "name": "Doña Blanca"
+    },
+    {
+      "id": "14",
+      "municipalityId": "6",
+      "name": "Jerez",
+      "derivedCoordinates": {
+        "stopCount": 31,
+        "average": {
+          "latitude": 36.673681,
+          "longitude": -6.113373
+        },
+        "representativeStop": {
+          "stopId": "2_180",
+          "latitude": 36.693656,
+          "longitude": -6.130328
+        }
+      }
+    },
+    {
+      "id": "15",
+      "municipalityId": "7",
+      "name": "Rota",
+      "derivedCoordinates": {
+        "stopCount": 6,
+        "average": {
+          "latitude": 36.634674,
+          "longitude": -6.361942
+        },
+        "representativeStop": {
+          "stopId": "2_255",
+          "latitude": 36.62353,
+          "longitude": -6.359879
+        }
+      }
+    },
+    {
+      "id": "16",
+      "municipalityId": "6",
+      "name": "El Portal"
+    },
+    {
+      "id": "17",
+      "municipalityId": "7",
+      "name": "Costa Ballena (Rota)",
+      "derivedCoordinates": {
+        "stopCount": 3,
+        "average": {
+          "latitude": 36.691094,
+          "longitude": -6.411492
+        },
+        "representativeStop": {
+          "stopId": "2_186",
+          "latitude": 36.692467,
+          "longitude": -6.410083
+        }
+      }
+    },
+    {
+      "id": "18",
+      "municipalityId": "8",
+      "name": "Medina",
+      "derivedCoordinates": {
+        "stopCount": 3,
+        "average": {
+          "latitude": 36.446305,
+          "longitude": -5.991255
+        },
+        "representativeStop": {
+          "stopId": "2_314",
+          "latitude": 36.438228,
+          "longitude": -6.021544
+        }
+      }
+    },
+    {
+      "id": "19",
+      "municipalityId": "10",
+      "name": "Jédula",
+      "derivedCoordinates": {
+        "stopCount": 2,
+        "average": {
+          "latitude": 36.724882,
+          "longitude": -5.929732
+        },
+        "representativeStop": {
+          "stopId": "2_189",
+          "latitude": 36.724754,
+          "longitude": -5.92982
+        }
+      }
+    },
+    {
+      "id": "2",
+      "municipalityId": "2",
+      "name": "San Fernando",
+      "derivedCoordinates": {
+        "stopCount": 38,
+        "average": {
+          "latitude": 36.463511,
+          "longitude": -6.201767
+        },
+        "representativeStop": {
+          "stopId": "2_207",
+          "latitude": 36.464473,
+          "longitude": -6.201655
+        }
+      }
+    },
+    {
+      "id": "20",
+      "municipalityId": "10",
+      "name": "Arcos",
+      "derivedCoordinates": {
+        "stopCount": 1,
+        "average": {
+          "latitude": 36.749337,
+          "longitude": -5.818322
+        },
+        "representativeStop": {
+          "stopId": "2_191",
+          "latitude": 36.749337,
+          "longitude": -5.818322
+        }
+      }
+    },
+    {
+      "id": "21",
+      "municipalityId": "5",
+      "name": "Penal",
+      "derivedCoordinates": {
+        "stopCount": 5,
+        "average": {
+          "latitude": 36.654961,
+          "longitude": -6.247499
+        },
+        "representativeStop": {
+          "stopId": "2_155",
+          "latitude": 36.666621,
+          "longitude": -6.246744
+        }
+      }
+    },
+    {
+      "id": "22",
+      "municipalityId": "6",
+      "name": "La Barca de la Florida"
+    },
+    {
+      "id": "23",
+      "municipalityId": "6",
+      "name": "Torrecera"
+    },
+    {
+      "id": "24",
+      "municipalityId": "6",
+      "name": "Guadalcín"
+    },
+    {
+      "id": "25",
+      "municipalityId": "6",
+      "name": "Nueva Jarilla"
+    },
+    {
+      "id": "26",
+      "municipalityId": "6",
+      "name": "Estella del Marqués"
+    },
+    {
+      "id": "28",
+      "municipalityId": "11",
+      "name": "Sanlúcar de Barrameda",
+      "derivedCoordinates": {
+        "stopCount": 14,
+        "average": {
+          "latitude": 36.765071,
+          "longitude": -6.354183
+        },
+        "representativeStop": {
+          "stopId": "2_227",
+          "latitude": 36.766917,
+          "longitude": -6.346745
+        }
+      }
+    },
+    {
+      "id": "3",
+      "municipalityId": "3",
+      "name": "Chiclana",
+      "derivedCoordinates": {
+        "stopCount": 32,
+        "average": {
+          "latitude": 36.439846,
+          "longitude": -6.128113
+        },
+        "representativeStop": {
+          "stopId": "2_64",
+          "latitude": 36.435623,
+          "longitude": -6.124618
+        }
+      }
+    },
+    {
+      "id": "30",
+      "municipalityId": "6",
+      "name": "El Torno"
+    },
+    {
+      "id": "31",
+      "municipalityId": "4",
+      "name": "Tres Caminos",
+      "derivedCoordinates": {
+        "stopCount": 1,
+        "average": {
+          "latitude": 36.469027,
+          "longitude": -6.173693
+        },
+        "representativeStop": {
+          "stopId": "2_249",
+          "latitude": 36.469027,
+          "longitude": -6.173693
+        }
+      }
+    },
+    {
+      "id": "32",
+      "municipalityId": "6",
+      "name": "Torremelgarejo"
+    },
+    {
+      "id": "4",
+      "municipalityId": "3",
+      "name": "Chiclana Costa"
+    },
+    {
+      "id": "40",
+      "municipalityId": "4",
+      "name": "El Marquesado",
+      "derivedCoordinates": {
+        "stopCount": 18,
+        "average": {
+          "latitude": 36.485235,
+          "longitude": -6.123038
+        },
+        "representativeStop": {
+          "stopId": "2_114",
+          "latitude": 36.480496,
+          "longitude": -6.117084
+        }
+      }
+    },
+    {
+      "id": "41",
+      "municipalityId": "4",
+      "name": "Campus Universitario",
+      "derivedCoordinates": {
+        "stopCount": 7,
+        "average": {
+          "latitude": 36.532465,
+          "longitude": -6.207312
+        },
+        "representativeStop": {
+          "stopId": "2_82",
+          "latitude": 36.530915,
+          "longitude": -6.210186
+        }
+      }
+    },
+    {
+      "id": "42",
+      "municipalityId": "6",
+      "name": "Aeropuerto",
+      "derivedCoordinates": {
+        "stopCount": 1,
+        "average": {
+          "latitude": 36.750337,
+          "longitude": -6.064587
+        },
+        "representativeStop": {
+          "stopId": "2_173",
+          "latitude": 36.750337,
+          "longitude": -6.064587
+        }
+      }
+    },
+    {
+      "id": "43",
+      "municipalityId": "4",
+      "name": "Hospital Pto. Real",
+      "derivedCoordinates": {
+        "stopCount": 2,
+        "average": {
+          "latitude": 36.519318,
+          "longitude": -6.152352
+        },
+        "representativeStop": {
+          "stopId": "2_359",
+          "latitude": 36.519346,
+          "longitude": -6.15175
+        }
+      }
+    },
+    {
+      "id": "44",
+      "municipalityId": "15",
+      "name": "Chipiona",
+      "derivedCoordinates": {
+        "stopCount": 1,
+        "average": {
+          "latitude": 36.736829,
+          "longitude": -6.428472
+        },
+        "representativeStop": {
+          "stopId": "2_266",
+          "latitude": 36.736829,
+          "longitude": -6.428472
+        }
+      }
+    },
+    {
+      "id": "45",
+      "municipalityId": "16",
+      "name": "Conil",
+      "derivedCoordinates": {
+        "stopCount": 3,
+        "average": {
+          "latitude": 36.284965,
+          "longitude": -6.080509
+        },
+        "representativeStop": {
+          "stopId": "2_278",
+          "latitude": 36.285625,
+          "longitude": -6.080686
+        }
+      }
+    },
+    {
+      "id": "46",
+      "municipalityId": "16",
+      "name": "El Colorado",
+      "derivedCoordinates": {
+        "stopCount": 7,
+        "average": {
+          "latitude": 36.315934,
+          "longitude": -6.084261
+        },
+        "representativeStop": {
+          "stopId": "2_283",
+          "latitude": 36.321138,
+          "longitude": -6.088644
+        }
+      }
+    },
+    {
+      "id": "47",
+      "municipalityId": "16",
+      "name": "Barrio Nuevo"
+    },
+    {
+      "id": "48",
+      "municipalityId": "3",
+      "name": "San Andrés Golf",
+      "derivedCoordinates": {
+        "stopCount": 1,
+        "average": {
+          "latitude": 36.35478,
+          "longitude": -6.105598
+        },
+        "representativeStop": {
+          "stopId": "2_289",
+          "latitude": 36.35478,
+          "longitude": -6.105598
+        }
+      }
+    },
+    {
+      "id": "49",
+      "municipalityId": "15",
+      "name": "Costa Ballena (Chipiona)"
+    },
+    {
+      "id": "50",
+      "municipalityId": "17",
+      "name": "Vejer de la Frontera"
+    },
+    {
+      "id": "51",
+      "municipalityId": "18",
+      "name": "Barbate"
+    },
+    {
+      "id": "55",
+      "municipalityId": "17",
+      "name": "El Palmar"
+    },
+    {
+      "id": "56",
+      "municipalityId": "18",
+      "name": "Zahora"
+    },
+    {
+      "id": "57",
+      "municipalityId": "18",
+      "name": "Caños de Meca"
+    },
+    {
+      "id": "58",
+      "municipalityId": "19",
+      "name": "Atlanterra"
+    },
+    {
+      "id": "59",
+      "municipalityId": "19",
+      "name": "Zahara de los Atunes"
+    },
+    {
+      "id": "6",
+      "municipalityId": "4",
+      "name": "Puerto Real",
+      "derivedCoordinates": {
+        "stopCount": 18,
+        "average": {
+          "latitude": 36.527469,
+          "longitude": -6.170975
+        },
+        "representativeStop": {
+          "stopId": "2_85",
+          "latitude": 36.528564,
+          "longitude": -6.18511
+        }
+      }
+    },
+    {
+      "id": "8",
+      "municipalityId": "5",
+      "name": "El Puerto de Santa María",
+      "derivedCoordinates": {
+        "stopCount": 15,
+        "average": {
+          "latitude": 36.596813,
+          "longitude": -6.223311
+        },
+        "representativeStop": {
+          "stopId": "2_194",
+          "latitude": 36.593778,
+          "longitude": -6.226493
+        }
+      }
+    },
+    {
+      "id": "9",
+      "municipalityId": "5",
+      "name": "Costa Oeste",
+      "derivedCoordinates": {
+        "stopCount": 6,
+        "average": {
+          "latitude": 36.609041,
+          "longitude": -6.269037
+        },
+        "representativeStop": {
+          "stopId": "2_142",
+          "latitude": 36.609376,
+          "longitude": -6.278192
+        }
+      }
+    }
+  ],
+  "stopLocations": {
+    "2_1": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_10": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_100": {
+      "municipalityId": "4",
+      "nucleusId": "11"
+    },
+    "2_101": {
+      "municipalityId": "4",
+      "nucleusId": "11"
+    },
+    "2_102": {
+      "municipalityId": "4",
+      "nucleusId": "11"
+    },
+    "2_103": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_104": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_105": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_106": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_107": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_108": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_109": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_11": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_110": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_111": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_112": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_113": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_114": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_115": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_116": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_117": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_118": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_119": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_12": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_120": {
+      "municipalityId": "4",
+      "nucleusId": "40"
+    },
+    "2_121": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_122": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_123": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_124": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_125": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_126": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_127": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_128": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_129": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_130": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_131": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_132": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_133": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_14": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_141": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_142": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_143": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_144": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_145": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_146": {
+      "municipalityId": "5",
+      "nucleusId": "9"
+    },
+    "2_15": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_155": {
+      "municipalityId": "5",
+      "nucleusId": "21"
+    },
+    "2_156": {
+      "municipalityId": "5",
+      "nucleusId": "21"
+    },
+    "2_159": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_16": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_160": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_161": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_162": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_163": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_164": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_165": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_166": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_167": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_168": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_169": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_17": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_170": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_171": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_172": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_173": {
+      "municipalityId": "6",
+      "nucleusId": "42"
+    },
+    "2_174": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_175": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_176": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_177": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_178": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_179": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_18": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_180": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_181": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_182": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_183": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_186": {
+      "municipalityId": "7",
+      "nucleusId": "17"
+    },
+    "2_187": {
+      "municipalityId": "7",
+      "nucleusId": "17"
+    },
+    "2_188": {
+      "municipalityId": "8",
+      "nucleusId": "18"
+    },
+    "2_189": {
+      "municipalityId": "10",
+      "nucleusId": "19"
+    },
+    "2_19": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_190": {
+      "municipalityId": "10",
+      "nucleusId": "19"
+    },
+    "2_191": {
+      "municipalityId": "10",
+      "nucleusId": "20"
+    },
+    "2_193": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_194": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_195": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_196": {
+      "municipalityId": "5",
+      "nucleusId": "21"
+    },
+    "2_197": {
+      "municipalityId": "5",
+      "nucleusId": "21"
+    },
+    "2_198": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_199": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_20": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_200": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_201": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_202": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_203": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_206": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_207": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_222": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_223": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_224": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_225": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_226": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_227": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_228": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_229": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_23": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_230": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_231": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_232": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_233": {
+      "municipalityId": "7",
+      "nucleusId": "17"
+    },
+    "2_234": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_235": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_236": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_237": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_238": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_24": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_241": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_243": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_244": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_245": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_247": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_248": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_249": {
+      "municipalityId": "4",
+      "nucleusId": "31"
+    },
+    "2_25": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_251": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_254": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_255": {
+      "municipalityId": "7",
+      "nucleusId": "15"
+    },
+    "2_257": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_258": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_259": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_26": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_260": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_261": {
+      "municipalityId": "5",
+      "nucleusId": "21"
+    },
+    "2_262": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_263": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_264": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_265": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_266": {
+      "municipalityId": "15",
+      "nucleusId": "44"
+    },
+    "2_268": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_269": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_27": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_270": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_271": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_272": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_273": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_274": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_277": {
+      "municipalityId": "16",
+      "nucleusId": "45"
+    },
+    "2_278": {
+      "municipalityId": "16",
+      "nucleusId": "45"
+    },
+    "2_279": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_280": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_282": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_283": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_284": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_285": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_287": {
+      "municipalityId": "16",
+      "nucleusId": "46"
+    },
+    "2_289": {
+      "municipalityId": "3",
+      "nucleusId": "48"
+    },
+    "2_29": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_291": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_292": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_296": {
+      "municipalityId": "16",
+      "nucleusId": "45"
+    },
+    "2_3": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_30": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_300": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_301": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_302": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_303": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_304": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_305": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_306": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_31": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_310": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_311": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_312": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_313": {
+      "municipalityId": "11",
+      "nucleusId": "28"
+    },
+    "2_314": {
+      "municipalityId": "8",
+      "nucleusId": "18"
+    },
+    "2_315": {
+      "municipalityId": "8",
+      "nucleusId": "18"
+    },
+    "2_316": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_317": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_318": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_319": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_32": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_320": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_321": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_322": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_33": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_34": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_345": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_346": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_347": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_348": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_349": {
+      "municipalityId": "7",
+      "nucleusId": null
+    },
+    "2_35": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_350": {
+      "municipalityId": "7",
+      "nucleusId": null
+    },
+    "2_351": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_352": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_353": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_354": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_355": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_356": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_357": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_359": {
+      "municipalityId": "4",
+      "nucleusId": "43"
+    },
+    "2_36": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_360": {
+      "municipalityId": "5",
+      "nucleusId": "8"
+    },
+    "2_361": {
+      "municipalityId": "6",
+      "nucleusId": "14"
+    },
+    "2_37": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_38": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_4": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_40": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_41": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_42": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_43": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_47": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_48": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_49": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_5": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_50": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_51": {
+      "municipalityId": "2",
+      "nucleusId": "2"
+    },
+    "2_56": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_57": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_58": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_59": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_6": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_60": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_61": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_62": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_63": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_64": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_65": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_66": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_67": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_68": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_69": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_7": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_70": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_71": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_72": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_73": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_74": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_75": {
+      "municipalityId": "4",
+      "nucleusId": "12"
+    },
+    "2_76": {
+      "municipalityId": "4",
+      "nucleusId": "12"
+    },
+    "2_77": {
+      "municipalityId": "4",
+      "nucleusId": "12"
+    },
+    "2_78": {
+      "municipalityId": "4",
+      "nucleusId": "12"
+    },
+    "2_79": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_8": {
+      "municipalityId": "1",
+      "nucleusId": "1"
+    },
+    "2_80": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_81": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_82": {
+      "municipalityId": "4",
+      "nucleusId": "41"
+    },
+    "2_83": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_84": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_85": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_86": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_87": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_88": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_90": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_91": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_92": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_93": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_94": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_95": {
+      "municipalityId": "4",
+      "nucleusId": "43"
+    },
+    "2_96": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_97": {
+      "municipalityId": "4",
+      "nucleusId": "6"
+    },
+    "2_98": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    },
+    "2_99": {
+      "municipalityId": "3",
+      "nucleusId": "3"
+    }
+  }
+}

@@ -78,15 +78,17 @@ function JourneyCard({
   journey,
   dataset,
   defaultBoardingIndex,
+  defaultAlightingIndex,
 }: {
   journey: DirectJourney;
   dataset: NetworkDataset;
   defaultBoardingIndex: number;
+  defaultAlightingIndex: number;
 }) {
   const { t } = useTranslation();
   const initialBoarding = journey.boardings[defaultBoardingIndex]!;
   const [boardingIndex, setBoardingIndex] = useState(initialBoarding.index);
-  const [alightingIndex, setAlightingIndex] = useState(initialBoarding.alightings[0]!.index);
+  const [alightingIndex, setAlightingIndex] = useState(defaultAlightingIndex);
   const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
   const route = dataset.routes.find((route) => route.id === journey.routeId);
   const trip = dataset.trips.find((trip) => trip.id === journey.tripId)!;
@@ -328,12 +330,13 @@ export function DirectJourneyResults({
             </p>
           ) : (
             <div className="mt-4 grid gap-4">
-              {visible.map(({ journey, boardingIndex }) => (
+              {visible.map(({ journey, boardingIndex, alightingIndex }) => (
                 <JourneyCard
                   key={journey.id}
                   journey={journey}
                   dataset={dataset}
                   defaultBoardingIndex={boardingIndex}
+                  defaultAlightingIndex={alightingIndex}
                 />
               ))}
             </div>

@@ -29,6 +29,54 @@ test('creates a Bahía-only topology with stable deduplicated patterns', () => {
   });
 });
 
+test('merges reviewed CTAN locations and rejects a selected stop with no relationship', () => {
+  const locations = {
+    municipalities: [{ id: 'municipality', name: 'Municipality' }],
+    nuclei: [
+      {
+        id: 'nucleus',
+        municipalityId: 'municipality',
+        name: 'Town',
+        derivedCoordinates: { representativeStop: { stopId: 'cadiz', latitude: 36.5, longitude: -6.2 } },
+      },
+      { id: 'empty', municipalityId: 'municipality', name: 'Empty' },
+    ],
+    stopLocations: {
+      cadiz: { municipalityId: 'municipality', nucleusId: 'nucleus' },
+      puerto: { municipalityId: 'municipality', nucleusId: 'nucleus' },
+      station: { municipalityId: 'municipality', nucleusId: null },
+    },
+  };
+  const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, locations);
+  assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.nucleusId, 'nucleus');
+  assert.equal(dataset.stops.find((stop) => stop.id === 'station')?.nucleusId, null);
+  assert.deepEqual(dataset.nuclei[0]?.referencePoint, { latitude: 36.5, longitude: -6.2 });
+  assert.equal(dataset.nuclei[1]?.referencePoint, null);
+  assert.throws(
+    () =>
+      createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, {
+        ...locations,
+        nuclei: [
+          {
+            id: 'nucleus',
+            municipalityId: 'municipality',
+            name: 'Town',
+            derivedCoordinates: { representativeStop: { stopId: 'station', latitude: 36.5, longitude: -6.2 } },
+          },
+        ],
+      }),
+    /outside its own area/,
+  );
+  assert.throws(
+    () =>
+      createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, {
+        ...locations,
+        stopLocations: { cadiz: locations.stopLocations.cadiz },
+      }),
+    /no reviewed CTAN location/,
+  );
+});
+
 test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnight', () => {
   const fixture = {
     ...topologyFixture,
@@ -43,7 +91,7 @@ test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnig
     ),
   };
   const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { cadiz: 'cadiz' });
-  assert.equal(dataset.formatVersion, 2);
+  assert.equal(dataset.formatVersion, 4);
   assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.placeId, 'cadiz');
   assert.equal(dataset.stops.find((stop) => stop.id === 'puerto')?.placeId, null);
   assert.deepEqual(

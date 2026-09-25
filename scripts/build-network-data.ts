@@ -30,6 +30,17 @@ const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
 /** Reviewed, single-place assignments that are separate from the ignored geographic audit report. */
 const placeAssignmentsPath = resolve('scripts/place-stop-assignments.json');
+/** Reviewed CTAN hierarchy captured once and kept available for offline data rebuilds. */
+const locationDirectoryPath = resolve('scripts/ctan-location-directory.json');
+
+/** The compact source relationships merged into the browser's network snapshot. */
+interface LocationDirectory {
+  municipalities: NetworkDataset['municipalities'];
+  nuclei: (Omit<NetworkDataset['nuclei'][number], 'referencePoint'> & {
+    derivedCoordinates?: { representativeStop: { stopId: string; latitude: number; longitude: number } };
+  })[];
+  stopLocations: Record<string, { municipalityId: string; nucleusId: string | null }>;
+}
 
 /** GTFS tables needed for the current direct-journey snapshot. */
 interface InputTables {
@@ -264,6 +275,7 @@ export function createNetworkDataset(
   archiveSha256: string,
   placeAssignments: Record<string, string> = {},
   dateRange?: SnapshotDateRange,
+  locationDirectory?: LocationDirectory,
 ): NetworkDataset {
   // First lock the snapshot to the one agency this application is allowed to represent.
   const agency = tables.agency.find((row) => optionalValue(row, 'agency_id') === bahiaAgencyId);
@@ -408,6 +420,10 @@ export function createNetworkDataset(
         fail(`stop ${stopId} references a missing parent station.`);
       }
 
+      const location = locationDirectory?.stopLocations[stopId];
+      if (locationDirectory !== undefined && location === undefined) {
+        fail(`stop ${stopId} has no reviewed CTAN location.`);
+      }
       return {
         id: stopId,
         name: requiredValue(stop, 'stop_name', 'stops'),
@@ -415,6 +431,8 @@ export function createNetworkDataset(
         longitude: requiredCoordinate(stop, 'stop_lon'),
         parentStationId: optionalValue(stop, 'parent_station'),
         placeId: placeAssignments[stopId] ?? null,
+        municipalityId: location?.municipalityId ?? null,
+        nucleusId: location?.nucleusId ?? null,
       };
     })
     .sort((first, second) => compareText(first.id, second.id));
@@ -469,7 +487,7 @@ export function createNetworkDataset(
 
   // Validate the generated shape through the same boundary the browser uses before returning it.
   const dataset = parseNetworkDataset({
-    formatVersion: 2,
+    formatVersion: 4,
     source: {
       url: sourceUrl,
       generatedAt: new Date().toISOString(),
@@ -477,6 +495,26 @@ export function createNetworkDataset(
     },
     agencies,
     routes,
+    municipalities: locationDirectory?.municipalities ?? [],
+    nuclei:
+      locationDirectory?.nuclei.map((nucleus) => {
+        const representative = nucleus.derivedCoordinates?.representativeStop;
+        if (
+          representative !== undefined &&
+          locationDirectory.stopLocations[representative.stopId]?.nucleusId !== nucleus.id
+        ) {
+          fail(`nucleus ${nucleus.id} has a representative stop outside its own area.`);
+        }
+        return {
+          id: nucleus.id,
+          municipalityId: nucleus.municipalityId,
+          name: nucleus.name,
+          referencePoint:
+            representative === undefined
+              ? null
+              : { latitude: representative.latitude, longitude: representative.longitude },
+        };
+      }) ?? [],
     stops,
     patterns,
     trips: scheduledTrips.sort((a, b) => compareText(a.id, b.id)),
@@ -589,7 +627,8 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
   // Record input provenance, then build and validate the reduced app-facing dataset.
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
   const placeAssignments = JSON.parse(await readFile(placeAssignmentsPath, 'utf8')) as Record<string, string>;
-  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments, dateRange);
+  const locationDirectory = JSON.parse(await readFile(locationDirectoryPath, 'utf8')) as LocationDirectory;
+  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments, dateRange, locationDirectory);
 
   // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
   await mkdir(resolve(outputPath, '..'), { recursive: true });

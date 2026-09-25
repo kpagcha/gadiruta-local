@@ -1,8 +1,8 @@
 {
-  "formatVersion": 2,
+  "formatVersion": 4,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-24T16:34:43.230Z",
+    "generatedAt": "2026-09-25T09:57:45.375Z",
     "archiveSha256": "05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844"
   },
   "agencies": [
@@ -616,6 +616,409 @@
       "textColor": "FFFFFF"
     }
   ],
+  "municipalities": [
+    {
+      "id": "1",
+      "name": "Cádiz"
+    },
+    {
+      "id": "10",
+      "name": "Arcos de la Frontera"
+    },
+    {
+      "id": "11",
+      "name": "Sanlucar de Barrameda"
+    },
+    {
+      "id": "15",
+      "name": "Chipiona"
+    },
+    {
+      "id": "16",
+      "name": "Conil de la Frontera"
+    },
+    {
+      "id": "17",
+      "name": "Vejer de la Frontera"
+    },
+    {
+      "id": "18",
+      "name": "Barbate"
+    },
+    {
+      "id": "19",
+      "name": "Tarifa"
+    },
+    {
+      "id": "2",
+      "name": "San Fernando"
+    },
+    {
+      "id": "3",
+      "name": "Chiclana"
+    },
+    {
+      "id": "4",
+      "name": "Puerto Real"
+    },
+    {
+      "id": "5",
+      "name": "El Puerto de Santa María"
+    },
+    {
+      "id": "6",
+      "name": "Jerez de la Frontera"
+    },
+    {
+      "id": "7",
+      "name": "Rota"
+    },
+    {
+      "id": "8",
+      "name": "Medina Sidonia"
+    }
+  ],
+  "nuclei": [
+    {
+      "id": "1",
+      "municipalityId": "1",
+      "name": "Cádiz",
+      "referencePoint": {
+        "latitude": 36.521701,
+        "longitude": -6.285631
+      }
+    },
+    {
+      "id": "11",
+      "municipalityId": "4",
+      "name": "Barrio Jarana",
+      "referencePoint": {
+        "latitude": 36.502844,
+        "longitude": -6.143829
+      }
+    },
+    {
+      "id": "12",
+      "municipalityId": "4",
+      "name": "Río San Pedro",
+      "referencePoint": {
+        "latitude": 36.525028,
+        "longitude": -6.22286
+      }
+    },
+    {
+      "id": "13",
+      "municipalityId": "5",
+      "name": "Doña Blanca",
+      "referencePoint": null
+    },
+    {
+      "id": "14",
+      "municipalityId": "6",
+      "name": "Jerez",
+      "referencePoint": {
+        "latitude": 36.693656,
+        "longitude": -6.130328
+      }
+    },
+    {
+      "id": "15",
+      "municipalityId": "7",
+      "name": "Rota",
+      "referencePoint": {
+        "latitude": 36.62353,
+        "longitude": -6.359879
+      }
+    },
+    {
+      "id": "16",
+      "municipalityId": "6",
+      "name": "El Portal",
+      "referencePoint": null
+    },
+    {
+      "id": "17",
+      "municipalityId": "7",
+      "name": "Costa Ballena (Rota)",
+      "referencePoint": {
+        "latitude": 36.692467,
+        "longitude": -6.410083
+      }
+    },
+    {
+      "id": "18",
+      "municipalityId": "8",
+      "name": "Medina",
+      "referencePoint": {
+        "latitude": 36.438228,
+        "longitude": -6.021544
+      }
+    },
+    {
+      "id": "19",
+      "municipalityId": "10",
+      "name": "Jédula",
+      "referencePoint": {
+        "latitude": 36.724754,
+        "longitude": -5.92982
+      }
+    },
+    {
+      "id": "2",
+      "municipalityId": "2",
+      "name": "San Fernando",
+      "referencePoint": {
+        "latitude": 36.464473,
+        "longitude": -6.201655
+      }
+    },
+    {
+      "id": "20",
+      "municipalityId": "10",
+      "name": "Arcos",
+      "referencePoint": {
+        "latitude": 36.749337,
+        "longitude": -5.818322
+      }
+    },
+    {
+      "id": "21",
+      "municipalityId": "5",
+      "name": "Penal",
+      "referencePoint": {
+        "latitude": 36.666621,
+        "longitude": -6.246744
+      }
+    },
+    {
+      "id": "22",
+      "municipalityId": "6",
+      "name": "La Barca de la Florida",
+      "referencePoint": null
+    },
+    {
+      "id": "23",
+      "municipalityId": "6",
+      "name": "Torrecera",
+      "referencePoint": null
+    },
+    {
+      "id": "24",
+      "municipalityId": "6",
+      "name": "Guadalcín",
+      "referencePoint": null
+    },
+    {
+      "id": "25",
+      "municipalityId": "6",
+      "name": "Nueva Jarilla",
+      "referencePoint": null
+    },
+    {
+      "id": "26",
+      "municipalityId": "6",
+      "name": "Estella del Marqués",
+      "referencePoint": null
+    },
+    {
+      "id": "28",
+      "municipalityId": "11",
+      "name": "Sanlúcar de Barrameda",
+      "referencePoint": {
+        "latitude": 36.766917,
+        "longitude": -6.346745
+      }
+    },
+    {
+      "id": "3",
+      "municipalityId": "3",
+      "name": "Chiclana",
+      "referencePoint": {
+        "latitude": 36.435623,
+        "longitude": -6.124618
+      }
+    },
+    {
+      "id": "30",
+      "municipalityId": "6",
+      "name": "El Torno",
+      "referencePoint": null
+    },
+    {
+      "id": "31",
+      "municipalityId": "4",
+      "name": "Tres Caminos",
+      "referencePoint": {
+        "latitude": 36.469027,
+        "longitude": -6.173693
+      }
+    },
+    {
+      "id": "32",
+      "municipalityId": "6",
+      "name": "Torremelgarejo",
+      "referencePoint": null
+    },
+    {
+      "id": "4",
+      "municipalityId": "3",
+      "name": "Chiclana Costa",
+      "referencePoint": null
+    },
+    {
+      "id": "40",
+      "municipalityId": "4",
+      "name": "El Marquesado",
+      "referencePoint": {
+        "latitude": 36.480496,
+        "longitude": -6.117084
+      }
+    },
+    {
+      "id": "41",
+      "municipalityId": "4",
+      "name": "Campus Universitario",
+      "referencePoint": {
+        "latitude": 36.530915,
+        "longitude": -6.210186
+      }
+    },
+    {
+      "id": "42",
+      "municipalityId": "6",
+      "name": "Aeropuerto",
+      "referencePoint": {
+        "latitude": 36.750337,
+        "longitude": -6.064587
+      }
+    },
+    {
+      "id": "43",
+      "municipalityId": "4",
+      "name": "Hospital Pto. Real",
+      "referencePoint": {
+        "latitude": 36.519346,
+        "longitude": -6.15175
+      }
+    },
+    {
+      "id": "44",
+      "municipalityId": "15",
+      "name": "Chipiona",
+      "referencePoint": {
+        "latitude": 36.736829,
+        "longitude": -6.428472
+      }
+    },
+    {
+      "id": "45",
+      "municipalityId": "16",
+      "name": "Conil",
+      "referencePoint": {
+        "latitude": 36.285625,
+        "longitude": -6.080686
+      }
+    },
+    {
+      "id": "46",
+      "municipalityId": "16",
+      "name": "El Colorado",
+      "referencePoint": {
+        "latitude": 36.321138,
+        "longitude": -6.088644
+      }
+    },
+    {
+      "id": "47",
+      "municipalityId": "16",
+      "name": "Barrio Nuevo",
+      "referencePoint": null
+    },
+    {
+      "id": "48",
+      "municipalityId": "3",
+      "name": "San Andrés Golf",
+      "referencePoint": {
+        "latitude": 36.35478,
+        "longitude": -6.105598
+      }
+    },
+    {
+      "id": "49",
+      "municipalityId": "15",
+      "name": "Costa Ballena (Chipiona)",
+      "referencePoint": null
+    },
+    {
+      "id": "50",
+      "municipalityId": "17",
+      "name": "Vejer de la Frontera",
+      "referencePoint": null
+    },
+    {
+      "id": "51",
+      "municipalityId": "18",
+      "name": "Barbate",
+      "referencePoint": null
+    },
+    {
+      "id": "55",
+      "municipalityId": "17",
+      "name": "El Palmar",
+      "referencePoint": null
+    },
+    {
+      "id": "56",
+      "municipalityId": "18",
+      "name": "Zahora",
+      "referencePoint": null
+    },
+    {
+      "id": "57",
+      "municipalityId": "18",
+      "name": "Caños de Meca",
+      "referencePoint": null
+    },
+    {
+      "id": "58",
+      "municipalityId": "19",
+      "name": "Atlanterra",
+      "referencePoint": null
+    },
+    {
+      "id": "59",
+      "municipalityId": "19",
+      "name": "Zahara de los Atunes",
+      "referencePoint": null
+    },
+    {
+      "id": "6",
+      "municipalityId": "4",
+      "name": "Puerto Real",
+      "referencePoint": {
+        "latitude": 36.528564,
+        "longitude": -6.18511
+      }
+    },
+    {
+      "id": "8",
+      "municipalityId": "5",
+      "name": "El Puerto de Santa María",
+      "referencePoint": {
+        "latitude": 36.593778,
+        "longitude": -6.226493
+      }
+    },
+    {
+      "id": "9",
+      "municipalityId": "5",
+      "name": "Costa Oeste",
+      "referencePoint": {
+        "latitude": 36.609376,
+        "longitude": -6.278192
+      }
+    }
+  ],
   "stops": [
     {
       "id": "2_1",
@@ -623,7 +1026,9 @@
       "latitude": 36.53021016116525,
       "longitude": -6.2909189520454385,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_10",
@@ -631,7 +1036,9 @@
       "latitude": 36.527229903333485,
       "longitude": -6.288757091579435,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_100",
@@ -639,7 +1046,9 @@
       "latitude": 36.502917,
       "longitude": -6.143661,
       "parentStationId": null,
-      "placeId": "barrio-jarana"
+      "placeId": "barrio-jarana",
+      "municipalityId": "4",
+      "nucleusId": "11"
     },
     {
       "id": "2_101",
@@ -647,7 +1056,9 @@
       "latitude": 36.502844,
       "longitude": -6.143829,
       "parentStationId": null,
-      "placeId": "barrio-jarana"
+      "placeId": "barrio-jarana",
+      "municipalityId": "4",
+      "nucleusId": "11"
     },
     {
       "id": "2_102",
@@ -655,7 +1066,9 @@
       "latitude": 36.491921,
       "longitude": -6.1423,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "11"
     },
     {
       "id": "2_103",
@@ -663,7 +1076,9 @@
       "latitude": 36.496422,
       "longitude": -6.139463,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_104",
@@ -671,7 +1086,9 @@
       "latitude": 36.496326,
       "longitude": -6.139463,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_105",
@@ -679,7 +1096,9 @@
       "latitude": 36.496177,
       "longitude": -6.133945,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_106",
@@ -687,7 +1106,9 @@
       "latitude": 36.496057,
       "longitude": -6.134278,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_107",
@@ -695,7 +1116,9 @@
       "latitude": 36.496047,
       "longitude": -6.130434,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_108",
@@ -703,7 +1126,9 @@
       "latitude": 36.495915,
       "longitude": -6.130379,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_109",
@@ -711,7 +1136,9 @@
       "latitude": 36.49389,
       "longitude": -6.115483,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_11",
@@ -719,7 +1146,9 @@
       "latitude": 36.521808460123054,
       "longitude": -6.285879081306455,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_110",
@@ -727,7 +1156,9 @@
       "latitude": 36.493934,
       "longitude": -6.115563,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_111",
@@ -735,7 +1166,9 @@
       "latitude": 36.486832,
       "longitude": -6.116635,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_112",
@@ -743,7 +1176,9 @@
       "latitude": 36.486799,
       "longitude": -6.11674,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_113",
@@ -751,7 +1186,9 @@
       "latitude": 36.480557,
       "longitude": -6.11695,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_114",
@@ -759,7 +1196,9 @@
       "latitude": 36.480496,
       "longitude": -6.117084,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_115",
@@ -767,7 +1206,9 @@
       "latitude": 36.476511,
       "longitude": -6.11725,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_116",
@@ -775,7 +1216,9 @@
       "latitude": 36.476513,
       "longitude": -6.117374,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_117",
@@ -783,7 +1226,9 @@
       "latitude": 36.471414,
       "longitude": -6.118335,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_118",
@@ -791,7 +1236,9 @@
       "latitude": 36.471373,
       "longitude": -6.118447,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_119",
@@ -799,7 +1246,9 @@
       "latitude": 36.469496,
       "longitude": -6.118366,
       "parentStationId": null,
-      "placeId": "el-marquesado"
+      "placeId": "el-marquesado",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_12",
@@ -807,7 +1256,9 @@
       "latitude": 36.52170122369042,
       "longitude": -6.285630976972578,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_120",
@@ -815,7 +1266,9 @@
       "latitude": 36.469479,
       "longitude": -6.118493,
       "parentStationId": null,
-      "placeId": "el-marquesado"
+      "placeId": "el-marquesado",
+      "municipalityId": "4",
+      "nucleusId": "40"
     },
     {
       "id": "2_121",
@@ -823,7 +1276,9 @@
       "latitude": 36.57923384877586,
       "longitude": -6.214028769346247,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_122",
@@ -831,7 +1286,9 @@
       "latitude": 36.579645,
       "longitude": -6.214024,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_123",
@@ -839,7 +1296,9 @@
       "latitude": 36.583432,
       "longitude": -6.217442,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_124",
@@ -847,7 +1306,9 @@
       "latitude": 36.58469,
       "longitude": -6.218058,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_125",
@@ -855,7 +1316,9 @@
       "latitude": 36.604761,
       "longitude": -6.218873,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_126",
@@ -863,7 +1326,9 @@
       "latitude": 36.604685,
       "longitude": -6.21863,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_127",
@@ -871,7 +1336,9 @@
       "latitude": 36.607108316360744,
       "longitude": -6.221217346234019,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_128",
@@ -879,7 +1346,9 @@
       "latitude": 36.607183,
       "longitude": -6.219736,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_129",
@@ -887,7 +1356,9 @@
       "latitude": 36.604638,
       "longitude": -6.228673,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_130",
@@ -895,7 +1366,9 @@
       "latitude": 36.604675,
       "longitude": -6.229028,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_131",
@@ -903,7 +1376,9 @@
       "latitude": 36.59845,
       "longitude": -6.236959,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_132",
@@ -911,7 +1386,9 @@
       "latitude": 36.598339,
       "longitude": -6.237023,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_133",
@@ -919,7 +1396,9 @@
       "latitude": 36.597182,
       "longitude": -6.232289,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_14",
@@ -927,7 +1406,9 @@
       "latitude": 36.52722370886567,
       "longitude": -6.2853893637657166,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_141",
@@ -935,7 +1416,9 @@
       "latitude": 36.609399,
       "longitude": -6.278401,
       "parentStationId": null,
-      "placeId": "costa-oeste"
+      "placeId": "costa-oeste",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_142",
@@ -943,7 +1426,9 @@
       "latitude": 36.609376,
       "longitude": -6.278192,
       "parentStationId": null,
-      "placeId": "costa-oeste"
+      "placeId": "costa-oeste",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_143",
@@ -951,7 +1436,9 @@
       "latitude": 36.60042,
       "longitude": -6.250995,
       "parentStationId": null,
-      "placeId": "costa-oeste"
+      "placeId": "costa-oeste",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_144",
@@ -959,7 +1446,9 @@
       "latitude": 36.601004,
       "longitude": -6.251889,
       "parentStationId": null,
-      "placeId": "costa-oeste"
+      "placeId": "costa-oeste",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_145",
@@ -967,7 +1456,9 @@
       "latitude": 36.617615,
       "longitude": -6.277921,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_146",
@@ -975,7 +1466,9 @@
       "latitude": 36.616435,
       "longitude": -6.276822,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "9"
     },
     {
       "id": "2_15",
@@ -983,7 +1476,9 @@
       "latitude": 36.51777055559838,
       "longitude": -6.283383285818098,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_155",
@@ -991,7 +1486,9 @@
       "latitude": 36.666621,
       "longitude": -6.246744,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "21"
     },
     {
       "id": "2_156",
@@ -999,7 +1496,9 @@
       "latitude": 36.666777,
       "longitude": -6.247073,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "21"
     },
     {
       "id": "2_159",
@@ -1007,7 +1506,9 @@
       "latitude": 36.677662,
       "longitude": -6.14502,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_16",
@@ -1015,7 +1516,9 @@
       "latitude": 36.50875847325536,
       "longitude": -6.278260266599653,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_160",
@@ -1023,7 +1526,9 @@
       "latitude": 36.677576,
       "longitude": -6.144948,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_161",
@@ -1031,7 +1536,9 @@
       "latitude": 36.679414,
       "longitude": -6.126668,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_162",
@@ -1039,7 +1546,9 @@
       "latitude": 36.681659,
       "longitude": -6.128064,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_163",
@@ -1047,7 +1556,9 @@
       "latitude": 36.680821,
       "longitude": -6.127525,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_164",
@@ -1055,7 +1566,9 @@
       "latitude": 36.695612,
       "longitude": -6.135986,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_165",
@@ -1063,7 +1576,9 @@
       "latitude": 36.695488,
       "longitude": -6.136216,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_166",
@@ -1071,7 +1586,9 @@
       "latitude": 36.68760813398017,
       "longitude": -6.113221049308777,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_167",
@@ -1079,7 +1596,9 @@
       "latitude": 36.69322461018721,
       "longitude": -6.103653609752655,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_168",
@@ -1087,7 +1606,9 @@
       "latitude": 36.693075572792075,
       "longitude": -6.103569120168686,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_169",
@@ -1095,7 +1616,9 @@
       "latitude": 36.697053,
       "longitude": -6.143516,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_17",
@@ -1103,7 +1626,9 @@
       "latitude": 36.50627379526967,
       "longitude": -6.27683333140373,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_170",
@@ -1111,7 +1636,9 @@
       "latitude": 36.696897,
       "longitude": -6.143476,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_171",
@@ -1119,7 +1646,9 @@
       "latitude": 36.686249,
       "longitude": -6.119375,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_172",
@@ -1127,7 +1656,9 @@
       "latitude": 36.686025,
       "longitude": -6.119362,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_173",
@@ -1135,7 +1666,9 @@
       "latitude": 36.75033683761318,
       "longitude": -6.064587212548067,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "6",
+      "nucleusId": "42"
     },
     {
       "id": "2_174",
@@ -1143,7 +1676,9 @@
       "latitude": 36.68055,
       "longitude": -6.127447,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_175",
@@ -1151,7 +1686,9 @@
       "latitude": 36.52513,
       "longitude": -5.982413,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_176",
@@ -1159,7 +1696,9 @@
       "latitude": 36.525248,
       "longitude": -5.98246,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_177",
@@ -1167,7 +1706,9 @@
       "latitude": 36.564217,
       "longitude": -6.010452,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_178",
@@ -1175,7 +1716,9 @@
       "latitude": 36.580883,
       "longitude": -6.016463,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_179",
@@ -1183,7 +1726,9 @@
       "latitude": 36.693608,
       "longitude": -6.129309,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_18",
@@ -1191,7 +1736,9 @@
       "latitude": 36.50027844018818,
       "longitude": -6.2733156142806985,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_180",
@@ -1199,7 +1746,9 @@
       "latitude": 36.693656,
       "longitude": -6.130328,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_181",
@@ -1207,7 +1756,9 @@
       "latitude": 36.627986,
       "longitude": -6.355891,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_182",
@@ -1215,7 +1766,9 @@
       "latitude": 36.659012,
       "longitude": -6.370426,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_183",
@@ -1223,7 +1776,9 @@
       "latitude": 36.659056,
       "longitude": -6.3708,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_186",
@@ -1231,7 +1786,9 @@
       "latitude": 36.692467,
       "longitude": -6.410083,
       "parentStationId": null,
-      "placeId": "costa-ballena"
+      "placeId": "costa-ballena",
+      "municipalityId": "7",
+      "nucleusId": "17"
     },
     {
       "id": "2_187",
@@ -1239,7 +1796,9 @@
       "latitude": 36.688138,
       "longitude": -6.41723,
       "parentStationId": null,
-      "placeId": "costa-ballena"
+      "placeId": "costa-ballena",
+      "municipalityId": "7",
+      "nucleusId": "17"
     },
     {
       "id": "2_188",
@@ -1247,7 +1806,9 @@
       "latitude": 36.462408,
       "longitude": -5.930291,
       "parentStationId": null,
-      "placeId": "medina-sidonia"
+      "placeId": "medina-sidonia",
+      "municipalityId": "8",
+      "nucleusId": "18"
     },
     {
       "id": "2_189",
@@ -1255,7 +1816,9 @@
       "latitude": 36.724754,
       "longitude": -5.92982,
       "parentStationId": null,
-      "placeId": "jedula"
+      "placeId": "jedula",
+      "municipalityId": "10",
+      "nucleusId": "19"
     },
     {
       "id": "2_19",
@@ -1263,7 +1826,9 @@
       "latitude": 36.49781923454934,
       "longitude": -6.271917123126218,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_190",
@@ -1271,7 +1836,9 @@
       "latitude": 36.725011,
       "longitude": -5.929644,
       "parentStationId": null,
-      "placeId": "jedula"
+      "placeId": "jedula",
+      "municipalityId": "10",
+      "nucleusId": "19"
     },
     {
       "id": "2_191",
@@ -1279,7 +1846,9 @@
       "latitude": 36.749337,
       "longitude": -5.818322,
       "parentStationId": null,
-      "placeId": "arcos-de-la-frontera"
+      "placeId": "arcos-de-la-frontera",
+      "municipalityId": "10",
+      "nucleusId": "20"
     },
     {
       "id": "2_193",
@@ -1287,7 +1856,9 @@
       "latitude": 36.530915,
       "longitude": -6.289546,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_194",
@@ -1295,7 +1866,9 @@
       "latitude": 36.593778,
       "longitude": -6.226493,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_195",
@@ -1303,7 +1876,9 @@
       "latitude": 36.615357,
       "longitude": -6.352778,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_196",
@@ -1311,7 +1886,9 @@
       "latitude": 36.664249,
       "longitude": -6.256196,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "21"
     },
     {
       "id": "2_197",
@@ -1319,7 +1896,9 @@
       "latitude": 36.6634,
       "longitude": -6.246123,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "5",
+      "nucleusId": "21"
     },
     {
       "id": "2_198",
@@ -1327,7 +1906,9 @@
       "latitude": 36.457785,
       "longitude": -6.198996,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_199",
@@ -1335,7 +1916,9 @@
       "latitude": 36.457479,
       "longitude": -6.19901,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_20",
@@ -1343,7 +1926,9 @@
       "latitude": 36.455872605383455,
       "longitude": -6.214650338706968,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_200",
@@ -1351,7 +1936,9 @@
       "latitude": 36.45174793639307,
       "longitude": -6.205760000000016,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_201",
@@ -1359,7 +1946,9 @@
       "latitude": 36.451438,
       "longitude": -6.205556,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_202",
@@ -1367,7 +1956,9 @@
       "latitude": 36.699575,
       "longitude": -6.14593,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_203",
@@ -1375,7 +1966,9 @@
       "latitude": 36.700154,
       "longitude": -6.146432,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_206",
@@ -1383,7 +1976,9 @@
       "latitude": 36.687529047173,
       "longitude": -6.1129045486450195,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_207",
@@ -1391,7 +1986,9 @@
       "latitude": 36.46447342713473,
       "longitude": -6.2016550419029155,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_222",
@@ -1399,7 +1996,9 @@
       "latitude": 36.78157949665965,
       "longitude": -6.358451783497618,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_223",
@@ -1407,7 +2006,9 @@
       "latitude": 36.77198805523583,
       "longitude": -6.356999367316054,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_224",
@@ -1415,7 +2016,9 @@
       "latitude": 36.77142406819268,
       "longitude": -6.356657385666655,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_225",
@@ -1423,7 +2026,9 @@
       "latitude": 36.76810559184053,
       "longitude": -6.358388751585768,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_226",
@@ -1431,7 +2036,9 @@
       "latitude": 36.76814319273308,
       "longitude": -6.35866099580078,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_227",
@@ -1439,7 +2046,9 @@
       "latitude": 36.76691739413688,
       "longitude": -6.34674528225212,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_228",
@@ -1447,7 +2056,9 @@
       "latitude": 36.76695392128419,
       "longitude": -6.346570938666152,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_229",
@@ -1455,7 +2066,9 @@
       "latitude": 36.76979957546195,
       "longitude": -6.346879836069508,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_23",
@@ -1463,7 +2076,9 @@
       "latitude": 36.45947743713433,
       "longitude": -6.208618050632475,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_230",
@@ -1471,7 +2086,9 @@
       "latitude": 36.76998776245468,
       "longitude": -6.345768958170699,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_231",
@@ -1479,7 +2096,9 @@
       "latitude": 36.53168650743388,
       "longitude": -6.292225187835691,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_232",
@@ -1487,7 +2106,9 @@
       "latitude": 36.53324687781956,
       "longitude": -6.293276613769529,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_233",
@@ -1495,7 +2116,9 @@
       "latitude": 36.69267585556875,
       "longitude": -6.407162643357848,
       "parentStationId": null,
-      "placeId": "costa-ballena"
+      "placeId": "costa-ballena",
+      "municipalityId": "7",
+      "nucleusId": "17"
     },
     {
       "id": "2_234",
@@ -1503,7 +2126,9 @@
       "latitude": 36.69774139541855,
       "longitude": -6.137006203041078,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_235",
@@ -1511,7 +2136,9 @@
       "latitude": 36.69748332381943,
       "longitude": -6.136633375988008,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_236",
@@ -1519,7 +2146,9 @@
       "latitude": 36.46828169535278,
       "longitude": -6.200212013452903,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_237",
@@ -1527,7 +2156,9 @@
       "latitude": 36.469463073798345,
       "longitude": -6.198961553846683,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_238",
@@ -1535,7 +2166,9 @@
       "latitude": 36.534726398838174,
       "longitude": -6.291927462635038,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_24",
@@ -1543,7 +2176,9 @@
       "latitude": 36.45926926319895,
       "longitude": -6.208403473911283,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_241",
@@ -1551,7 +2186,9 @@
       "latitude": 36.43977465050151,
       "longitude": -6.121705070114185,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_243",
@@ -1559,7 +2196,9 @@
       "latitude": 36.43835915987877,
       "longitude": -6.122581863224021,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_244",
@@ -1567,7 +2206,9 @@
       "latitude": 36.44740316594242,
       "longitude": -6.118354701816551,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_245",
@@ -1575,7 +2216,9 @@
       "latitude": 36.44621645900167,
       "longitude": -6.1186124831199935,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_247",
@@ -1583,7 +2226,9 @@
       "latitude": 36.47055843000482,
       "longitude": -6.198037200022721,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_248",
@@ -1591,7 +2236,9 @@
       "latitude": 36.47080431274299,
       "longitude": -6.197586579982218,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_249",
@@ -1599,7 +2246,9 @@
       "latitude": 36.469026950332044,
       "longitude": -6.173693007049598,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "31"
     },
     {
       "id": "2_25",
@@ -1607,7 +2256,9 @@
       "latitude": 36.462013231240284,
       "longitude": -6.205045348224638,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_251",
@@ -1615,7 +2266,9 @@
       "latitude": 36.74914487225048,
       "longitude": -6.336783170700073,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_254",
@@ -1623,7 +2276,9 @@
       "latitude": 36.62310164168587,
       "longitude": -6.361879706355467,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_255",
@@ -1631,7 +2286,9 @@
       "latitude": 36.62353033128876,
       "longitude": -6.359878522921463,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": "15"
     },
     {
       "id": "2_257",
@@ -1639,7 +2296,9 @@
       "latitude": 36.52205713228747,
       "longitude": -6.170787960290909,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_258",
@@ -1647,7 +2306,9 @@
       "latitude": 36.52196121257755,
       "longitude": -6.170778572559357,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_259",
@@ -1655,7 +2316,9 @@
       "latitude": 36.52316289473787,
       "longitude": -6.175190806388855,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_26",
@@ -1663,7 +2326,9 @@
       "latitude": 36.462049903111584,
       "longitude": -6.204723483142851,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_260",
@@ -1671,7 +2336,9 @@
       "latitude": 36.523071287338,
       "longitude": -6.175255179405212,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_261",
@@ -1679,7 +2346,9 @@
       "latitude": 36.61375793480854,
       "longitude": -6.241360902786255,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "21"
     },
     {
       "id": "2_262",
@@ -1687,7 +2356,9 @@
       "latitude": 36.53687476012414,
       "longitude": -6.200977563858032,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_263",
@@ -1695,7 +2366,9 @@
       "latitude": 36.53683596858676,
       "longitude": -6.200854182243347,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_264",
@@ -1703,7 +2376,9 @@
       "latitude": 36.536704179923404,
       "longitude": -6.20187939574726,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_265",
@@ -1711,7 +2386,9 @@
       "latitude": 36.54456587548587,
       "longitude": -6.199142932891846,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_266",
@@ -1719,7 +2396,9 @@
       "latitude": 36.736829230805995,
       "longitude": -6.428471803665161,
       "parentStationId": null,
-      "placeId": "chipiona"
+      "placeId": "chipiona",
+      "municipalityId": "15",
+      "nucleusId": "44"
     },
     {
       "id": "2_268",
@@ -1727,7 +2406,9 @@
       "latitude": 36.42992355995217,
       "longitude": -6.144657290680287,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_269",
@@ -1735,7 +2416,9 @@
       "latitude": 36.42969612822568,
       "longitude": -6.144150942564011,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_27",
@@ -1743,7 +2426,9 @@
       "latitude": 36.466547451970136,
       "longitude": -6.202521395414726,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_270",
@@ -1751,7 +2436,9 @@
       "latitude": 36.42623558881636,
       "longitude": -6.1479878425598145,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_271",
@@ -1759,7 +2446,9 @@
       "latitude": 36.426464353900435,
       "longitude": -6.1477330327034,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_272",
@@ -1767,7 +2456,9 @@
       "latitude": 36.42284935511073,
       "longitude": -6.149012446403503,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_273",
@@ -1775,7 +2466,9 @@
       "latitude": 36.748809603470434,
       "longitude": -6.380444169044495,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_274",
@@ -1783,7 +2476,9 @@
       "latitude": 36.7484184547089,
       "longitude": -6.381315886974335,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_277",
@@ -1791,7 +2486,9 @@
       "latitude": 36.28734491029222,
       "longitude": -6.079431921243668,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "45"
     },
     {
       "id": "2_278",
@@ -1799,7 +2496,9 @@
       "latitude": 36.28562500540278,
       "longitude": -6.08068585395813,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "45"
     },
     {
       "id": "2_279",
@@ -1807,7 +2506,9 @@
       "latitude": 36.295076987330354,
       "longitude": -6.07407420873642,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_280",
@@ -1815,7 +2516,9 @@
       "latitude": 36.2944760033553,
       "longitude": -6.073215901851654,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_282",
@@ -1823,7 +2526,9 @@
       "latitude": 36.3115373918375,
       "longitude": -6.082891970872879,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_283",
@@ -1831,7 +2536,9 @@
       "latitude": 36.32113750990034,
       "longitude": -6.088643968105316,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_284",
@@ -1839,7 +2546,9 @@
       "latitude": 36.32250654341758,
       "longitude": -6.0887981951236725,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_285",
@@ -1847,7 +2556,9 @@
       "latitude": 36.33182116766874,
       "longitude": -6.090564429759979,
       "parentStationId": null,
-      "placeId": "el-colorado"
+      "placeId": "el-colorado",
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_287",
@@ -1855,7 +2566,9 @@
       "latitude": 36.33498449396479,
       "longitude": -6.091635972261429,
       "parentStationId": null,
-      "placeId": "el-colorado"
+      "placeId": "el-colorado",
+      "municipalityId": "16",
+      "nucleusId": "46"
     },
     {
       "id": "2_289",
@@ -1863,7 +2576,9 @@
       "latitude": 36.35478045485695,
       "longitude": -6.105598211288452,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "48"
     },
     {
       "id": "2_29",
@@ -1871,7 +2586,9 @@
       "latitude": 36.452110112753,
       "longitude": -6.216447418746946,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_291",
@@ -1879,7 +2596,9 @@
       "latitude": 36.52179847212352,
       "longitude": -6.276908218860626,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_292",
@@ -1887,7 +2606,9 @@
       "latitude": 36.52178446133996,
       "longitude": -6.27649113535881,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_296",
@@ -1895,7 +2616,9 @@
       "latitude": 36.28192562206986,
       "longitude": -6.081410050392151,
       "parentStationId": null,
-      "placeId": "conil-de-la-frontera"
+      "placeId": "conil-de-la-frontera",
+      "municipalityId": "16",
+      "nucleusId": "45"
     },
     {
       "id": "2_3",
@@ -1903,7 +2626,9 @@
       "latitude": 36.52605953745319,
       "longitude": -6.2892090437984445,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_30",
@@ -1911,7 +2636,9 @@
       "latitude": 36.45194183186898,
       "longitude": -6.216259664115904,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_300",
@@ -1919,7 +2646,9 @@
       "latitude": 36.534506852336875,
       "longitude": -6.292211562395096,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_301",
@@ -1927,7 +2656,9 @@
       "latitude": 36.42186086643798,
       "longitude": -6.124802827835083,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_302",
@@ -1935,7 +2666,9 @@
       "latitude": 36.42207993215277,
       "longitude": -6.124805510044098,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_303",
@@ -1943,7 +2676,9 @@
       "latitude": 36.52731210460236,
       "longitude": -6.28530889749527,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_304",
@@ -1951,7 +2686,9 @@
       "latitude": 36.52746527283803,
       "longitude": -6.284932047128677,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_305",
@@ -1959,7 +2696,9 @@
       "latitude": 36.530139952837146,
       "longitude": -6.2889352440834045,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_306",
@@ -1967,7 +2706,9 @@
       "latitude": 36.529921257403295,
       "longitude": -6.289133056998253,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_31",
@@ -1975,7 +2716,9 @@
       "latitude": 36.4520669638431,
       "longitude": -6.2097204385375955,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_310",
@@ -1983,7 +2726,9 @@
       "latitude": 36.70521618846066,
       "longitude": -6.117768883461606,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_311",
@@ -1991,7 +2736,9 @@
       "latitude": 36.705044040788934,
       "longitude": -6.117529394175983,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_312",
@@ -1999,7 +2746,9 @@
       "latitude": 36.7648275805982,
       "longitude": -6.342550813855808,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_313",
@@ -2007,7 +2756,9 @@
       "latitude": 36.7648876416888,
       "longitude": -6.342341568997988,
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda"
+      "placeId": "sanlucar-de-barrameda",
+      "municipalityId": "11",
+      "nucleusId": "28"
     },
     {
       "id": "2_314",
@@ -2015,7 +2766,9 @@
       "latitude": 36.43822774664942,
       "longitude": -6.021543920873059,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "8",
+      "nucleusId": "18"
     },
     {
       "id": "2_315",
@@ -2023,7 +2776,9 @@
       "latitude": 36.43827966851398,
       "longitude": -6.02193014997476,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "8",
+      "nucleusId": "18"
     },
     {
       "id": "2_316",
@@ -2031,7 +2786,9 @@
       "latitude": 36.474772340495385,
       "longitude": -6.195007783417189,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_317",
@@ -2039,7 +2796,9 @@
       "latitude": 36.47490612630914,
       "longitude": -6.19447153200973,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_318",
@@ -2047,7 +2806,9 @@
       "latitude": 36.47931003858101,
       "longitude": -6.195349549614012,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_319",
@@ -2055,7 +2816,9 @@
       "latitude": 36.4795343793609,
       "longitude": -6.194936245040586,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_32",
@@ -2063,7 +2826,9 @@
       "latitude": 36.45183395931541,
       "longitude": -6.2096936164474466,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_320",
@@ -2071,7 +2836,9 @@
       "latitude": 36.526362988126415,
       "longitude": -6.289908753174425,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_321",
@@ -2079,7 +2846,9 @@
       "latitude": 36.53169747747063,
       "longitude": -6.3054697276509755,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_322",
@@ -2087,7 +2856,9 @@
       "latitude": 36.52047729359471,
       "longitude": -6.276453000667986,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_33",
@@ -2095,7 +2866,9 @@
       "latitude": 36.45552714170314,
       "longitude": -6.201299428939819,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_34",
@@ -2103,7 +2876,9 @@
       "latitude": 36.45487346194542,
       "longitude": -6.201371848583221,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_345",
@@ -2111,7 +2886,9 @@
       "latitude": 36.51935382183055,
       "longitude": -6.278385040952424,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_346",
@@ -2119,7 +2896,9 @@
       "latitude": 36.52878168661495,
       "longitude": -6.298829126284983,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_347",
@@ -2127,7 +2906,9 @@
       "latitude": 36.53151436143342,
       "longitude": -6.305470381012,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_348",
@@ -2135,7 +2916,9 @@
       "latitude": 36.53173008854554,
       "longitude": -6.30545409268817,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_349",
@@ -2143,7 +2926,9 @@
       "latitude": 36.62743140679498,
       "longitude": -6.364939600449971,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": null
     },
     {
       "id": "2_35",
@@ -2151,7 +2936,9 @@
       "latitude": 36.461352102035576,
       "longitude": -6.196463484256598,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_350",
@@ -2159,7 +2946,9 @@
       "latitude": 36.626545498314236,
       "longitude": -6.364661617773433,
       "parentStationId": null,
-      "placeId": "rota"
+      "placeId": "rota",
+      "municipalityId": "7",
+      "nucleusId": null
     },
     {
       "id": "2_351",
@@ -2167,7 +2956,9 @@
       "latitude": 36.51833347122721,
       "longitude": -6.283853592528017,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_352",
@@ -2175,7 +2966,9 @@
       "latitude": 36.70067483881514,
       "longitude": -6.141437308963645,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_353",
@@ -2183,7 +2976,9 @@
       "latitude": 36.69973714869114,
       "longitude": -6.140830918081077,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_354",
@@ -2191,7 +2986,9 @@
       "latitude": 36.5085324881102,
       "longitude": -6.2784447361305045,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_355",
@@ -2199,7 +2996,9 @@
       "latitude": 36.50858203795657,
       "longitude": -6.2783348011775635,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_356",
@@ -2207,7 +3006,9 @@
       "latitude": 36.50946374914346,
       "longitude": -6.278802997610547,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_357",
@@ -2215,7 +3016,9 @@
       "latitude": 36.509606136566184,
       "longitude": -6.278905688681334,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_359",
@@ -2223,7 +3026,9 @@
       "latitude": 36.51934562282705,
       "longitude": -6.151750414591955,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "43"
     },
     {
       "id": "2_36",
@@ -2231,7 +3036,9 @@
       "latitude": 36.460923240375976,
       "longitude": -6.196589331282798,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_360",
@@ -2239,7 +3046,9 @@
       "latitude": 36.60440093320923,
       "longitude": -6.217192866107507,
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria"
+      "placeId": "el-puerto-de-santa-maria",
+      "municipalityId": "5",
+      "nucleusId": "8"
     },
     {
       "id": "2_361",
@@ -2247,7 +3056,9 @@
       "latitude": 36.699289838552495,
       "longitude": -6.148633480981442,
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera"
+      "placeId": "jerez-de-la-frontera",
+      "municipalityId": "6",
+      "nucleusId": "14"
     },
     {
       "id": "2_37",
@@ -2255,7 +3066,9 @@
       "latitude": 36.46440380402708,
       "longitude": -6.1927323147193825,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_38",
@@ -2263,7 +3076,9 @@
       "latitude": 36.46415034402248,
       "longitude": -6.192692081584159,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_4",
@@ -2271,7 +3086,9 @@
       "latitude": 36.51749323128765,
       "longitude": -6.283438271102903,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_40",
@@ -2279,7 +3096,9 @@
       "latitude": 36.45615267513754,
       "longitude": -6.210423839286802,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_41",
@@ -2287,7 +3106,9 @@
       "latitude": 36.45628858696246,
       "longitude": -6.21023608465576,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_42",
@@ -2295,7 +3116,9 @@
       "latitude": 36.466743471012485,
       "longitude": -6.19060680270195,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_43",
@@ -2303,7 +3126,9 @@
       "latitude": 36.46784010550127,
       "longitude": -6.190936259187963,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_47",
@@ -2311,7 +3136,9 @@
       "latitude": 36.46924203486384,
       "longitude": -6.206721375836555,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_48",
@@ -2319,7 +3146,9 @@
       "latitude": 36.46905006444781,
       "longitude": -6.206614087475959,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_49",
@@ -2327,7 +3156,9 @@
       "latitude": 36.47277506839376,
       "longitude": -6.2067388101951515,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_5",
@@ -2335,7 +3166,9 @@
       "latitude": 36.50903119010323,
       "longitude": -6.278618341503141,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_50",
@@ -2343,7 +3176,9 @@
       "latitude": 36.47536326914427,
       "longitude": -6.19404659713668,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_51",
@@ -2351,7 +3186,9 @@
       "latitude": 36.47500955347344,
       "longitude": -6.18805454219741,
       "parentStationId": null,
-      "placeId": "san-fernando"
+      "placeId": "san-fernando",
+      "municipalityId": "2",
+      "nucleusId": "2"
     },
     {
       "id": "2_56",
@@ -2359,7 +3196,9 @@
       "latitude": 36.42153388542836,
       "longitude": -6.093550941016199,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_57",
@@ -2367,7 +3206,9 @@
       "latitude": 36.43007,
       "longitude": -6.140354,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_58",
@@ -2375,7 +3216,9 @@
       "latitude": 36.4302,
       "longitude": -6.140269,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_59",
@@ -2383,7 +3226,9 @@
       "latitude": 36.431565,
       "longitude": -6.135204,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_6",
@@ -2391,7 +3236,9 @@
       "latitude": 36.506289425814266,
       "longitude": -6.277057295856474,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_60",
@@ -2399,7 +3246,9 @@
       "latitude": 36.431615,
       "longitude": -6.135438,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_61",
@@ -2407,7 +3256,9 @@
       "latitude": 36.432902007264104,
       "longitude": -6.13138010943027,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_62",
@@ -2415,7 +3266,9 @@
       "latitude": 36.43296672394737,
       "longitude": -6.131388005615276,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_63",
@@ -2423,7 +3276,9 @@
       "latitude": 36.435422,
       "longitude": -6.124686,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_64",
@@ -2431,7 +3286,9 @@
       "latitude": 36.435623,
       "longitude": -6.124618,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_65",
@@ -2439,7 +3296,9 @@
       "latitude": 36.442686,
       "longitude": -6.120368,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_66",
@@ -2447,7 +3306,9 @@
       "latitude": 36.442701,
       "longitude": -6.120468,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_67",
@@ -2455,7 +3316,9 @@
       "latitude": 36.451805,
       "longitude": -6.118891,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_68",
@@ -2463,7 +3326,9 @@
       "latitude": 36.452707,
       "longitude": -6.1191,
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera"
+      "placeId": "chiclana-de-la-frontera",
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_69",
@@ -2471,7 +3336,9 @@
       "latitude": 36.456257,
       "longitude": -6.11856,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_7",
@@ -2479,7 +3346,9 @@
       "latitude": 36.500057150866574,
       "longitude": -6.273421347141266,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_70",
@@ -2487,7 +3356,9 @@
       "latitude": 36.456977,
       "longitude": -6.118562,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_71",
@@ -2495,7 +3366,9 @@
       "latitude": 36.461041,
       "longitude": -6.118616,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_72",
@@ -2503,7 +3376,9 @@
       "latitude": 36.462239,
       "longitude": -6.118723,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_73",
@@ -2511,7 +3386,9 @@
       "latitude": 36.467022,
       "longitude": -6.118394,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_74",
@@ -2519,7 +3396,9 @@
       "latitude": 36.467212,
       "longitude": -6.118493,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_75",
@@ -2527,7 +3406,9 @@
       "latitude": 36.524031,
       "longitude": -6.227945,
       "parentStationId": null,
-      "placeId": "rio-san-pedro"
+      "placeId": "rio-san-pedro",
+      "municipalityId": "4",
+      "nucleusId": "12"
     },
     {
       "id": "2_76",
@@ -2535,7 +3416,9 @@
       "latitude": 36.524244,
       "longitude": -6.22798,
       "parentStationId": null,
-      "placeId": "rio-san-pedro"
+      "placeId": "rio-san-pedro",
+      "municipalityId": "4",
+      "nucleusId": "12"
     },
     {
       "id": "2_77",
@@ -2543,7 +3426,9 @@
       "latitude": 36.524832,
       "longitude": -6.222788,
       "parentStationId": null,
-      "placeId": "rio-san-pedro"
+      "placeId": "rio-san-pedro",
+      "municipalityId": "4",
+      "nucleusId": "12"
     },
     {
       "id": "2_78",
@@ -2551,7 +3436,9 @@
       "latitude": 36.525028,
       "longitude": -6.22286,
       "parentStationId": null,
-      "placeId": "rio-san-pedro"
+      "placeId": "rio-san-pedro",
+      "municipalityId": "4",
+      "nucleusId": "12"
     },
     {
       "id": "2_79",
@@ -2559,7 +3446,9 @@
       "latitude": 36.527558,
       "longitude": -6.213559,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_8",
@@ -2567,7 +3456,9 @@
       "latitude": 36.49696012447015,
       "longitude": -6.271749204216001,
       "parentStationId": null,
-      "placeId": "cadiz"
+      "placeId": "cadiz",
+      "municipalityId": "1",
+      "nucleusId": "1"
     },
     {
       "id": "2_80",
@@ -2575,7 +3466,9 @@
       "latitude": 36.527449,
       "longitude": -6.213339,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_81",
@@ -2583,7 +3476,9 @@
       "latitude": 36.530918,
       "longitude": -6.210391,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_82",
@@ -2591,7 +3486,9 @@
       "latitude": 36.530915,
       "longitude": -6.210186,
       "parentStationId": null,
-      "placeId": "campus-universitario"
+      "placeId": "campus-universitario",
+      "municipalityId": "4",
+      "nucleusId": "41"
     },
     {
       "id": "2_83",
@@ -2599,7 +3496,9 @@
       "latitude": 36.526036,
       "longitude": -6.182332,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_84",
@@ -2607,7 +3506,9 @@
       "latitude": 36.526808,
       "longitude": -6.183799,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_85",
@@ -2615,7 +3516,9 @@
       "latitude": 36.528564,
       "longitude": -6.18511,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_86",
@@ -2623,7 +3526,9 @@
       "latitude": 36.530555,
       "longitude": -6.185302,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_87",
@@ -2631,7 +3536,9 @@
       "latitude": 36.530454,
       "longitude": -6.185305,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_88",
@@ -2639,7 +3546,9 @@
       "latitude": 36.528436,
       "longitude": -6.189262,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_90",
@@ -2647,7 +3556,9 @@
       "latitude": 36.531574,
       "longitude": -6.193957,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_91",
@@ -2655,7 +3566,9 @@
       "latitude": 36.530574,
       "longitude": -6.196301,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_92",
@@ -2663,7 +3576,9 @@
       "latitude": 36.530409,
       "longitude": -6.196348,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_93",
@@ -2671,7 +3586,9 @@
       "latitude": 36.530703,
       "longitude": -6.199554,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_94",
@@ -2679,7 +3596,9 @@
       "latitude": 36.530667,
       "longitude": -6.199933,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_95",
@@ -2687,7 +3606,9 @@
       "latitude": 36.51928966617859,
       "longitude": -6.152954202760202,
       "parentStationId": null,
-      "placeId": "puerto-real"
+      "placeId": "puerto-real",
+      "municipalityId": "4",
+      "nucleusId": "43"
     },
     {
       "id": "2_96",
@@ -2695,7 +3616,9 @@
       "latitude": 36.517358,
       "longitude": -6.04446,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_97",
@@ -2703,7 +3626,9 @@
       "latitude": 36.517486,
       "longitude": -6.044727,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "4",
+      "nucleusId": "6"
     },
     {
       "id": "2_98",
@@ -2711,7 +3636,9 @@
       "latitude": 36.440655103661825,
       "longitude": -6.143926978111267,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     },
     {
       "id": "2_99",
@@ -2719,7 +3646,9 @@
       "latitude": 36.441012,
       "longitude": -6.14423,
       "parentStationId": null,
-      "placeId": null
+      "placeId": null,
+      "municipalityId": "3",
+      "nucleusId": "3"
     }
   ],
   "patterns": [

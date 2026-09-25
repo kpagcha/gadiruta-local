@@ -25,6 +25,21 @@ export interface NetworkRoute {
   textColor: string | null;
 }
 
+/** One municipality in the reviewed CTAN location hierarchy. */
+export interface NetworkMunicipality {
+  id: string;
+  name: string;
+}
+
+/** One named area within a CTAN municipality. */
+export interface NetworkNucleus {
+  id: string;
+  municipalityId: string;
+  name: string;
+  /** The reviewed representative stop's position, when the area has one. */
+  referencePoint: { latitude: number; longitude: number } | null;
+}
+
 /** A physical boarding location, kept distinct from a future user-facing place. */
 export interface NetworkStop {
   id: string;
@@ -33,6 +48,8 @@ export interface NetworkStop {
   longitude: number;
   parentStationId: string | null;
   placeId: string | null;
+  municipalityId: string | null;
+  nucleusId: string | null;
 }
 
 /** One stop visit with GTFS minutes measured from the trip's service date. */
@@ -81,12 +98,14 @@ export interface NetworkSource {
   archiveSha256: string;
 }
 
-/** The version-two local network and timetable contract. */
+/** The version-four local network, location hierarchy, and timetable contract. */
 export interface NetworkDataset {
-  formatVersion: 2;
+  formatVersion: 4;
   source: NetworkSource;
   agencies: NetworkAgency[];
   routes: NetworkRoute[];
+  municipalities: NetworkMunicipality[];
+  nuclei: NetworkNucleus[];
   stops: NetworkStop[];
   patterns: RoutePattern[];
   trips: NetworkTrip[];
@@ -215,6 +234,38 @@ function parseRoute(value: unknown, index: number): NetworkRoute {
   };
 }
 
+/** Validate one municipality's stable ID and rider-facing source name. */
+function parseMunicipality(value: unknown, index: number): NetworkMunicipality {
+  const record = requiredRecord(value, `municipalities[${index}]`);
+  return {
+    id: requiredString(record.id, `municipalities[${index}].id`),
+    name: requiredString(record.name, `municipalities[${index}].name`),
+  };
+}
+
+/** Validate a nucleus and the municipality that contains it. */
+function parseNucleus(value: unknown, index: number): NetworkNucleus {
+  const record = requiredRecord(value, `nuclei[${index}]`);
+  const point =
+    record.referencePoint === null ? null : requiredRecord(record.referencePoint, `nuclei[${index}].referencePoint`);
+  const latitude = point === null ? null : requiredNumber(point.latitude, `nuclei[${index}].referencePoint.latitude`);
+  const longitude =
+    point === null ? null : requiredNumber(point.longitude, `nuclei[${index}].referencePoint.longitude`);
+  if (
+    latitude !== null &&
+    longitude !== null &&
+    (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
+  ) {
+    throw new NetworkDataError(`nuclei[${index}] has invalid reference coordinates.`);
+  }
+  return {
+    id: requiredString(record.id, `nuclei[${index}].id`),
+    municipalityId: requiredString(record.municipalityId, `nuclei[${index}].municipalityId`),
+    name: requiredString(record.name, `nuclei[${index}].name`),
+    referencePoint: latitude === null || longitude === null ? null : { latitude, longitude },
+  };
+}
+
 /** Validate a physical stop and reject impossible coordinates before map features consume them. */
 function parseStop(value: unknown, index: number): NetworkStop {
   const record = requiredRecord(value, `stops[${index}]`);
@@ -234,6 +285,8 @@ function parseStop(value: unknown, index: number): NetworkStop {
     longitude,
     parentStationId: optionalString(record.parentStationId, `stops[${index}].parentStationId`),
     placeId: optionalString(record.placeId, `stops[${index}].placeId`),
+    municipalityId: optionalString(record.municipalityId, `stops[${index}].municipalityId`),
+    nucleusId: optionalString(record.nucleusId, `stops[${index}].nucleusId`),
   };
 }
 
@@ -338,8 +391,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   // Validate the outer version before treating any file contents as the current contract.
   const record = requiredRecord(value, 'dataset');
 
-  if (record.formatVersion !== 2) {
-    throw new NetworkDataError('dataset.formatVersion must be 2.');
+  if (record.formatVersion !== 4) {
+    throw new NetworkDataError('dataset.formatVersion must be 4.');
   }
 
   const sourceRecord = requiredRecord(record.source, 'dataset.source');
@@ -361,6 +414,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   // Shape-check each collection before examining relationships between their IDs.
   const agencies = requiredArray(record.agencies, 'dataset.agencies').map(parseAgency);
   const routes = requiredArray(record.routes, 'dataset.routes').map(parseRoute);
+  const municipalities = requiredArray(record.municipalities, 'dataset.municipalities').map(parseMunicipality);
+  const nuclei = requiredArray(record.nuclei, 'dataset.nuclei').map(parseNucleus);
   const stops = requiredArray(record.stops, 'dataset.stops').map(parseStop);
   const patterns = requiredArray(record.patterns, 'dataset.patterns').map(parsePattern);
   const trips = requiredArray(record.trips, 'dataset.trips').map(parseTrip);
@@ -391,6 +446,9 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
+  const municipalityIds = uniqueIds(municipalities, 'dataset.municipalities');
+  uniqueIds(nuclei, 'dataset.nuclei');
+  const nucleiById = new Map(nuclei.map((nucleus) => [nucleus.id, nucleus]));
   const stopIds = uniqueIds(stops, 'dataset.stops');
   const stopUrlTokens = new Set<string>();
   for (const stop of stops) {
@@ -424,6 +482,12 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
   }
 
+  for (const nucleus of nuclei) {
+    if (!municipalityIds.has(nucleus.municipalityId)) {
+      throw new NetworkDataError(`nucleus ${nucleus.id} references an unknown municipality.`);
+    }
+  }
+
   // A parent station and a pattern stop must both refer to records in this same local file.
   for (const stop of stops) {
     if (stop.parentStationId !== null && !stopIds.has(stop.parentStationId)) {
@@ -431,6 +495,12 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
     if (stop.placeId !== null && !placeIds.has(stop.placeId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown place.`);
+    }
+    if (stop.municipalityId !== null && !municipalityIds.has(stop.municipalityId)) {
+      throw new NetworkDataError(`stop ${stop.id} references an unknown municipality.`);
+    }
+    if (stop.nucleusId !== null && nucleiById.get(stop.nucleusId)?.municipalityId !== stop.municipalityId) {
+      throw new NetworkDataError(`stop ${stop.id} references a nucleus outside its municipality.`);
     }
   }
 
@@ -466,10 +536,12 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   }
 
   return {
-    formatVersion: 2,
+    formatVersion: 4,
     source,
     agencies,
     routes,
+    municipalities,
+    nuclei,
     stops,
     patterns,
     trips,
