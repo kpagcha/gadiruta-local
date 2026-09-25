@@ -20,6 +20,7 @@ const dataset: NetworkDataset = {
     { id: '1', name: 'Cádiz' },
     { id: '3', name: 'Chiclana de la Frontera' },
     { id: '4', name: 'Puerto Real' },
+    { id: '6', name: 'Jerez de la Frontera' },
   ],
   localAreas: [
     { id: '1', name: 'Cádiz', municipalityId: '1', referencePoint: null },
@@ -29,6 +30,8 @@ const dataset: NetworkDataset = {
     { id: '40', name: 'El Marquesado', municipalityId: '4', referencePoint: null },
     { id: '11', name: 'Barrio Jarana', municipalityId: '4', referencePoint: null },
     { id: '43', name: 'Hospital Pto. Real', municipalityId: '4', referencePoint: null },
+    { id: '14', name: 'Jerez de la Frontera', municipalityId: '6', referencePoint: null },
+    { id: '42', name: 'Aeropuerto', municipalityId: '6', referencePoint: null },
   ],
   stops: [
     {
@@ -101,8 +104,30 @@ const dataset: NetworkDataset = {
       municipalityId: '4',
       localAreaId: '43',
     },
+    {
+      id: '2_8',
+      name: 'Estación Jerez',
+      latitude: 36.68,
+      longitude: -6.13,
+      parentStationId: null,
+      placeId: 'jerez-de-la-frontera',
+      municipalityId: '6',
+      localAreaId: '14',
+    },
+    {
+      id: '2_9',
+      name: 'Aeropuerto',
+      latitude: 36.75,
+      longitude: -6.06,
+      parentStationId: null,
+      placeId: 'jerez-de-la-frontera',
+      municipalityId: '6',
+      localAreaId: '42',
+    },
   ],
-  patterns: [{ routeId: '2_10', directionId: '0', stopIds: ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6', '2_7'] }],
+  patterns: [
+    { routeId: '2_10', directionId: '0', stopIds: ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6', '2_7', '2_8', '2_9'] },
+  ],
   trips: [],
   calendars: [],
   calendarExceptions: [],
@@ -194,6 +219,32 @@ test('named areas expand their own stops and words match in any order', () => {
   assert.deepEqual(
     searchLocations(options, 'Plaza Asdrubal').stops.map((stop) => stop.id),
     ['2_1'],
+  );
+});
+
+test('a municipality and area can be searched together in either order', () => {
+  for (const query of ['jerez aeropuerto', 'aeropuerto jerez', 'jere aerop']) {
+    const results = searchLocations(options, query);
+    assert.deepEqual(
+      results.areas.map((area) => area.id),
+      ['aeropuerto-jerez'],
+    );
+    assert.deepEqual(
+      results.stops.map((stop) => stop.id),
+      ['2_9'],
+    );
+  }
+  assert.deepEqual(
+    searchLocations(options, 'chiclana san andres').stops.map((stop) => stop.id),
+    ['2_3'],
+  );
+  assert.deepEqual(
+    searchLocations(options, 'jerez').stops.map((stop) => stop.id),
+    ['2_8'],
+  );
+  assert.deepEqual(
+    searchLocations(options, 'aeropuerto').stops.map((stop) => stop.id),
+    ['2_9'],
   );
 });
 

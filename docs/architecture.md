@@ -43,7 +43,8 @@ existing municipality URL ID and searches the whole municipality. A municipality
 stops retains one choice. Named local-area searches use CTAN membership. Suggestions group places,
 served local areas, and exact stops. A matched municipality expands stops only from its matching
 town area; a matched local area expands its own stops. Name matching ignores accent, case, and word
-order, and the picker reveals further matches within each group on request.
+order. A query can combine a municipality and one of its local-area names without expanding stops
+from the municipality's other areas. The picker reveals further matches within each group on request.
 The earlier reviewed assignments in `scripts/place-stop-assignments.json` remain in the snapshot
 for places without a CTAN link. The ignored geographic report was used as a review checklist and
 is never browser input.

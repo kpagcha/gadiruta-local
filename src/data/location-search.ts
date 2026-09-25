@@ -158,12 +158,32 @@ function matchRank(name: string, query: string): number {
   return query.split(' ').every((word) => normalized.includes(word)) ? 3 : Infinity;
 }
 
+/** Match a parent-plus-area query only when it names something specific to that area. */
+function parentAreaRank(option: LocationOption, query: string): number {
+  if (option.kind !== 'place' || option.localAreaId === undefined || option.isTown || !option.parentName) {
+    return Infinity;
+  }
+  const parent = normalizeSearchText(option.parentName);
+  const area = normalizeSearchText(option.name);
+  const words = query.split(' ');
+  if (
+    !words.some((word) => parent.includes(word)) ||
+    !words.some((word) => area.includes(word) && !parent.includes(word))
+  ) {
+    return Infinity;
+  }
+  return matchRank(`${option.parentName} ${option.name}`, query);
+}
+
 /** Find direct place hits, their child areas, and stops within the matched town or local areas. */
 export function searchLocations(options: readonly LocationOption[], query: string): LocationResults {
   const empty = { places: [], areas: [], stops: [] };
   const normalizedQuery = normalizeSearchText(query);
   if (normalizedQuery === '') return empty;
-  const ranked = options.map((option) => ({ option, rank: matchRank(option.name, normalizedQuery) }));
+  const ranked = options.map((option) => ({
+    option,
+    rank: Math.min(matchRank(option.name, normalizedQuery), parentAreaRank(option, normalizedQuery)),
+  }));
   const byRank = (first: { option: LocationOption; rank: number }, second: { option: LocationOption; rank: number }) =>
     first.rank - second.rank ||
     first.option.name.localeCompare(second.option.name, 'es', { sensitivity: 'base', numeric: true }) ||
