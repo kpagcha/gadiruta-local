@@ -179,7 +179,7 @@ export function JourneyTimePill({
       {isOpen && !disabled && (
         <div
           ref={popoverRef}
-          className="absolute top-[calc(100%+8px)] left-0 z-50 w-52 rounded-xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
+          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-52 rounded-xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
         >
           <ul
             id={listId}
@@ -193,7 +193,7 @@ export function JourneyTimePill({
                 key={choice}
                 id={`${listId}-${index}`}
                 aria-selected={value === choice}
-                className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-[650] tabular-nums ${
+                className={`motion-timeline-color cursor-pointer rounded-lg px-3 py-1.5 text-sm font-[650] tabular-nums ${
                   activeIndex === index || value === choice
                     ? 'bg-accent text-on-accent'
                     : 'text-ink hover:bg-surface-hover'

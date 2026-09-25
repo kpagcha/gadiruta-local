@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -77,7 +78,7 @@ function StopTimelineOption({
       id={id}
       aria-disabled={!choice.selectable}
       aria-selected={selected}
-      className={`flex min-h-8 w-full items-stretch px-2 py-1 ${selected ? 'font-[700] text-accent' : endpoint ? 'font-[650] text-accent' : choice.selectable ? '' : 'text-muted'} ${active && !selected ? 'underline decoration-accent underline-offset-4' : ''} ${choice.selectable ? 'cursor-pointer hover:text-accent-strong' : 'cursor-default'}`}
+      className={`motion-timeline-color flex min-h-8 w-full items-stretch px-2 py-1 ${selected ? 'font-[700] text-accent' : endpoint ? 'font-[650] text-accent' : choice.selectable ? '' : 'text-muted'} ${active && !selected ? 'underline decoration-accent underline-offset-4' : ''} ${choice.selectable ? 'cursor-pointer hover:text-accent-strong' : 'cursor-default'}`}
       onClick={choice.selectable ? onSelect : undefined}
       onMouseDown={(event) => event.preventDefault()}
       role="option"
@@ -90,11 +91,11 @@ function StopTimelineOption({
           />
           {inJourney && (
             <span
-              className={`absolute left-1/2 w-0.5 -translate-x-1/2 bg-accent ${choice.index === boardingIndex ? 'top-2.5' : '-top-2'} ${choice.index === alightingIndex ? 'bottom-[calc(100%-0.625rem)]' : '-bottom-2'}`}
+              className={`motion-segment absolute left-1/2 w-0.5 -translate-x-1/2 bg-accent ${choice.index === boardingIndex ? 'top-2.5' : '-top-2'} ${choice.index === alightingIndex ? 'bottom-[calc(100%-0.625rem)]' : '-bottom-2'}`}
             />
           )}
           <span
-            className={`absolute top-[5px] left-1/2 size-2.5 -translate-x-1/2 rounded-full border-2 ${inJourney ? 'border-accent bg-accent' : 'border-icon-muted bg-surface-input'}`}
+            className={`motion-timeline-color absolute top-[5px] left-1/2 size-2.5 -translate-x-1/2 rounded-full border-2 ${inJourney ? 'border-accent bg-accent' : 'border-icon-muted bg-surface-input'}`}
           />
         </span>
         <span className="min-w-0 wrap-anywhere">{choice.name}</span>
@@ -253,6 +254,7 @@ function JourneyCard({
   defaultAlightingIndex: number;
 }) {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const stopLabelId = useId();
   const stopListId = useId();
   const boardTriggerRef = useRef<HTMLButtonElement>(null);
@@ -354,7 +356,7 @@ function JourneyCard({
                 aria-expanded={openStop === 'board'}
                 aria-haspopup="listbox"
                 aria-labelledby={`${stopLabelId}-board ${stopLabelId}-board-trigger`}
-                className={`-ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'board' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
+                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'board' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
                 onClick={() => toggleStopList('board')}
                 onKeyDown={(event) => {
                   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -367,7 +369,7 @@ function JourneyCard({
                 <span className="min-w-0 truncate">{boardingStop?.name ?? boarding.stopId}</span>
                 <ChevronDown
                   aria-hidden="true"
-                  className={`shrink-0 ${openStop === 'board' ? 'rotate-180 text-white' : 'text-muted'}`}
+                  className={`motion-chevron shrink-0 ${openStop === 'board' ? 'rotate-180 text-white' : 'text-muted'}`}
                   size={16}
                   strokeWidth={1.6}
                 />
@@ -404,7 +406,7 @@ function JourneyCard({
                 aria-expanded={openStop === 'alight'}
                 aria-haspopup="listbox"
                 aria-labelledby={`${stopLabelId}-alight ${stopLabelId}-alight-trigger`}
-                className={`-ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'alight' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
+                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'alight' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
                 onClick={() => toggleStopList('alight')}
                 onKeyDown={(event) => {
                   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -417,7 +419,7 @@ function JourneyCard({
                 <span className="min-w-0 truncate">{alightingStop?.name ?? alighting.stopId}</span>
                 <ChevronDown
                   aria-hidden="true"
-                  className={`shrink-0 ${openStop === 'alight' ? 'rotate-180 text-white' : 'text-muted'}`}
+                  className={`motion-chevron shrink-0 ${openStop === 'alight' ? 'rotate-180 text-white' : 'text-muted'}`}
                   size={16}
                   strokeWidth={1.6}
                 />
@@ -440,7 +442,13 @@ function JourneyCard({
         </div>
       </div>
       {openStop !== null && (
-        <div className="mt-2 min-w-0">
+        <motion.div
+          key={openStop}
+          className="mt-2 min-w-0 overflow-hidden"
+          initial={reducedMotion ? false : { height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+        >
           <StopTimelineList
             key={openStop}
             id={stopListId}
@@ -461,7 +469,7 @@ function JourneyCard({
             }}
             onClose={() => setOpenStop((current) => (current === openStop ? null : current))}
           />
-        </div>
+        </motion.div>
       )}
     </article>
   );
@@ -478,6 +486,7 @@ export function DirectJourneyResults({
   panelRef: RefObject<HTMLElement | null>;
 }) {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [earlierCount, setEarlierCount] = useState(0);
   const [laterCount, setLaterCount] = useState(4);
   const split = result === null ? { earlier: [], later: [] } : splitDirectJourneys(result.journeys, result.departAfter);
@@ -524,14 +533,25 @@ export function DirectJourneyResults({
             </p>
           ) : (
             <div className="mt-4 grid gap-4">
-              {visible.map(({ journey, boardingIndex, alightingIndex }) => (
-                <JourneyCard
+              {visible.map(({ journey, boardingIndex, alightingIndex }, index) => (
+                <motion.div
                   key={journey.id}
-                  journey={journey}
-                  dataset={dataset}
-                  defaultBoardingIndex={boardingIndex}
-                  defaultAlightingIndex={alightingIndex}
-                />
+                  layout={!reducedMotion}
+                  initial={reducedMotion ? false : { opacity: 0, y: 7 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    layout: { type: 'spring', stiffness: 300, damping: 35 },
+                    opacity: { duration: 0.2, delay: Math.min(index, 3) * 0.035 },
+                    y: { duration: 0.2, delay: Math.min(index, 3) * 0.035 },
+                  }}
+                >
+                  <JourneyCard
+                    journey={journey}
+                    dataset={dataset}
+                    defaultBoardingIndex={boardingIndex}
+                    defaultAlightingIndex={alightingIndex}
+                  />
+                </motion.div>
               ))}
             </div>
           )}

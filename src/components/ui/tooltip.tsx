@@ -20,7 +20,7 @@ export function AppTooltip({
       <TooltipPrimitive.Trigger delay={300} render={children} />
       <TooltipPrimitive.Portal>
         <TooltipPrimitive.Positioner side={side} align={align} className="z-100" sideOffset={7}>
-          <TooltipPrimitive.Popup className="rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
+          <TooltipPrimitive.Popup className="motion-base-popup rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)]">
             {content}
           </TooltipPrimitive.Popup>
         </TooltipPrimitive.Positioner>

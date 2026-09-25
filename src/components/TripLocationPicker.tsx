@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LOCATION_SEARCH_DEBOUNCE_MS } from '../config.ts';
@@ -49,6 +50,7 @@ interface LocationFieldProps {
 /** Render a labelled search input with keyboard-accessible place and stop suggestions. */
 function LocationField({ id, label, placeholder, options, disabled, invalid, value, onChange }: LocationFieldProps) {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
@@ -127,7 +129,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
           aria-describedby={invalid ? 'same-location-error' : undefined}
           aria-invalid={invalid || undefined}
           autoComplete="off"
-          className="h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
+          className="motion-field h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
           disabled={disabled}
           id={`${id}-search`}
           onChange={(event) => {
@@ -159,7 +161,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
         {value.text !== '' && !disabled ? (
           <button
             aria-label={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
-            className="absolute inset-y-0 right-1 grid w-11 place-items-center rounded-lg text-muted transition-colors hover:text-ink"
+            className="motion-interactive absolute inset-y-0 right-1 grid w-11 place-items-center rounded-lg text-muted hover:text-ink"
             onClick={() => {
               onChange({ text: '', choice: null }, false);
               setIsOpen(false);
@@ -180,7 +182,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
         ) : null}
       </div>
       {showResults && (
-        <div className="absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">
+        <div className="motion-popover absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">
           <p className="sr-only" role="status">
             {t('search.resultCount', { count: totalResults })}
           </p>
@@ -201,11 +203,16 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
                           {group.label}
                         </p>
                         <ul aria-label={group.label}>
-                          {visible.map((result) => {
+                          {visible.map((result, choiceIndex) => {
                             const index = ++focusIndex;
                             const extraLines = result.kind === 'stop' ? result.routeLabels.length - 2 : 0;
                             return (
-                              <li key={`${result.kind}:${result.id}`}>
+                              <motion.li
+                                key={`${result.kind}:${result.id}`}
+                                initial={expanded && choiceIndex >= 5 && !reducedMotion ? { opacity: 0, y: 5 } : false}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.18 }}
+                              >
                                 <button
                                   ref={(button) => {
                                     resultRefs.current[index] = button;
@@ -239,7 +246,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
                                     )}
                                   </span>
                                 </button>
-                              </li>
+                              </motion.li>
                             );
                           })}
                           {group.choices.length > 5 &&
@@ -251,7 +258,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
                                     ref={(button) => {
                                       resultRefs.current[index] = button;
                                     }}
-                                    className="w-full rounded-lg px-3 py-2 text-left text-sm font-[650] text-accent hover:bg-surface-hover focus-visible:bg-surface-hover"
+                                    className="motion-interactive w-full rounded-lg px-3 py-2 text-left text-sm font-[650] text-accent hover:bg-surface-hover focus-visible:bg-surface-hover"
                                     onClick={() =>
                                       setExpandedGroups((current) =>
                                         expanded ? current.filter((id) => id !== group.id) : [...current, group.id],
@@ -373,7 +380,7 @@ export function TripLocationPicker({
           <AppTooltip content={t('search.swap')} disabled={swapDisabled}>
             <button
               aria-label={t('search.swap')}
-              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-muted disabled:opacity-100 max-[380px]:size-9"
+              className="motion-interactive grid size-11 place-items-center rounded-full text-ink enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-muted disabled:opacity-100 max-[380px]:size-9"
               disabled={swapDisabled}
               onClick={() => {
                 changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
@@ -412,7 +419,7 @@ export function TripLocationPicker({
                       origin,
                       destination,
                     })}
-                    className="flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
+                    className="motion-list-item motion-interactive flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
                     onClick={() => onSelectRecentSearch(search)}
                     type="button"
                   >
@@ -481,7 +488,7 @@ export function TripLocationPicker({
               </SelectContent>
             </Select>
             {draft.departureMode === 'depart-at' && (
-              <div className="flex w-max max-w-full shrink-0 flex-wrap items-center gap-1.5">
+              <div className="motion-popover flex w-max max-w-full shrink-0 flex-wrap items-center gap-1.5">
                 <JourneyDatePill
                   value={draft.date}
                   onChange={(date) => changeDraft({ ...draft, date }, true)}

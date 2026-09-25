@@ -7,7 +7,7 @@ export function AppFooter() {
   const { t } = useTranslation();
 
   return (
-    <footer className="grid gap-4.5 border-t border-line py-6.25 pb-8.75 desktop:grid-cols-[auto_1fr] desktop:items-start desktop:gap-10">
+    <footer className="motion-arrive grid gap-4.5 border-t border-line py-6.25 pb-8.75 desktop:grid-cols-[auto_1fr] desktop:items-start desktop:gap-10">
       {/* Keep the service area and source statement present on every page, not tied to a feature. */}
       <p className="text-[13px] font-semibold">{t('footer.region')}</p>
       <p className="text-right text-[11px] leading-[1.7] text-muted">

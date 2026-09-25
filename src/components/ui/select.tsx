@@ -14,12 +14,12 @@ export function SelectTrigger({
 }: SelectPrimitive.Trigger.Props & { children: ReactNode }) {
   return (
     <SelectPrimitive.Trigger
-      className={`inline-flex min-w-0 items-center justify-between gap-2 text-ink outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className ?? ''}`}
+      className={`motion-interactive inline-flex min-w-0 items-center justify-between gap-2 text-ink outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className ?? ''}`}
       type="button"
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon className="shrink-0 text-muted">
+      <SelectPrimitive.Icon className="motion-chevron shrink-0 text-muted">
         <ChevronDown aria-hidden="true" size={16} strokeWidth={1.6} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
@@ -42,7 +42,7 @@ export function SelectContent({
     <SelectPrimitive.Portal container={portalContainer}>
       <SelectPrimitive.Positioner align="start" alignItemWithTrigger={false} className="z-100" sideOffset={6}>
         <SelectPrimitive.Popup
-          className={`${wide ? 'max-h-[min(20rem,calc(100dvh-2rem))] w-[min(28rem,calc(100vw-2rem))]' : 'max-h-64 w-[var(--anchor-width)]'} max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-[var(--shadow-popover)] outline-none ${className ?? ''}`}
+          className={`motion-base-popup ${wide ? 'max-h-[min(20rem,calc(100dvh-2rem))] w-[min(28rem,calc(100vw-2rem))]' : 'max-h-64 w-[var(--anchor-width)]'} max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-[var(--shadow-popover)] outline-none ${className ?? ''}`}
         >
           <SelectPrimitive.List>{children}</SelectPrimitive.List>
         </SelectPrimitive.Popup>

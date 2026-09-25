@@ -42,6 +42,7 @@ function localSearch(
 export function HomePage() {
   const networkState = useNetworkDataset();
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [initialNetworkStatus] = useState(networkState.status);
 
   useEffect(() => {
     /** Restore the URL's submitted criteria when browser Back or Forward is used. */
@@ -52,11 +53,23 @@ export function HomePage() {
     return () => window.removeEventListener('popstate', restoreHistorySearch);
   }, []);
 
-  return <SearchContent key={`${networkState.status}:${historyVersion}`} networkState={networkState} />;
+  return (
+    <SearchContent
+      key={`${networkState.status}:${historyVersion}`}
+      networkState={networkState}
+      animateArrival={networkState.status === initialNetworkStatus && historyVersion === 0}
+    />
+  );
 }
 
 /** Put the search beside the introduction at first, then beside its own results card. */
-function SearchContent({ networkState }: { networkState: NetworkDatasetState }) {
+function SearchContent({
+  networkState,
+  animateArrival,
+}: {
+  networkState: NetworkDatasetState;
+  animateArrival: boolean;
+}) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const [restoredNow] = useState(() => new Date());
@@ -230,7 +243,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     >
       {/* The heading stays available after the visible introduction leaves. */}
       <h1 className="sr-only">{t('hero.title')}</h1>
-      <AnimatePresence initial={false} mode="popLayout">
+      <AnimatePresence mode="popLayout">
         {!hasSearched && (
           <motion.section
             key="intro"
@@ -262,7 +275,13 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
           key="search"
           className="relative z-1 min-w-0"
           layout={!reducedMotion}
-          transition={{ layout: { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 } }}
+          initial={animateArrival && !reducedMotion ? { opacity: 0, y: 8 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            layout: { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 },
+            opacity: { duration: 0.24, delay: animateArrival ? 0.04 : 0 },
+            y: { duration: 0.24, delay: animateArrival ? 0.04 : 0 },
+          }}
         >
           <motion.div layout={!reducedMotion}>
             <TripLocationPicker
@@ -293,12 +312,14 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
               revealResults();
             }}
           >
-            <DirectJourneyResults
+            <motion.div
               key={searchNumber}
-              dataset={networkState.dataset}
-              result={result}
-              panelRef={resultsRef}
-            />
+              initial={searchNumber > 1 && !reducedMotion ? { opacity: 0, y: 6 } : false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <DirectJourneyResults dataset={networkState.dataset} result={result} panelRef={resultsRef} />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

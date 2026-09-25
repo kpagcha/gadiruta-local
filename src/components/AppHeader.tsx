@@ -14,7 +14,7 @@ export function AppHeader() {
   const themeLabel = theme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark');
 
   return (
-    <header className="flex min-h-20 items-center justify-between gap-2 border-b border-line desktop:min-h-25 desktop:gap-5">
+    <header className="motion-arrive flex min-h-20 items-center justify-between gap-2 border-b border-line desktop:min-h-25 desktop:gap-5">
       {/* The brand is also the simple route back to this single-page application's home view. */}
       <a
         className="inline-flex items-center gap-2 text-[20px] font-[750] tracking-[-1.2px] text-ink no-underline desktop:gap-2.75 desktop:text-[25px]"
@@ -33,7 +33,7 @@ export function AppHeader() {
           aria-label={themeLabel}
           aria-pressed={theme === 'dark'}
           title={themeLabel}
-          className="grid size-11 place-items-center rounded-lg border-0 bg-transparent text-muted transition-colors hover:text-ink"
+          className="motion-interactive grid size-11 place-items-center rounded-lg border-0 bg-transparent text-muted hover:text-ink"
           onClick={toggleTheme}
         >
           <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
@@ -45,7 +45,7 @@ export function AppHeader() {
             lang="en"
             aria-label={t('language.en')}
             aria-pressed={language === 'en'}
-            className={`min-h-11 min-w-11 rounded-lg border-0 bg-transparent px-2 text-muted transition-colors hover:text-ink ${language === 'en' ? 'bg-surface-active text-accent' : ''}`}
+            className={`motion-interactive min-h-11 min-w-11 rounded-lg border-0 bg-transparent px-2 text-muted hover:text-ink ${language === 'en' ? 'bg-surface-active text-accent' : ''}`}
             onClick={() => changeLanguage('en')}
           >
             {t('language.enShort')}
@@ -58,7 +58,7 @@ export function AppHeader() {
             lang="es"
             aria-label={t('language.es')}
             aria-pressed={language === 'es'}
-            className={`min-h-11 min-w-11 rounded-lg border-0 bg-transparent px-2 text-muted transition-colors hover:text-ink ${language === 'es' ? 'bg-surface-active text-accent' : ''}`}
+            className={`motion-interactive min-h-11 min-w-11 rounded-lg border-0 bg-transparent px-2 text-muted hover:text-ink ${language === 'es' ? 'bg-surface-active text-accent' : ''}`}
             onClick={() => changeLanguage('es')}
           >
             {t('language.esShort')}

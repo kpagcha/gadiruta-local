@@ -44,5 +44,6 @@ On mobile, the origin and destination search must be visible on arrival without 
 introductory copy. Desktop can pair that search with a larger editorial introduction.
 
 The search form stays visible when results appear, beside the results card on desktop and above it
-on mobile. Controls should work with keyboard and touch. Transitions should respect reduced-motion
+on mobile. Short, restrained transitions help show where content appears and how a choice changes the
+journey. Controls should work with keyboard and touch. Transitions should respect reduced-motion
 preferences.

@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { calendarDays, monthKey, parseCalendarDate, shiftCalendarDate, shiftMonth } from '../data/calendar-date.ts';
 import { madridToday } from '../data/direct-journeys.ts';
@@ -26,6 +27,7 @@ export function JourneyDatePill({
   disabled: boolean;
 }) {
   const { t, i18n } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const locale = i18n.resolvedLanguage ?? 'en';
   const today = madridToday();
   const earliestDate = minimum > today ? minimum : today;
@@ -142,7 +144,7 @@ export function JourneyDatePill({
         <button
           ref={triggerRef}
           type="button"
-          className="inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-50"
+          className="motion-interactive inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-ink enabled:hover:bg-surface-hover disabled:opacity-50"
           aria-controls={isOpen ? dialogId : undefined}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
@@ -159,14 +161,14 @@ export function JourneyDatePill({
         <div
           id={dialogId}
           ref={popoverRef}
-          className="absolute top-[calc(100%+8px)] left-0 z-50 w-[min(20rem,calc(100vw-3rem))] rounded-2xl border border-line-popover bg-surface-card p-4 shadow-[var(--shadow-popover)] max-[380px]:p-3"
+          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-[min(20rem,calc(100vw-3rem))] rounded-2xl border border-line-popover bg-surface-card p-4 shadow-[var(--shadow-popover)] max-[380px]:p-3"
           role="dialog"
           aria-label={t('search.chooseDate')}
         >
           <div className="mb-3 flex items-center justify-between gap-2 max-[380px]:gap-1">
             <button
               type="button"
-              className="grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
+              className="motion-interactive grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
               aria-label={t('search.previousMonth')}
               disabled={visibleMonth <= minimumMonth}
               onClick={() => setVisibleMonth((month) => shiftMonth(month, -1))}
@@ -200,7 +202,7 @@ export function JourneyDatePill({
             </div>
             <button
               type="button"
-              className="grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
+              className="motion-interactive grid size-10 shrink-0 place-items-center rounded-full enabled:hover:bg-surface-hover disabled:opacity-35 max-[380px]:size-8"
               aria-label={t('search.nextMonth')}
               disabled={visibleMonth >= maximumMonth}
               onClick={() => setVisibleMonth((month) => shiftMonth(month, 1))}
@@ -215,7 +217,13 @@ export function JourneyDatePill({
               </span>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1">
+          <motion.div
+            key={visibleMonth}
+            className="grid grid-cols-7 gap-1"
+            initial={reducedMotion ? false : { opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.18 }}
+          >
             {calendarDays(visibleMonth).map((day, index) =>
               day === null ? (
                 <span key={`blank-${index}`} className="aspect-square w-full max-w-9" aria-hidden="true" />
@@ -223,7 +231,7 @@ export function JourneyDatePill({
                 <button
                   key={day}
                   type="button"
-                  className={`grid aspect-square w-full max-w-9 place-items-center rounded-full text-[13px] font-[650] transition-colors enabled:hover:bg-surface-hover disabled:opacity-30 ${
+                  className={`motion-interactive grid aspect-square w-full max-w-9 place-items-center rounded-full text-[13px] font-[650] enabled:hover:bg-surface-hover disabled:opacity-30 ${
                     day === value && day >= earliestDate
                       ? 'bg-accent text-on-accent hover:bg-accent'
                       : day === today
@@ -246,7 +254,7 @@ export function JourneyDatePill({
                 </button>
               ),
             )}
-          </div>
+          </motion.div>
         </div>
       )}
     </div>

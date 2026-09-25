@@ -69,7 +69,8 @@ Browser opens index.html
 ```
 
 After a search, `HomePage` places the persistent form next to a separate `DirectJourneyResults`
-card on desktop, or above it on mobile. Motion animates only the first fresh search transition.
+card on desktop, or above it on mobile. Motion animates the page entrance, search layout, and journey
+cards; CSS handles short control and popup transitions.
 `search-url.ts` maps shareable browser URLs to local places,
 stops, dates, and times; `direct-journeys.ts` supplies and divides the local journey list.
 

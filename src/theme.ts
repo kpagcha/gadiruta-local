@@ -1,5 +1,5 @@
 /** Manage the persisted theme preference and synchronize the document theme. */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /** Theme choices supported by the application; system is the default until overridden. */
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -67,6 +67,7 @@ function persistThemeMode(mode: ThemeMode): void {
 
 /** Synchronize React state, system preference changes, and the document theme. */
 export function useTheme(): ThemeState {
+  const transitionTimer = useRef<number | null>(null);
   // Read storage lazily so it runs only when this hook first mounts.
   const [mode, setMode] = useState<ThemeMode>(() => readThemeMode());
   const [theme, setTheme] = useState<ResolvedTheme>(() => {
@@ -90,10 +91,26 @@ export function useTheme(): ThemeState {
     return () => media.removeEventListener('change', updateTheme);
   }, [mode]);
 
+  useEffect(
+    () => () => {
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+      document.documentElement.classList.remove('theme-shift');
+    },
+    [],
+  );
+
   /** Toggle to the opposite explicit theme, overriding the system choice for this browser. */
   function toggleTheme(): void {
     // Toggling always creates an explicit preference, even if the starting mode was "system".
     const nextTheme: ResolvedTheme = theme === 'dark' ? 'light' : 'dark';
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('theme-shift');
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+      transitionTimer.current = window.setTimeout(() => {
+        document.documentElement.classList.remove('theme-shift');
+        transitionTimer.current = null;
+      }, 180);
+    }
     persistThemeMode(nextTheme);
     setMode(nextTheme);
   }
