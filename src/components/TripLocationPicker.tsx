@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RECENT_SEARCH_LIMIT } from '../config.ts';
-import { locationLabel, searchLocations, type LocationOption } from '../data/location-search.ts';
+import { isSameLocationChoice, locationLabel, searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { currentMadridQuarterHour, type DepartureMode } from '../data/journey-time.ts';
 import type { RecentSearch } from '../data/recent-searches.ts';
@@ -35,12 +35,13 @@ interface LocationFieldProps {
   placeholder: string;
   options: readonly LocationOption[];
   disabled: boolean;
+  invalid: boolean;
   value: LocationFieldValue;
   onChange: (value: LocationFieldValue, committed: boolean) => void;
 }
 
 /** Render a labelled search input with keyboard-accessible place and stop suggestions. */
-function LocationField({ id, label, placeholder, options, disabled, value, onChange }: LocationFieldProps) {
+function LocationField({ id, label, placeholder, options, disabled, invalid, value, onChange }: LocationFieldProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -106,6 +107,8 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
       <div className="relative">
         <input
           ref={inputRef}
+          aria-describedby={invalid ? 'same-location-error' : undefined}
+          aria-invalid={invalid || undefined}
           autoComplete="off"
           className="h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pr-12 pl-4 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:pl-3 max-[380px]:text-base"
           disabled={disabled}
@@ -287,10 +290,7 @@ export function TripLocationPicker({
   const today = madridToday();
   const earliestDate = coverage === null ? draft.date : coverage.startDate > today ? coverage.startDate : today;
   const departureDisabled = disabled || (coverage !== null && earliestDate > coverage.endDate);
-  const sameExactStop =
-    draft.origin.choice?.kind === 'stop' &&
-    draft.destination.choice?.kind === 'stop' &&
-    draft.origin.choice.id === draft.destination.choice.id;
+  const sameLocation = isSameLocationChoice(draft.origin.choice, draft.destination.choice);
 
   /** Update edited text immediately, and search once a choice or time is committed. */
   function changeDraft(nextDraft: TripSearchDraft, committed: boolean) {
@@ -330,6 +330,7 @@ export function TripLocationPicker({
               <LocationField
                 disabled={disabled}
                 id="origin"
+                invalid={sameLocation}
                 label={t('search.origin')}
                 placeholder={t('search.originPlaceholder')}
                 onChange={(value, committed) => {
@@ -341,6 +342,7 @@ export function TripLocationPicker({
               <LocationField
                 disabled={disabled}
                 id="destination"
+                invalid={sameLocation}
                 label={t('search.destination')}
                 placeholder={t('search.destinationPlaceholder')}
                 onChange={(value, committed) => {
@@ -368,6 +370,11 @@ export function TripLocationPicker({
             </button>
           </AppTooltip>
         </div>
+        {sameLocation && (
+          <p className="mt-3 text-sm text-warning" id="same-location-error" role="alert">
+            {t('search.sameLocation')}
+          </p>
+        )}
         {recentSearches.length > 0 && (
           <div
             aria-label={t('search.recentSearches')}
@@ -482,7 +489,6 @@ export function TripLocationPicker({
               {t('search.expiredData', { date: coverage.endDate })}
             </p>
           )}
-          {sameExactStop && <p className="mt-3 text-sm text-warning">{t('search.sameStop')}</p>}
         </div>
       </form>
     </section>

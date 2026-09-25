@@ -4,7 +4,7 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createLocationOptions, locationLabel, searchLocations } from './location-search.ts';
+import { createLocationOptions, isSameLocationChoice, locationLabel, searchLocations } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import { places } from './places.ts';
 import { resolveSearchUrl, searchQuery } from './search-url.ts';
@@ -110,6 +110,29 @@ const dataset: NetworkDataset = {
 };
 
 const options = createLocationOptions(places, dataset);
+
+test('only identical selected places or physical stops are the same location choice', () => {
+  const town = options.find((option) => option.id === 'puerto-real-town')!;
+  const broad = options.find((option) => option.id === 'puerto-real')!;
+  const firstStop = options.find((option) => option.id === '2_1')!;
+  const secondStopWithSameName = { ...firstStop, id: 'another-physical-stop' };
+  assert.equal(isSameLocationChoice(town, town), true);
+  assert.equal(isSameLocationChoice(firstStop, firstStop), true);
+  assert.equal(isSameLocationChoice(town, broad), false);
+  assert.equal(isSameLocationChoice(firstStop, secondStopWithSameName), false);
+  assert.equal(isSameLocationChoice(null, firstStop), false);
+  assert.equal(isSameLocationChoice({ kind: 'place', id: firstStop.id, name: firstStop.name }, firstStop), false);
+});
+
+test('shared links reject identical choices but allow a town and its all-stops municipality', () => {
+  const town = options.find((option) => option.id === 'puerto-real-town')!;
+  const broad = options.find((option) => option.id === 'puerto-real')!;
+  const stop = options.find((option) => option.id === '2_1')!;
+  const resolve = (query: string) => resolveSearchUrl(query, options, dataset.coverage, '2026-09-25');
+  assert.equal(resolve(searchQuery(town, town, 'leave-now', '2026-09-25', '')).invalid, true);
+  assert.equal(resolve(searchQuery(stop, stop, 'leave-now', '2026-09-25', '')).complete, false);
+  assert.equal(resolve(searchQuery(town, broad, 'leave-now', '2026-09-25', '')).complete, true);
+});
 
 test('plain Puerto Real is the town and the existing municipality URL remains broad', () => {
   const results = searchLocations(options, 'Puerto Real');

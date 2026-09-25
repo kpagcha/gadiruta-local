@@ -62,7 +62,7 @@
     "timeChoices": "Departure times every 30 minutes",
     "invalidLink": "This search link has an invalid place, stop, departure option, date, or time. Check the form to see journeys.",
     "expiredData": "Available schedules end on {{date}}. New journey dates will appear when schedules are updated.",
-    "sameStop": "Choose a different destination stop."
+    "sameLocation": "From and To must be different."
   },
   "journey": {
     "results": "Direct journeys",

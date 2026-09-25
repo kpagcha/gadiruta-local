@@ -4,7 +4,7 @@
  */
 import { isCalendarDate } from './calendar-date.ts';
 import type { DepartureMode } from './journey-time.ts';
-import type { LocationOption } from './location-search.ts';
+import { isSameLocationChoice, type LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import { stopTokenFromUrl, stopUrlToken, stopUrlValue } from './stop-url.ts';
 
@@ -60,14 +60,14 @@ export function resolveSearchUrl(
     rawDate <= coverage.endDate;
   const todayCovered = today >= coverage.startDate && today <= coverage.endDate;
   const timeValid = rawTime === null || rawTime === '' || isClockTime(rawTime);
-  const sameStop = origin?.kind === 'stop' && destination?.kind === 'stop' && origin.id === destination.id;
+  const sameLocation = isSameLocationChoice(origin, destination);
   const invalid =
     (from !== null && origin === null) ||
     (to !== null && destination === null) ||
     (departureMode === 'depart-at' && !dateValid) ||
     (rawMode !== null && (rawMode !== 'now' || departureMode !== 'leave-now')) ||
     !timeValid ||
-    sameStop;
+    sameLocation;
 
   return {
     origin,

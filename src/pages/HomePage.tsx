@@ -7,7 +7,12 @@ import { TripLocationPicker, type TripSearchDraft } from '../components/TripLoca
 import { isCalendarDate } from '../data/calendar-date.ts';
 import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
 import { currentMadridTime, normalizeJourneyTime } from '../data/journey-time.ts';
-import { createLocationOptions, locationLabel, type LocationOption } from '../data/location-search.ts';
+import {
+  createLocationOptions,
+  isSameLocationChoice,
+  locationLabel,
+  type LocationOption,
+} from '../data/location-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { places } from '../data/places.ts';
 import {
@@ -141,7 +146,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     const date = nextDraft.departureMode === 'leave-now' ? today : nextDraft.date;
     const { startDate, endDate } = networkState.dataset.coverage;
     if (!isCalendarDate(date) || date < today || date < startDate || date > endDate) return;
-    if (origin.kind === 'stop' && destination.kind === 'stop' && origin.id === destination.id) return;
+    if (isSameLocationChoice(origin, destination)) return;
 
     const departAfter =
       nextDraft.departureMode === 'leave-now' ? currentMadridTime(now) : normalizeJourneyTime(nextDraft.departAfter);
@@ -197,9 +202,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     if (
       nextDraft.origin.choice === null ||
       nextDraft.destination.choice === null ||
-      (nextDraft.origin.choice.kind === 'stop' &&
-        nextDraft.destination.choice.kind === 'stop' &&
-        nextDraft.origin.choice.id === nextDraft.destination.choice.id)
+      isSameLocationChoice(nextDraft.origin.choice, nextDraft.destination.choice)
     )
       setResult(null);
     setUrlError(false);

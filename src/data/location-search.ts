@@ -30,6 +30,11 @@ export type LocationOption =
       areaName?: string | null;
     };
 
+/** Reject only the same selected choice; a town and its wider municipality remain distinct. */
+export function isSameLocationChoice(origin: LocationOption | null, destination: LocationOption | null): boolean {
+  return origin !== null && destination !== null && origin.kind === destination.kind && origin.id === destination.id;
+}
+
 /** Results stay grouped so each kind can be revealed independently in the picker. */
 export interface LocationResults {
   places: LocationOption[];
