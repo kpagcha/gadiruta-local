@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  createLocationMunicipalities,
   createLocationOptions,
   hasMinimumLocationQuery,
   isSameLocationChoice,
@@ -141,6 +142,38 @@ const dataset: NetworkDataset = {
 };
 
 const options = createLocationOptions(places, dataset);
+
+test('the place picker uses served locations and existing place identities', () => {
+  const hierarchy = createLocationMunicipalities(options, {
+    ...dataset,
+    municipalities: [...dataset.municipalities, { id: '15', name: 'Chipiona' }],
+    localAreas: [
+      ...dataset.localAreas,
+      { id: '44', name: 'Chipiona', municipalityId: '15', referencePoint: null },
+      { id: '99', name: 'Unserved', municipalityId: '4', referencePoint: null },
+    ],
+  });
+  assert.deepEqual(
+    hierarchy.map((municipality) => municipality.name),
+    ['Cádiz', 'Chiclana de la Frontera', 'Jerez de la Frontera', 'Puerto Real'],
+  );
+  const puertoReal = hierarchy.find((municipality) => municipality.id === '4')!;
+  assert.equal(puertoReal.choice.id, 'puerto-real');
+  assert.deepEqual(
+    puertoReal.areas.map((area) => [area.id, area.choice.id]),
+    [
+      ['11', 'barrio-jarana'],
+      ['40', 'el-marquesado'],
+      ['43', 'hospital-puerto-real'],
+      ['6', 'puerto-real-town'],
+    ],
+  );
+  assert.deepEqual(hierarchy.find((municipality) => municipality.id === '1')?.areas, []);
+  assert.equal(
+    searchQuery(puertoReal.choice, puertoReal.areas[0]!.choice, 'leave-now', '2026-09-25', ''),
+    '?from=puerto-real&to=barrio-jarana&mode=now',
+  );
+});
 
 test('requires two non-space characters before returning location suggestions', () => {
   assert.equal(hasMinimumLocationQuery(' c '), false);

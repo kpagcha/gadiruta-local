@@ -31,6 +31,18 @@ export type LocationOption =
       areaName?: string | null;
     };
 
+/** One served municipality and its narrower choices in the place picker. */
+export interface LocationMunicipality {
+  id: string;
+  name: string;
+  choice: Extract<LocationOption, { kind: 'place' }>;
+  areas: {
+    id: string;
+    name: string;
+    choice: Extract<LocationOption, { kind: 'place' }>;
+  }[];
+}
+
 /** Reject only the same selected choice; a town and its wider municipality remain distinct. */
 export function isSameLocationChoice(origin: LocationOption | null, destination: LocationOption | null): boolean {
   return origin !== null && destination !== null && origin.kind === destination.kind && origin.id === destination.id;
@@ -139,6 +151,44 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
       .sort((first, second) => first.localeCompare(second, 'es', { numeric: true })),
   }));
   return [...placeOptions, ...stopOptions];
+}
+
+/** Pair served feed locations with the existing place choices used by search and URLs. */
+export function createLocationMunicipalities(
+  options: readonly LocationOption[],
+  dataset: NetworkDataset,
+): LocationMunicipality[] {
+  const placeOptions = options.filter(
+    (option): option is Extract<LocationOption, { kind: 'place' }> => option.kind === 'place',
+  );
+  const municipalitiesById = new Map(
+    placeOptions
+      .filter((option) => option.municipalityId !== undefined)
+      .map((option) => [option.municipalityId, option]),
+  );
+  const areasById = new Map(
+    placeOptions.filter((option) => option.localAreaId !== undefined).map((option) => [option.localAreaId, option]),
+  );
+  const servedMunicipalities = new Set(dataset.stops.map((stop) => stop.municipalityId).filter((id) => id !== null));
+  const servedAreas = new Set(dataset.stops.map((stop) => stop.localAreaId).filter((id) => id !== null));
+  const byName = (first: { id: string; name: string }, second: { id: string; name: string }) =>
+    first.name.localeCompare(second.name, 'es', { sensitivity: 'base' }) || first.id.localeCompare(second.id, 'en');
+
+  return dataset.municipalities
+    .flatMap((municipality) => {
+      const choice = municipalitiesById.get(municipality.id);
+      if (!servedMunicipalities.has(municipality.id) || choice === undefined) return [];
+      // A town with the same scope as its municipality has no separate place ID to select.
+      const areas = dataset.localAreas
+        .filter((area) => area.municipalityId === municipality.id && servedAreas.has(area.id))
+        .flatMap((area) => {
+          const areaChoice = areasById.get(area.id);
+          return areaChoice === undefined ? [] : [{ id: area.id, name: area.name, choice: areaChoice }];
+        })
+        .sort(byName);
+      return [{ id: municipality.id, name: municipality.name, choice, areas }];
+    })
+    .sort(byName);
 }
 
 /** Give broad and child-area choices labels that distinguish their selectable scope. */

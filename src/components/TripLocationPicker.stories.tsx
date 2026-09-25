@@ -31,8 +31,15 @@ const readyState = {
         textColor: 'FFFFFF',
       },
     ],
-    municipalities: [],
-    localAreas: [],
+    municipalities: [
+      { id: '1', name: 'Cádiz' },
+      { id: '6', name: 'Jerez de la Frontera' },
+    ],
+    localAreas: [
+      { id: '1', municipalityId: '1', name: 'Cádiz', referencePoint: null },
+      { id: '14', municipalityId: '6', name: 'Jerez', referencePoint: null },
+      { id: '42', municipalityId: '6', name: 'Aeropuerto', referencePoint: null },
+    ],
     stops: [
       {
         id: '2_10',
@@ -41,8 +48,8 @@ const readyState = {
         longitude: -6.29,
         parentStationId: null,
         placeId: 'cadiz',
-        municipalityId: null,
-        localAreaId: null,
+        municipalityId: '1',
+        localAreaId: '1',
       },
       {
         id: '2_11',
@@ -51,11 +58,21 @@ const readyState = {
         longitude: -6.14,
         parentStationId: null,
         placeId: 'jerez-de-la-frontera',
-        municipalityId: null,
-        localAreaId: null,
+        municipalityId: '6',
+        localAreaId: '14',
+      },
+      {
+        id: '2_12',
+        name: 'Aeropuerto Jerez',
+        latitude: 36.75,
+        longitude: -6.06,
+        parentStationId: null,
+        placeId: 'aeropuerto-jerez',
+        municipalityId: '6',
+        localAreaId: '42',
       },
     ],
-    patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['2_10', '2_11'] }],
+    patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['2_10', '2_11', '2_12'] }],
     trips: [
       {
         id: 'sample',
@@ -64,6 +81,7 @@ const readyState = {
         stopTimes: [
           { stopId: '2_10', arrivalMinutes: 480, departureMinutes: 480, pickupType: 0, dropOffType: 0 },
           { stopId: '2_11', arrivalMinutes: 540, departureMinutes: 540, pickupType: 0, dropOffType: 0 },
+          { stopId: '2_12', arrivalMinutes: 560, departureMinutes: 560, pickupType: 0, dropOffType: 0 },
         ],
       },
     ],

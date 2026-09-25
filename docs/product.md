@@ -25,6 +25,10 @@ people can choose a named local area or an exact stop. A direct journey is one
 scheduled trip that serves the origin before the destination; transfer routing is not part of the
 first product.
 
+From and To also offer a municipality and local-area selector. Its default All choice covers every
+stop in the selected municipality; a named local area narrows that end of the journey. The selector
+lists only places served by stops in the loaded network.
+
 The interface supports English and Spanish. Official place, operator, and line names remain as
 provided by their source.
 

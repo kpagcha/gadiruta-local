@@ -28,6 +28,8 @@
     "destination": "To",
     "originPlaceholder": "Where are you starting?",
     "destinationPlaceholder": "Where would you like to go?",
+    "chooseFromList": "Choose from a list",
+    "allAreas": "All",
     "swap": "Swap start and destination",
     "recentSearches": "Recent searches",
     "repeatRecentSearch": "Search again from {{origin}} to {{destination}}",

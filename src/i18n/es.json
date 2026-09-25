@@ -28,6 +28,8 @@
     "destination": "Hasta",
     "originPlaceholder": "¿Desde dónde sales?",
     "destinationPlaceholder": "¿Adónde quieres ir?",
+    "chooseFromList": "Elegir de una lista",
+    "allAreas": "Todos",
     "swap": "Intercambiar origen y destino",
     "recentSearches": "Búsquedas recientes",
     "repeatRecentSearch": "Buscar de nuevo de {{origin}} a {{destination}}",
