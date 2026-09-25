@@ -4,7 +4,13 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createLocationOptions, isSameLocationChoice, locationLabel, searchLocations } from './location-search.ts';
+import {
+  createLocationOptions,
+  hasMinimumLocationQuery,
+  isSameLocationChoice,
+  locationLabel,
+  searchLocations,
+} from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import { places } from './places.ts';
 import { resolveSearchUrl, searchQuery } from './search-url.ts';
@@ -135,6 +141,13 @@ const dataset: NetworkDataset = {
 };
 
 const options = createLocationOptions(places, dataset);
+
+test('requires two non-space characters before returning location suggestions', () => {
+  assert.equal(hasMinimumLocationQuery(' c '), false);
+  assert.equal(hasMinimumLocationQuery('ca'), true);
+  assert.deepEqual(searchLocations(options, 'c'), { places: [], areas: [], stops: [] });
+  assert.ok(searchLocations(options, 'ca').places.length > 0);
+});
 
 test('only identical selected places or physical stops are the same location choice', () => {
   const town = options.find((option) => option.id === 'puerto-real-town')!;

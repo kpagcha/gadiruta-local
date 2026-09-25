@@ -361,7 +361,7 @@ export function TripLocationPicker({
           <AppTooltip content={t('search.swap')} disabled={swapDisabled}>
             <button
               aria-label={t('search.swap')}
-              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-muted-soft disabled:opacity-40 max-[380px]:size-9"
+              className="grid size-11 place-items-center rounded-full border border-transparent text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:border-line disabled:bg-surface-active disabled:text-muted disabled:opacity-100 max-[380px]:size-9"
               disabled={swapDisabled}
               onClick={() => {
                 changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
