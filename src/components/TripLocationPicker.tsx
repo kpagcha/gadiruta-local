@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LOCATION_SEARCH_DEBOUNCE_MS } from '../config.ts';
 import {
   hasMinimumLocationQuery,
   isSameLocationChoice,
@@ -53,7 +54,17 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const results = searchLocations(options, value.choice === null && isOpen ? value.text : '');
+  const query = value.choice === null && isOpen ? value.text : '';
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const isWaitingForResults = query !== debouncedQuery;
+
+  // Hide stale suggestions until typing pauses, so the popup always matches the visible query.
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setDebouncedQuery(query), LOCATION_SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(timeoutId);
+  }, [query]);
+
+  const results = searchLocations(options, debouncedQuery);
   const groups = [
     { id: 'places', label: t('search.places'), choices: results.places },
     { id: 'areas', label: t('search.areas'), choices: results.areas },
@@ -67,7 +78,8 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
       (group.choices.length > 5 ? 1 : 0),
     0,
   );
-  const showResults = !disabled && value.choice === null && isOpen && hasMinimumLocationQuery(value.text);
+  const showResults =
+    !disabled && !isWaitingForResults && value.choice === null && isOpen && hasMinimumLocationQuery(debouncedQuery);
 
   /** Close suggestions only when focus leaves this field and its result buttons. */
   function handleBlur(event: FocusEvent<HTMLDivElement>) {
@@ -80,7 +92,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
   function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Escape') {
       setIsOpen(false);
-    } else if (event.key === 'ArrowDown' && visibleCount > 0) {
+    } else if (event.key === 'ArrowDown' && showResults && visibleCount > 0) {
       event.preventDefault();
       resultRefs.current[0]?.focus();
     }
@@ -361,7 +373,7 @@ export function TripLocationPicker({
           <AppTooltip content={t('search.swap')} disabled={swapDisabled}>
             <button
               aria-label={t('search.swap')}
-              className="grid size-11 place-items-center rounded-full border border-transparent text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:border-line disabled:bg-surface-active disabled:text-muted disabled:opacity-100 max-[380px]:size-9"
+              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-muted disabled:opacity-100 max-[380px]:size-9"
               disabled={swapDisabled}
               onClick={() => {
                 changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
