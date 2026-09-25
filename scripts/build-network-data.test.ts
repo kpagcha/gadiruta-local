@@ -91,7 +91,7 @@ test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnig
     ),
   };
   const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { cadiz: 'cadiz' });
-  assert.equal(dataset.formatVersion, 4);
+  assert.equal(dataset.formatVersion, 5);
   assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.placeId, 'cadiz');
   assert.equal(dataset.stops.find((stop) => stop.id === 'puerto')?.placeId, null);
   assert.deepEqual(

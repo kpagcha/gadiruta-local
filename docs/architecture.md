@@ -36,8 +36,14 @@ them, see the [development guide](development.md).
 
 A place is a name people recognize, such as Cádiz or Rota. A stop is one exact bus boarding point.
 The app keeps them as separate search choices. The tracked CTAN location directory records 15
-municipalities, 44 local areas, and the location of all 263 selected stops. A municipality search covers all
-its local areas; a named local-area search uses CTAN's stop membership. Exact stops remain searchable.
+municipalities, 44 local areas, and the location of all 263 selected stops. The curated place list
+covers all local areas with selected stops. Where a municipality has a matching town area and other
+served areas, its plain-name choice searches the town area; its explicit all-stops choice keeps the
+existing municipality URL ID and searches the whole municipality. A municipality with only town
+stops retains one choice. Named local-area searches use CTAN membership. Suggestions group places,
+served local areas, and exact stops. A matched municipality expands stops only from its matching
+town area; a matched local area expands its own stops. Name matching ignores accent, case, and word
+order, and the picker reveals further matches within each group on request.
 The earlier reviewed assignments in `scripts/place-stop-assignments.json` remain in the snapshot
 for places without a CTAN link. The ignored geographic report was used as a review checklist and
 is never browser input.

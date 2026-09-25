@@ -7,7 +7,7 @@ import { TripLocationPicker, type TripSearchDraft } from '../components/TripLoca
 import { isCalendarDate } from '../data/calendar-date.ts';
 import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
 import { currentMadridTime, normalizeJourneyTime } from '../data/journey-time.ts';
-import { createLocationOptions, type LocationOption } from '../data/location-search.ts';
+import { createLocationOptions, locationLabel, type LocationOption } from '../data/location-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { places } from '../data/places.ts';
 import {
@@ -68,8 +68,14 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     [networkState, options, restoredNow],
   );
   const [draft, setDraft] = useState<TripSearchDraft>(() => ({
-    origin: { text: restored?.origin?.name ?? '', choice: restored?.origin ?? null },
-    destination: { text: restored?.destination?.name ?? '', choice: restored?.destination ?? null },
+    origin: {
+      text: restored?.origin ? locationLabel(restored.origin, t('search.allStops')) : '',
+      choice: restored?.origin ?? null,
+    },
+    destination: {
+      text: restored?.destination ? locationLabel(restored.destination, t('search.allStops')) : '',
+      choice: restored?.destination ?? null,
+    },
     date: restored?.date ?? madridToday(),
     departAfter: restored?.departAfter ?? '',
     departureMode: restored?.departureMode ?? 'leave-now',
@@ -177,8 +183,8 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
     const departureMode =
       search.departureMode === 'depart-at' && search.date < today ? 'leave-now' : search.departureMode;
     handleSearch({
-      origin: { text: search.origin.name, choice: search.origin },
-      destination: { text: search.destination.name, choice: search.destination },
+      origin: { text: locationLabel(search.origin, t('search.allStops')), choice: search.origin },
+      destination: { text: locationLabel(search.destination, t('search.allStops')), choice: search.destination },
       departureMode,
       date: departureMode === 'leave-now' ? today : search.date,
       departAfter: departureMode === 'leave-now' ? '' : search.departAfter,
@@ -198,6 +204,16 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
       setResult(null);
     setUrlError(false);
   }
+
+  const displayedDraft: TripSearchDraft = {
+    ...draft,
+    origin: draft.origin.choice
+      ? { ...draft.origin, text: locationLabel(draft.origin.choice, t('search.allStops')) }
+      : draft.origin,
+    destination: draft.destination.choice
+      ? { ...draft.destination, text: locationLabel(draft.destination.choice, t('search.allStops')) }
+      : draft.destination,
+  };
 
   return (
     <main
@@ -249,7 +265,7 @@ function SearchContent({ networkState }: { networkState: NetworkDatasetState }) 
             <TripLocationPicker
               state={networkState}
               options={options}
-              draft={draft}
+              draft={displayedDraft}
               onSearch={handleSearch}
               onDraftChange={handleDraftChange}
               recentSearches={recentSearches}

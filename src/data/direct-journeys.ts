@@ -3,7 +3,7 @@
  * Times are minutes from a GTFS service day, which may continue after midnight. This module makes
  * no network requests and leaves display formatting to the interface.
  */
-import type { LocationOption } from './location-search.ts';
+import { townLocalAreaId, type LocationOption } from './location-search.ts';
 import type { NetworkDataset, NetworkStop, NetworkStopTime, NetworkTrip } from './network-schema.ts';
 
 /** A reachable destination on the same trip after one chosen boarding visit. */
@@ -72,23 +72,6 @@ function runsOnDate(
   if (calendar === undefined || date < calendar.startDate || date > calendar.endDate) return false;
   const weekday = (new Date(`${date}T00:00:00Z`).getUTCDay() + 6) % 7;
   return calendar.weekdays[weekday] ?? false;
-}
-
-/** Fold accents and case before comparing official municipality and local-area names. */
-function normalizedName(name: string): string {
-  return name.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es').trim().replace(/\s+/g, ' ');
-}
-
-/** Find the unique same-named or shortened town area within one municipality. */
-function townLocalAreaId(dataset: NetworkDataset, municipalityId: string): string | null {
-  const municipality = dataset.municipalities.find((item) => item.id === municipalityId);
-  if (municipality === undefined) return null;
-  const name = normalizedName(municipality.name);
-  const localAreas = dataset.localAreas.filter((localArea) => localArea.municipalityId === municipalityId);
-  const exact = localAreas.filter((localArea) => normalizedName(localArea.name) === name);
-  if (exact.length > 0) return exact.length === 1 ? exact[0]!.id : null;
-  const shorter = localAreas.filter((localArea) => name.startsWith(`${normalizedName(localArea.name)} `));
-  return shorter.length === 1 ? shorter[0]!.id : null;
 }
 
 /** Locate the reviewed point used to rank stops for a place, if one exists. */

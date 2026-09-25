@@ -18,9 +18,10 @@ The app should be fast, friendly, mobile-first, and easy to scan. Its core tasks
 - browse lines, stops, and timetables;
 - view useful network information and relevant service notices.
 
-Places are names people recognize when describing an area; stops are exact boarding points. A
-municipality search covers its local areas and chooses a default stop pair nearest its town area when possible;
-people can also search a named local area or an exact stop. A direct journey is one
+Places are names people recognize when describing an area; stops are exact boarding points. A plain
+municipality name selects its matching town area when one is available, while an explicit all-stops
+choice covers the municipality. Search also reveals its served local areas and the town area's stops;
+people can choose a named local area or an exact stop. A direct journey is one
 scheduled trip that serves the origin before the destination; transfer routing is not part of the
 first product.
 

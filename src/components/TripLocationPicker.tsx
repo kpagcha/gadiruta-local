@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RECENT_SEARCH_LIMIT } from '../config.ts';
-import { searchLocations, type LocationOption } from '../data/location-search.ts';
+import { locationLabel, searchLocations, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { currentMadridQuarterHour, type DepartureMode } from '../data/journey-time.ts';
 import type { RecentSearch } from '../data/recent-searches.ts';
@@ -44,9 +44,23 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const results = value.choice === null && isOpen ? searchLocations(options, value.text) : [];
+  const results = searchLocations(options, value.choice === null && isOpen ? value.text : '');
+  const groups = [
+    { id: 'places', label: t('search.places'), choices: results.places },
+    { id: 'areas', label: t('search.areas'), choices: results.areas },
+    { id: 'stops', label: t('search.stops'), choices: results.stops },
+  ];
+  const totalResults = groups.reduce((count, group) => count + group.choices.length, 0);
+  const visibleCount = groups.reduce(
+    (count, group) =>
+      count +
+      Math.min(group.choices.length, expandedGroups.includes(group.id) ? group.choices.length : 5) +
+      (group.choices.length > 5 ? 1 : 0),
+    0,
+  );
   const showResults = !disabled && value.choice === null && isOpen && value.text.trim() !== '';
 
   /** Close suggestions only when focus leaves this field and its result buttons. */
@@ -60,7 +74,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
   function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Escape') {
       setIsOpen(false);
-    } else if (event.key === 'ArrowDown' && results.length > 0) {
+    } else if (event.key === 'ArrowDown' && visibleCount > 0) {
       event.preventDefault();
       resultRefs.current[0]?.focus();
     }
@@ -71,7 +85,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
     if (event.key === 'Escape') {
       inputRef.current?.focus();
       setIsOpen(false);
-    } else if (event.key === 'ArrowDown' && index < results.length - 1) {
+    } else if (event.key === 'ArrowDown' && index < visibleCount - 1) {
       event.preventDefault();
       resultRefs.current[index + 1]?.focus();
     } else if (event.key === 'ArrowUp') {
@@ -99,6 +113,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
           onChange={(event) => {
             onChange({ text: event.target.value, choice: null }, false);
             setIsOpen(true);
+            setExpandedGroups([]);
           }}
           onBlur={() => setIsInputFocused(false)}
           onFocus={() => {
@@ -128,6 +143,7 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
             onClick={() => {
               onChange({ text: '', choice: null }, false);
               setIsOpen(false);
+              setExpandedGroups([]);
               inputRef.current?.focus();
             }}
             title={t(id === 'origin' ? 'search.clearOrigin' : 'search.clearDestination')}
@@ -146,52 +162,96 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
       {showResults && (
         <div className="absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">
           <p className="sr-only" role="status">
-            {t('search.resultCount', { count: results.length })}
+            {t('search.resultCount', { count: totalResults })}
           </p>
-          {results.length === 0 ? (
+          {totalResults === 0 ? (
             <p className="px-3 py-3 text-sm text-muted">{t('search.noResults')}</p>
           ) : (
-            <ul className="max-h-72 overflow-y-auto">
-              {results.map((result, index) => {
-                const extraLines = result.kind === 'stop' ? result.routeLabels.length - 2 : 0;
-                return (
-                  <li key={`${result.kind}:${result.id}`}>
-                    <button
-                      ref={(button) => {
-                        resultRefs.current[index] = button;
-                      }}
-                      className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-hover focus-visible:bg-surface-hover"
-                      onClick={() => {
-                        onChange({ text: result.name, choice: result }, true);
-                        inputRef.current?.focus();
-                        setIsOpen(false);
-                      }}
-                      onKeyDown={(event) => handleResultKeyDown(event, index)}
-                      type="button"
-                    >
-                      <span className="mt-0.5 text-accent">
-                        <Icon name={result.kind === 'place' ? 'place' : 'stop'} size={18} />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-sm font-[650]">{result.name}</span>
-                        {result.kind === 'stop' && (
-                          <span className="block text-xs leading-5 text-muted">
-                            {t('search.stop')}
-                            {result.routeLabels.length > 0 && (
-                              <>
-                                {' · '}
-                                {result.routeLabels.slice(0, 2).join(', ')}
-                                {extraLines > 0 && ` (+${extraLines})`}
-                              </>
-                            )}
-                          </span>
-                        )}
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="max-h-[min(28rem,60vh)] overflow-y-auto">
+              {(() => {
+                let focusIndex = -1;
+                return groups
+                  .filter((group) => group.choices.length > 0)
+                  .map((group) => {
+                    const expanded = expandedGroups.includes(group.id);
+                    const visible = expanded ? group.choices : group.choices.slice(0, 5);
+                    return (
+                      <div key={group.id}>
+                        <p className="px-3 pt-2.5 pb-1 text-xs font-[700] tracking-wide text-muted uppercase">
+                          {group.label}
+                        </p>
+                        <ul aria-label={group.label}>
+                          {visible.map((result) => {
+                            const index = ++focusIndex;
+                            const extraLines = result.kind === 'stop' ? result.routeLabels.length - 2 : 0;
+                            return (
+                              <li key={`${result.kind}:${result.id}`}>
+                                <button
+                                  ref={(button) => {
+                                    resultRefs.current[index] = button;
+                                  }}
+                                  className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-hover focus-visible:bg-surface-hover"
+                                  onClick={() => {
+                                    onChange(
+                                      { text: locationLabel(result, t('search.allStops')), choice: result },
+                                      true,
+                                    );
+                                    inputRef.current?.focus();
+                                    setIsOpen(false);
+                                  }}
+                                  onKeyDown={(event) => handleResultKeyDown(event, index)}
+                                  type="button"
+                                >
+                                  <span className="mt-0.5 text-accent">
+                                    <Icon name={result.kind === 'place' ? 'place' : 'stop'} size={18} />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-sm font-[650]">
+                                      {locationLabel(result, t('search.allStops'))}
+                                    </span>
+                                    {result.kind === 'stop' && (
+                                      <span className="block text-xs leading-5 text-muted">
+                                        {t('search.stop')}
+                                        {result.routeLabels.length > 0 &&
+                                          ` · ${result.routeLabels.slice(0, 2).join(', ')}${extraLines > 0 ? ` (+${extraLines})` : ''}`}
+                                      </span>
+                                    )}
+                                  </span>
+                                </button>
+                              </li>
+                            );
+                          })}
+                          {group.choices.length > 5 &&
+                            (() => {
+                              const index = ++focusIndex;
+                              return (
+                                <li key={`${group.id}-toggle`}>
+                                  <button
+                                    ref={(button) => {
+                                      resultRefs.current[index] = button;
+                                    }}
+                                    className="w-full rounded-lg px-3 py-2 text-left text-sm font-[650] text-accent hover:bg-surface-hover focus-visible:bg-surface-hover"
+                                    onClick={() =>
+                                      setExpandedGroups((current) =>
+                                        expanded ? current.filter((id) => id !== group.id) : [...current, group.id],
+                                      )
+                                    }
+                                    onKeyDown={(event) => handleResultKeyDown(event, index)}
+                                    type="button"
+                                  >
+                                    {expanded
+                                      ? t('search.showLess')
+                                      : t('search.showMore', { count: group.choices.length - 5 })}
+                                  </button>
+                                </li>
+                              );
+                            })()}
+                        </ul>
+                      </div>
+                    );
+                  });
+              })()}
+            </div>
           )}
         </div>
       )}
@@ -315,7 +375,9 @@ export function TripLocationPicker({
             style={{ gridTemplateColumns: `repeat(${RECENT_SEARCH_LIMIT}, minmax(0, 1fr))` }}
           >
             {recentSearches.map((search) => {
-              const route = `${search.origin.name} → ${search.destination.name}`;
+              const origin = locationLabel(search.origin, t('search.allStops'));
+              const destination = locationLabel(search.destination, t('search.allStops'));
+              const route = `${origin} → ${destination}`;
               return (
                 <AppTooltip
                   content={route}
@@ -323,8 +385,8 @@ export function TripLocationPicker({
                 >
                   <button
                     aria-label={t('search.repeatRecentSearch', {
-                      origin: search.origin.name,
-                      destination: search.destination.name,
+                      origin,
+                      destination,
                     })}
                     className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
                     onClick={() => onSelectRecentSearch(search)}
