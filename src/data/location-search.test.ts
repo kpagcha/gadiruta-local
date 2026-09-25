@@ -115,7 +115,7 @@ test('plain Puerto Real is the town and the existing municipality URL remains br
   const results = searchLocations(options, 'Puerto Real');
   assert.equal(results.places[0]?.id, 'puerto-real-town');
   assert.equal(results.places[1]?.id, 'puerto-real');
-  assert.equal(locationLabel(results.places[1]!, 'All stops'), 'Puerto Real · All stops');
+  assert.equal(locationLabel(results.places[1]!, 'All stops'), 'Puerto Real (All stops)');
   assert.deepEqual(
     results.stops.map((stop) => stop.id),
     ['2_4'],

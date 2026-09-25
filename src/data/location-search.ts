@@ -133,13 +133,13 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
 /** Give broad and child-area choices labels that distinguish their selectable scope. */
 export function locationLabel(option: LocationOption, allStopsLabel: string): string {
   if (option.kind === 'stop') return option.name;
-  if (option.isBroad) return `${option.name} · ${allStopsLabel}`;
+  if (option.isBroad) return `${option.name} (${allStopsLabel})`;
   if (
     !option.isTown &&
     option.parentName &&
     !normalizeSearchText(option.name).includes(normalizeSearchText(option.parentName))
   ) {
-    return `${option.name} · ${option.parentName}`;
+    return `${option.name} (${option.parentName})`;
   }
   return option.name;
 }
