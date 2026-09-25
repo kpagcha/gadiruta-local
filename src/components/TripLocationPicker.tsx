@@ -1,8 +1,13 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RECENT_SEARCH_LIMIT } from '../config.ts';
-import { isSameLocationChoice, locationLabel, searchLocations, type LocationOption } from '../data/location-search.ts';
+import {
+  hasMinimumLocationQuery,
+  isSameLocationChoice,
+  locationLabel,
+  searchLocations,
+  type LocationOption,
+} from '../data/location-search.ts';
 import { madridToday } from '../data/direct-journeys.ts';
 import { currentMadridQuarterHour, type DepartureMode } from '../data/journey-time.ts';
 import type { RecentSearch } from '../data/recent-searches.ts';
@@ -62,7 +67,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
       (group.choices.length > 5 ? 1 : 0),
     0,
   );
-  const showResults = !disabled && value.choice === null && isOpen && value.text.trim() !== '';
+  const showResults = !disabled && value.choice === null && isOpen && hasMinimumLocationQuery(value.text);
 
   /** Close suggestions only when focus leaves this field and its result buttons. */
   function handleBlur(event: FocusEvent<HTMLDivElement>) {
@@ -121,7 +126,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
           onBlur={() => setIsInputFocused(false)}
           onFocus={() => {
             setIsInputFocused(true);
-            if (value.choice === null && value.text.trim() !== '') {
+            if (value.choice === null && hasMinimumLocationQuery(value.text)) {
               setIsOpen(true);
             }
           }}
@@ -356,7 +361,7 @@ export function TripLocationPicker({
           <AppTooltip content={t('search.swap')} disabled={swapDisabled}>
             <button
               aria-label={t('search.swap')}
-              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:opacity-75 max-[380px]:size-9"
+              className="grid size-11 place-items-center rounded-full text-ink transition-colors enabled:hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-muted-soft disabled:opacity-40 max-[380px]:size-9"
               disabled={swapDisabled}
               onClick={() => {
                 changeDraft({ ...draft, origin: draft.destination, destination: draft.origin }, true);
@@ -378,9 +383,8 @@ export function TripLocationPicker({
         {recentSearches.length > 0 && (
           <div
             aria-label={t('search.recentSearches')}
-            className="mt-4 grid min-w-0 gap-2 max-[380px]:gap-1.5"
+            className="mt-3 flex min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto max-[380px]:gap-1"
             role="group"
-            style={{ gridTemplateColumns: `repeat(${RECENT_SEARCH_LIMIT}, minmax(0, 1fr))` }}
           >
             {recentSearches.map((search) => {
               const origin = locationLabel(search.origin, t('search.allStops'));
@@ -396,11 +400,11 @@ export function TripLocationPicker({
                       origin,
                       destination,
                     })}
-                    className="flex min-h-10 min-w-0 items-center gap-2 overflow-hidden rounded-full border border-line-input bg-surface-card px-3 text-left text-sm font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1.5 max-[380px]:px-2"
+                    className="flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink transition-colors hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
                     onClick={() => onSelectRecentSearch(search)}
                     type="button"
                   >
-                    <Icon name="search" className="shrink-0" size={17} />
+                    <Icon name="search" className="shrink-0" size={15} />
                     <span className="min-w-0 truncate">{route}</span>
                   </button>
                 </AppTooltip>

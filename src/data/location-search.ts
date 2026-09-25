@@ -2,6 +2,7 @@
  * Builds browser-only choices from the reviewed place list and network snapshot, then finds
  * matching places, local areas, and physical stops. No search requests leave the browser.
  */
+import { MIN_LOCATION_QUERY_LENGTH } from '../config.ts';
 import { getRouteLabel } from './network.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import type { Place } from './places.ts';
@@ -45,6 +46,11 @@ export interface LocationResults {
 /** Fold accents, case, and repeated spaces for name comparisons. */
 function normalizeSearchText(value: string): string {
   return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es').trim().replace(/\s+/g, ' ');
+}
+
+/** Keep short or whitespace-only input from opening a location search. */
+export function hasMinimumLocationQuery(query: string): boolean {
+  return [...normalizeSearchText(query).replaceAll(' ', '')].length >= MIN_LOCATION_QUERY_LENGTH;
 }
 
 /** Find the unique same-named or shortened town area within one municipality. */
@@ -179,7 +185,7 @@ function parentAreaRank(option: LocationOption, query: string): number {
 export function searchLocations(options: readonly LocationOption[], query: string): LocationResults {
   const empty = { places: [], areas: [], stops: [] };
   const normalizedQuery = normalizeSearchText(query);
-  if (normalizedQuery === '') return empty;
+  if (!hasMinimumLocationQuery(normalizedQuery)) return empty;
   const ranked = options.map((option) => ({
     option,
     rank: Math.min(matchRank(option.name, normalizedQuery), parentAreaRank(option, normalizedQuery)),
