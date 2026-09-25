@@ -60,7 +60,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const isWaitingForResults = query !== debouncedQuery;
 
-  // Hide stale suggestions until typing pauses, so the popup always matches the visible query.
+  // Keep the popup mounted during the debounce; stale choices remain inert until they match the input.
   useEffect(() => {
     const timeoutId = window.setTimeout(() => setDebouncedQuery(query), LOCATION_SEARCH_DEBOUNCE_MS);
     return () => window.clearTimeout(timeoutId);
@@ -81,7 +81,11 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
     0,
   );
   const showResults =
-    !disabled && !isWaitingForResults && value.choice === null && isOpen && hasMinimumLocationQuery(debouncedQuery);
+    !disabled &&
+    value.choice === null &&
+    isOpen &&
+    hasMinimumLocationQuery(query) &&
+    hasMinimumLocationQuery(debouncedQuery);
 
   /** Close suggestions only when focus leaves this field and its result buttons. */
   function handleBlur(event: FocusEvent<HTMLDivElement>) {
@@ -94,7 +98,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
   function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Escape') {
       setIsOpen(false);
-    } else if (event.key === 'ArrowDown' && showResults && visibleCount > 0) {
+    } else if (event.key === 'ArrowDown' && showResults && !isWaitingForResults && visibleCount > 0) {
       event.preventDefault();
       resultRefs.current[0]?.focus();
     }
@@ -133,7 +137,9 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
           disabled={disabled}
           id={`${id}-search`}
           onChange={(event) => {
-            onChange({ text: event.target.value, choice: null }, false);
+            const text = event.target.value;
+            onChange({ text, choice: null }, false);
+            if (!hasMinimumLocationQuery(text)) setDebouncedQuery('');
             setIsOpen(true);
             setExpandedGroups([]);
           }}
@@ -182,14 +188,19 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
         ) : null}
       </div>
       {showResults && (
-        <div className="motion-popover absolute z-30 mt-2 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]">
-          <p className="sr-only" role="status">
-            {t('search.resultCount', { count: totalResults })}
-          </p>
-          {totalResults === 0 ? (
+        <div
+          aria-busy={isWaitingForResults}
+          className="motion-popover absolute z-30 mt-2 min-h-12 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]"
+        >
+          {!isWaitingForResults && (
+            <p className="sr-only" role="status">
+              {t('search.resultCount', { count: totalResults })}
+            </p>
+          )}
+          {!isWaitingForResults && totalResults === 0 ? (
             <p className="px-3 py-3 text-sm text-muted">{t('search.noResults')}</p>
-          ) : (
-            <div className="max-h-[min(28rem,60vh)] overflow-y-auto">
+          ) : totalResults > 0 ? (
+            <div className="max-h-[min(28rem,60vh)] overflow-y-auto" inert={isWaitingForResults}>
               {(() => {
                 let focusIndex = -1;
                 return groups
@@ -280,7 +291,7 @@ function LocationField({ id, label, placeholder, options, disabled, invalid, val
                   });
               })()}
             </div>
-          )}
+          ) : null}
         </div>
       )}
     </div>
