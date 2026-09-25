@@ -13,7 +13,7 @@ const stop = (id: string, placeId: string | null) => ({
   parentStationId: null,
   placeId,
   municipalityId: null,
-  nucleusId: null,
+  localAreaId: null,
 });
 const time = (stopId: string, minute: number, pickupType = 0, dropOffType = 0) => ({
   stopId,
@@ -23,12 +23,12 @@ const time = (stopId: string, minute: number, pickupType = 0, dropOffType = 0) =
   dropOffType,
 });
 const dataset: NetworkDataset = {
-  formatVersion: 4,
+  formatVersion: 5,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bay' }],
   routes: [{ id: 'line', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
   municipalities: [],
-  nuclei: [],
+  localAreas: [],
   stops: [stop('a', 'cadiz'), stop('a2', 'cadiz'), stop('b', 'rota'), stop('b2', 'rota'), stop('road', null)],
   patterns: [{ routeId: 'line', directionId: '0', stopIds: ['a', 'a2', 'b', 'b2'] }],
   trips: [
@@ -133,17 +133,17 @@ const hierarchyDataset: NetworkDataset = {
     { id: 'a', name: 'Town A' },
     { id: 'b', name: 'Town B' },
   ],
-  nuclei: [
+  localAreas: [
     { id: 'a-out', municipalityId: 'a', name: 'A Outer', referencePoint: { latitude: 0, longitude: 1 } },
     { id: 'a-town', municipalityId: 'a', name: 'Town A', referencePoint: { latitude: 0, longitude: 0 } },
     { id: 'b-out', municipalityId: 'b', name: 'B Outer', referencePoint: { latitude: 0, longitude: 11 } },
     { id: 'b-town', municipalityId: 'b', name: 'Town B', referencePoint: { latitude: 0, longitude: 10 } },
   ],
   stops: [
-    { ...stop('a-out', null), latitude: 0, longitude: 1, municipalityId: 'a', nucleusId: 'a-out' },
-    { ...stop('a-town', null), latitude: 0, longitude: 0, municipalityId: 'a', nucleusId: 'a-town' },
-    { ...stop('b-out', null), latitude: 0, longitude: 12, municipalityId: 'b', nucleusId: 'b-out' },
-    { ...stop('b-town', null), latitude: 0, longitude: 10, municipalityId: 'b', nucleusId: 'b-town' },
+    { ...stop('a-out', null), latitude: 0, longitude: 1, municipalityId: 'a', localAreaId: 'a-out' },
+    { ...stop('a-town', null), latitude: 0, longitude: 0, municipalityId: 'a', localAreaId: 'a-town' },
+    { ...stop('b-out', null), latitude: 0, longitude: 12, municipalityId: 'b', localAreaId: 'b-out' },
+    { ...stop('b-town', null), latitude: 0, longitude: 10, municipalityId: 'b', localAreaId: 'b-town' },
   ],
   patterns: [{ routeId: 'line', directionId: '0', stopIds: ['a-out', 'a-town', 'b-out', 'b-town'] }],
   trips: [
@@ -204,7 +204,7 @@ test('may board later for a closer pair, then returns to the earliest pair witho
 
   const withoutPoints: NetworkDataset = {
     ...hierarchyDataset,
-    nuclei: hierarchyDataset.nuclei.map((nucleus) => ({ ...nucleus, referencePoint: null })),
+    localAreas: hierarchyDataset.localAreas.map((localArea) => ({ ...localArea, referencePoint: null })),
   };
   const without = findDirectJourneys(withoutPoints, '2026-09-22', townA, townB).find(
     (journey) => journey.tripId === 'both',
@@ -215,9 +215,9 @@ test('may board later for a closer pair, then returns to the earliest pair witho
 });
 
 test('matches a named local area and applies the cutoff before proximity ranking', () => {
-  const nucleusB: LocationOption = { kind: 'place', id: 'b-nucleus', name: 'Town B', nucleusId: 'b-town' };
+  const localAreaB: LocationOption = { kind: 'place', id: 'b-localArea', name: 'Town B', localAreaId: 'b-town' };
   assert.deepEqual(
-    findDirectJourneys(hierarchyDataset, '2026-09-22', townA, nucleusB).map((journey) => journey.tripId),
+    findDirectJourneys(hierarchyDataset, '2026-09-22', townA, localAreaB).map((journey) => journey.tripId),
     ['conflict', 'both', 'cutoff'],
   );
   const cutoff = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB).find(
@@ -241,7 +241,7 @@ test('uses CTAN membership over an older conflicting place assignment', () => {
   );
 });
 
-test('accepts a unique shortened town name and ignores a municipality with no town-nucleus match', () => {
+test('accepts a unique shortened town name and ignores a municipality with no town-area match', () => {
   const shortened: NetworkDataset = {
     ...hierarchyDataset,
     municipalities: [
@@ -271,7 +271,10 @@ test('accepts a unique shortened town name and ignores a municipality with no to
 
   const ambiguous: NetworkDataset = {
     ...shortened,
-    nuclei: [...shortened.nuclei, { id: 'another-prefix', municipalityId: 'a', name: 'Town', referencePoint: null }],
+    localAreas: [
+      ...shortened.localAreas,
+      { id: 'another-prefix', municipalityId: 'a', name: 'Town', referencePoint: null },
+    ],
   };
   const [withoutUniqueTown] = findDirectJourneys(ambiguous, '2026-09-22', townA, exactOutlying);
   assert.equal(withoutUniqueTown?.tripId, 'conflict');

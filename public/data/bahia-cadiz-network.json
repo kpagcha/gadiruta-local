@@ -1,8 +1,8 @@
 {
-  "formatVersion": 4,
+  "formatVersion": 5,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-25T09:57:45.375Z",
+    "generatedAt": "2026-09-25T10:06:59.822Z",
     "archiveSha256": "05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844"
   },
   "agencies": [
@@ -678,7 +678,7 @@
       "name": "Medina Sidonia"
     }
   ],
-  "nuclei": [
+  "localAreas": [
     {
       "id": "1",
       "municipalityId": "1",
@@ -1028,7 +1028,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_10",
@@ -1038,7 +1038,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_100",
@@ -1048,7 +1048,7 @@
       "parentStationId": null,
       "placeId": "barrio-jarana",
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     {
       "id": "2_101",
@@ -1058,7 +1058,7 @@
       "parentStationId": null,
       "placeId": "barrio-jarana",
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     {
       "id": "2_102",
@@ -1068,7 +1068,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     {
       "id": "2_103",
@@ -1078,7 +1078,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_104",
@@ -1088,7 +1088,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_105",
@@ -1098,7 +1098,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_106",
@@ -1108,7 +1108,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_107",
@@ -1118,7 +1118,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_108",
@@ -1128,7 +1128,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_109",
@@ -1138,7 +1138,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_11",
@@ -1148,7 +1148,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_110",
@@ -1158,7 +1158,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_111",
@@ -1168,7 +1168,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_112",
@@ -1178,7 +1178,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_113",
@@ -1188,7 +1188,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_114",
@@ -1198,7 +1198,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_115",
@@ -1208,7 +1208,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_116",
@@ -1218,7 +1218,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_117",
@@ -1228,7 +1228,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_118",
@@ -1238,7 +1238,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_119",
@@ -1248,7 +1248,7 @@
       "parentStationId": null,
       "placeId": "el-marquesado",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_12",
@@ -1258,7 +1258,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_120",
@@ -1268,7 +1268,7 @@
       "parentStationId": null,
       "placeId": "el-marquesado",
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     {
       "id": "2_121",
@@ -1278,7 +1278,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_122",
@@ -1288,7 +1288,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_123",
@@ -1298,7 +1298,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_124",
@@ -1308,7 +1308,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_125",
@@ -1318,7 +1318,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_126",
@@ -1328,7 +1328,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_127",
@@ -1338,7 +1338,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_128",
@@ -1348,7 +1348,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_129",
@@ -1358,7 +1358,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_130",
@@ -1368,7 +1368,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_131",
@@ -1378,7 +1378,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_132",
@@ -1388,7 +1388,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_133",
@@ -1398,7 +1398,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_14",
@@ -1408,7 +1408,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_141",
@@ -1418,7 +1418,7 @@
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_142",
@@ -1428,7 +1428,7 @@
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_143",
@@ -1438,7 +1438,7 @@
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_144",
@@ -1448,7 +1448,7 @@
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_145",
@@ -1458,7 +1458,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_146",
@@ -1468,7 +1468,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     {
       "id": "2_15",
@@ -1478,7 +1478,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_155",
@@ -1488,7 +1488,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     {
       "id": "2_156",
@@ -1498,7 +1498,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     {
       "id": "2_159",
@@ -1508,7 +1508,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_16",
@@ -1518,7 +1518,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_160",
@@ -1528,7 +1528,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_161",
@@ -1538,7 +1538,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_162",
@@ -1548,7 +1548,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_163",
@@ -1558,7 +1558,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_164",
@@ -1568,7 +1568,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_165",
@@ -1578,7 +1578,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_166",
@@ -1588,7 +1588,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_167",
@@ -1598,7 +1598,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_168",
@@ -1608,7 +1608,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_169",
@@ -1618,7 +1618,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_17",
@@ -1628,7 +1628,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_170",
@@ -1638,7 +1638,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_171",
@@ -1648,7 +1648,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_172",
@@ -1658,7 +1658,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_173",
@@ -1668,7 +1668,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
-      "nucleusId": "42"
+      "localAreaId": "42"
     },
     {
       "id": "2_174",
@@ -1678,7 +1678,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_175",
@@ -1688,7 +1688,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_176",
@@ -1698,7 +1698,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_177",
@@ -1708,7 +1708,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_178",
@@ -1718,7 +1718,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_179",
@@ -1728,7 +1728,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_18",
@@ -1738,7 +1738,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_180",
@@ -1748,7 +1748,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_181",
@@ -1758,7 +1758,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_182",
@@ -1768,7 +1768,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_183",
@@ -1778,7 +1778,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_186",
@@ -1788,7 +1788,7 @@
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     {
       "id": "2_187",
@@ -1798,7 +1798,7 @@
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     {
       "id": "2_188",
@@ -1808,7 +1808,7 @@
       "parentStationId": null,
       "placeId": "medina-sidonia",
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     {
       "id": "2_189",
@@ -1818,7 +1818,7 @@
       "parentStationId": null,
       "placeId": "jedula",
       "municipalityId": "10",
-      "nucleusId": "19"
+      "localAreaId": "19"
     },
     {
       "id": "2_19",
@@ -1828,7 +1828,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_190",
@@ -1838,7 +1838,7 @@
       "parentStationId": null,
       "placeId": "jedula",
       "municipalityId": "10",
-      "nucleusId": "19"
+      "localAreaId": "19"
     },
     {
       "id": "2_191",
@@ -1848,7 +1848,7 @@
       "parentStationId": null,
       "placeId": "arcos-de-la-frontera",
       "municipalityId": "10",
-      "nucleusId": "20"
+      "localAreaId": "20"
     },
     {
       "id": "2_193",
@@ -1858,7 +1858,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_194",
@@ -1868,7 +1868,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_195",
@@ -1878,7 +1878,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_196",
@@ -1888,7 +1888,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     {
       "id": "2_197",
@@ -1898,7 +1898,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     {
       "id": "2_198",
@@ -1908,7 +1908,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_199",
@@ -1918,7 +1918,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_20",
@@ -1928,7 +1928,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_200",
@@ -1938,7 +1938,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_201",
@@ -1948,7 +1948,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_202",
@@ -1958,7 +1958,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_203",
@@ -1968,7 +1968,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_206",
@@ -1978,7 +1978,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_207",
@@ -1988,7 +1988,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_222",
@@ -1998,7 +1998,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_223",
@@ -2008,7 +2008,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_224",
@@ -2018,7 +2018,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_225",
@@ -2028,7 +2028,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_226",
@@ -2038,7 +2038,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_227",
@@ -2048,7 +2048,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_228",
@@ -2058,7 +2058,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_229",
@@ -2068,7 +2068,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_23",
@@ -2078,7 +2078,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_230",
@@ -2088,7 +2088,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_231",
@@ -2098,7 +2098,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_232",
@@ -2108,7 +2108,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_233",
@@ -2118,7 +2118,7 @@
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     {
       "id": "2_234",
@@ -2128,7 +2128,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_235",
@@ -2138,7 +2138,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_236",
@@ -2148,7 +2148,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_237",
@@ -2158,7 +2158,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_238",
@@ -2168,7 +2168,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_24",
@@ -2178,7 +2178,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_241",
@@ -2188,7 +2188,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_243",
@@ -2198,7 +2198,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_244",
@@ -2208,7 +2208,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_245",
@@ -2218,7 +2218,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_247",
@@ -2228,7 +2228,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_248",
@@ -2238,7 +2238,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_249",
@@ -2248,7 +2248,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "31"
+      "localAreaId": "31"
     },
     {
       "id": "2_25",
@@ -2258,7 +2258,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_251",
@@ -2268,7 +2268,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_254",
@@ -2278,7 +2278,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_255",
@@ -2288,7 +2288,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     {
       "id": "2_257",
@@ -2298,7 +2298,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_258",
@@ -2308,7 +2308,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_259",
@@ -2318,7 +2318,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_26",
@@ -2328,7 +2328,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_260",
@@ -2338,7 +2338,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_261",
@@ -2348,7 +2348,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     {
       "id": "2_262",
@@ -2358,7 +2358,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_263",
@@ -2368,7 +2368,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_264",
@@ -2378,7 +2378,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_265",
@@ -2388,7 +2388,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_266",
@@ -2398,7 +2398,7 @@
       "parentStationId": null,
       "placeId": "chipiona",
       "municipalityId": "15",
-      "nucleusId": "44"
+      "localAreaId": "44"
     },
     {
       "id": "2_268",
@@ -2408,7 +2408,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_269",
@@ -2418,7 +2418,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_27",
@@ -2428,7 +2428,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_270",
@@ -2438,7 +2438,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_271",
@@ -2448,7 +2448,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_272",
@@ -2458,7 +2458,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_273",
@@ -2468,7 +2468,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_274",
@@ -2478,7 +2478,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_277",
@@ -2488,7 +2488,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     {
       "id": "2_278",
@@ -2498,7 +2498,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     {
       "id": "2_279",
@@ -2508,7 +2508,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_280",
@@ -2518,7 +2518,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_282",
@@ -2528,7 +2528,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_283",
@@ -2538,7 +2538,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_284",
@@ -2548,7 +2548,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_285",
@@ -2558,7 +2558,7 @@
       "parentStationId": null,
       "placeId": "el-colorado",
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_287",
@@ -2568,7 +2568,7 @@
       "parentStationId": null,
       "placeId": "el-colorado",
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     {
       "id": "2_289",
@@ -2578,7 +2578,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "48"
+      "localAreaId": "48"
     },
     {
       "id": "2_29",
@@ -2588,7 +2588,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_291",
@@ -2598,7 +2598,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_292",
@@ -2608,7 +2608,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_296",
@@ -2618,7 +2618,7 @@
       "parentStationId": null,
       "placeId": "conil-de-la-frontera",
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     {
       "id": "2_3",
@@ -2628,7 +2628,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_30",
@@ -2638,7 +2638,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_300",
@@ -2648,7 +2648,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_301",
@@ -2658,7 +2658,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_302",
@@ -2668,7 +2668,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_303",
@@ -2678,7 +2678,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_304",
@@ -2688,7 +2688,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_305",
@@ -2698,7 +2698,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_306",
@@ -2708,7 +2708,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_31",
@@ -2718,7 +2718,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_310",
@@ -2728,7 +2728,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_311",
@@ -2738,7 +2738,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_312",
@@ -2748,7 +2748,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_313",
@@ -2758,7 +2758,7 @@
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     {
       "id": "2_314",
@@ -2768,7 +2768,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     {
       "id": "2_315",
@@ -2778,7 +2778,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     {
       "id": "2_316",
@@ -2788,7 +2788,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_317",
@@ -2798,7 +2798,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_318",
@@ -2808,7 +2808,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_319",
@@ -2818,7 +2818,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_32",
@@ -2828,7 +2828,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_320",
@@ -2838,7 +2838,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_321",
@@ -2848,7 +2848,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_322",
@@ -2858,7 +2858,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_33",
@@ -2868,7 +2868,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_34",
@@ -2878,7 +2878,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_345",
@@ -2888,7 +2888,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_346",
@@ -2898,7 +2898,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_347",
@@ -2908,7 +2908,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_348",
@@ -2918,7 +2918,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_349",
@@ -2928,7 +2928,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": null
+      "localAreaId": null
     },
     {
       "id": "2_35",
@@ -2938,7 +2938,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_350",
@@ -2948,7 +2948,7 @@
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
-      "nucleusId": null
+      "localAreaId": null
     },
     {
       "id": "2_351",
@@ -2958,7 +2958,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_352",
@@ -2968,7 +2968,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_353",
@@ -2978,7 +2978,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_354",
@@ -2988,7 +2988,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_355",
@@ -2998,7 +2998,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_356",
@@ -3008,7 +3008,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_357",
@@ -3018,7 +3018,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_359",
@@ -3028,7 +3028,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "43"
+      "localAreaId": "43"
     },
     {
       "id": "2_36",
@@ -3038,7 +3038,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_360",
@@ -3048,7 +3048,7 @@
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     {
       "id": "2_361",
@@ -3058,7 +3058,7 @@
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     {
       "id": "2_37",
@@ -3068,7 +3068,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_38",
@@ -3078,7 +3078,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_4",
@@ -3088,7 +3088,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_40",
@@ -3098,7 +3098,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_41",
@@ -3108,7 +3108,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_42",
@@ -3118,7 +3118,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_43",
@@ -3128,7 +3128,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_47",
@@ -3138,7 +3138,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_48",
@@ -3148,7 +3148,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_49",
@@ -3158,7 +3158,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_5",
@@ -3168,7 +3168,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_50",
@@ -3178,7 +3178,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_51",
@@ -3188,7 +3188,7 @@
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     {
       "id": "2_56",
@@ -3198,7 +3198,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_57",
@@ -3208,7 +3208,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_58",
@@ -3218,7 +3218,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_59",
@@ -3228,7 +3228,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_6",
@@ -3238,7 +3238,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_60",
@@ -3248,7 +3248,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_61",
@@ -3258,7 +3258,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_62",
@@ -3268,7 +3268,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_63",
@@ -3278,7 +3278,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_64",
@@ -3288,7 +3288,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_65",
@@ -3298,7 +3298,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_66",
@@ -3308,7 +3308,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_67",
@@ -3318,7 +3318,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_68",
@@ -3328,7 +3328,7 @@
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_69",
@@ -3338,7 +3338,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_7",
@@ -3348,7 +3348,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_70",
@@ -3358,7 +3358,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_71",
@@ -3368,7 +3368,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_72",
@@ -3378,7 +3378,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_73",
@@ -3388,7 +3388,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_74",
@@ -3398,7 +3398,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_75",
@@ -3408,7 +3408,7 @@
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     {
       "id": "2_76",
@@ -3418,7 +3418,7 @@
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     {
       "id": "2_77",
@@ -3428,7 +3428,7 @@
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     {
       "id": "2_78",
@@ -3438,7 +3438,7 @@
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     {
       "id": "2_79",
@@ -3448,7 +3448,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_8",
@@ -3458,7 +3458,7 @@
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     {
       "id": "2_80",
@@ -3468,7 +3468,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_81",
@@ -3478,7 +3478,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_82",
@@ -3488,7 +3488,7 @@
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     {
       "id": "2_83",
@@ -3498,7 +3498,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_84",
@@ -3508,7 +3508,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_85",
@@ -3518,7 +3518,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_86",
@@ -3528,7 +3528,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_87",
@@ -3538,7 +3538,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_88",
@@ -3548,7 +3548,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_90",
@@ -3558,7 +3558,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_91",
@@ -3568,7 +3568,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_92",
@@ -3578,7 +3578,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_93",
@@ -3588,7 +3588,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_94",
@@ -3598,7 +3598,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_95",
@@ -3608,7 +3608,7 @@
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
-      "nucleusId": "43"
+      "localAreaId": "43"
     },
     {
       "id": "2_96",
@@ -3618,7 +3618,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_97",
@@ -3628,7 +3628,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     {
       "id": "2_98",
@@ -3638,7 +3638,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     {
       "id": "2_99",
@@ -3648,7 +3648,7 @@
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     }
   ],
   "patterns": [

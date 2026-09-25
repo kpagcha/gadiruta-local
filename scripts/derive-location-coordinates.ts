@@ -25,8 +25,10 @@ interface DerivedCoordinates {
 export interface LocationDirectory {
   retrievedAt: string;
   municipalities: (NetworkDataset['municipalities'][number] & { derivedCoordinates?: DerivedCoordinates })[];
-  nuclei: (Omit<NetworkDataset['nuclei'][number], 'referencePoint'> & { derivedCoordinates?: DerivedCoordinates })[];
-  stopLocations: Record<string, { municipalityId: string; nucleusId: string | null }>;
+  localAreas: (Omit<NetworkDataset['localAreas'][number], 'referencePoint'> & {
+    derivedCoordinates?: DerivedCoordinates;
+  })[];
+  stopLocations: Record<string, { municipalityId: string; localAreaId: string | null }>;
 }
 
 /** Round a coordinate to roughly 10 cm so generated JSON stays compact and stable. */
@@ -81,7 +83,7 @@ function coordinatesFromStops(stops: readonly NetworkStop[]): DerivedCoordinates
 function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset): void {
   if (
     !Array.isArray(directory.municipalities) ||
-    !Array.isArray(directory.nuclei) ||
+    !Array.isArray(directory.localAreas) ||
     typeof directory.stopLocations !== 'object' ||
     directory.stopLocations === null
   ) {
@@ -89,8 +91,8 @@ function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset
   }
 
   const municipalities = new Map(directory.municipalities.map((item) => [item.id, item]));
-  const nuclei = new Map(directory.nuclei.map((item) => [item.id, item]));
-  if (municipalities.size !== dataset.municipalities.length || nuclei.size !== dataset.nuclei.length) {
+  const localAreas = new Map(directory.localAreas.map((item) => [item.id, item]));
+  if (municipalities.size !== dataset.municipalities.length || localAreas.size !== dataset.localAreas.length) {
     throw new Error('The reviewed location directory and network snapshot have different location sets.');
   }
   for (const municipality of dataset.municipalities) {
@@ -98,10 +100,10 @@ function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset
       throw new Error(`Municipality ${municipality.id} differs between the directory and snapshot.`);
     }
   }
-  for (const nucleus of dataset.nuclei) {
-    const reviewed = nuclei.get(nucleus.id);
-    if (reviewed?.name !== nucleus.name || reviewed.municipalityId !== nucleus.municipalityId) {
-      throw new Error(`Local area ${nucleus.id} differs between the directory and snapshot.`);
+  for (const localArea of dataset.localAreas) {
+    const reviewed = localAreas.get(localArea.id);
+    if (reviewed?.name !== localArea.name || reviewed.municipalityId !== localArea.municipalityId) {
+      throw new Error(`Local area ${localArea.id} differs between the directory and snapshot.`);
     }
   }
   for (const stop of dataset.stops) {
@@ -109,7 +111,7 @@ function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset
     if (
       reviewed === undefined ||
       reviewed.municipalityId !== stop.municipalityId ||
-      reviewed.nucleusId !== stop.nucleusId
+      reviewed.localAreaId !== stop.localAreaId
     ) {
       throw new Error(`Stop ${stop.id} differs between the directory and snapshot.`);
     }
@@ -119,14 +121,14 @@ function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset
 /** Add candidates to local areas with stops and remove all municipality candidates. */
 export function deriveLocationCoordinates(directory: LocationDirectory, dataset: NetworkDataset): LocationDirectory {
   validateDirectory(directory, dataset);
-  const stopsByNucleus = new Map<string, NetworkStop[]>();
+  const stopsByLocalArea = new Map<string, NetworkStop[]>();
 
   // Only resolved local areas receive a point; a municipality search can use its town area's point.
   for (const stop of dataset.stops) {
-    if (stop.nucleusId !== null) {
-      const nucleusStops = stopsByNucleus.get(stop.nucleusId) ?? [];
-      nucleusStops.push(stop);
-      stopsByNucleus.set(stop.nucleusId, nucleusStops);
+    if (stop.localAreaId !== null) {
+      const localAreaStops = stopsByLocalArea.get(stop.localAreaId) ?? [];
+      localAreaStops.push(stop);
+      stopsByLocalArea.set(stop.localAreaId, localAreaStops);
     }
   }
 
@@ -137,9 +139,9 @@ export function deriveLocationCoordinates(directory: LocationDirectory, dataset:
       delete next.derivedCoordinates;
       return next;
     }),
-    nuclei: directory.nuclei.map((nucleus) => {
-      const next = { ...nucleus };
-      const coordinates = coordinatesFromStops(stopsByNucleus.get(nucleus.id) ?? []);
+    localAreas: directory.localAreas.map((localArea) => {
+      const next = { ...localArea };
+      const coordinates = coordinatesFromStops(stopsByLocalArea.get(localArea.id) ?? []);
       if (coordinates === undefined) delete next.derivedCoordinates;
       else next.derivedCoordinates = coordinates;
       return next;
@@ -158,7 +160,7 @@ export async function writeDerivedLocationCoordinates(): Promise<{ localAreas: n
   const after = `${JSON.stringify(updated, null, 2)}\n`;
   if (after !== before) await writeFile(directoryPath, after);
   return {
-    localAreas: updated.nuclei.filter((item) => item.derivedCoordinates !== undefined).length,
+    localAreas: updated.localAreas.filter((item) => item.derivedCoordinates !== undefined).length,
     changed: after !== before,
   };
 }

@@ -13,7 +13,7 @@ const maximum = `${Number(today.slice(0, 4)) + 1}-12-31`;
 const readyState = {
   status: 'ready',
   dataset: {
-    formatVersion: 4,
+    formatVersion: 5,
     source: {
       url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
       generatedAt: '2026-09-21T15:15:44.000Z',
@@ -32,7 +32,7 @@ const readyState = {
       },
     ],
     municipalities: [],
-    nuclei: [],
+    localAreas: [],
     stops: [
       {
         id: '2_10',
@@ -42,7 +42,7 @@ const readyState = {
         parentStationId: null,
         placeId: 'cadiz',
         municipalityId: null,
-        nucleusId: null,
+        localAreaId: null,
       },
       {
         id: '2_11',
@@ -52,7 +52,7 @@ const readyState = {
         parentStationId: null,
         placeId: 'jerez-de-la-frontera',
         municipalityId: null,
-        nucleusId: null,
+        localAreaId: null,
       },
     ],
     patterns: [{ routeId: '2_13', directionId: '0', stopIds: ['2_10', '2_11'] }],

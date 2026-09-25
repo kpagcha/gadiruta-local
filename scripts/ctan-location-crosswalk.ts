@@ -9,8 +9,8 @@ export interface CtanMunicipality {
   id: string;
 }
 
-/** One population nucleus listed beneath a CTAN municipality. */
-export interface CtanNucleus {
+/** One named local area listed beneath a CTAN municipality. */
+export interface CtanLocalArea {
   id: string;
   municipalityId: string;
 }
@@ -19,7 +19,7 @@ export interface CtanNucleus {
 export interface CtanStop {
   id: string;
   municipalityId: string;
-  nucleusId: string;
+  localAreaId: string;
 }
 
 /** One line-itinerary stop with CTAN's municipality value carried in its mislabeled field. */
@@ -37,7 +37,7 @@ export interface CtanLineFallback {
 /** CTAN location records reduced to the identifiers needed to prove the GTFS relation. */
 export interface CtanLocationDirectory {
   municipalities: readonly CtanMunicipality[];
-  nuclei: readonly CtanNucleus[];
+  localAreas: readonly CtanLocalArea[];
   stops: readonly CtanStop[];
 }
 
@@ -46,12 +46,12 @@ export interface CtanLocationProbeReport {
   status: 'verified' | 'incomplete';
   gtfsStopCount: number;
   municipalityCount: number;
-  nucleusCount: number;
+  localAreaCount: number;
   ctanStopCount: number;
   matchedGtfsStopCount: number;
   unmatchedGtfsStopIds: string[];
   lineFallbacks: CtanLineFallback[];
-  unresolvedNucleusGtfsStopIds: string[];
+  unresolvedLocalAreaGtfsStopIds: string[];
 }
 
 /** Reject an upstream or command-line condition with a distinct, actionable error prefix. */
@@ -100,14 +100,14 @@ export function parseCtanMunicipalities(value: unknown): CtanMunicipality[] {
   });
 }
 
-/** Parse CTAN's nuclei-list response and retain its explicit municipality relationship. */
-export function parseCtanNuclei(value: unknown): CtanNucleus[] {
-  const record = requiredRecord(value, 'nuclei response');
-  return requiredArray(record.nucleos, 'nuclei response.nucleos').map((item, index) => {
-    const nucleus = requiredRecord(item, `nuclei[${index}]`);
+/** Parse CTAN's local-area list and retain its explicit municipality relationship. */
+export function parseCtanLocalAreas(value: unknown): CtanLocalArea[] {
+  const record = requiredRecord(value, 'localAreas response');
+  return requiredArray(record.nucleos, 'localAreas response.nucleos').map((item, index) => {
+    const localArea = requiredRecord(item, `localAreas[${index}]`);
     return {
-      id: requiredIdentifier(nucleus.idNucleo, `nuclei[${index}].idNucleo`),
-      municipalityId: requiredIdentifier(nucleus.idMunicipio, `nuclei[${index}].idMunicipio`),
+      id: requiredIdentifier(localArea.idNucleo, `localAreas[${index}].idNucleo`),
+      municipalityId: requiredIdentifier(localArea.idMunicipio, `localAreas[${index}].idMunicipio`),
     };
   });
 }
@@ -126,7 +126,7 @@ export function parseCtanStop(value: unknown, label = 'stop response'): CtanStop
   return {
     id: requiredIdentifier(stop.idParada, `${label}.idParada`),
     municipalityId: requiredIdentifier(stop.idMunicipio, `${label}.idMunicipio`),
-    nucleusId: requiredIdentifier(stop.idNucleo, `${label}.idNucleo`),
+    localAreaId: requiredIdentifier(stop.idNucleo, `${label}.idNucleo`),
   };
 }
 
@@ -212,24 +212,24 @@ export function createCtanLocationProbeReport(
 ): CtanLocationProbeReport {
   // Index each CTAN level first, which both detects duplicate IDs and makes relationship checks direct.
   const municipalitiesById = uniqueById(directory.municipalities, 'municipalities');
-  const nucleiById = uniqueById(directory.nuclei, 'nuclei');
+  const localAreasById = uniqueById(directory.localAreas, 'localAreas');
   const stopsById = uniqueById(directory.stops, 'stops');
 
-  // A núcleo cannot be useful to the crosswalk unless its parent municipality is present.
-  for (const nucleus of directory.nuclei) {
-    if (!municipalitiesById.has(nucleus.municipalityId)) {
-      fail(`nucleus ${nucleus.id} references unknown municipality ${nucleus.municipalityId}.`);
+  // A local area cannot be useful to the crosswalk unless its parent municipality is present.
+  for (const localArea of directory.localAreas) {
+    if (!municipalitiesById.has(localArea.municipalityId)) {
+      fail(`local area ${localArea.id} references unknown municipality ${localArea.municipalityId}.`);
     }
   }
 
-  // Every stop must point to a known núcleo that agrees about the enclosing municipality.
+  // Every stop must point to a known local area that agrees about the enclosing municipality.
   for (const stop of directory.stops) {
-    const nucleus = nucleiById.get(stop.nucleusId);
-    if (nucleus === undefined) {
-      fail(`stop ${stop.id} references unknown nucleus ${stop.nucleusId}.`);
+    const localArea = localAreasById.get(stop.localAreaId);
+    if (localArea === undefined) {
+      fail(`stop ${stop.id} references unknown local area ${stop.localAreaId}.`);
     }
-    if (nucleus.municipalityId !== stop.municipalityId) {
-      fail(`stop ${stop.id} disagrees with nucleus ${stop.nucleusId} about its municipality.`);
+    if (localArea.municipalityId !== stop.municipalityId) {
+      fail(`stop ${stop.id} disagrees with local area ${stop.localAreaId} about its municipality.`);
     }
   }
 
@@ -251,7 +251,7 @@ export function createCtanLocationProbeReport(
     }
   }
 
-  // A line itinerary proves both the exact stop and municipality; the núcleo remains unknown.
+  // A line itinerary proves both the exact stop and municipality; the local area remains unknown.
   const resolvedByLineFallback = new Map<string, CtanLineFallback>();
   for (const fallback of lineFallbacks) {
     if (!municipalitiesById.has(fallback.municipalityId)) {
@@ -274,8 +274,8 @@ export function createCtanLocationProbeReport(
     }
   }
 
-  // These IDs remain evidence that CTAN did not supply a usable municipality -> núcleo relation.
-  const unresolvedNucleusGtfsStopIds = [...resolvedByLineFallback.keys()].sort(compareText);
+  // These IDs remain evidence that CTAN did not supply a usable municipality-to-area relation.
+  const unresolvedLocalAreaGtfsStopIds = [...resolvedByLineFallback.keys()].sort(compareText);
 
   // This final difference is the user-facing evidence of stop IDs CTAN did not supply by any source.
   const unmatchedGtfsStopIds = [...uniqueGtfsStopIds]
@@ -283,17 +283,18 @@ export function createCtanLocationProbeReport(
     .sort(compareText);
 
   return {
-    status: unmatchedGtfsStopIds.length === 0 && unresolvedNucleusGtfsStopIds.length === 0 ? 'verified' : 'incomplete',
+    status:
+      unmatchedGtfsStopIds.length === 0 && unresolvedLocalAreaGtfsStopIds.length === 0 ? 'verified' : 'incomplete',
     gtfsStopCount: uniqueGtfsStopIds.size,
     municipalityCount: municipalitiesById.size,
-    nucleusCount: nucleiById.size,
+    localAreaCount: localAreasById.size,
     ctanStopCount: stopsById.size,
     matchedGtfsStopCount: matchedGtfsStopIds.size,
     unmatchedGtfsStopIds,
     lineFallbacks: [...resolvedByLineFallback.values()].sort((first, second) =>
       compareText(first.gtfsStopId, second.gtfsStopId),
     ),
-    unresolvedNucleusGtfsStopIds,
+    unresolvedLocalAreaGtfsStopIds,
   };
 }
 

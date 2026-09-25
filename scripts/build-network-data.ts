@@ -36,10 +36,10 @@ const locationDirectoryPath = resolve('scripts/ctan-location-directory.json');
 /** The compact source relationships merged into the browser's network snapshot. */
 interface LocationDirectory {
   municipalities: NetworkDataset['municipalities'];
-  nuclei: (Omit<NetworkDataset['nuclei'][number], 'referencePoint'> & {
+  localAreas: (Omit<NetworkDataset['localAreas'][number], 'referencePoint'> & {
     derivedCoordinates?: { representativeStop: { stopId: string; latitude: number; longitude: number } };
   })[];
-  stopLocations: Record<string, { municipalityId: string; nucleusId: string | null }>;
+  stopLocations: Record<string, { municipalityId: string; localAreaId: string | null }>;
 }
 
 /** GTFS tables needed for the current direct-journey snapshot. */
@@ -432,7 +432,7 @@ export function createNetworkDataset(
         parentStationId: optionalValue(stop, 'parent_station'),
         placeId: placeAssignments[stopId] ?? null,
         municipalityId: location?.municipalityId ?? null,
-        nucleusId: location?.nucleusId ?? null,
+        localAreaId: location?.localAreaId ?? null,
       };
     })
     .sort((first, second) => compareText(first.id, second.id));
@@ -487,7 +487,7 @@ export function createNetworkDataset(
 
   // Validate the generated shape through the same boundary the browser uses before returning it.
   const dataset = parseNetworkDataset({
-    formatVersion: 4,
+    formatVersion: 5,
     source: {
       url: sourceUrl,
       generatedAt: new Date().toISOString(),
@@ -496,19 +496,19 @@ export function createNetworkDataset(
     agencies,
     routes,
     municipalities: locationDirectory?.municipalities ?? [],
-    nuclei:
-      locationDirectory?.nuclei.map((nucleus) => {
-        const representative = nucleus.derivedCoordinates?.representativeStop;
+    localAreas:
+      locationDirectory?.localAreas.map((localArea) => {
+        const representative = localArea.derivedCoordinates?.representativeStop;
         if (
           representative !== undefined &&
-          locationDirectory.stopLocations[representative.stopId]?.nucleusId !== nucleus.id
+          locationDirectory.stopLocations[representative.stopId]?.localAreaId !== localArea.id
         ) {
-          fail(`nucleus ${nucleus.id} has a representative stop outside its own area.`);
+          fail(`local area ${localArea.id} has a representative stop outside its own area.`);
         }
         return {
-          id: nucleus.id,
-          municipalityId: nucleus.municipalityId,
-          name: nucleus.name,
+          id: localArea.id,
+          municipalityId: localArea.municipalityId,
+          name: localArea.name,
           referencePoint:
             representative === undefined
               ? null

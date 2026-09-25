@@ -7,7 +7,7 @@
 /** A representative CTAN Bahía response chain captured from its municipality, núcleo, and stop endpoints. */
 export const ctanLocationFixture = {
   municipalities: [{ idMunicipio: '1', datos: 'Cádiz' }],
-  nuclei: [{ idNucleo: '1', idMunicipio: '1', idZona: 'A', nombre: 'Cádiz' }],
+  localAreas: [{ idNucleo: '1', idMunicipio: '1', idZona: 'A', nombre: 'Cádiz' }],
   stops: [
     {
       idParada: '303',

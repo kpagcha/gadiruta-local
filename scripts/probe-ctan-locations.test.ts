@@ -15,7 +15,7 @@ import {
   parseCtanLineStops,
   parseCtanStop,
   parseCtanMunicipalities,
-  parseCtanNuclei,
+  parseCtanLocalAreas,
   parseCtanStops,
 } from './ctan-location-crosswalk.ts';
 import { probeCtanLocations } from './probe-ctan-locations.ts';
@@ -24,7 +24,7 @@ import { ctanLocationFixture } from './fixtures/ctan-location.ts';
 test('proves a complete CTAN hierarchy using the exact consortium-prefixed GTFS stop ID', () => {
   const directory = {
     municipalities: parseCtanMunicipalities({ municipios: ctanLocationFixture.municipalities }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({ paradas: ctanLocationFixture.stops }),
   };
 
@@ -33,19 +33,19 @@ test('proves a complete CTAN hierarchy using the exact consortium-prefixed GTFS 
     status: 'verified',
     gtfsStopCount: 1,
     municipalityCount: 1,
-    nucleusCount: 1,
+    localAreaCount: 1,
     ctanStopCount: 1,
     matchedGtfsStopCount: 1,
     unmatchedGtfsStopIds: [],
     lineFallbacks: [],
-    unresolvedNucleusGtfsStopIds: [],
+    unresolvedLocalAreaGtfsStopIds: [],
   });
 });
 
 test('reports unmatched GTFS stops without creating a heuristic location assignment', () => {
   const directory = {
     municipalities: parseCtanMunicipalities({ municipios: ctanLocationFixture.municipalities }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({ paradas: ctanLocationFixture.stops }),
   };
 
@@ -60,7 +60,7 @@ test('records a line-only stop match with its municipality but without inventing
     municipalities: parseCtanMunicipalities({
       municipios: [...ctanLocationFixture.municipalities, { idMunicipio: '7', datos: 'Rota' }],
     }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({ paradas: ctanLocationFixture.stops }),
   };
 
@@ -79,13 +79,13 @@ test('records a line-only stop match with its municipality but without inventing
   assert.equal(report.matchedGtfsStopCount, 2);
   assert.deepEqual(report.unmatchedGtfsStopIds, []);
   assert.deepEqual(report.lineFallbacks, [{ gtfsStopId: '2_999', municipalityId: '7' }]);
-  assert.deepEqual(report.unresolvedNucleusGtfsStopIds, ['2_999']);
+  assert.deepEqual(report.unresolvedLocalAreaGtfsStopIds, ['2_999']);
 });
 
 test('rejects a line fallback whose mislabeled hierarchy value is not a known municipality', () => {
   const directory = {
     municipalities: parseCtanMunicipalities({ municipios: ctanLocationFixture.municipalities }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({ paradas: ctanLocationFixture.stops }),
   };
 
@@ -100,7 +100,7 @@ test('rejects conflicting municipality values for the same line-fallback GTFS st
     municipalities: parseCtanMunicipalities({
       municipios: [...ctanLocationFixture.municipalities, { idMunicipio: '2', datos: 'San Fernando' }],
     }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({ paradas: ctanLocationFixture.stops }),
   };
 
@@ -124,7 +124,7 @@ test('recovers the only CTAN stop detail ID that can supplement an incomplete co
   assert.deepEqual(parseCtanStop(ctanLocationFixture.stops[0]), {
     id: '303',
     municipalityId: '1',
-    nucleusId: '1',
+    localAreaId: '1',
   });
 });
 
@@ -135,10 +135,10 @@ test("recognizes CTAN's not-found responses without hiding other failed detail r
   assert.equal(isMissingCtanStopResponse(500, '{"error":"No se encuentran los datos"}'), false);
 });
 
-test('rejects a stop whose declared municipality disagrees with its CTAN nucleus', () => {
+test('rejects a stop whose declared municipality disagrees with its CTAN local area', () => {
   const directory = {
     municipalities: parseCtanMunicipalities({ municipios: ctanLocationFixture.municipalities }),
-    nuclei: parseCtanNuclei({ nucleos: ctanLocationFixture.nuclei }),
+    localAreas: parseCtanLocalAreas({ nucleos: ctanLocationFixture.localAreas }),
     stops: parseCtanStops({
       paradas: [{ ...ctanLocationFixture.stops[0], idMunicipio: '99' }],
     }),
@@ -146,7 +146,7 @@ test('rejects a stop whose declared municipality disagrees with its CTAN nucleus
 
   assert.throws(
     () => createCtanLocationProbeReport(directory, ['2_303']),
-    /disagrees with nucleus 1 about its municipality/,
+    /disagrees with local area 1 about its municipality/,
   );
 });
 

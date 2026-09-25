@@ -32,7 +32,7 @@ export interface NetworkMunicipality {
 }
 
 /** One named area within a CTAN municipality. */
-export interface NetworkNucleus {
+export interface NetworkLocalArea {
   id: string;
   municipalityId: string;
   name: string;
@@ -49,7 +49,7 @@ export interface NetworkStop {
   parentStationId: string | null;
   placeId: string | null;
   municipalityId: string | null;
-  nucleusId: string | null;
+  localAreaId: string | null;
 }
 
 /** One stop visit with GTFS minutes measured from the trip's service date. */
@@ -98,14 +98,14 @@ export interface NetworkSource {
   archiveSha256: string;
 }
 
-/** The version-four local network, location hierarchy, and timetable contract. */
+/** The version-five local network, location hierarchy, and timetable contract. */
 export interface NetworkDataset {
-  formatVersion: 4;
+  formatVersion: 5;
   source: NetworkSource;
   agencies: NetworkAgency[];
   routes: NetworkRoute[];
   municipalities: NetworkMunicipality[];
-  nuclei: NetworkNucleus[];
+  localAreas: NetworkLocalArea[];
   stops: NetworkStop[];
   patterns: RoutePattern[];
   trips: NetworkTrip[];
@@ -243,25 +243,28 @@ function parseMunicipality(value: unknown, index: number): NetworkMunicipality {
   };
 }
 
-/** Validate a nucleus and the municipality that contains it. */
-function parseNucleus(value: unknown, index: number): NetworkNucleus {
-  const record = requiredRecord(value, `nuclei[${index}]`);
+/** Validate a local area and the municipality that contains it. */
+function parseLocalArea(value: unknown, index: number): NetworkLocalArea {
+  const record = requiredRecord(value, `localAreas[${index}]`);
   const point =
-    record.referencePoint === null ? null : requiredRecord(record.referencePoint, `nuclei[${index}].referencePoint`);
-  const latitude = point === null ? null : requiredNumber(point.latitude, `nuclei[${index}].referencePoint.latitude`);
+    record.referencePoint === null
+      ? null
+      : requiredRecord(record.referencePoint, `localAreas[${index}].referencePoint`);
+  const latitude =
+    point === null ? null : requiredNumber(point.latitude, `localAreas[${index}].referencePoint.latitude`);
   const longitude =
-    point === null ? null : requiredNumber(point.longitude, `nuclei[${index}].referencePoint.longitude`);
+    point === null ? null : requiredNumber(point.longitude, `localAreas[${index}].referencePoint.longitude`);
   if (
     latitude !== null &&
     longitude !== null &&
     (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
   ) {
-    throw new NetworkDataError(`nuclei[${index}] has invalid reference coordinates.`);
+    throw new NetworkDataError(`localAreas[${index}] has invalid reference coordinates.`);
   }
   return {
-    id: requiredString(record.id, `nuclei[${index}].id`),
-    municipalityId: requiredString(record.municipalityId, `nuclei[${index}].municipalityId`),
-    name: requiredString(record.name, `nuclei[${index}].name`),
+    id: requiredString(record.id, `localAreas[${index}].id`),
+    municipalityId: requiredString(record.municipalityId, `localAreas[${index}].municipalityId`),
+    name: requiredString(record.name, `localAreas[${index}].name`),
     referencePoint: latitude === null || longitude === null ? null : { latitude, longitude },
   };
 }
@@ -286,7 +289,7 @@ function parseStop(value: unknown, index: number): NetworkStop {
     parentStationId: optionalString(record.parentStationId, `stops[${index}].parentStationId`),
     placeId: optionalString(record.placeId, `stops[${index}].placeId`),
     municipalityId: optionalString(record.municipalityId, `stops[${index}].municipalityId`),
-    nucleusId: optionalString(record.nucleusId, `stops[${index}].nucleusId`),
+    localAreaId: optionalString(record.localAreaId, `stops[${index}].localAreaId`),
   };
 }
 
@@ -391,8 +394,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   // Validate the outer version before treating any file contents as the current contract.
   const record = requiredRecord(value, 'dataset');
 
-  if (record.formatVersion !== 4) {
-    throw new NetworkDataError('dataset.formatVersion must be 4.');
+  if (record.formatVersion !== 5) {
+    throw new NetworkDataError('dataset.formatVersion must be 5.');
   }
 
   const sourceRecord = requiredRecord(record.source, 'dataset.source');
@@ -415,7 +418,7 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   const agencies = requiredArray(record.agencies, 'dataset.agencies').map(parseAgency);
   const routes = requiredArray(record.routes, 'dataset.routes').map(parseRoute);
   const municipalities = requiredArray(record.municipalities, 'dataset.municipalities').map(parseMunicipality);
-  const nuclei = requiredArray(record.nuclei, 'dataset.nuclei').map(parseNucleus);
+  const localAreas = requiredArray(record.localAreas, 'dataset.localAreas').map(parseLocalArea);
   const stops = requiredArray(record.stops, 'dataset.stops').map(parseStop);
   const patterns = requiredArray(record.patterns, 'dataset.patterns').map(parsePattern);
   const trips = requiredArray(record.trips, 'dataset.trips').map(parseTrip);
@@ -447,8 +450,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
   const municipalityIds = uniqueIds(municipalities, 'dataset.municipalities');
-  uniqueIds(nuclei, 'dataset.nuclei');
-  const nucleiById = new Map(nuclei.map((nucleus) => [nucleus.id, nucleus]));
+  uniqueIds(localAreas, 'dataset.localAreas');
+  const localAreasById = new Map(localAreas.map((localArea) => [localArea.id, localArea]));
   const stopIds = uniqueIds(stops, 'dataset.stops');
   const stopUrlTokens = new Set<string>();
   for (const stop of stops) {
@@ -482,9 +485,9 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
   }
 
-  for (const nucleus of nuclei) {
-    if (!municipalityIds.has(nucleus.municipalityId)) {
-      throw new NetworkDataError(`nucleus ${nucleus.id} references an unknown municipality.`);
+  for (const localArea of localAreas) {
+    if (!municipalityIds.has(localArea.municipalityId)) {
+      throw new NetworkDataError(`local area ${localArea.id} references an unknown municipality.`);
     }
   }
 
@@ -499,8 +502,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     if (stop.municipalityId !== null && !municipalityIds.has(stop.municipalityId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown municipality.`);
     }
-    if (stop.nucleusId !== null && nucleiById.get(stop.nucleusId)?.municipalityId !== stop.municipalityId) {
-      throw new NetworkDataError(`stop ${stop.id} references a nucleus outside its municipality.`);
+    if (stop.localAreaId !== null && localAreasById.get(stop.localAreaId)?.municipalityId !== stop.municipalityId) {
+      throw new NetworkDataError(`stop ${stop.id} references a local area outside its municipality.`);
     }
   }
 
@@ -536,12 +539,12 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   }
 
   return {
-    formatVersion: 4,
+    formatVersion: 5,
     source,
     agencies,
     routes,
     municipalities,
-    nuclei,
+    localAreas,
     stops,
     patterns,
     trips,

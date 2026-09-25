@@ -32,9 +32,9 @@ test('creates a Bahía-only topology with stable deduplicated patterns', () => {
 test('merges reviewed CTAN locations and rejects a selected stop with no relationship', () => {
   const locations = {
     municipalities: [{ id: 'municipality', name: 'Municipality' }],
-    nuclei: [
+    localAreas: [
       {
-        id: 'nucleus',
+        id: 'localArea',
         municipalityId: 'municipality',
         name: 'Town',
         derivedCoordinates: { representativeStop: { stopId: 'cadiz', latitude: 36.5, longitude: -6.2 } },
@@ -42,23 +42,23 @@ test('merges reviewed CTAN locations and rejects a selected stop with no relatio
       { id: 'empty', municipalityId: 'municipality', name: 'Empty' },
     ],
     stopLocations: {
-      cadiz: { municipalityId: 'municipality', nucleusId: 'nucleus' },
-      puerto: { municipalityId: 'municipality', nucleusId: 'nucleus' },
-      station: { municipalityId: 'municipality', nucleusId: null },
+      cadiz: { municipalityId: 'municipality', localAreaId: 'localArea' },
+      puerto: { municipalityId: 'municipality', localAreaId: 'localArea' },
+      station: { municipalityId: 'municipality', localAreaId: null },
     },
   };
   const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, locations);
-  assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.nucleusId, 'nucleus');
-  assert.equal(dataset.stops.find((stop) => stop.id === 'station')?.nucleusId, null);
-  assert.deepEqual(dataset.nuclei[0]?.referencePoint, { latitude: 36.5, longitude: -6.2 });
-  assert.equal(dataset.nuclei[1]?.referencePoint, null);
+  assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.localAreaId, 'localArea');
+  assert.equal(dataset.stops.find((stop) => stop.id === 'station')?.localAreaId, null);
+  assert.deepEqual(dataset.localAreas[0]?.referencePoint, { latitude: 36.5, longitude: -6.2 });
+  assert.equal(dataset.localAreas[1]?.referencePoint, null);
   assert.throws(
     () =>
       createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, {
         ...locations,
-        nuclei: [
+        localAreas: [
           {
-            id: 'nucleus',
+            id: 'localArea',
             municipalityId: 'municipality',
             name: 'Town',
             derivedCoordinates: { representativeStop: { stopId: 'station', latitude: 36.5, longitude: -6.2 } },

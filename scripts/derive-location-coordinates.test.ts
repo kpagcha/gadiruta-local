@@ -8,7 +8,7 @@ import { deriveLocationCoordinates, type LocationDirectory } from './derive-loca
 function stop(
   id: string,
   municipalityId: string,
-  nucleusId: string | null,
+  localAreaId: string | null,
   latitude: number,
   longitude: number,
 ): NetworkStop {
@@ -20,12 +20,12 @@ function stop(
     parentStationId: null,
     placeId: null,
     municipalityId,
-    nucleusId,
+    localAreaId,
   };
 }
 
 const dataset: NetworkDataset = {
-  formatVersion: 4,
+  formatVersion: 5,
   source: { url: 'source', generatedAt: '2026-09-25T00:00:00.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [],
   routes: [],
@@ -34,7 +34,7 @@ const dataset: NetworkDataset = {
     { id: 'b', name: 'Town B' },
     { id: 'empty', name: 'No stops' },
   ],
-  nuclei: [
+  localAreas: [
     { id: 'a-town', municipalityId: 'a', name: 'Town A', referencePoint: null },
     { id: 'b-town', municipalityId: 'b', name: 'Town B', referencePoint: null },
     { id: 'empty-area', municipalityId: 'empty', name: 'No stops', referencePoint: null },
@@ -58,21 +58,21 @@ function directoryFor(network: NetworkDataset): LocationDirectory {
   return {
     retrievedAt: '2026-09-22T00:00:00.000Z',
     municipalities: network.municipalities.map((municipality) => ({ ...municipality })),
-    nuclei: network.nuclei.map(({ id, municipalityId, name }) => ({ id, municipalityId, name })),
+    localAreas: network.localAreas.map(({ id, municipalityId, name }) => ({ id, municipalityId, name })),
     stopLocations: Object.fromEntries(
-      network.stops.map((item) => [item.id, { municipalityId: item.municipalityId!, nucleusId: item.nucleusId }]),
+      network.stops.map((item) => [item.id, { municipalityId: item.municipalityId!, localAreaId: item.localAreaId }]),
     ),
   };
 }
 
 test('writes average and representative coordinates only for resolved local areas', () => {
   const result = deriveLocationCoordinates(directoryFor(dataset), dataset);
-  assert.deepEqual(result.nuclei[0]?.derivedCoordinates, {
+  assert.deepEqual(result.localAreas[0]?.derivedCoordinates, {
     stopCount: 3,
     average: { latitude: 0, longitude: 4 },
     representativeStop: { stopId: 'a-2', latitude: 0, longitude: 2 },
   });
-  assert.deepEqual(result.nuclei[1]?.derivedCoordinates, {
+  assert.deepEqual(result.localAreas[1]?.derivedCoordinates, {
     stopCount: 1,
     average: { latitude: 1, longitude: 1 },
     representativeStop: { stopId: 'b-1', latitude: 1, longitude: 1 },
@@ -88,10 +88,10 @@ test('removes municipality and empty-area points and produces the same JSON on a
     representativeStop: { stopId: 'old', latitude: 9, longitude: 9 },
   };
   directory.municipalities[0]!.derivedCoordinates = stale;
-  directory.nuclei[2]!.derivedCoordinates = stale;
+  directory.localAreas[2]!.derivedCoordinates = stale;
   const first = deriveLocationCoordinates(directory, dataset);
   assert.equal(first.municipalities[0]?.derivedCoordinates, undefined);
-  assert.equal(first.nuclei[2]?.derivedCoordinates, undefined);
+  assert.equal(first.localAreas[2]?.derivedCoordinates, undefined);
   assert.equal(JSON.stringify(deriveLocationCoordinates(first, dataset)), JSON.stringify(first));
 });
 
@@ -101,7 +101,7 @@ test('breaks equally representative stop ties by stable stop ID', () => {
     stops: [stop('z', 'a', 'a-town', 0, 2), stop('a', 'a', 'a-town', 0, 0)],
   };
   const result = deriveLocationCoordinates(directoryFor(twoStops), twoStops);
-  assert.deepEqual(result.nuclei[0]?.derivedCoordinates, {
+  assert.deepEqual(result.localAreas[0]?.derivedCoordinates, {
     stopCount: 2,
     average: { latitude: 0, longitude: 1 },
     representativeStop: { stopId: 'a', latitude: 0, longitude: 0 },
@@ -110,6 +110,6 @@ test('breaks equally representative stop ties by stable stop ID', () => {
 
 test('refuses a stale stop relationship before deriving any coordinates', () => {
   const directory = directoryFor(dataset);
-  directory.stopLocations['a-1'] = { municipalityId: 'b', nucleusId: 'a-town' };
+  directory.stopLocations['a-1'] = { municipalityId: 'b', localAreaId: 'a-town' };
   assert.throws(() => deriveLocationCoordinates(directory, dataset), /Stop a-1 differs/);
 });

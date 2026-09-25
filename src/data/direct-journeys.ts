@@ -74,20 +74,20 @@ function runsOnDate(
   return calendar.weekdays[weekday] ?? false;
 }
 
-/** Fold accents and case before comparing official municipality and nucleus names. */
+/** Fold accents and case before comparing official municipality and local-area names. */
 function normalizedName(name: string): string {
   return name.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es').trim().replace(/\s+/g, ' ');
 }
 
-/** Find the unique same-named or shortened town nucleus within one municipality. */
-function townNucleusId(dataset: NetworkDataset, municipalityId: string): string | null {
+/** Find the unique same-named or shortened town area within one municipality. */
+function townLocalAreaId(dataset: NetworkDataset, municipalityId: string): string | null {
   const municipality = dataset.municipalities.find((item) => item.id === municipalityId);
   if (municipality === undefined) return null;
   const name = normalizedName(municipality.name);
-  const nuclei = dataset.nuclei.filter((nucleus) => nucleus.municipalityId === municipalityId);
-  const exact = nuclei.filter((nucleus) => normalizedName(nucleus.name) === name);
+  const localAreas = dataset.localAreas.filter((localArea) => localArea.municipalityId === municipalityId);
+  const exact = localAreas.filter((localArea) => normalizedName(localArea.name) === name);
   if (exact.length > 0) return exact.length === 1 ? exact[0]!.id : null;
-  const shorter = nuclei.filter((nucleus) => name.startsWith(`${normalizedName(nucleus.name)} `));
+  const shorter = localAreas.filter((localArea) => name.startsWith(`${normalizedName(localArea.name)} `));
   return shorter.length === 1 ? shorter[0]!.id : null;
 }
 
@@ -98,9 +98,9 @@ function locationReferencePoint(
   stopsById: Map<string, NetworkStop>,
 ): { latitude: number; longitude: number } | null {
   if (location.kind === 'stop') return stopsById.get(location.id) ?? null;
-  const nucleusId =
-    location.municipalityId === undefined ? location.nucleusId : townNucleusId(dataset, location.municipalityId);
-  return dataset.nuclei.find((nucleus) => nucleus.id === nucleusId)?.referencePoint ?? null;
+  const localAreaId =
+    location.municipalityId === undefined ? location.localAreaId : townLocalAreaId(dataset, location.municipalityId);
+  return dataset.localAreas.find((localArea) => localArea.id === localAreaId)?.referencePoint ?? null;
 }
 
 /** Measure straight-line distance between two coordinates in kilometres. */
@@ -122,7 +122,7 @@ function distanceKm(
 function matchesLocation(location: LocationOption, stop: NetworkStop): boolean {
   if (location.kind === 'stop') return location.id === stop.id;
   if (location.municipalityId !== undefined) return location.municipalityId === stop.municipalityId;
-  if (location.nucleusId !== undefined) return stop.nucleusId === location.nucleusId;
+  if (location.localAreaId !== undefined) return stop.localAreaId === location.localAreaId;
   return stop.placeId === location.id;
 }
 

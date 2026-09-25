@@ -62,7 +62,7 @@
       "name": "Medina Sidonia"
     }
   ],
-  "nuclei": [
+  "localAreas": [
     {
       "id": "1",
       "municipalityId": "1",
@@ -587,1055 +587,1055 @@
   "stopLocations": {
     "2_1": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_10": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_100": {
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     "2_101": {
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     "2_102": {
       "municipalityId": "4",
-      "nucleusId": "11"
+      "localAreaId": "11"
     },
     "2_103": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_104": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_105": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_106": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_107": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_108": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_109": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_11": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_110": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_111": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_112": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_113": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_114": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_115": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_116": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_117": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_118": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_119": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_12": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_120": {
       "municipalityId": "4",
-      "nucleusId": "40"
+      "localAreaId": "40"
     },
     "2_121": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_122": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_123": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_124": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_125": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_126": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_127": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_128": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_129": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_130": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_131": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_132": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_133": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_14": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_141": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_142": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_143": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_144": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_145": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_146": {
       "municipalityId": "5",
-      "nucleusId": "9"
+      "localAreaId": "9"
     },
     "2_15": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_155": {
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     "2_156": {
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     "2_159": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_16": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_160": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_161": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_162": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_163": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_164": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_165": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_166": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_167": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_168": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_169": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_17": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_170": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_171": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_172": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_173": {
       "municipalityId": "6",
-      "nucleusId": "42"
+      "localAreaId": "42"
     },
     "2_174": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_175": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_176": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_177": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_178": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_179": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_18": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_180": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_181": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_182": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_183": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_186": {
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     "2_187": {
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     "2_188": {
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     "2_189": {
       "municipalityId": "10",
-      "nucleusId": "19"
+      "localAreaId": "19"
     },
     "2_19": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_190": {
       "municipalityId": "10",
-      "nucleusId": "19"
+      "localAreaId": "19"
     },
     "2_191": {
       "municipalityId": "10",
-      "nucleusId": "20"
+      "localAreaId": "20"
     },
     "2_193": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_194": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_195": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_196": {
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     "2_197": {
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     "2_198": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_199": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_20": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_200": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_201": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_202": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_203": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_206": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_207": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_222": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_223": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_224": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_225": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_226": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_227": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_228": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_229": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_23": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_230": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_231": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_232": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_233": {
       "municipalityId": "7",
-      "nucleusId": "17"
+      "localAreaId": "17"
     },
     "2_234": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_235": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_236": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_237": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_238": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_24": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_241": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_243": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_244": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_245": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_247": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_248": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_249": {
       "municipalityId": "4",
-      "nucleusId": "31"
+      "localAreaId": "31"
     },
     "2_25": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_251": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_254": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_255": {
       "municipalityId": "7",
-      "nucleusId": "15"
+      "localAreaId": "15"
     },
     "2_257": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_258": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_259": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_26": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_260": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_261": {
       "municipalityId": "5",
-      "nucleusId": "21"
+      "localAreaId": "21"
     },
     "2_262": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_263": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_264": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_265": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_266": {
       "municipalityId": "15",
-      "nucleusId": "44"
+      "localAreaId": "44"
     },
     "2_268": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_269": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_27": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_270": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_271": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_272": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_273": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_274": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_277": {
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     "2_278": {
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     "2_279": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_280": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_282": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_283": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_284": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_285": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_287": {
       "municipalityId": "16",
-      "nucleusId": "46"
+      "localAreaId": "46"
     },
     "2_289": {
       "municipalityId": "3",
-      "nucleusId": "48"
+      "localAreaId": "48"
     },
     "2_29": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_291": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_292": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_296": {
       "municipalityId": "16",
-      "nucleusId": "45"
+      "localAreaId": "45"
     },
     "2_3": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_30": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_300": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_301": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_302": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_303": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_304": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_305": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_306": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_31": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_310": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_311": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_312": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_313": {
       "municipalityId": "11",
-      "nucleusId": "28"
+      "localAreaId": "28"
     },
     "2_314": {
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     "2_315": {
       "municipalityId": "8",
-      "nucleusId": "18"
+      "localAreaId": "18"
     },
     "2_316": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_317": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_318": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_319": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_32": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_320": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_321": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_322": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_33": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_34": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_345": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_346": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_347": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_348": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_349": {
       "municipalityId": "7",
-      "nucleusId": null
+      "localAreaId": null
     },
     "2_35": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_350": {
       "municipalityId": "7",
-      "nucleusId": null
+      "localAreaId": null
     },
     "2_351": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_352": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_353": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_354": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_355": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_356": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_357": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_359": {
       "municipalityId": "4",
-      "nucleusId": "43"
+      "localAreaId": "43"
     },
     "2_36": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_360": {
       "municipalityId": "5",
-      "nucleusId": "8"
+      "localAreaId": "8"
     },
     "2_361": {
       "municipalityId": "6",
-      "nucleusId": "14"
+      "localAreaId": "14"
     },
     "2_37": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_38": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_4": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_40": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_41": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_42": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_43": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_47": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_48": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_49": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_5": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_50": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_51": {
       "municipalityId": "2",
-      "nucleusId": "2"
+      "localAreaId": "2"
     },
     "2_56": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_57": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_58": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_59": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_6": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_60": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_61": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_62": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_63": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_64": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_65": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_66": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_67": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_68": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_69": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_7": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_70": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_71": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_72": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_73": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_74": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_75": {
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     "2_76": {
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     "2_77": {
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     "2_78": {
       "municipalityId": "4",
-      "nucleusId": "12"
+      "localAreaId": "12"
     },
     "2_79": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_8": {
       "municipalityId": "1",
-      "nucleusId": "1"
+      "localAreaId": "1"
     },
     "2_80": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_81": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_82": {
       "municipalityId": "4",
-      "nucleusId": "41"
+      "localAreaId": "41"
     },
     "2_83": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_84": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_85": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_86": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_87": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_88": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_90": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_91": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_92": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_93": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_94": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_95": {
       "municipalityId": "4",
-      "nucleusId": "43"
+      "localAreaId": "43"
     },
     "2_96": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_97": {
       "municipalityId": "4",
-      "nucleusId": "6"
+      "localAreaId": "6"
     },
     "2_98": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     },
     "2_99": {
       "municipalityId": "3",
-      "nucleusId": "3"
+      "localAreaId": "3"
     }
   }
 }

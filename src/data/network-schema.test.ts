@@ -4,12 +4,12 @@ import test from 'node:test';
 import { parseNetworkDataset } from './network-schema.ts';
 
 const dataset = {
-  formatVersion: 4,
+  formatVersion: 5,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [{ id: 'route', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
   municipalities: [],
-  nuclei: [],
+  localAreas: [],
   stops: [
     {
       id: 'a',
@@ -19,7 +19,7 @@ const dataset = {
       parentStationId: null,
       placeId: 'cadiz',
       municipalityId: null,
-      nucleusId: null,
+      localAreaId: null,
     },
     {
       id: 'b',
@@ -29,7 +29,7 @@ const dataset = {
       parentStationId: null,
       placeId: null,
       municipalityId: null,
-      nucleusId: null,
+      localAreaId: null,
     },
   ],
   patterns: [{ routeId: 'route', directionId: '0', stopIds: ['a', 'b'] }],
@@ -56,9 +56,9 @@ const dataset = {
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
-test('accepts the version-four timetable contract', () => {
+test('accepts the version-five timetable contract', () => {
   assert.deepEqual(parseNetworkDataset(dataset), dataset);
-  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 3 }), /formatVersion must be 4/);
+  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 3 }), /formatVersion must be 5/);
 });
 
 test('rejects broken stop, route, service, and place references', () => {
@@ -76,14 +76,14 @@ test('rejects broken stop, route, service, and place references', () => {
   );
 });
 
-test('validates municipality and nucleus relationships while allowing an unresolved nucleus', () => {
+test('validates municipality and local-area relationships while allowing an unresolved local area', () => {
   const withLocations = {
     ...dataset,
     municipalities: [{ id: 'municipality', name: 'Municipality' }],
-    nuclei: [{ id: 'nucleus', municipalityId: 'municipality', name: 'Town', referencePoint: null }],
+    localAreas: [{ id: 'localArea', municipalityId: 'municipality', name: 'Town', referencePoint: null }],
     stops: [
-      { ...dataset.stops[0], municipalityId: 'municipality', nucleusId: 'nucleus' },
-      { ...dataset.stops[1], municipalityId: 'municipality', nucleusId: null },
+      { ...dataset.stops[0], municipalityId: 'municipality', localAreaId: 'localArea' },
+      { ...dataset.stops[1], municipalityId: 'municipality', localAreaId: null },
     ],
   };
   assert.deepEqual(parseNetworkDataset(withLocations), withLocations);
@@ -91,7 +91,7 @@ test('validates municipality and nucleus relationships while allowing an unresol
     () =>
       parseNetworkDataset({
         ...withLocations,
-        nuclei: [{ id: 'nucleus', municipalityId: 'municipality', name: 'Town' }],
+        localAreas: [{ id: 'localArea', municipalityId: 'municipality', name: 'Town' }],
       }),
     /referencePoint must be an object/,
   );
@@ -99,7 +99,7 @@ test('validates municipality and nucleus relationships while allowing an unresol
     () =>
       parseNetworkDataset({
         ...withLocations,
-        nuclei: [{ ...withLocations.nuclei[0], referencePoint: { latitude: 91, longitude: 0 } }],
+        localAreas: [{ ...withLocations.localAreas[0], referencePoint: { latitude: 91, longitude: 0 } }],
       }),
     /invalid reference coordinates/,
   );
@@ -115,9 +115,9 @@ test('validates municipality and nucleus relationships while allowing an unresol
     () =>
       parseNetworkDataset({
         ...withLocations,
-        stops: [{ ...withLocations.stops[0], nucleusId: 'other' }, withLocations.stops[1]],
+        stops: [{ ...withLocations.stops[0], localAreaId: 'other' }, withLocations.stops[1]],
       }),
-    /nucleus outside its municipality/,
+    /local area outside its municipality/,
   );
 });
 

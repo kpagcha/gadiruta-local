@@ -14,7 +14,7 @@ The browser-facing file, `public/data/bahia-cadiz-network.json`, contains the pa
 local search and direct journey results:
 
 - the selected transport agency and its routes;
-- physical stops, their coordinates, and their CTAN municipio and núcleo relationships;
+- physical stops, their coordinates, and their CTAN municipality and local-area relationships;
 - ordered stop lists showing which stops each route serves;
 - a reviewed single place assignment for each confidently located stop; and
 - timed trips, weekly service calendars, and date exceptions.
@@ -36,16 +36,16 @@ them, see the [development guide](development.md).
 
 A place is a name people recognize, such as Cádiz or Rota. A stop is one exact bus boarding point.
 The app keeps them as separate search choices. The tracked CTAN location directory records 15
-municipios, 44 núcleos, and the location of all 263 selected stops. A municipio search covers all
-its núcleos; a named-núcleo search uses CTAN's stop membership. Exact stops remain searchable.
+municipalities, 44 local areas, and the location of all 263 selected stops. A municipality search covers all
+its local areas; a named local-area search uses CTAN's stop membership. Exact stops remain searchable.
 The earlier reviewed assignments in `scripts/place-stop-assignments.json` remain in the snapshot
 for places without a CTAN link. The ignored geographic report was used as a review checklist and
 is never browser input.
 
 The names and URL IDs in `src/data/places.ts` are maintained by the project and linked to reviewed
-CTAN location IDs. GTFS does not supply municipio or núcleo IDs; the builder reads the tracked
-directory extracted from the separate CTAN probe. Two Rota stops have a known municipio but no
-resolved núcleo, so they can match Rota without a local-area label.
+CTAN location IDs. GTFS does not supply municipality or local-area IDs; the builder reads the tracked
+directory extracted from the separate CTAN probe. Two Rota stops have a known municipality but no
+resolved local area, so they can match Rota without a local-area label.
 
 The reviewed directory holds an average position and a representative stop for each local area
 with selected stops. The snapshot carries the representative stop's coordinates as that area's
@@ -55,7 +55,7 @@ Costa Ballena is linked to Rota's local area only; its stable place ID remains `
 
 ## Direct journeys and coverage
 
-The browser checks the version-four snapshot before searching. A direct journey uses one trip, with
+The browser checks the version-five snapshot before searching. A direct journey uses one trip, with
 boarding before alighting and GTFS pickup/drop-off permissions applied. The selected date covers the
 whole local day, including departures earlier today. Trips scheduled on the previous service date
 are also considered when their GTFS stop time is `24:00` or later. A calendar exception overrides
@@ -63,7 +63,7 @@ the weekly rule. The result card starts with stops matching the search, then let
 pair on the same trip where boarding and alighting are permitted in that order. These card choices
 do not change the search URL. After applying the departure cutoff, the initial pair minimizes the
 sum of straight-line distances from the origin and destination reference points, with equal weight
-at both ends. Ties use the earliest departure, then arrival. A town núcleo is found through a
+at both ends. Ties use the earliest departure, then arrival. A town area is found through a
 normalized exact or unique shortened name match; an absent or ambiguous match contributes no
 distance preference. The full local result is split into four-card visual pages:
 earlier and later controls reveal adjacent groups without another data request. A trip appears only
@@ -102,14 +102,14 @@ later feed changes cannot be rounded silently.
 
 CTAN's all-stops list omits some stops that are available from individual stop lookups. Its line-stop
 response also uses a field named `idNucleo` to return a municipality ID. That value can identify a
-municipality, but it does not establish the smaller area (nucleus) a stop belongs to. The current
+municipality, but it does not establish the local area a stop belongs to. The current
 probe report keeps those cases unresolved. Coordinates and stop names are not used to guess missing
 relationships.
 
 The tracked directory is reviewed before it enters the static snapshot. These findings are
 source-data limitations, not part of the website's runtime request flow.
 
-The earlier spatial review disagrees with CTAN's municipio on four boundary stops. Current place
+The earlier spatial review disagrees with CTAN's municipality on four boundary stops. Current place
 search follows CTAN's location hierarchy for those stops; the discrepancy remains in the local
 probe evidence.
 

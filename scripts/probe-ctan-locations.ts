@@ -19,13 +19,13 @@ import {
   isMissingCtanStopResponse,
   parseCtanLineStops,
   parseCtanMunicipalities,
-  parseCtanNuclei,
+  parseCtanLocalAreas,
   parseCtanStop,
   parseCtanStops,
   type CtanLineFallback,
   type CtanLineStop,
   type CtanLocationProbeReport,
-  type CtanNucleus,
+  type CtanLocalArea,
 } from './ctan-location-crosswalk.ts';
 import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
 
@@ -255,17 +255,17 @@ export async function probeCtanLocations(
   await writeCapture(resolve(outputPath, 'municipios.json'), municipalitiesResponse, manifest);
   const municipalities = parseCtanMunicipalities(parseCapturedJson(municipalitiesResponse));
 
-  const nuclei: CtanNucleus[] = [];
+  const localAreas: CtanLocalArea[] = [];
   for (const municipality of municipalities) {
     // This endpoint is scoped to one municipality; verify CTAN did not return a mismatched child.
     const response = await fetchJson(getCtanUrl(`municipios/${municipality.id}/nucleos`));
     await writeCapture(resolve(outputPath, `municipio-${municipality.id}-nucleos.json`), response, manifest);
-    const municipalityNuclei = parseCtanNuclei(parseCapturedJson(response));
-    for (const nucleus of municipalityNuclei) {
-      if (nucleus.municipalityId !== municipality.id) {
-        fail(`municipality ${municipality.id} returned nucleus ${nucleus.id} for ${nucleus.municipalityId}.`);
+    const municipalityLocalAreas = parseCtanLocalAreas(parseCapturedJson(response));
+    for (const localArea of municipalityLocalAreas) {
+      if (localArea.municipalityId !== municipality.id) {
+        fail(`municipality ${municipality.id} returned local area ${localArea.id} for ${localArea.municipalityId}.`);
       }
-      nuclei.push(nucleus);
+      localAreas.push(localArea);
     }
   }
 
@@ -275,7 +275,7 @@ export async function probeCtanLocations(
   const stops = parseCtanStops(parseCapturedJson(stopsResponse));
 
   // Use the first report only to identify which GTFS IDs need a direct CTAN stop lookup.
-  const collectionReport = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
+  const collectionReport = createCtanLocationProbeReport({ municipalities, localAreas, stops }, stopIds);
   for (const gtfsStopId of collectionReport.unmatchedGtfsStopIds) {
     // The identifier rule is reversible: GTFS "2_91" corresponds to CTAN stop "91".
     const ctanStopId = getCtanStopId(gtfsStopId);
@@ -299,7 +299,7 @@ export async function probeCtanLocations(
   }
 
   // Query each relevant line once for stop IDs absent from both stop-directory endpoints.
-  const detailReport = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds);
+  const detailReport = createCtanLocationProbeReport({ municipalities, localAreas, stops }, stopIds);
   const lineStopsByLineId = new Map<string, Map<string, CtanLineStop>>();
   const lineFallbacksByGtfsStopId = new Map<string, CtanLineFallback>();
   for (const gtfsStopId of detailReport.unmatchedGtfsStopIds) {
@@ -336,7 +336,7 @@ export async function probeCtanLocations(
   }
 
   // The final report separates all-source stop coverage from verified place membership.
-  const report = createCtanLocationProbeReport({ municipalities, nuclei, stops }, stopIds, [
+  const report = createCtanLocationProbeReport({ municipalities, localAreas, stops }, stopIds, [
     ...lineFallbacksByGtfsStopId.values(),
   ]);
 

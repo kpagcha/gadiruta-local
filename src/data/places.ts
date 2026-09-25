@@ -10,7 +10,7 @@ export interface Place {
   id: string;
   name: string;
   municipalityId?: string;
-  nucleusId?: string;
+  localAreaId?: string;
 }
 
 /**
@@ -21,22 +21,22 @@ export interface Place {
  */
 export const places: readonly Place[] = [
   { id: 'arcos-de-la-frontera', name: 'Arcos de la Frontera', municipalityId: '10' },
-  { id: 'barrio-jarana', name: 'Barrio Jarana', nucleusId: '11' },
+  { id: 'barrio-jarana', name: 'Barrio Jarana', localAreaId: '11' },
   { id: 'cadiz', name: 'Cádiz', municipalityId: '1' },
-  { id: 'campus-universitario', name: 'Campus Universitario', nucleusId: '41' },
+  { id: 'campus-universitario', name: 'Campus Universitario', localAreaId: '41' },
   { id: 'chiclana-de-la-frontera', name: 'Chiclana de la Frontera', municipalityId: '3' },
   { id: 'chipiona', name: 'Chipiona', municipalityId: '15' },
   { id: 'conil-de-la-frontera', name: 'Conil de la Frontera', municipalityId: '16' },
-  { id: 'costa-ballena', name: 'Costa Ballena (Rota)', nucleusId: '17' },
-  { id: 'costa-oeste', name: 'Costa Oeste', nucleusId: '9' },
-  { id: 'el-colorado', name: 'El Colorado', nucleusId: '46' },
-  { id: 'el-marquesado', name: 'El Marquesado', nucleusId: '40' },
+  { id: 'costa-ballena', name: 'Costa Ballena (Rota)', localAreaId: '17' },
+  { id: 'costa-oeste', name: 'Costa Oeste', localAreaId: '9' },
+  { id: 'el-colorado', name: 'El Colorado', localAreaId: '46' },
+  { id: 'el-marquesado', name: 'El Marquesado', localAreaId: '40' },
   { id: 'el-puerto-de-santa-maria', name: 'El Puerto de Santa María', municipalityId: '5' },
   { id: 'jerez-de-la-frontera', name: 'Jerez de la Frontera', municipalityId: '6' },
-  { id: 'jedula', name: 'Jédula', nucleusId: '19' },
+  { id: 'jedula', name: 'Jédula', localAreaId: '19' },
   { id: 'medina-sidonia', name: 'Medina Sidonia', municipalityId: '8' },
   { id: 'puerto-real', name: 'Puerto Real', municipalityId: '4' },
-  { id: 'rio-san-pedro', name: 'Río San Pedro', nucleusId: '12' },
+  { id: 'rio-san-pedro', name: 'Río San Pedro', localAreaId: '12' },
   { id: 'rota', name: 'Rota', municipalityId: '7' },
   { id: 'san-fernando', name: 'San Fernando', municipalityId: '2' },
   { id: 'sanlucar-de-barrameda', name: 'Sanlúcar de Barrameda', municipalityId: '11' },

@@ -19,8 +19,8 @@ The app should be fast, friendly, mobile-first, and easy to scan. Its core tasks
 - view useful network information and relevant service notices.
 
 Places are names people recognize when describing an area; stops are exact boarding points. A
-municipio search covers its núcleos and chooses a default stop pair nearest its town area when possible;
-people can also search a named núcleo or an exact stop. A direct journey is one
+municipality search covers its local areas and chooses a default stop pair nearest its town area when possible;
+people can also search a named local area or an exact stop. A direct journey is one
 scheduled trip that serves the origin before the destination; transfer routing is not part of the
 first product.
 

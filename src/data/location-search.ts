@@ -11,7 +11,7 @@ import type { Place } from './places.ts';
 
 /** One selectable place or exact physical stop in the shared origin/destination search. */
 export type LocationOption =
-  | { kind: 'place'; id: string; name: string; municipalityId?: string; nucleusId?: string }
+  | { kind: 'place'; id: string; name: string; municipalityId?: string; localAreaId?: string }
   | { kind: 'stop'; id: string; name: string; routeLabels: string[] };
 
 /** Fold accents, case, and repeated spaces for forgiving local name searches. */
