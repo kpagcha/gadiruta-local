@@ -209,11 +209,12 @@ function LocationField({ id, label, placeholder, options, disabled, value, onCha
                                     <span className="block text-sm font-[650]">
                                       {locationLabel(result, t('search.allStops'))}
                                     </span>
-                                    {result.kind === 'stop' && (
+                                    {result.kind === 'stop' && (result.areaName || result.routeLabels.length > 0) && (
                                       <span className="block text-xs leading-5 text-muted">
-                                        {t('search.stop')}
+                                        {result.areaName}
+                                        {result.areaName && result.routeLabels.length > 0 && ' · '}
                                         {result.routeLabels.length > 0 &&
-                                          ` · ${result.routeLabels.slice(0, 2).join(', ')}${extraLines > 0 ? ` (+${extraLines})` : ''}`}
+                                          `${result.routeLabels.slice(0, 2).join(', ')}${extraLines > 0 ? ` (+${extraLines})` : ''}`}
                                       </span>
                                     )}
                                   </span>

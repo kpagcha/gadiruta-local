@@ -27,6 +27,7 @@ export type LocationOption =
       routeLabels: string[];
       municipalityId?: string | null;
       localAreaId?: string | null;
+      areaName?: string | null;
     };
 
 /** Results stay grouped so each kind can be revealed independently in the picker. */
@@ -118,6 +119,10 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
     name: stop.name,
     municipalityId: stop.municipalityId,
     localAreaId: stop.localAreaId,
+    areaName:
+      (stop.localAreaId === null ? null : areaById.get(stop.localAreaId)?.name) ??
+      (stop.municipalityId === null ? null : municipalityById.get(stop.municipalityId)?.name) ??
+      null,
     routeLabels: [...(routeIdsByStopId.get(stop.id) ?? [])]
       .map((routeId) => routeLabelsById.get(routeId) ?? routeId)
       .sort((first, second) => first.localeCompare(second, 'es', { numeric: true })),
