@@ -18,5 +18,5 @@
     "skipLibCheck": true
   },
   "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.stories.tsx"]
+  "exclude": ["src/**/*.test.ts"]
 }

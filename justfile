@@ -12,14 +12,6 @@ install:
 dev:
     npm run dev
 
-# Develop components in isolation with their saved visual states.
-storybook:
-    npm run storybook
-
-# Build the static Storybook site for checking stories outside the application build.
-storybook-build:
-    npm run storybook:build
-
 # Build this and next year's tracked snapshot from data/source/ctan-gtfs.zip.
 data:
     npm run data -- --current-and-next-year

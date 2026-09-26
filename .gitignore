@@ -6,7 +6,6 @@
 node_modules/
 .npm-cache/
 dist/
-storybook-static/
 coverage/
 *.tsbuildinfo
 

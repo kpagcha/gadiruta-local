@@ -15,7 +15,7 @@ gadiruta-local/
 │   ├── App.tsx                   Shared header/footer shell and page metadata
 │   ├── config.ts                 Project-controlled browser settings such as recent-search count
 │   ├── pages/                    Full-page content (currently HomePage)
-│   ├── components/               Reusable interface pieces and their Storybook stories
+│   ├── components/               Reusable interface pieces
 │   │   └── ui/                   Shared Base UI select and tooltip wrappers with app styling
 │   ├── data/                     Browser-side network loading, journey search, recent history, URL and calendar helpers
 │   ├── hooks/                    React lifecycle for dataset loading and theme preference
@@ -34,16 +34,15 @@ gadiruta-local/
 │   └── fixtures/                 Small GTFS examples for tooling tests
 ├── data/source/                  Ignored downloaded GTFS ZIP and probe captures (local only)
 ├── docs/                         Product, architecture, and contributor guides
-├── .storybook/                   Storybook configuration; stories sit by components in src/
 ├── package.json                  npm scripts and dependency list
 ├── package-lock.json             Exact installed dependency versions
 ├── justfile                      Friendly command names that call npm scripts
 ├── vite.config.ts                Vite development server and build configuration
 ├── tsconfig.json                 Strict browser TypeScript settings, without Node globals
-└── tsconfig.tools.json           Node tooling, tests, Storybook, and Vite configuration
+└── tsconfig.tools.json           Node tooling, tests, and Vite configuration
 ```
 
-Generated or local-only directories such as `node_modules/`, `dist/`, `storybook-static/`, and
+Generated or local-only directories such as `node_modules/`, `dist/`, and
 `.idea/` are omitted from the tree. The data paths have different roles:
 
 - `data/source/` is ignored local input/evidence for developer tools. It is not shipped and is not
@@ -137,23 +136,23 @@ just dev
 Open `http://127.0.0.1:5173`; stop the development server with Ctrl+C. `just --list` prints all
 available commands. Common commands:
 
-| Command                           | What it does                                                 |
-| --------------------------------- | ------------------------------------------------------------ |
-| `just dev`                        | Runs the website locally with Vite                           |
-| `just build`                      | Type-checks and builds static deployment files in `dist/`    |
-| `just preview`                    | Serves the existing `dist/` build locally                    |
-| `just data`                       | Builds the rolling-year snapshot from the local GTFS ZIP     |
-| `just data-refresh`               | Downloads GTFS, then builds the rolling-year snapshot        |
-| `just locations-probe`            | Captures CTAN location evidence under ignored source data    |
-| `just locations-coordinates`      | Derives candidate local-area points from tracked stops       |
-| `just test`                       | Runs focused offline data tests with Node's test runner      |
-| `just typecheck`                  | Checks TypeScript without writing build files                |
-| `just lint` / `just format-check` | Checks code rules / formatting                               |
-| `just check`                      | Runs lint, formatting, tests, and production build           |
-| `just storybook`                  | Opens isolated component examples at `http://127.0.0.1:6006` |
+| Command                           | What it does                                              |
+| --------------------------------- | --------------------------------------------------------- |
+| `just dev`                        | Runs the website locally with Vite                        |
+| `just build`                      | Type-checks and builds static deployment files in `dist/` |
+| `just preview`                    | Serves the existing `dist/` build locally                 |
+| `just data`                       | Builds the rolling-year snapshot from the local GTFS ZIP  |
+| `just data-refresh`               | Downloads GTFS, then builds the rolling-year snapshot     |
+| `just locations-probe`            | Captures CTAN location evidence under ignored source data |
+| `just locations-coordinates`      | Derives candidate local-area points from tracked stops    |
+| `just test`                       | Runs focused offline data tests with Node's test runner   |
+| `just typecheck`                  | Checks TypeScript without writing build files             |
+| `just lint` / `just format-check` | Checks code rules / formatting                            |
+| `just check`                      | Runs lint, formatting, tests, and production build        |
 
-Stories are saved interface examples, not separate app pages. They live next to the component they
-demonstrate and can be opened in Storybook without running the app flow.
+Storybook may be useful later if the app grows enough shared components to benefit from isolated
+visual examples. For now, develop components in the app and keep interaction checks focused on
+behavior that needs them.
 
 ## Code conventions
 
@@ -176,7 +175,7 @@ reviewed-input tests in `scripts/reviewed/`, experimental tests in `scripts/expe
 data tests in `src/data/`. `npm test` discovers `*.test.ts` in both trees using Node's test runner.
 Fixtures remain small and local to tooling; application tests use application-shaped data.
 
-`npm run typecheck` checks browser code without Node globals, then tooling, tests, and stories with
+`npm run typecheck` checks browser code without Node globals, then tooling and tests with
 Node types. ESLint rejects Node/tooling imports in browser code, React imports in data modules, and
 experimental imports in production data generation. Tests can use Node for offline fixtures.
 Formatting skips generated sites, caches, and ignored source evidence.

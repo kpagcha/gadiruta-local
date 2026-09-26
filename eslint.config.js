@@ -8,7 +8,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist', 'storybook-static', '.npm-cache', 'data/source', 'docs/local']),
+  globalIgnores(['dist', '.npm-cache', 'data/source', 'docs/local']),
   {
     files: ['**/*.{js,mjs,cjs,jsx}'],
     extends: [js.configs.recommended],
