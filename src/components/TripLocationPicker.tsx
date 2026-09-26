@@ -244,7 +244,7 @@ export function TripLocationPicker({
               </div>
             )}
           </div>
-          {coverage !== null && madridToday() > coverage.endDate && (
+          {coverage !== null && today > coverage.endDate && (
             <p className="mt-3 text-sm text-warning" role="alert">
               {t('search.expiredData', { date: coverage.endDate })}
             </p>

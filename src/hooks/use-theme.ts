@@ -2,17 +2,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 /** Theme choices supported by the application; system is the default until overridden. */
-export type ThemeMode = 'system' | 'light' | 'dark';
+type ThemeMode = 'system' | 'light' | 'dark';
 
 /** Theme values applied to the document after resolving a system preference. */
-export type ResolvedTheme = Exclude<ThemeMode, 'system'>;
-
-/** Theme state and actions exposed to the application shell. */
-export interface ThemeState {
-  mode: ThemeMode;
-  theme: ResolvedTheme;
-  toggleTheme: () => void;
-}
+type ResolvedTheme = Exclude<ThemeMode, 'system'>;
 
 const STORAGE_KEY = 'gadiruta-local.theme';
 const MEDIA_QUERY = '(prefers-color-scheme: dark)';
@@ -66,7 +59,7 @@ function persistThemeMode(mode: ThemeMode): void {
 }
 
 /** Synchronize React state, system preference changes, and the document theme. */
-export function useTheme(): ThemeState {
+export function useTheme() {
   const transitionTimer = useRef<number | null>(null);
   // Read storage lazily so it runs only when this hook first mounts.
   const [mode, setMode] = useState<ThemeMode>(() => readThemeMode());
@@ -74,7 +67,7 @@ export function useTheme(): ThemeState {
     // An early document theme avoids a visible flash while React is starting up.
     const initialTheme = document.documentElement.dataset.theme;
     if (initialTheme === 'dark' || initialTheme === 'light') return initialTheme;
-    return resolveTheme(readThemeMode());
+    return resolveTheme(mode);
   });
 
   useEffect(() => {
@@ -115,5 +108,5 @@ export function useTheme(): ThemeState {
     setMode(nextTheme);
   }
 
-  return { mode, theme, toggleTheme };
+  return { theme, toggleTheme };
 }

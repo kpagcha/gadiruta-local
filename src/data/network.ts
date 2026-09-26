@@ -7,8 +7,6 @@
  */
 import { parseNetworkDataset, type NetworkDataset, type NetworkRoute } from './network-schema.ts';
 
-export type { NetworkDataset, NetworkRoute } from './network-schema.ts';
-
 const datasetUrl = '/data/bahia-cadiz-network.json';
 
 /** Load the versioned static network asset without contacting an upstream transit service. */

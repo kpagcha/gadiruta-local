@@ -265,7 +265,7 @@ export function searchLocations(options: readonly LocationOption[], query: strin
     first.rank - second.rank ||
     first.option.name.localeCompare(second.option.name, 'es', { sensitivity: 'base', numeric: true }) ||
     first.option.id.localeCompare(second.option.id, 'en');
-  const directPlaces = ranked.filter(({ option, rank }) => option.kind === 'place' && rank < Infinity).sort(byRank);
+  const directPlaces = ranked.filter(({ option, rank }) => option.kind === 'place' && rank < Infinity);
   const matchedMunicipalities = new Set(
     directPlaces.flatMap(({ option }) =>
       option.kind === 'place' && option.municipalityId ? [option.municipalityId] : [],

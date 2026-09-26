@@ -5,11 +5,11 @@
  * browser. The generated JSON is saved at `public/data/bahia-cadiz-network.json`.
  */
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { isCalendarDate } from '../../src/data/calendar-date.ts';
+import { isCalendarDate, madridToday } from '../../src/data/calendar-date.ts';
 import { z } from 'zod';
 import { readGtfsTables } from './archive.ts';
 import { createNetworkDataset, sourceUrl, type SnapshotDateRange } from './convert.ts';
@@ -23,11 +23,6 @@ const locationDirectoryPath = resolve('data/reviewed/ctan/location-directory.jso
 /** Stop before doing IO when command options contradict the supported build workflow. */
 function fail(message: string): never {
   throw new Error(`GTFS data error: ${message}`);
-}
-
-/** Resolve the current calendar year in Cádiz even when the build host uses another time zone. */
-function madridYear(now: Date): number {
-  return Number(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'Europe/Madrid' }).format(now));
 }
 
 /** Parse the optional date range and the deliberately small archive command interface. */
@@ -75,7 +70,7 @@ function parseArguments(arguments_: readonly string[]): {
   ) {
     fail('--start-date and --end-date must be ordered YYYY-MM-DD dates.');
   }
-  const year = madridYear(new Date());
+  const year = Number(madridToday().slice(0, 4));
   const dateRange = rolling
     ? { startDate: `${year}-01-01`, endDate: `${year + 1}-12-31` }
     : startDate !== undefined && endDate !== undefined
@@ -96,7 +91,7 @@ async function downloadArchive(inputPath: string): Promise<Uint8Array> {
   }
 
   const archive = new Uint8Array(await response.arrayBuffer());
-  await mkdir(resolve(inputPath, '..'), { recursive: true });
+  await mkdir(dirname(inputPath), { recursive: true });
   await writeFile(inputPath, archive);
   return archive;
 }
@@ -124,11 +119,10 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
   const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments, dateRange, locationDirectory);
 
   // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
-  await mkdir(resolve(outputPath, '..'), { recursive: true });
+  await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
-  const inputStats = await stat(inputPath);
   console.log(
-    `Built ${outputPath} from ${inputPath} (${inputStats.size} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.patterns.length} patterns; coverage ${dataset.coverage.startDate} to ${dataset.coverage.endDate}.`,
+    `Built ${outputPath} from ${inputPath} (${archive.byteLength} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.patterns.length} patterns; coverage ${dataset.coverage.startDate} to ${dataset.coverage.endDate}.`,
   );
   if (dateRange !== undefined && dataset.coverage.endDate < dateRange.endDate) {
     console.warn(

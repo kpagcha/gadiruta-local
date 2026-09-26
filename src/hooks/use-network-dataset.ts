@@ -6,7 +6,8 @@
  * file from `public/data/`.
  */
 import { useEffect, useState } from 'react';
-import { loadNetworkDataset, type NetworkDataset } from '../data/network.ts';
+import { loadNetworkDataset } from '../data/network.ts';
+import type { NetworkDataset } from '../data/network-schema.ts';
 
 /** The three visible states while one mounted interface loads the local network asset. */
 export type NetworkDatasetState =
