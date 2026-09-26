@@ -1,6 +1,4 @@
-import { Check, Plus } from 'lucide-react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LOCATION_SEARCH_DEBOUNCE_MS } from '../config.ts';
 import {
@@ -12,6 +10,8 @@ import {
 } from '../data/location-search.ts';
 import type { LocationFieldValue } from '../data/journey-search.ts';
 import { Icon } from './Icon';
+import { LocationPlacePicker } from './LocationPlacePicker';
+import { LocationSuggestions, type SuggestionGroup } from './LocationSuggestions';
 import { AppTooltip } from './ui/tooltip';
 
 /** One of the two identical search controls in the trip picker. */
@@ -40,7 +40,6 @@ export function LocationField({
   onChange,
 }: LocationFieldProps) {
   const { t } = useTranslation();
-  const reducedMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
@@ -48,10 +47,9 @@ export function LocationField({
   const [pickerStep, setPickerStep] = useState<'municipalities' | 'areas'>('municipalities');
   const [pendingChoice, setPendingChoice] = useState<LocationOption | null>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLButtonElement>(null);
-  const firstPickerChoiceRef = useRef<HTMLButtonElement>(null);
-  const pickerSettledRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const pickerSettledRef = useRef(false);
   const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const query = value.choice === null && isOpen && !pickerOpen ? value.text : '';
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -66,7 +64,7 @@ export function LocationField({
   const results = searchLocations(options, debouncedQuery);
   // Assign keyboard positions once, including each group's expand/collapse button.
   let visibleCount = 0;
-  const groups = [
+  const groups: SuggestionGroup[] = [
     { id: 'places', label: t('search.places'), choices: results.places },
     { id: 'areas', label: t('search.areas'), choices: results.areas },
     { id: 'stops', label: t('search.stops'), choices: results.stops },
@@ -88,22 +86,16 @@ export function LocationField({
     isOpen &&
     hasMinimumLocationQuery(query) &&
     hasMinimumLocationQuery(debouncedQuery);
-  const selectedMunicipality = municipalities.find(
-    (municipality) =>
-      pendingChoice?.kind === 'place' &&
-      (pendingChoice.municipalityId === municipality.id || pendingChoice.parentMunicipalityId === municipality.id),
-  );
-  const selectedAreaId = pendingChoice?.kind === 'place' ? (pendingChoice.localAreaId ?? 'all') : 'all';
-  const selectedAreaName =
-    selectedAreaId === 'all'
-      ? t('search.allAreas')
-      : (selectedMunicipality?.areas.find((area) => area.id === selectedAreaId)?.name ?? t('search.allAreas'));
   const displayText = pickerOpen && pendingChoice ? locationLabel(pendingChoice, t('search.allStops')) : value.text;
 
-  /** Commit a place through the same draft path as a text suggestion. */
-  function choosePlace(choice: LocationOption) {
-    onChange({ text: locationLabel(choice, t('search.allStops')), choice }, true);
-  }
+  /** Commit the municipality's All choice once when the picker closes normally. */
+  const finishPicker = useCallback(() => {
+    if (!pickerSettledRef.current && pendingChoice && pendingChoice.id !== value.choice?.id) {
+      pickerSettledRef.current = true;
+      onChange({ text: locationLabel(pendingChoice, t('search.allStops')), choice: pendingChoice }, true);
+    }
+    setPickerOpen(false);
+  }, [pendingChoice, value.choice, onChange, t]);
 
   /** Clear this end without changing the other end. */
   function clearLocation() {
@@ -115,55 +107,58 @@ export function LocationField({
     inputRef.current?.focus();
   }
 
-  /** Keep All as the default when the panel closes after a municipality was picked. */
-  function finishPicker() {
-    if (!pickerSettledRef.current && pendingChoice && pendingChoice.id !== value.choice?.id) {
+  /** Select a municipality directly when it has no narrower area choices. */
+  function selectMunicipality(municipality: LocationMunicipality) {
+    if (municipality.areas.length <= 1) {
       pickerSettledRef.current = true;
-      choosePlace(pendingChoice);
+      onChange({ text: locationLabel(municipality.choice, t('search.allStops')), choice: municipality.choice }, true);
+      setPickerOpen(false);
+      triggerRef.current?.focus();
+      return;
     }
-    setPickerOpen(false);
+    setPendingChoice(municipality.choice);
+    setPickerStep('areas');
   }
 
-  // Leaving the panel accepts All; Escape leaves the current field unchanged.
+  /** Commit one narrower area and return focus to the trigger. */
+  function selectArea(choice: LocationOption) {
+    pickerSettledRef.current = true;
+    onChange({ text: locationLabel(choice, t('search.allStops')), choice }, true);
+    setPickerOpen(false);
+    triggerRef.current?.focus();
+  }
+
+  // Focus or a pointer press outside accepts a pending All choice; Escape discards it.
   useEffect(() => {
     if (!pickerOpen) return;
-    /** Commit a pending place once when pointer or keyboard focus leaves the picker. */
+
+    /** Close only after focus or pointer input leaves the entire location field. */
     function handleOutside(event: PointerEvent | globalThis.FocusEvent) {
-      if (fieldRef.current?.contains(event.target as Node)) return;
-      if (!pickerSettledRef.current && pendingChoice && pendingChoice.id !== value.choice?.id) {
-        pickerSettledRef.current = true;
-        onChange({ text: locationLabel(pendingChoice, t('search.allStops')), choice: pendingChoice }, true);
-      }
-      setPickerOpen(false);
+      if (!fieldRef.current?.contains(event.target as Node)) finishPicker();
     }
-    /** Cancel the pending choice and return keyboard focus to the trigger. */
-    function handlePickerEscape(event: globalThis.KeyboardEvent) {
+
+    /** Cancel the pending choice without losing keyboard position. */
+    function handleEscape(event: globalThis.KeyboardEvent) {
       if (event.key !== 'Escape') return;
       event.preventDefault();
       pickerSettledRef.current = true;
       setPickerOpen(false);
-      pinRef.current?.focus();
+      triggerRef.current?.focus();
     }
+
     document.addEventListener('pointerdown', handleOutside);
     document.addEventListener('focusin', handleOutside);
-    document.addEventListener('keydown', handlePickerEscape);
+    document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('pointerdown', handleOutside);
       document.removeEventListener('focusin', handleOutside);
-      document.removeEventListener('keydown', handlePickerEscape);
+      document.removeEventListener('keydown', handleEscape);
     };
-  }, [pickerOpen, pendingChoice, value.choice, onChange, t]);
-
-  /** Put keyboard focus on the first choice after opening or changing picker steps. */
-  useEffect(() => {
-    if (pickerOpen) firstPickerChoiceRef.current?.focus();
-  }, [pickerOpen, pickerStep]);
+  }, [pickerOpen, finishPicker]);
 
   /** Close suggestions only when focus leaves this field and its result buttons. */
   function handleBlur(event: FocusEvent<HTMLDivElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsOpen(false);
-    }
+    if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
   }
 
   /** Let the input's down arrow reach the first result without changing the typed query. */
@@ -186,12 +181,21 @@ export function LocationField({
       resultRefs.current[index + 1]?.focus();
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      if (index === 0) {
-        inputRef.current?.focus();
-      } else {
-        resultRefs.current[index - 1]?.focus();
-      }
+      if (index === 0) inputRef.current?.focus();
+      else resultRefs.current[index - 1]?.focus();
     }
+  }
+
+  /** Commit a suggestion and return focus to the text input. */
+  function selectSuggestion(choice: LocationOption) {
+    onChange({ text: locationLabel(choice, t('search.allStops')), choice }, true);
+    inputRef.current?.focus();
+    setIsOpen(false);
+  }
+
+  /** Expand or collapse one group without changing the typed query. */
+  function toggleGroup(id: string, expanded: boolean) {
+    setExpandedGroups((current) => (expanded ? current.filter((groupId) => groupId !== id) : [...current, id]));
   }
 
   return (
@@ -249,7 +253,7 @@ export function LocationField({
         )}
         <AppTooltip content={t('search.chooseFromList')} disabled={disabled || pickerOpen}>
           <button
-            ref={pinRef}
+            ref={triggerRef}
             aria-controls={id + '-place-picker'}
             aria-expanded={pickerOpen}
             aria-label={label + ': ' + t('search.chooseFromList')}
@@ -280,205 +284,27 @@ export function LocationField({
           </button>
         </AppTooltip>
       </div>
-      <AnimatePresence>
-        {pickerOpen && (
-          <motion.div
-            id={id + '-place-picker'}
-            aria-label={label + ': ' + t('search.chooseFromList')}
-            className="absolute right-0 left-0 z-50 mt-2 w-full overflow-hidden rounded-2xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
-            initial={reducedMotion ? false : { opacity: 0, y: -6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reducedMotion ? undefined : { opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ duration: 0.16 }}
-            role="dialog"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {pickerStep === 'municipalities' ? (
-                <motion.div
-                  key="municipalities"
-                  className="max-h-[min(22rem,65dvh)] space-y-1 overflow-y-auto"
-                  initial={reducedMotion ? false : { opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={reducedMotion ? undefined : { opacity: 0, x: -10 }}
-                  transition={{ duration: 0.1 }}
-                  onAnimationComplete={() => firstPickerChoiceRef.current?.focus()}
-                >
-                  {municipalities.map((municipality, index) => (
-                    <button
-                      key={municipality.id}
-                      ref={
-                        municipality.id === selectedMunicipality?.id || (!selectedMunicipality && index === 0)
-                          ? firstPickerChoiceRef
-                          : undefined
-                      }
-                      className="motion-interactive flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none"
-                      onClick={() => {
-                        if (municipality.areas.length <= 1) {
-                          pickerSettledRef.current = true;
-                          choosePlace(municipality.choice);
-                          setPickerOpen(false);
-                          pinRef.current?.focus();
-                          return;
-                        }
-                        setPendingChoice(municipality.choice);
-                        setPickerStep('areas');
-                      }}
-                      type="button"
-                    >
-                      <span>{municipality.name}</span>
-                      {municipality.areas.length > 1 && (
-                        <Plus aria-hidden="true" className="shrink-0 text-muted" size={16} strokeWidth={1.8} />
-                      )}
-                    </button>
-                  ))}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="areas"
-                  initial={reducedMotion ? false : { opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={reducedMotion ? undefined : { opacity: 0, x: 10 }}
-                  transition={{ duration: 0.1 }}
-                  onAnimationComplete={() => firstPickerChoiceRef.current?.focus()}
-                >
-                  <div className="flex min-w-0 items-center gap-2 border-b border-line px-1 pb-2">
-                    <button
-                      className="motion-interactive min-w-0 rounded-lg bg-surface-hover px-2.5 py-2 text-left text-sm font-[700] text-ink hover:bg-surface-active focus-visible:outline-2 focus-visible:outline-accent"
-                      onClick={() => setPickerStep('municipalities')}
-                      type="button"
-                    >
-                      <span className="block truncate">{selectedMunicipality?.name}</span>
-                    </button>
-                    <Icon name="arrow" className="shrink-0 text-accent" size={17} />
-                    <span className="min-w-0 truncate text-sm font-[700] text-accent">{selectedAreaName}</span>
-                  </div>
-                  <div className="max-h-[min(18rem,52dvh)] space-y-1 overflow-y-auto pt-1">
-                    {selectedMunicipality &&
-                      [
-                        { id: 'all', name: t('search.allAreas'), choice: selectedMunicipality.choice },
-                        ...selectedMunicipality.areas,
-                      ].map((area) => (
-                        <button
-                          key={area.id}
-                          ref={selectedAreaId === area.id ? firstPickerChoiceRef : undefined}
-                          aria-pressed={selectedAreaId === area.id}
-                          className={
-                            selectedAreaId === area.id
-                              ? 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl bg-surface-selected px-3 py-2 text-left text-sm font-[700] text-accent focus-visible:outline-2 focus-visible:outline-accent'
-                              : 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none'
-                          }
-                          onClick={() => {
-                            pickerSettledRef.current = true;
-                            choosePlace(area.choice);
-                            setPickerOpen(false);
-                            pinRef.current?.focus();
-                          }}
-                          type="button"
-                        >
-                          <span>{area.name}</span>
-                          {selectedAreaId === area.id && <Check aria-hidden="true" className="shrink-0" size={16} />}
-                        </button>
-                      ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <LocationPlacePicker
+        id={id}
+        label={label}
+        municipalities={municipalities}
+        isOpen={pickerOpen}
+        step={pickerStep}
+        pendingChoice={pendingChoice}
+        onSelectMunicipality={selectMunicipality}
+        onSelectArea={selectArea}
+        onBack={() => setPickerStep('municipalities')}
+      />
       {showResults && (
-        <div
-          aria-busy={isWaitingForResults}
-          className="motion-popover absolute z-30 mt-2 min-h-12 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]"
-        >
-          {!isWaitingForResults && (
-            <p className="sr-only" role="status">
-              {t('search.resultCount', { count: totalResults })}
-            </p>
-          )}
-          {!isWaitingForResults && totalResults === 0 ? (
-            <p className="px-3 py-3 text-sm text-muted">{t('search.noResults')}</p>
-          ) : totalResults > 0 ? (
-            <div className="max-h-[min(28rem,60vh)] overflow-y-auto" inert={isWaitingForResults}>
-              {groups.map((group) => {
-                const { expanded, visible, focusStart, toggleIndex } = group;
-                return (
-                  <div key={group.id}>
-                    <p className="px-3 pt-2.5 pb-1 text-xs font-[700] tracking-wide text-muted uppercase">
-                      {group.label}
-                    </p>
-                    <ul aria-label={group.label}>
-                      {visible.map((result, choiceIndex) => {
-                        const index = focusStart + choiceIndex;
-                        const extraLines = result.kind === 'stop' ? result.routeLabels.length - 2 : 0;
-                        return (
-                          <motion.li
-                            key={`${result.kind}:${result.id}`}
-                            initial={expanded && choiceIndex >= 5 && !reducedMotion ? { opacity: 0, y: 5 } : false}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            <button
-                              ref={(button) => {
-                                resultRefs.current[index] = button;
-                              }}
-                              className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-hover focus-visible:bg-surface-hover"
-                              onClick={() => {
-                                onChange({ text: locationLabel(result, t('search.allStops')), choice: result }, true);
-                                inputRef.current?.focus();
-                                setIsOpen(false);
-                              }}
-                              onKeyDown={(event) => handleResultKeyDown(event, index)}
-                              type="button"
-                            >
-                              <span className="mt-0.5 text-accent">
-                                <Icon name={result.kind === 'place' ? 'place' : 'stop'} size={18} />
-                              </span>
-                              <span className="min-w-0">
-                                <span className="block text-sm font-[650]">
-                                  {locationLabel(result, t('search.allStops'))}
-                                </span>
-                                {result.kind === 'stop' && (result.areaName || result.routeLabels.length > 0) && (
-                                  <span className="block text-xs leading-5 text-muted">
-                                    {result.areaName}
-                                    {result.areaName && result.routeLabels.length > 0 && ' · '}
-                                    {result.routeLabels.length > 0 &&
-                                      `${result.routeLabels.slice(0, 2).join(', ')}${extraLines > 0 ? ` (+${extraLines})` : ''}`}
-                                  </span>
-                                )}
-                              </span>
-                            </button>
-                          </motion.li>
-                        );
-                      })}
-                      {group.choices.length > 5 && (
-                        <li key={`${group.id}-toggle`}>
-                          <button
-                            ref={(button) => {
-                              resultRefs.current[toggleIndex] = button;
-                            }}
-                            className="motion-interactive w-full rounded-lg px-3 py-2 text-left text-sm font-[650] text-accent hover:bg-surface-hover focus-visible:bg-surface-hover"
-                            onClick={() =>
-                              setExpandedGroups((current) =>
-                                expanded ? current.filter((id) => id !== group.id) : [...current, group.id],
-                              )
-                            }
-                            onKeyDown={(event) => handleResultKeyDown(event, toggleIndex)}
-                            type="button"
-                          >
-                            {expanded
-                              ? t('search.showLess')
-                              : t('search.showMore', { count: group.choices.length - 5 })}
-                          </button>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          ) : null}
-        </div>
+        <LocationSuggestions
+          groups={groups}
+          totalResults={totalResults}
+          isWaitingForResults={isWaitingForResults}
+          resultRefs={resultRefs}
+          onSelect={selectSuggestion}
+          onResultKeyDown={handleResultKeyDown}
+          onToggleGroup={toggleGroup}
+        />
       )}
     </div>
   );
