@@ -8,7 +8,7 @@ import { resolveSearchUrl } from '../../../src/data/search-url.ts';
 const origin = { kind: 'stop' as const, id: 'a', name: 'A', routeLabels: [] };
 const destination = { kind: 'stop' as const, id: 'b', name: 'B', routeLabels: [] };
 const dataset: NetworkDataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: { url: 'source', generatedAt: '2026-09-26T00:00:00Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'agency', name: 'Agency' }],
   routes: [
@@ -36,15 +36,7 @@ const dataset: NetworkDataset = {
       ],
     },
   ],
-  calendars: [
-    {
-      serviceId: 'daily',
-      startDate: '2026-01-01',
-      endDate: '2026-12-31',
-      weekdays: [true, true, true, true, true, true, true],
-    },
-  ],
-  calendarExceptions: [],
+  serviceDates: [{ serviceId: 'daily', dates: ['2026-09-26', '2026-09-27'] }],
   coverage: { startDate: '2026-01-01', endDate: '2026-12-31' },
 };
 const draft: TripSearchDraft = {

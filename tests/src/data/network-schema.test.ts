@@ -4,7 +4,7 @@ import test from 'node:test';
 import { parseNetworkDataset } from '../../../src/data/network-schema.ts';
 
 const dataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [{ id: 'route', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
@@ -41,21 +41,13 @@ const dataset = {
       ],
     },
   ],
-  calendars: [
-    {
-      serviceId: 'daily',
-      startDate: '2026-09-01',
-      endDate: '2026-12-31',
-      weekdays: [true, true, true, true, true, true, true],
-    },
-  ],
-  calendarExceptions: [{ serviceId: 'daily', date: '2026-09-25', type: 2 }],
+  serviceDates: [{ serviceId: 'daily', dates: ['2026-09-24', '2026-09-26'] }],
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
-test('accepts the version-six timetable contract', () => {
+test('accepts the version-seven timetable contract', () => {
   assert.deepEqual(parseNetworkDataset(dataset), dataset);
-  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 5 }), /formatVersion must be 6/);
+  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 6 }), /formatVersion must be 7/);
 });
 
 test('rejects duplicate IDs, invalid primitives, missing nullable fields', () => {
@@ -133,7 +125,7 @@ test('validates municipality and local-area relationships while allowing an unre
   );
 });
 
-test('rejects invalid times, dates, and duplicate exceptions', () => {
+test('rejects invalid times and operating dates', () => {
   const trip = dataset.trips[0]!;
   assert.throws(
     () =>
@@ -144,19 +136,27 @@ test('rejects invalid times, dates, and duplicate exceptions', () => {
     /ordered/,
   );
   assert.throws(
-    () => parseNetworkDataset({ ...dataset, calendars: [{ ...dataset.calendars[0], endDate: '2026-02-30' }] }),
+    () => parseNetworkDataset({ ...dataset, serviceDates: [{ serviceId: 'daily', dates: ['2026-02-30'] }] }),
     /valid YYYY-MM-DD/,
   );
   assert.throws(
     () =>
       parseNetworkDataset({
         ...dataset,
-        calendarExceptions: [dataset.calendarExceptions[0], dataset.calendarExceptions[0]],
+        serviceDates: [{ serviceId: 'daily', dates: ['2026-09-26', '2026-09-24'] }],
       }),
-    /duplicated/,
+    /unordered or duplicate/,
   );
   assert.throws(
-    () => parseNetworkDataset({ ...dataset, coverage: { startDate: '2026-09-03', endDate: '2026-12-31' } }),
+    () => parseNetworkDataset({ ...dataset, serviceDates: [dataset.serviceDates[0], dataset.serviceDates[0]] }),
+    /duplicate service ID/,
+  );
+  assert.throws(
+    () => parseNetworkDataset({ ...dataset, coverage: { startDate: '2026-09-26', endDate: '2026-12-31' } }),
+    /coverage/,
+  );
+  assert.throws(
+    () => parseNetworkDataset({ ...dataset, serviceDates: [{ serviceId: 'daily', dates: ['2027-01-01'] }] }),
     /coverage/,
   );
 });

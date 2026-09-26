@@ -51,16 +51,8 @@ const tripSchema = z.object({
       'stopTimes must be ordered',
     ),
 });
-const calendarSchema = z
-  .object({
-    serviceId: name,
-    startDate: date,
-    endDate: date,
-    weekdays: z.array(z.boolean()).length(7),
-  })
-  .refine((calendar) => calendar.startDate <= calendar.endDate, 'invalid calendar dates');
 const datasetSchema = z.object({
-  formatVersion: z.literal(6, { error: 'formatVersion must be 6' }),
+  formatVersion: z.literal(7, { error: 'formatVersion must be 7' }),
   source: z.object({
     url: name,
     generatedAt: name.refine((value) => !Number.isNaN(Date.parse(value)), 'invalid generation date-time'),
@@ -84,14 +76,13 @@ const datasetSchema = z.object({
   localAreas: z.array(localAreaSchema),
   stops: z.array(stopSchema).min(1),
   trips: z.array(tripSchema).min(1),
-  calendars: z.array(calendarSchema).min(1),
-  calendarExceptions: z.array(z.object({ serviceId: name, date, type: z.literal([1, 2]) })),
+  serviceDates: z.array(z.object({ serviceId: name, dates: z.array(date) })).min(1),
   coverage: z
     .object({ startDate: date, endDate: date })
     .refine((coverage) => coverage.startDate <= coverage.endDate, 'coverage has reversed dates'),
 });
 
-/** Version-six application data after shape and relationship checks. */
+/** Version-seven application data after shape and relationship checks. */
 export type NetworkDataset = z.infer<typeof datasetSchema>;
 /** A route's official labels and transport mode. */
 export type NetworkRoute = NetworkDataset['routes'][number];
@@ -133,8 +124,7 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     throw new NetworkDataError('dataset.' + issue.path.join('.') + ': ' + issue.message);
   }
   const dataset = parsed.data;
-  const { agencies, routes, municipalities, localAreas, stops, trips, calendars, calendarExceptions, coverage } =
-    dataset;
+  const { agencies, routes, municipalities, localAreas, stops, trips, serviceDates, coverage } = dataset;
   // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
@@ -151,20 +141,24 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     stopUrlTokens.add(token);
   }
   uniqueIds(trips, 'dataset.trips');
-  const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
-  if (serviceIds.size !== calendars.length) {
-    throw new NetworkDataError('dataset contains duplicate calendars.');
-  }
+  const serviceIds = new Set<string>();
   // A service dated yesterday can still board just after midnight on the first visible day.
   const earliestServiceDate = shiftCalendarDate(coverage.startDate, -1);
-  if (
-    calendars.some((calendar) => calendar.startDate < earliestServiceDate || calendar.endDate > coverage.endDate) ||
-    calendarExceptions.some(
-      (exception) =>
-        exception.type === 1 && (exception.date < earliestServiceDate || exception.date > coverage.endDate),
-    )
-  ) {
-    throw new NetworkDataError('dataset.coverage does not include its service dates.');
+  for (const service of serviceDates) {
+    if (serviceIds.has(service.serviceId)) {
+      throw new NetworkDataError(`dataset.serviceDates contains duplicate service ID ${service.serviceId}.`);
+    }
+    serviceIds.add(service.serviceId);
+    let previousDate = '';
+    for (const date of service.dates) {
+      if (date <= previousDate) {
+        throw new NetworkDataError(`service ${service.serviceId} has unordered or duplicate dates.`);
+      }
+      if (date < earliestServiceDate || date > coverage.endDate) {
+        throw new NetworkDataError('dataset.coverage does not include its service dates.');
+      }
+      previousDate = date;
+    }
   }
 
   for (const route of routes) {
@@ -201,14 +195,5 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
       throw new NetworkDataError(`trip ${trip.id} references an unknown route, service, or stop.`);
     }
   }
-  const exceptionKeys = new Set<string>();
-  for (const exception of calendarExceptions) {
-    const key = `${exception.serviceId}:${exception.date}`;
-    if (!serviceIds.has(exception.serviceId) || exceptionKeys.has(key)) {
-      throw new NetworkDataError(`calendar exception ${key} is invalid or duplicated.`);
-    }
-    exceptionKeys.add(key);
-  }
-
   return dataset;
 }

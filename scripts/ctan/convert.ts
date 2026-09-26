@@ -3,7 +3,12 @@
  * Runs only in data tooling. It has no file, CLI, or network side effects and validates the selected
  * source once before filtering its date range. The browser consumes its output, never GTFS rows.
  */
-import { isCalendarDate, shiftCalendarDate } from '../../src/data/calendar-date.ts';
+import {
+  formatCalendarDate,
+  isCalendarDate,
+  parseCalendarDate,
+  shiftCalendarDate,
+} from '../../src/data/calendar-date.ts';
 import { parseNetworkDataset, type NetworkDataset, type NetworkStopTime } from '../../src/data/network-schema.ts';
 import type { LocationDirectory } from './location-directory.ts';
 import type { CsvRow, GtfsTables } from './archive.ts';
@@ -34,7 +39,9 @@ function gtfsDate(value: string, label: string): string {
   if (!/^\d{8}$/.test(value)) {
     fail(`${label} must be a YYYYMMDD date.`);
   }
-  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+  const date = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+  if (!isCalendarDate(date)) fail(`${label} must be a valid YYYYMMDD date.`);
+  return date;
 }
 
 /** GTFS uses zero for ordinary boarding/alighting and one for a prohibited action. */
@@ -125,61 +132,22 @@ function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRan
   }
 
   // Yesterday's service may board after midnight on the first visible date.
-  const serviceStart = shiftCalendarDate(coverage.startDate, -1);
+  const precedingDate = shiftCalendarDate(coverage.startDate, -1);
   const overnightServiceIds = new Set(
     dataset.trips
       .filter((trip) => trip.stopTimes.some((time) => time.departureMinutes >= 1440))
       .map((trip) => trip.serviceId),
   );
-  /** Only an overnight service needs its preceding day in the snapshot. */
-  function firstServiceDate(serviceId: string): string {
-    return overnightServiceIds.has(serviceId) ? serviceStart : coverage.startDate;
-  }
-  const additions = new Set(
-    dataset.calendarExceptions
-      .filter(
-        (exception) =>
-          exception.type === 1 &&
-          exception.date >= firstServiceDate(exception.serviceId) &&
-          exception.date <= coverage.endDate,
-      )
-      .map((exception) => exception.serviceId),
-  );
-  const calendars = dataset.calendars.flatMap((calendar) => {
-    const firstDate = firstServiceDate(calendar.serviceId);
-    const weeklyOverlap = calendar.endDate >= firstDate && calendar.startDate <= coverage.endDate;
-    if (!weeklyOverlap && !additions.has(calendar.serviceId)) return [];
-    const startDate = calendar.startDate > firstDate ? calendar.startDate : firstDate;
-    const endDate = calendar.endDate < coverage.endDate ? calendar.endDate : coverage.endDate;
-    return [
-      {
-        ...calendar,
-        startDate: weeklyOverlap ? startDate : coverage.startDate,
-        endDate: weeklyOverlap ? endDate : coverage.startDate,
-        weekdays: weeklyOverlap ? calendar.weekdays : [false, false, false, false, false, false, false],
-      },
-    ];
+  const serviceDates = dataset.serviceDates.flatMap((service) => {
+    const firstDate = overnightServiceIds.has(service.serviceId) ? precedingDate : coverage.startDate;
+    const dates = service.dates.filter((date) => date >= firstDate && date <= coverage.endDate);
+    return dates.length === 0 ? [] : [{ serviceId: service.serviceId, dates }];
   });
-  const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
-  const calendarExceptions = dataset.calendarExceptions.filter(
-    (exception) =>
-      serviceIds.has(exception.serviceId) &&
-      exception.date >= firstServiceDate(exception.serviceId) &&
-      exception.date <= coverage.endDate,
-  );
-  const trips = dataset.trips.filter((trip) => serviceIds.has(trip.serviceId));
-  if (
-    trips.length === 0 ||
-    (!calendars.some(
-      (calendar) =>
-        calendar.startDate <= coverage.endDate &&
-        calendar.endDate >= coverage.startDate &&
-        calendar.weekdays.some(Boolean),
-    ) &&
-      !calendarExceptions.some((exception) => exception.type === 1 && exception.date >= coverage.startDate))
-  ) {
+  if (serviceDates.length === 0) {
     fail(`requested dates ${requested.startDate} to ${requested.endDate} contain no Cádiz service.`);
   }
+  const serviceIds = new Set(serviceDates.map((service) => service.serviceId));
+  const trips = dataset.trips.filter((trip) => serviceIds.has(trip.serviceId));
 
   // A range can remove entire services, so remove their unused route and stop records too.
   const routeIds = new Set(trips.map((trip) => trip.routeId));
@@ -193,8 +161,7 @@ function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRan
     routes: dataset.routes.filter((route) => routeIds.has(route.id)),
     stops: dataset.stops.filter((stop) => stopIds.has(stop.id)),
     trips,
-    calendars,
-    calendarExceptions,
+    serviceDates,
     coverage,
   };
 }
@@ -383,9 +350,39 @@ export function createNetworkDataset(
         date: gtfsDate(requiredValue(row, 'date', 'calendar_dates'), 'calendar_dates.date'),
         type: type as 1 | 2,
       };
-    })
-    .sort((a, b) => compareText(`${a.serviceId}:${a.date}`, `${b.serviceId}:${b.date}`));
+    });
   if (calendars.length === 0) fail('selected trips have no service calendars.');
+
+  // Resolve the provider's weekly rules once; the browser receives only operating dates.
+  const datesByService = new Map<string, Set<string>>();
+  for (const calendar of calendars) {
+    if (calendar.startDate > calendar.endDate) fail(`calendar ${calendar.serviceId} has reversed dates.`);
+    if (datesByService.has(calendar.serviceId)) fail(`calendar contains duplicate service ID ${calendar.serviceId}.`);
+    const dates = new Set<string>();
+    const end = parseCalendarDate(calendar.endDate).getTime();
+    for (
+      const day = parseCalendarDate(calendar.startDate);
+      day.getTime() <= end;
+      day.setUTCDate(day.getUTCDate() + 1)
+    ) {
+      if (calendar.weekdays[(day.getUTCDay() + 6) % 7]) dates.add(formatCalendarDate(day));
+    }
+    datesByService.set(calendar.serviceId, dates);
+  }
+  const exceptionKeys = new Set<string>();
+  for (const exception of calendarExceptions) {
+    const key = `${exception.serviceId}:${exception.date}`;
+    if (exceptionKeys.has(key)) fail(`calendar exception ${key} is duplicated.`);
+    exceptionKeys.add(key);
+    const dates = datesByService.get(exception.serviceId);
+    if (dates === undefined) fail(`calendar exception ${key} references an unknown service.`);
+    if (exception.type === 1) dates.add(exception.date);
+    else dates.delete(exception.date);
+  }
+  const serviceDates = [...datesByService].map(([serviceId, dates]) => ({
+    serviceId,
+    dates: [...dates].sort(compareText),
+  }));
   const activeDates = [
     ...calendars.flatMap((calendar) => [calendar.startDate, calendar.endDate]),
     ...calendarExceptions.filter((exception) => exception.type === 1).map((exception) => exception.date),
@@ -397,7 +394,7 @@ export function createNetworkDataset(
 
   // Validate the generated shape through the same boundary the browser uses before returning it.
   const dataset = parseNetworkDataset({
-    formatVersion: 6,
+    formatVersion: 7,
     source: {
       url: sourceUrl,
       generatedAt: new Date().toISOString(),
@@ -427,8 +424,7 @@ export function createNetworkDataset(
       }) ?? [],
     stops,
     trips: scheduledTrips.sort((a, b) => compareText(a.id, b.id)),
-    calendars,
-    calendarExceptions,
+    serviceDates,
     coverage,
   });
   return dateRange === undefined ? dataset : limitNetworkDataset(dataset, dateRange);

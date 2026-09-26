@@ -25,7 +25,7 @@ function stop(
 }
 
 const dataset: NetworkDataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: { url: 'source', generatedAt: '2026-09-25T00:00:00.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [],
   routes: [],
@@ -47,8 +47,7 @@ const dataset: NetworkDataset = {
     stop('b-unresolved', 'b', null, 3, 3),
   ],
   trips: [],
-  calendars: [],
-  calendarExceptions: [],
+  serviceDates: [],
   coverage: { startDate: '2026-01-01', endDate: '2026-12-31' },
 };
 

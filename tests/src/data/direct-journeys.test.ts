@@ -27,7 +27,7 @@ const time = (stopId: string, minute: number, pickupType = 0, dropOffType = 0) =
   dropOffType,
 });
 const dataset: NetworkDataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bay' }],
   routes: [{ id: 'line', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
@@ -54,23 +54,9 @@ const dataset: NetworkDataset = {
     { id: 'added', routeId: 'line', serviceId: 'added', stopTimes: [time('a', 700), time('b', 750)] },
     { id: 'no-pickup', routeId: 'line', serviceId: 'weekday', stopTimes: [time('a', 800, 1), time('b', 850)] },
   ],
-  calendars: [
-    {
-      serviceId: 'weekday',
-      startDate: '2026-09-21',
-      endDate: '2026-09-27',
-      weekdays: [true, true, true, true, true, false, false],
-    },
-    {
-      serviceId: 'added',
-      startDate: '2026-09-21',
-      endDate: '2026-09-27',
-      weekdays: [false, false, false, false, false, false, false],
-    },
-  ],
-  calendarExceptions: [
-    { serviceId: 'weekday', date: '2026-09-23', type: 2 },
-    { serviceId: 'added', date: '2026-09-23', type: 1 },
+  serviceDates: [
+    { serviceId: 'weekday', dates: ['2026-09-21', '2026-09-22', '2026-09-24', '2026-09-25'] },
+    { serviceId: 'added', dates: ['2026-09-23'] },
   ],
   coverage: { startDate: '2026-09-21', endDate: '2026-09-27' },
 };
@@ -99,7 +85,7 @@ test('returns one trip card with reachable alternatives and respects stop direct
   );
 });
 
-test('applies exceptions and includes after-midnight boarding from yesterday', () => {
+test('uses resolved service dates and includes after-midnight boarding from yesterday', () => {
   assert.deepEqual(
     findDirectJourneys(dataset, '2026-09-23', cadiz, rota).later.map((journey) => journey.trip.id),
     ['night', 'added'],

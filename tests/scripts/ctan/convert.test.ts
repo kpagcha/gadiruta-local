@@ -84,7 +84,7 @@ test('merges reviewed CTAN locations and rejects a selected stop with no relatio
   );
 });
 
-test('keeps calendar exceptions and GTFS times after midnight', () => {
+test('applies calendar exceptions and keeps GTFS times after midnight', () => {
   const fixture = {
     ...topologyFixture,
     stopTimes: topologyFixture.stopTimes.map((time) =>
@@ -98,12 +98,14 @@ test('keeps calendar exceptions and GTFS times after midnight', () => {
     ),
   };
   const dataset = createNetworkDataset(fixture, 'a'.repeat(64));
-  assert.equal(dataset.formatVersion, 6);
+  assert.equal(dataset.formatVersion, 7);
   assert.deepEqual(
     dataset.trips.find((trip) => trip.id === 'outbound-two')?.stopTimes.map((time) => time.departureMinutes),
     [1450, 1500],
   );
-  assert.deepEqual(dataset.calendarExceptions, [{ serviceId: 'weekday', date: '2026-09-25', type: 2 }]);
+  assert.ok(dataset.serviceDates[0]?.dates.includes('2026-09-24'));
+  assert.ok(!dataset.serviceDates[0]?.dates.includes('2026-09-25'));
+  assert.ok(dataset.serviceDates[0]?.dates.includes('2026-09-28'));
   assert.deepEqual(dataset.coverage, { startDate: '2026-09-01', endDate: '2026-12-31' });
 });
 
@@ -124,7 +126,7 @@ test('clips the requested range to source coverage and keeps overnight journeys 
   const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { startDate: '2026-01-01', endDate: '2027-12-31' });
 
   assert.deepEqual(dataset.coverage, { startDate: '2026-01-01', endDate: '2026-12-31' });
-  assert.equal(dataset.calendars[0]?.startDate, '2025-12-31');
+  assert.ok(dataset.serviceDates[0]?.dates.includes('2025-12-31'));
   assert.ok(
     findDirectJourneys(
       dataset,
@@ -179,7 +181,7 @@ test('removes services and topology outside the date range', () => {
   assert.ok(dataset.trips.every((trip) => trip.routeId === '2_13'));
   assert.ok(!dataset.stops.some((stop) => stop.id === 'old-stop'));
   assert.deepEqual(
-    dataset.calendars.map((calendar) => calendar.serviceId),
+    dataset.serviceDates.map((service) => service.serviceId),
     ['weekday'],
   );
 });
@@ -193,8 +195,7 @@ test('keeps a service added by exception outside its weekly calendar dates', () 
   const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { startDate: '2026-02-01', endDate: '2026-02-02' });
 
   assert.deepEqual(dataset.coverage, { startDate: '2026-02-01', endDate: '2026-02-01' });
-  assert.deepEqual(dataset.calendars[0]?.weekdays, [false, false, false, false, false, false, false]);
-  assert.equal(dataset.calendarExceptions[0]?.date, '2026-02-01');
+  assert.deepEqual(dataset.serviceDates[0]?.dates, ['2026-02-01']);
   assert.ok(
     findDirectJourneys(
       dataset,
@@ -209,6 +210,32 @@ test('rejects a range that does not overlap the source service', () => {
   assert.throws(
     () => createNetworkDataset(topologyFixture, 'a'.repeat(64), { startDate: '2027-01-01', endDate: '2027-12-31' }),
     /do not overlap the Cádiz feed/,
+  );
+});
+
+test('rejects a covered date range with no operating service', () => {
+  assert.throws(
+    () => createNetworkDataset(topologyFixture, 'a'.repeat(64), { startDate: '2026-09-26', endDate: '2026-09-27' }),
+    /contain no .* service/,
+  );
+});
+
+test('rejects ambiguous or invalid selected GTFS calendar dates', () => {
+  assert.throws(
+    () =>
+      createNetworkDataset(
+        { ...topologyFixture, calendarDates: [...topologyFixture.calendarDates, topologyFixture.calendarDates[0]] },
+        'a'.repeat(64),
+      ),
+    /duplicated/,
+  );
+  assert.throws(
+    () =>
+      createNetworkDataset(
+        { ...topologyFixture, calendar: [{ ...topologyFixture.calendar[0], start_date: '20260230' }] },
+        'a'.repeat(64),
+      ),
+    /valid YYYYMMDD date/,
   );
 });
 

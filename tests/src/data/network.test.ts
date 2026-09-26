@@ -9,7 +9,7 @@ import test from 'node:test';
 import { loadNetworkDataset } from '../../../src/data/network.ts';
 
 const dataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: {
     url: 'https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip',
     generatedAt: '2026-09-21T16:09:45.619Z',
@@ -60,15 +60,7 @@ const dataset = {
       ],
     },
   ],
-  calendars: [
-    {
-      serviceId: 'daily',
-      startDate: '2026-09-01',
-      endDate: '2026-12-31',
-      weekdays: [true, true, true, true, true, true, true],
-    },
-  ],
-  calendarExceptions: [],
+  serviceDates: [{ serviceId: 'daily', dates: ['2026-09-26'] }],
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 

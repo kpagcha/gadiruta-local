@@ -19,7 +19,7 @@ import { places } from '../../../src/data/places.ts';
 import { resolveSearchUrl, searchQuery } from '../../../src/data/search-url.ts';
 
 const dataset: NetworkDataset = {
-  formatVersion: 6,
+  formatVersion: 7,
   source: { url: 'source', generatedAt: '2026-09-21T16:09:45.619Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [
@@ -139,8 +139,7 @@ const dataset: NetworkDataset = {
       })),
     },
   ],
-  calendars: [],
-  calendarExceptions: [],
+  serviceDates: [],
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 

@@ -18,21 +18,6 @@ export interface DirectJourney {
   departureMinute: number;
 }
 
-/** Check whether a service runs after a date exception overrides its weekly calendar. */
-function runsOnDate(
-  serviceId: string,
-  date: string,
-  calendars: Map<string, NetworkDataset['calendars'][number]>,
-  exceptions: Map<string, number>,
-): boolean {
-  const exception = exceptions.get(`${serviceId}:${date}`);
-  if (exception !== undefined) return exception === 1;
-  const calendar = calendars.get(serviceId);
-  if (calendar === undefined || date < calendar.startDate || date > calendar.endDate) return false;
-  const weekday = (new Date(`${date}T00:00:00Z`).getUTCDay() + 6) % 7;
-  return calendar.weekdays[weekday] ?? false;
-}
-
 /** Locate the reviewed point used to rank stops for a place, if one exists. */
 function locationReferencePoint(
   dataset: NetworkDataset,
@@ -112,15 +97,14 @@ export function findDirectJourneys(
   const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
   const originPoint = locationReferencePoint(dataset, origin, stopsById);
   const destinationPoint = locationReferencePoint(dataset, destination, stopsById);
-  const calendars = new Map(dataset.calendars.map((calendar) => [calendar.serviceId, calendar]));
-  const exceptions = new Map(
-    dataset.calendarExceptions.map((exception) => [`${exception.serviceId}:${exception.date}`, exception.type]),
-  );
   // A GTFS trip dated yesterday can board after midnight today with a 24:xx time.
   for (const serviceDate of [shiftCalendarDate(date, -1), date]) {
+    const activeServices = new Set(
+      dataset.serviceDates.filter((service) => service.dates.includes(serviceDate)).map((service) => service.serviceId),
+    );
     const minuteOffset: 0 | -1440 = serviceDate === date ? 0 : -1440;
     for (const trip of dataset.trips) {
-      if (!runsOnDate(trip.serviceId, serviceDate, calendars, exceptions)) continue;
+      if (!activeServices.has(trip.serviceId)) continue;
       let selected: {
         boardingIndex: number;
         alightingIndex: number;
