@@ -2,7 +2,7 @@
   "formatVersion": 5,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-26T09:04:50.824Z",
+    "generatedAt": "2026-09-26T16:11:42.329Z",
     "archiveSha256": "e07f803aa6936ac11e9155fcf45527020d1e4eabaea58787afb5abd4f7f2c6e2"
   },
   "agencies": [

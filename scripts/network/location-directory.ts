@@ -1,5 +1,5 @@
 /**
- * Defines the reviewed location input read by the offline builder and coordinate experiment.
+ * Defines the reviewed location input read by the offline builder and coordinate research tool.
  * This is curated input, separate from CTAN's raw API responses. Parse it once when reading JSON;
  * the network contract checks the relationships copied into the final snapshot.
  */

@@ -9,7 +9,7 @@ dist/
 coverage/
 *.tsbuildinfo
 
-# Downloaded GTFS input; the reviewed static network snapshot in public/data is tracked instead.
+# Downloaded inputs and probe captures; reviewed inputs in data/reviewed/ and the public snapshot are tracked.
 data/source/
 
 # Local working plans; project documentation remains in tracked docs files.

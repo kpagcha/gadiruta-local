@@ -12,31 +12,38 @@ commands that prepare that file and build the website.
 CTAN, the regional transit data provider, supplies the timetable ZIP.
 
 ```text
-CTAN timetable ZIP + reviewed stop locations
+CTAN timetable ZIP in data/source/ + reviewed locations in data/reviewed/
   → developer-run data script
   → checked-in network JSON in public/data/
   → browser loads and searches that JSON
 ```
 
-The ZIP uses GTFS, a common format for transit schedules. The data script selects services around
-the Bay of Cádiz and turns them into the smaller file the app needs. The browser never contacts CTAN; it
-works from the saved file even when the original ZIP is unavailable.
+The ZIP uses GTFS, a common format for transit schedules. Each folder has one job:
+
+- `data/source/` holds the downloaded ZIP and saved research responses. Git ignores it; the app
+  does not need it to run.
+- `data/reviewed/` holds checked-in decisions about stop locations and place assignments. The
+  builder needs these when it regenerates the network file.
+- `scripts/network/` contains the developer-only command and code that read those inputs, select
+  Bay of Cádiz services, and write the finished network file.
+- `scripts/location-research/` contains optional tools for checking CTAN location information.
+  They run only when requested, separately from the normal network refresh.
+- `public/data/` holds the checked-in result that the browser loads and searches. The browser
+  never contacts CTAN.
 
 ## Where to look
 
-| If you need to...                    | Start in...                                         |
-| ------------------------------------ | --------------------------------------------------- |
-| Change what people see               | `src/pages/` and `src/components/`                  |
-| Change network loading or theme      | `src/hooks/`                                        |
-| Change place or journey search       | `src/data/`                                         |
-| Change the network file's format     | `src/data/network-schema.ts`                        |
-| Change timetable conversion          | `scripts/gtfs/` and `scripts/build-network-data.ts` |
-| Investigate or review stop locations | `scripts/experiments/` and `scripts/reviewed/`      |
+| If you need to...                    | Start in...                                       |
+| ------------------------------------ | ------------------------------------------------- |
+| Change what people see               | `src/pages/` and `src/components/`                |
+| Change network loading or theme      | `src/hooks/`                                      |
+| Change place or journey search       | `src/data/`                                       |
+| Change the network file's format     | `src/data/network-schema.ts`                      |
+| Change timetable preparation         | `scripts/network/`                                |
+| Investigate or review stop locations | `scripts/location-research/` and `data/reviewed/` |
 
 Tests mirror the source folders under `tests/src/` and `tests/scripts/`, with saved examples in
-`tests/fixtures/`. `public/data/bahia-cadiz-network.json` is the reviewed file
-served to the browser. `data/source/` holds downloaded inputs and investigation results on your
-machine; Git ignores it.
+`tests/fixtures/`.
 
 ## Day-to-day commands
 
@@ -59,7 +66,7 @@ under ignored `data/source/`; `just locations-coordinates` writes candidate poin
 location directory. Review those findings before using them to rebuild the network file or
 committing them. CTAN location information can be incomplete or misleading: leave an area unknown
 when it cannot be established, rather than inferring it from a stop name or coordinates. The tests
-under `tests/scripts/experiments/` record the specific provider quirks.
+under `tests/scripts/location-research/` record the specific provider quirks.
 
 ## Working on the app
 

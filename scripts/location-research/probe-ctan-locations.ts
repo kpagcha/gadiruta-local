@@ -10,7 +10,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { createNetworkDataset } from '../gtfs/network-dataset.ts';
+import { createNetworkDataset } from '../network/convert.ts';
 import {
   createCtanLocationProbeReport,
   getCtanLineId,
@@ -27,7 +27,7 @@ import {
   type CtanLocationProbeReport,
   type CtanLocalArea,
 } from './ctan-location-crosswalk.ts';
-import { readGtfsTables } from '../gtfs/archive.ts';
+import { readGtfsTables } from '../network/archive.ts';
 
 /** CTAN's stable API root for the Bahia de Cadiz consortium. */
 const ctanApiRoot = 'http://api.ctan.es/v1/Consorcios/2/';

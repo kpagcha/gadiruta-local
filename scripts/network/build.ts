@@ -9,16 +9,16 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { isCalendarDate } from '../src/data/calendar-date.ts';
+import { isCalendarDate } from '../../src/data/calendar-date.ts';
 import { z } from 'zod';
-import { readGtfsTables } from './gtfs/archive.ts';
-import { createNetworkDataset, sourceUrl, type SnapshotDateRange } from './gtfs/network-dataset.ts';
-import { locationDirectorySchema } from './reviewed/location-directory.ts';
+import { readGtfsTables } from './archive.ts';
+import { createNetworkDataset, sourceUrl, type SnapshotDateRange } from './convert.ts';
+import { locationDirectorySchema } from './location-directory.ts';
 
 const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
-const placeAssignmentsPath = resolve('scripts/reviewed/place-stop-assignments.json');
-const locationDirectoryPath = resolve('scripts/reviewed/ctan-location-directory.json');
+const placeAssignmentsPath = resolve('data/reviewed/place-stop-assignments.json');
+const locationDirectoryPath = resolve('data/reviewed/ctan-location-directory.json');
 
 /** Stop before doing IO when command options contradict the supported build workflow. */
 function fail(message: string): never {

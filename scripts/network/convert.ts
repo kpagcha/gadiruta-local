@@ -6,7 +6,7 @@
 import { isCalendarDate, shiftCalendarDate } from '../../src/data/calendar-date.ts';
 import { parseNetworkDataset, type NetworkDataset, type NetworkStopTime } from '../../src/data/network-schema.ts';
 import { places } from '../../src/data/places.ts';
-import type { LocationDirectory } from '../reviewed/location-directory.ts';
+import type { LocationDirectory } from './location-directory.ts';
 import type { CsvRow, GtfsTables } from './archive.ts';
 
 /** Source used only by the explicit refresh command and snapshot provenance. */

@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ctanMalformedQuoteArchiveFixture } from '../../fixtures/gtfs-topology.ts';
-import { parseCsv, readGtfsTable, readZipTextFiles } from '../../../scripts/gtfs/archive.ts';
+import { parseCsv, readGtfsTable, readZipTextFiles } from '../../../scripts/network/archive.ts';
 
 test('reads CTAN CSV quirks from a ZIP archive without changing GTFS field values', async () => {
   const files = await readZipTextFiles(ctanMalformedQuoteArchiveFixture);

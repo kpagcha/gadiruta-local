@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { findDirectJourneys } from '../../../src/data/direct-journeys.ts';
-import { createNetworkDataset } from '../../../scripts/gtfs/network-dataset.ts';
+import { createNetworkDataset } from '../../../scripts/network/convert.ts';
 import { topologyFixture } from '../../fixtures/gtfs-topology.ts';
 
 test('creates a Bahía-only topology with stable deduplicated patterns', () => {
