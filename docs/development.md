@@ -22,8 +22,8 @@ The ZIP uses GTFS, a common format for transit schedules. Each folder has one jo
 
 - `data/source/ctan/` holds the downloaded ZIP and saved research responses. Git ignores it; the app
   does not need it to run.
-- `data/reviewed/ctan/` holds checked-in decisions about CTAN stop locations and place assignments.
-  The builder needs these when it regenerates the network file.
+- `data/reviewed/ctan/` holds checked-in decisions about CTAN stop locations. The builder needs
+  them when it regenerates the network file.
 - `scripts/ctan/` contains the developer-only command and code that read those inputs, select Bay
   of Cádiz services, and write the finished network file. Its `research/` folder has optional
   location tools that run separately from a normal refresh.

@@ -10,15 +10,14 @@ import {
 import type { NetworkDataset } from '../../../src/data/network-schema.ts';
 import type { LocationOption } from '../../../src/data/location-search.ts';
 
-const stop = (id: string, placeId: string | null) => ({
+const stop = (id: string, municipalityId: string | null = null, localAreaId: string | null = null) => ({
   id,
   name: id,
   latitude: 36.5,
   longitude: -6.2,
   parentStationId: null,
-  placeId,
-  municipalityId: null,
-  localAreaId: null,
+  municipalityId,
+  localAreaId,
 });
 const time = (stopId: string, minute: number, pickupType = 0, dropOffType = 0) => ({
   stopId,
@@ -28,14 +27,16 @@ const time = (stopId: string, minute: number, pickupType = 0, dropOffType = 0) =
   dropOffType,
 });
 const dataset: NetworkDataset = {
-  formatVersion: 5,
+  formatVersion: 6,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bay' }],
   routes: [{ id: 'line', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
-  municipalities: [],
+  municipalities: [
+    { id: 'cadiz', name: 'Cádiz' },
+    { id: 'rota', name: 'Rota' },
+  ],
   localAreas: [],
-  stops: [stop('a', 'cadiz'), stop('a2', 'cadiz'), stop('b', 'rota'), stop('b2', 'rota'), stop('road', null)],
-  patterns: [{ routeId: 'line', directionId: '0', stopIds: ['a', 'a2', 'b', 'b2'] }],
+  stops: [stop('a', 'cadiz'), stop('a2', 'cadiz'), stop('b', 'rota'), stop('b2', 'rota'), stop('road')],
   trips: [
     {
       id: 'morning',
@@ -73,8 +74,8 @@ const dataset: NetworkDataset = {
   ],
   coverage: { startDate: '2026-09-21', endDate: '2026-09-27' },
 };
-const cadiz: LocationOption = { kind: 'place', id: 'cadiz', name: 'Cádiz' };
-const rota: LocationOption = { kind: 'place', id: 'rota', name: 'Rota' };
+const cadiz: LocationOption = { kind: 'place', id: 'cadiz', name: 'Cádiz', municipalityId: 'cadiz' };
+const rota: LocationOption = { kind: 'place', id: 'rota', name: 'Rota', municipalityId: 'rota' };
 const exactA: LocationOption = { kind: 'stop', id: 'a', name: 'A', routeLabels: [] };
 const exactB: LocationOption = { kind: 'stop', id: 'b', name: 'B', routeLabels: [] };
 
@@ -153,7 +154,6 @@ const hierarchyDataset: NetworkDataset = {
     { ...stop('b-out', null), latitude: 0, longitude: 12, municipalityId: 'b', localAreaId: 'b-out' },
     { ...stop('b-town', null), latitude: 0, longitude: 10, municipalityId: 'b', localAreaId: 'b-town' },
   ],
-  patterns: [{ routeId: 'line', directionId: '0', stopIds: ['a-out', 'a-town', 'b-out', 'b-town'] }],
   trips: [
     {
       id: 'conflict',
@@ -237,19 +237,6 @@ test('matches a named local area and applies the cutoff before proximity ranking
   assert.equal(pastCutoff.later.length, 0);
   const lastEarlier = pastCutoff.earlier.at(-1)!;
   assert.equal(lastEarlier.trip.stopTimes[lastEarlier.boardingIndex]?.stopId, 'a-town');
-});
-
-test('uses CTAN membership over an older conflicting place assignment', () => {
-  const conflictingAssignment: NetworkDataset = {
-    ...hierarchyDataset,
-    stops: hierarchyDataset.stops.map((stop) => (stop.id === 'a-out' ? { ...stop, placeId: 'town-b' } : stop)),
-  };
-  const exactTownB: LocationOption = { kind: 'stop', id: 'b-town', name: 'Town B stop', routeLabels: [] };
-  const journeys = findDirectJourneys(conflictingAssignment, '2026-09-22', townB, exactTownB).later;
-  assert.equal(
-    journeys.some((journey) => journey.trip.id === 'conflict'),
-    false,
-  );
 });
 
 test('accepts a unique shortened town name and ignores a municipality with no town-area match', () => {

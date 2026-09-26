@@ -8,7 +8,7 @@ import { resolveSearchUrl } from '../../../src/data/search-url.ts';
 const origin = { kind: 'stop' as const, id: 'a', name: 'A', routeLabels: [] };
 const destination = { kind: 'stop' as const, id: 'b', name: 'B', routeLabels: [] };
 const dataset: NetworkDataset = {
-  formatVersion: 5,
+  formatVersion: 6,
   source: { url: 'source', generatedAt: '2026-09-26T00:00:00Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'agency', name: 'Agency' }],
   routes: [
@@ -22,11 +22,9 @@ const dataset: NetworkDataset = {
     latitude: 36,
     longitude: -6,
     parentStationId: null,
-    placeId: null,
     municipalityId: null,
     localAreaId: null,
   })),
-  patterns: [{ routeId: 'route', directionId: null, stopIds: ['a', 'b'] }],
   trips: [
     {
       id: 'trip',

@@ -19,7 +19,7 @@ import { places } from '../../../src/data/places.ts';
 import { resolveSearchUrl, searchQuery } from '../../../src/data/search-url.ts';
 
 const dataset: NetworkDataset = {
-  formatVersion: 5,
+  formatVersion: 6,
   source: { url: 'source', generatedAt: '2026-09-21T16:09:45.619Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [
@@ -49,7 +49,6 @@ const dataset: NetworkDataset = {
       latitude: 36.5,
       longitude: -6.3,
       parentStationId: null,
-      placeId: 'cadiz',
       municipalityId: '1',
       localAreaId: '1',
     },
@@ -59,7 +58,6 @@ const dataset: NetworkDataset = {
       latitude: 36.4,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'chiclana-de-la-frontera',
       municipalityId: '3',
       localAreaId: '3',
     },
@@ -69,7 +67,6 @@ const dataset: NetworkDataset = {
       latitude: 36.4,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'chiclana-de-la-frontera',
       municipalityId: '3',
       localAreaId: '48',
     },
@@ -79,7 +76,6 @@ const dataset: NetworkDataset = {
       latitude: 36.5,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'puerto-real',
       municipalityId: '4',
       localAreaId: '6',
     },
@@ -89,7 +85,6 @@ const dataset: NetworkDataset = {
       latitude: 36.5,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'puerto-real',
       municipalityId: '4',
       localAreaId: '40',
     },
@@ -99,7 +94,6 @@ const dataset: NetworkDataset = {
       latitude: 36.5,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'puerto-real',
       municipalityId: '4',
       localAreaId: '11',
     },
@@ -109,7 +103,6 @@ const dataset: NetworkDataset = {
       latitude: 36.5,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'puerto-real',
       municipalityId: '4',
       localAreaId: '43',
     },
@@ -119,7 +112,6 @@ const dataset: NetworkDataset = {
       latitude: 36.68,
       longitude: -6.13,
       parentStationId: null,
-      placeId: 'jerez-de-la-frontera',
       municipalityId: '6',
       localAreaId: '14',
     },
@@ -129,21 +121,52 @@ const dataset: NetworkDataset = {
       latitude: 36.75,
       longitude: -6.06,
       parentStationId: null,
-      placeId: 'jerez-de-la-frontera',
       municipalityId: '6',
       localAreaId: '42',
     },
   ],
-  patterns: [
-    { routeId: '2_10', directionId: '0', stopIds: ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6', '2_7', '2_8', '2_9'] },
+  trips: [
+    {
+      id: 'fixture-trip',
+      routeId: '2_10',
+      serviceId: 'daily',
+      stopTimes: ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6', '2_7', '2_8', '2_9'].map((stopId, index) => ({
+        stopId,
+        arrivalMinutes: index * 10,
+        departureMinutes: index * 10,
+        pickupType: 0,
+        dropOffType: 0,
+      })),
+    },
   ],
-  trips: [],
   calendars: [],
   calendarExceptions: [],
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
 const options = createLocationOptions(places, dataset);
+
+test('labels physical stops from the routes of trips that visit them', () => {
+  const secondRoute = { ...dataset.routes[0]!, id: '2_11', shortName: 'M-033' };
+  const secondTrip = {
+    ...dataset.trips[0]!,
+    id: 'second-trip',
+    routeId: secondRoute.id,
+    stopTimes: dataset.trips[0]!.stopTimes.slice(1, 3),
+  };
+  const withTwoRoutes = createLocationOptions(places, {
+    ...dataset,
+    routes: [...dataset.routes, secondRoute],
+    trips: [...dataset.trips, secondTrip],
+  });
+  /** Read the labels shown beside one physical stop option. */
+  const labels = (id: string) => {
+    const option = withTwoRoutes.find((item) => item.id === id);
+    return option?.kind === 'stop' ? option.routeLabels : null;
+  };
+  assert.deepEqual(labels('2_1'), ['M-032']);
+  assert.deepEqual(labels('2_2'), ['M-032', 'M-033']);
+});
 
 test('the place picker uses served locations and existing place identities', () => {
   const hierarchy = createLocationMunicipalities(options, {

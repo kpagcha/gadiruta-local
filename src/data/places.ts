@@ -6,12 +6,9 @@
  * the static network snapshot.
  */
 /** A reviewed, rider-facing place that can be selected independently of a physical stop. */
-export interface Place {
-  id: string;
-  name: string;
-  municipalityId?: string;
-  localAreaId?: string;
-}
+export type Place = { id: string; name: string } & (
+  { municipalityId: string; localAreaId?: never } | { localAreaId: string; municipalityId?: never }
+);
 
 /**
  * Places served by the current Bahía snapshot, using stable app IDs instead of CTAN hierarchy IDs.

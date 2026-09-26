@@ -5,7 +5,6 @@
  */
 import { isCalendarDate, shiftCalendarDate } from '../../src/data/calendar-date.ts';
 import { parseNetworkDataset, type NetworkDataset, type NetworkStopTime } from '../../src/data/network-schema.ts';
-import { places } from '../../src/data/places.ts';
 import type { LocationDirectory } from './location-directory.ts';
 import type { CsvRow, GtfsTables } from './archive.ts';
 
@@ -184,12 +183,6 @@ function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRan
 
   // A range can remove entire services, so remove their unused route and stop records too.
   const routeIds = new Set(trips.map((trip) => trip.routeId));
-  const patternKeys = new Set(
-    trips.map((trip) => [trip.routeId, ...trip.stopTimes.map((time) => time.stopId)].join('\u001f')),
-  );
-  const patterns = dataset.patterns.filter((pattern) =>
-    patternKeys.has([pattern.routeId, ...pattern.stopIds].join('\u001f')),
-  );
   const stopIds = new Set(trips.flatMap((trip) => trip.stopTimes.map((time) => time.stopId)));
   for (const stop of dataset.stops) {
     if (stopIds.has(stop.id) && stop.parentStationId !== null) stopIds.add(stop.parentStationId);
@@ -199,7 +192,6 @@ function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRan
     ...dataset,
     routes: dataset.routes.filter((route) => routeIds.has(route.id)),
     stops: dataset.stops.filter((stop) => stopIds.has(stop.id)),
-    patterns,
     trips,
     calendars,
     calendarExceptions,
@@ -217,7 +209,6 @@ function limitNetworkDataset(dataset: NetworkDataset, requested: SnapshotDateRan
 export function createNetworkDataset(
   tables: GtfsTables,
   archiveSha256: string,
-  placeAssignments: Record<string, string> = {},
   dateRange?: SnapshotDateRange,
   locationDirectory?: LocationDirectory,
 ): NetworkDataset {
@@ -261,7 +252,6 @@ export function createNetworkDataset(
     .map((row) => ({
       id: requiredValue(row, 'trip_id', 'trips'),
       routeId: requiredValue(row, 'route_id', 'trips'),
-      directionId: optionalValue(row, 'direction_id'),
       serviceId: requiredValue(row, 'service_id', 'trips'),
     }));
   const tripById = uniqueById(trips, 'trips');
@@ -289,8 +279,6 @@ export function createNetworkDataset(
     stopTimesByTrip.set(tripId, stopTimes);
   }
 
-  // Different trips with the same route, direction, and stops become one reusable route pattern.
-  const patternsByKey = new Map<string, NetworkDataset['patterns'][number]>();
   const scheduledTrips: NetworkDataset['trips'] = [];
   const referencedStopIds = new Set<string>();
   for (const trip of trips) {
@@ -307,7 +295,6 @@ export function createNetworkDataset(
       }
     }
 
-    const stopIds = stopTimes.map((stopTime) => stopTime.stopId);
     scheduledTrips.push({
       id: trip.id,
       routeId: trip.routeId,
@@ -320,13 +307,7 @@ export function createNetworkDataset(
         dropOffType,
       })),
     });
-    stopIds.forEach((stopId) => referencedStopIds.add(stopId));
-    const key = [trip.routeId, trip.directionId ?? '', ...stopIds].join('\u001f');
-    patternsByKey.set(key, {
-      routeId: trip.routeId,
-      directionId: trip.directionId,
-      stopIds,
-    });
+    for (const { stopId } of stopTimes) referencedStopIds.add(stopId);
   }
 
   // Index all source stops before resolving the IDs referenced by selected trips.
@@ -371,18 +352,11 @@ export function createNetworkDataset(
         latitude: requiredCoordinate(stop, 'stop_lat'),
         longitude: requiredCoordinate(stop, 'stop_lon'),
         parentStationId: optionalValue(stop, 'parent_station'),
-        placeId: placeAssignments[stopId] ?? null,
         municipalityId: location?.municipalityId ?? null,
         localAreaId: location?.localAreaId ?? null,
       };
     })
     .sort((first, second) => compareText(first.id, second.id));
-
-  const patterns = [...patternsByKey.values()].sort((first, second) => {
-    const firstKey = [first.routeId, first.directionId ?? '', ...first.stopIds].join('\u001f');
-    const secondKey = [second.routeId, second.directionId ?? '', ...second.stopIds].join('\u001f');
-    return compareText(firstKey, secondKey);
-  });
 
   // Calendars and exceptions are selected through trip service IDs, never by geographic guesswork.
   const usedServiceIds = new Set(trips.map((trip) => trip.serviceId));
@@ -412,11 +386,6 @@ export function createNetworkDataset(
     })
     .sort((a, b) => compareText(`${a.serviceId}:${a.date}`, `${b.serviceId}:${b.date}`));
   if (calendars.length === 0) fail('selected trips have no service calendars.');
-  const knownPlaceIds = new Set(places.map((place) => place.id));
-  for (const [stopId, placeId] of Object.entries(placeAssignments)) {
-    if (!selectedStopIds.has(stopId) || !knownPlaceIds.has(placeId))
-      fail(`place assignment ${stopId} -> ${placeId} is invalid.`);
-  }
   const activeDates = [
     ...calendars.flatMap((calendar) => [calendar.startDate, calendar.endDate]),
     ...calendarExceptions.filter((exception) => exception.type === 1).map((exception) => exception.date),
@@ -428,7 +397,7 @@ export function createNetworkDataset(
 
   // Validate the generated shape through the same boundary the browser uses before returning it.
   const dataset = parseNetworkDataset({
-    formatVersion: 5,
+    formatVersion: 6,
     source: {
       url: sourceUrl,
       generatedAt: new Date().toISOString(),
@@ -457,7 +426,6 @@ export function createNetworkDataset(
         };
       }) ?? [],
     stops,
-    patterns,
     trips: scheduledTrips.sort((a, b) => compareText(a.id, b.id)),
     calendars,
     calendarExceptions,

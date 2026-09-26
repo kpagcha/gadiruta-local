@@ -4,7 +4,7 @@ import test from 'node:test';
 import { parseNetworkDataset } from '../../../src/data/network-schema.ts';
 
 const dataset = {
-  formatVersion: 5,
+  formatVersion: 6,
   source: { url: 'source', generatedAt: '2026-09-21T15:15:44.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [{ id: 'CMTBC', name: 'Bahía de Cádiz' }],
   routes: [{ id: 'route', agencyId: 'CMTBC', shortName: 'M-1', longName: null, type: 3, color: null, textColor: null }],
@@ -17,7 +17,6 @@ const dataset = {
       latitude: 36.5,
       longitude: -6.2,
       parentStationId: null,
-      placeId: 'cadiz',
       municipalityId: null,
       localAreaId: null,
     },
@@ -27,12 +26,10 @@ const dataset = {
       latitude: 36.6,
       longitude: -6.3,
       parentStationId: null,
-      placeId: null,
       municipalityId: null,
       localAreaId: null,
     },
   ],
-  patterns: [{ routeId: 'route', directionId: '0', stopIds: ['a', 'b'] }],
   trips: [
     {
       id: 'trip',
@@ -56,9 +53,9 @@ const dataset = {
   coverage: { startDate: '2026-09-01', endDate: '2026-12-31' },
 };
 
-test('accepts the version-five timetable contract', () => {
+test('accepts the version-six timetable contract', () => {
   assert.deepEqual(parseNetworkDataset(dataset), dataset);
-  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 3 }), /formatVersion must be 5/);
+  assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 5 }), /formatVersion must be 6/);
 });
 
 test('rejects duplicate IDs, invalid primitives, missing nullable fields', () => {
@@ -68,10 +65,6 @@ test('rejects duplicate IDs, invalid primitives, missing nullable fields', () =>
     /latitude/,
   );
   assert.throws(() => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], latitude: NaN }] }), /latitude/);
-  assert.throws(
-    () => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], placeId: undefined }] }),
-    /placeId/,
-  );
   assert.throws(() => parseNetworkDataset({ ...dataset, routes: [{ ...dataset.routes[0], id: ' ' }] }), /non-empty/);
   assert.throws(
     () => parseNetworkDataset({ ...dataset, source: { ...dataset.source, archiveSha256: 'bad' } }),
@@ -79,18 +72,19 @@ test('rejects duplicate IDs, invalid primitives, missing nullable fields', () =>
   );
 });
 
-test('rejects broken stop, route, service, and place references', () => {
+test('rejects broken stop, route, and service references', () => {
+  const trip = dataset.trips[0]!;
   assert.throws(
-    () => parseNetworkDataset({ ...dataset, trips: [{ ...dataset.trips[0], serviceId: 'missing' }] }),
+    () => parseNetworkDataset({ ...dataset, trips: [{ ...trip, serviceId: 'missing' }] }),
     /unknown route, service, or stop/,
   );
   assert.throws(
-    () => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], placeId: 'unknown' }, dataset.stops[1]] }),
-    /unknown place/,
-  );
-  assert.throws(
-    () => parseNetworkDataset({ ...dataset, patterns: [{ routeId: 'missing', directionId: null, stopIds: ['a'] }] }),
-    /unknown route/,
+    () =>
+      parseNetworkDataset({
+        ...dataset,
+        trips: [{ ...trip, stopTimes: [{ ...trip.stopTimes[0], stopId: 'missing' }, trip.stopTimes[1]] }],
+      }),
+    /unknown route, service, or stop/,
   );
 });
 

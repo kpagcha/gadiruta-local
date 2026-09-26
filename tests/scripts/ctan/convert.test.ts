@@ -8,7 +8,7 @@ import { findDirectJourneys } from '../../../src/data/direct-journeys.ts';
 import { createNetworkDataset } from '../../../scripts/ctan/convert.ts';
 import { topologyFixture } from '../../fixtures/gtfs-topology.ts';
 
-test('creates a Bahía-only topology with stable deduplicated patterns', () => {
+test('selects the Bahía routes and their scheduled stops', () => {
   const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64));
 
   assert.deepEqual(dataset.agencies, [
@@ -20,12 +20,11 @@ test('creates a Bahía-only topology with stable deduplicated patterns', () => {
     dataset.stops.map((stop) => stop.id),
     ['cadiz', 'puerto', 'station'],
   );
-  assert.equal(dataset.patterns.length, 2);
-  assert.deepEqual(dataset.patterns[0], {
-    routeId: '2_13',
-    directionId: '0',
-    stopIds: ['cadiz', 'puerto'],
-  });
+  assert.equal(dataset.trips.length, 3);
+  assert.deepEqual(
+    dataset.trips.find((trip) => trip.id === 'outbound-one')?.stopTimes.map((time) => time.stopId),
+    ['cadiz', 'puerto'],
+  );
 });
 
 test('merges reviewed CTAN locations and rejects a selected stop with no relationship', () => {
@@ -51,14 +50,14 @@ test('merges reviewed CTAN locations and rejects a selected stop with no relatio
       station: { municipalityId: 'municipality', localAreaId: null },
     },
   };
-  const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, locations);
+  const dataset = createNetworkDataset(topologyFixture, 'a'.repeat(64), undefined, locations);
   assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.localAreaId, 'localArea');
   assert.equal(dataset.stops.find((stop) => stop.id === 'station')?.localAreaId, null);
   assert.deepEqual(dataset.localAreas[0]?.referencePoint, { latitude: 36.5, longitude: -6.2 });
   assert.equal(dataset.localAreas[1]?.referencePoint, null);
   assert.throws(
     () =>
-      createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, {
+      createNetworkDataset(topologyFixture, 'a'.repeat(64), undefined, {
         ...locations,
         localAreas: [
           {
@@ -77,7 +76,7 @@ test('merges reviewed CTAN locations and rejects a selected stop with no relatio
   );
   assert.throws(
     () =>
-      createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, undefined, {
+      createNetworkDataset(topologyFixture, 'a'.repeat(64), undefined, {
         ...locations,
         stopLocations: { cadiz: locations.stopLocations.cadiz },
       }),
@@ -85,7 +84,7 @@ test('merges reviewed CTAN locations and rejects a selected stop with no relatio
   );
 });
 
-test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnight', () => {
+test('keeps calendar exceptions and GTFS times after midnight', () => {
   const fixture = {
     ...topologyFixture,
     stopTimes: topologyFixture.stopTimes.map((time) =>
@@ -98,10 +97,8 @@ test('keeps reviewed place IDs, calendar exceptions, and GTFS times after midnig
         : time,
     ),
   };
-  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { cadiz: 'cadiz' });
-  assert.equal(dataset.formatVersion, 5);
-  assert.equal(dataset.stops.find((stop) => stop.id === 'cadiz')?.placeId, 'cadiz');
-  assert.equal(dataset.stops.find((stop) => stop.id === 'puerto')?.placeId, null);
+  const dataset = createNetworkDataset(fixture, 'a'.repeat(64));
+  assert.equal(dataset.formatVersion, 6);
   assert.deepEqual(
     dataset.trips.find((trip) => trip.id === 'outbound-two')?.stopTimes.map((time) => time.departureMinutes),
     [1450, 1500],
@@ -124,7 +121,7 @@ test('clips the requested range to source coverage and keeps overnight journeys 
         : time,
     ),
   };
-  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), {}, { startDate: '2026-01-01', endDate: '2027-12-31' });
+  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { startDate: '2026-01-01', endDate: '2027-12-31' });
 
   assert.deepEqual(dataset.coverage, { startDate: '2026-01-01', endDate: '2026-12-31' });
   assert.equal(dataset.calendars[0]?.startDate, '2025-12-31');
@@ -172,14 +169,14 @@ test('removes services and topology outside the date range', () => {
       { ...topologyFixture.calendar[0], service_id: 'old', start_date: '20250101', end_date: '20251231' },
     ],
   };
-  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), {}, { startDate: '2026-01-01', endDate: '2026-12-31' });
+  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { startDate: '2026-01-01', endDate: '2026-12-31' });
 
   assert.deepEqual(
     dataset.routes.map((route) => route.id),
     ['2_13'],
   );
   assert.equal(dataset.trips.length, 3);
-  assert.equal(dataset.patterns.length, 2);
+  assert.ok(dataset.trips.every((trip) => trip.routeId === '2_13'));
   assert.ok(!dataset.stops.some((stop) => stop.id === 'old-stop'));
   assert.deepEqual(
     dataset.calendars.map((calendar) => calendar.serviceId),
@@ -193,7 +190,7 @@ test('keeps a service added by exception outside its weekly calendar dates', () 
     calendar: [{ ...topologyFixture.calendar[0], start_date: '20250101', end_date: '20251231' }],
     calendarDates: [{ service_id: 'weekday', date: '20260201', exception_type: '1' }],
   };
-  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), {}, { startDate: '2026-02-01', endDate: '2026-02-02' });
+  const dataset = createNetworkDataset(fixture, 'a'.repeat(64), { startDate: '2026-02-01', endDate: '2026-02-02' });
 
   assert.deepEqual(dataset.coverage, { startDate: '2026-02-01', endDate: '2026-02-01' });
   assert.deepEqual(dataset.calendars[0]?.weekdays, [false, false, false, false, false, false, false]);
@@ -210,7 +207,7 @@ test('keeps a service added by exception outside its weekly calendar dates', () 
 
 test('rejects a range that does not overlap the source service', () => {
   assert.throws(
-    () => createNetworkDataset(topologyFixture, 'a'.repeat(64), {}, { startDate: '2027-01-01', endDate: '2027-12-31' }),
+    () => createNetworkDataset(topologyFixture, 'a'.repeat(64), { startDate: '2027-01-01', endDate: '2027-12-31' }),
     /do not overlap the Cádiz feed/,
   );
 });
@@ -281,5 +278,5 @@ test('does not validate fields outside the selected GTFS slice', () => {
 
   const dataset = createNetworkDataset(fixtureWithUnselectedMalformedRows, 'a'.repeat(64));
   assert.equal(dataset.routes.length, 1);
-  assert.equal(dataset.patterns.length, 2);
+  assert.equal(dataset.trips.length, 3);
 });

@@ -104,16 +104,16 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
       .map((stop) => stop.municipalityId),
   );
 
-  // A pattern is a route traversal; several patterns may use the same stop and route.
-  for (const pattern of dataset.patterns) {
-    for (const stopId of pattern.stopIds) {
+  // Several trips may visit the same stop on one route; keep each route label once.
+  for (const trip of dataset.trips) {
+    for (const { stopId } of trip.stopTimes) {
       const routeIds = routeIdsByStopId.get(stopId) ?? new Set<string>();
-      routeIds.add(pattern.routeId);
+      routeIds.add(trip.routeId);
       routeIdsByStopId.set(stopId, routeIds);
     }
   }
 
-  const placeOptions: LocationOption[] = places.flatMap((place) => {
+  const placeOptions = places.flatMap<LocationOption>((place) => {
     if (place.localAreaId !== undefined) {
       const area = areaById.get(place.localAreaId);
       if (area === undefined || !servedAreaIds.has(area.id)) return [];
@@ -134,18 +134,15 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
         },
       ];
     }
-    if (place.municipalityId !== undefined) {
-      return [
-        {
-          kind: 'place',
-          ...place,
-          searchAliases: aliasesByPlaceId.get(place.id),
-          townAreaId: townByMunicipality.get(place.municipalityId) ?? null,
-          isBroad: hasOtherStops.has(place.municipalityId),
-        },
-      ];
-    }
-    return [{ kind: 'place', ...place, searchAliases: aliasesByPlaceId.get(place.id) }];
+    return [
+      {
+        kind: 'place',
+        ...place,
+        searchAliases: aliasesByPlaceId.get(place.id),
+        townAreaId: townByMunicipality.get(place.municipalityId) ?? null,
+        isBroad: hasOtherStops.has(place.municipalityId),
+      },
+    ];
   });
   const stopOptions: LocationOption[] = dataset.stops.map((stop) => ({
     kind: 'stop',

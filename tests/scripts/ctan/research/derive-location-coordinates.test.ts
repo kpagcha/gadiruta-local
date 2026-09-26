@@ -19,14 +19,13 @@ function stop(
     latitude,
     longitude,
     parentStationId: null,
-    placeId: null,
     municipalityId,
     localAreaId,
   };
 }
 
 const dataset: NetworkDataset = {
-  formatVersion: 5,
+  formatVersion: 6,
   source: { url: 'source', generatedAt: '2026-09-25T00:00:00.000Z', archiveSha256: 'a'.repeat(64) },
   agencies: [],
   routes: [],
@@ -47,7 +46,6 @@ const dataset: NetworkDataset = {
     stop('b-1', 'b', 'b-town', 1, 1),
     stop('b-unresolved', 'b', null, 3, 3),
   ],
-  patterns: [],
   trips: [],
   calendars: [],
   calendarExceptions: [],

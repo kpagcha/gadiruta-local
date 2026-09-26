@@ -10,14 +10,12 @@ import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { isCalendarDate, madridToday } from '../../src/data/calendar-date.ts';
-import { z } from 'zod';
 import { readGtfsTables } from './archive.ts';
 import { createNetworkDataset, sourceUrl, type SnapshotDateRange } from './convert.ts';
 import { locationDirectorySchema } from './location-directory.ts';
 
 const defaultInputPath = resolve('data/source/ctan/gtfs.zip');
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
-const placeAssignmentsPath = resolve('data/reviewed/ctan/place-stop-assignments.json');
 const locationDirectoryPath = resolve('data/reviewed/ctan/location-directory.json');
 
 /** Stop before doing IO when command options contradict the supported build workflow. */
@@ -112,17 +110,14 @@ export async function buildNetworkData(arguments_: readonly string[] = process.a
 
   // Record input provenance, then build and validate the reduced app-facing dataset.
   const archiveSha256 = createHash('sha256').update(archive).digest('hex');
-  const placeAssignments = z
-    .record(z.string().min(1), z.string().min(1))
-    .parse(JSON.parse(await readFile(placeAssignmentsPath, 'utf8')));
   const locationDirectory = locationDirectorySchema.parse(JSON.parse(await readFile(locationDirectoryPath, 'utf8')));
-  const dataset = createNetworkDataset(tables, archiveSha256, placeAssignments, dateRange, locationDirectory);
+  const dataset = createNetworkDataset(tables, archiveSha256, dateRange, locationDirectory);
 
   // Only this reviewed JSON file becomes browser-visible; the downloaded ZIP remains ignored source data.
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
   console.log(
-    `Built ${outputPath} from ${inputPath} (${archive.byteLength} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.patterns.length} patterns; coverage ${dataset.coverage.startDate} to ${dataset.coverage.endDate}.`,
+    `Built ${outputPath} from ${inputPath} (${archive.byteLength} bytes): ${dataset.routes.length} routes, ${dataset.stops.length} stops, ${dataset.trips.length} trips; coverage ${dataset.coverage.startDate} to ${dataset.coverage.endDate}.`,
   );
   if (dateRange !== undefined && dataset.coverage.endDate < dateRange.endDate) {
     console.warn(

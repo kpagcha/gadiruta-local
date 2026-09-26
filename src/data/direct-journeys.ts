@@ -64,8 +64,7 @@ function distanceKm(
 function matchesLocation(location: LocationOption, stop: NetworkStop): boolean {
   if (location.kind === 'stop') return location.id === stop.id;
   if (location.municipalityId !== undefined) return location.municipalityId === stop.municipalityId;
-  if (location.localAreaId !== undefined) return stop.localAreaId === location.localAreaId;
-  return stop.placeId === location.id;
+  return location.localAreaId !== undefined && stop.localAreaId === location.localAreaId;
 }
 
 /** A GTFS pickup or drop-off value of one forbids the corresponding action. */

@@ -1,8 +1,8 @@
 {
-  "formatVersion": 5,
+  "formatVersion": 6,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-26T16:11:42.329Z",
+    "generatedAt": "2026-09-26T18:16:30.995Z",
     "archiveSha256": "e07f803aa6936ac11e9155fcf45527020d1e4eabaea58787afb5abd4f7f2c6e2"
   },
   "agencies": [
@@ -1026,7 +1026,6 @@
       "id": "2_1",
       "name": "Avda. Del Puerto-Edif. Trocadero",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1036,7 +1035,6 @@
       "id": "2_10",
       "name": "Audiencia Provincial V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1046,7 +1044,6 @@
       "id": "2_100",
       "name": "Barrio Jarana",
       "parentStationId": null,
-      "placeId": "barrio-jarana",
       "municipalityId": "4",
       "localAreaId": "11"
     },
@@ -1056,7 +1053,6 @@
       "id": "2_101",
       "name": "Barrio Jarana V",
       "parentStationId": null,
-      "placeId": "barrio-jarana",
       "municipalityId": "4",
       "localAreaId": "11"
     },
@@ -1066,7 +1062,6 @@
       "id": "2_102",
       "name": "Venta Santa Ana",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "11"
     },
@@ -1076,7 +1071,6 @@
       "id": "2_103",
       "name": "Venta Paquete",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1086,7 +1080,6 @@
       "id": "2_104",
       "name": "Venta Paquete V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1096,7 +1089,6 @@
       "id": "2_105",
       "name": "Club Hípico",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1106,7 +1098,6 @@
       "id": "2_106",
       "name": "Club Hípico V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1116,7 +1107,6 @@
       "id": "2_107",
       "name": "Finca Villanueva Y Rosal",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1126,7 +1116,6 @@
       "id": "2_108",
       "name": "Finca Villanueva Y Rosal V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1136,7 +1125,6 @@
       "id": "2_109",
       "name": "Cuartel",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1146,7 +1134,6 @@
       "id": "2_11",
       "name": "Comisaría",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1156,7 +1143,6 @@
       "id": "2_110",
       "name": "Cuartel V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1166,7 +1152,6 @@
       "id": "2_111",
       "name": "Campo De Fútbol",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1176,7 +1161,6 @@
       "id": "2_112",
       "name": "Campo De Fútbol V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1186,7 +1170,6 @@
       "id": "2_113",
       "name": "Matadero",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1196,7 +1179,6 @@
       "id": "2_114",
       "name": "Matadero V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1206,7 +1188,6 @@
       "id": "2_115",
       "name": "Mirlo",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1216,7 +1197,6 @@
       "id": "2_116",
       "name": "Mirlo V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1226,7 +1206,6 @@
       "id": "2_117",
       "name": "Venta El Chirimono",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1236,7 +1215,6 @@
       "id": "2_118",
       "name": "Venta El Chirimono V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1246,7 +1224,6 @@
       "id": "2_119",
       "name": "El Marquesado-Venta Nicolás",
       "parentStationId": null,
-      "placeId": "el-marquesado",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1256,7 +1233,6 @@
       "id": "2_12",
       "name": "Comisaría V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1266,7 +1242,6 @@
       "id": "2_120",
       "name": "El Marquesado-Venta Nicolás V",
       "parentStationId": null,
-      "placeId": "el-marquesado",
       "municipalityId": "4",
       "localAreaId": "40"
     },
@@ -1276,7 +1251,6 @@
       "id": "2_121",
       "name": "Los Toruños",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1286,7 +1260,6 @@
       "id": "2_122",
       "name": "Los Toruños V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1296,7 +1269,6 @@
       "id": "2_123",
       "name": "Valdelagrana-Caballo Blanco",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1306,7 +1278,6 @@
       "id": "2_124",
       "name": "Valdelagrana-Caballo Blanco V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1316,7 +1287,6 @@
       "id": "2_125",
       "name": "Estación Fc El Pto. De Sta. María",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1326,7 +1296,6 @@
       "id": "2_126",
       "name": "Estación Fc El Pto. De Sta. María V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1336,7 +1305,6 @@
       "id": "2_127",
       "name": "Parque Vino Fino",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1346,7 +1314,6 @@
       "id": "2_128",
       "name": "Parque Vino Fino V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1356,7 +1323,6 @@
       "id": "2_129",
       "name": "Avda. Sanlúcar",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1366,7 +1332,6 @@
       "id": "2_130",
       "name": "Avda. Sanlúcar V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1376,7 +1341,6 @@
       "id": "2_131",
       "name": "Cl. Valdés-Hospital",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1386,7 +1350,6 @@
       "id": "2_132",
       "name": "Cl. Valdés-Hospital V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1396,7 +1359,6 @@
       "id": "2_133",
       "name": "Plaza De Toros",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1406,7 +1368,6 @@
       "id": "2_14",
       "name": "Estación De Autobuses Cádiz",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1416,7 +1377,6 @@
       "id": "2_141",
       "name": "Fuenterrabía",
       "parentStationId": null,
-      "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1426,7 +1386,6 @@
       "id": "2_142",
       "name": "Fuenterrabía V",
       "parentStationId": null,
-      "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1436,7 +1395,6 @@
       "id": "2_143",
       "name": "Vistahermosa",
       "parentStationId": null,
-      "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1446,7 +1404,6 @@
       "id": "2_144",
       "name": "Vistahermosa V",
       "parentStationId": null,
-      "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1456,7 +1413,6 @@
       "id": "2_145",
       "name": "Las Tórtolas",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1466,7 +1422,6 @@
       "id": "2_146",
       "name": "Las Tórtolas V",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "9"
     },
@@ -1476,7 +1431,6 @@
       "id": "2_15",
       "name": "Plaza Asdrúbal V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1486,7 +1440,6 @@
       "id": "2_155",
       "name": "A-2078 Venta El Cepo",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
@@ -1496,7 +1449,6 @@
       "id": "2_156",
       "name": "A-2078 Venta El Cepo V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
@@ -1506,7 +1458,6 @@
       "id": "2_159",
       "name": "Cuatro Caminos",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1516,7 +1467,6 @@
       "id": "2_16",
       "name": "Hospital Puerta Del Mar V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1526,7 +1476,6 @@
       "id": "2_160",
       "name": "Cuatro Caminos V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1536,7 +1485,6 @@
       "id": "2_161",
       "name": "Estación De Autobuses Jerez",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1546,7 +1494,6 @@
       "id": "2_162",
       "name": "Avda. Ntra. Sra. De La Paz",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1556,7 +1503,6 @@
       "id": "2_163",
       "name": "Avda.Cartuja-Estación Fc",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1566,7 +1512,6 @@
       "id": "2_164",
       "name": "Parque Juan Carlos Durán (La Unión)",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1576,7 +1521,6 @@
       "id": "2_165",
       "name": "Parque Juan Carlos Durán (La Unión) V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1586,7 +1530,6 @@
       "id": "2_166",
       "name": "Torres Blancas",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1596,7 +1539,6 @@
       "id": "2_167",
       "name": "La Granja-Hogar Del Pensionista",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1606,7 +1548,6 @@
       "id": "2_168",
       "name": "La Granja-Hogar Del Pensionista V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1616,7 +1557,6 @@
       "id": "2_169",
       "name": "Avda M Álvarez Beigbeder",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1626,7 +1566,6 @@
       "id": "2_17",
       "name": "Ingeniero La Cierva V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1636,7 +1575,6 @@
       "id": "2_170",
       "name": "Avda M Álvarez Beigbeder V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1646,7 +1584,6 @@
       "id": "2_171",
       "name": "Campus De Jerez",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1656,7 +1593,6 @@
       "id": "2_172",
       "name": "Campus De Jerez V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1666,7 +1602,6 @@
       "id": "2_173",
       "name": "Aeropuerto",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "6",
       "localAreaId": "42"
     },
@@ -1676,7 +1611,6 @@
       "id": "2_174",
       "name": "Avda.Cartuja-Estación Fc V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1686,7 +1620,6 @@
       "id": "2_175",
       "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1696,7 +1629,6 @@
       "id": "2_176",
       "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1706,7 +1638,6 @@
       "id": "2_177",
       "name": "Baldío Gallardo",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1716,7 +1647,6 @@
       "id": "2_178",
       "name": "El Mojo",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1726,7 +1656,6 @@
       "id": "2_179",
       "name": "Plaza Del Caballo",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1736,7 +1665,6 @@
       "id": "2_18",
       "name": "Telegrafía Sin Hilos V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1746,7 +1674,6 @@
       "id": "2_180",
       "name": "Plaza Del Caballo V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1756,7 +1683,6 @@
       "id": "2_181",
       "name": "Estación De Autobuses Rota",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -1766,7 +1692,6 @@
       "id": "2_182",
       "name": "Cementerio",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -1776,7 +1701,6 @@
       "id": "2_183",
       "name": "Cementerio V",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -1786,7 +1710,6 @@
       "id": "2_186",
       "name": "Avda. Juan Carlos I-H. Colón",
       "parentStationId": null,
-      "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
@@ -1796,7 +1719,6 @@
       "id": "2_187",
       "name": "Avda. Juan Carlos I-H. Playa",
       "parentStationId": null,
-      "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
@@ -1806,7 +1728,6 @@
       "id": "2_188",
       "name": "Estación De Autobuses Medina",
       "parentStationId": null,
-      "placeId": "medina-sidonia",
       "municipalityId": "8",
       "localAreaId": "18"
     },
@@ -1816,7 +1737,6 @@
       "id": "2_189",
       "name": "Jédula",
       "parentStationId": null,
-      "placeId": "jedula",
       "municipalityId": "10",
       "localAreaId": "19"
     },
@@ -1826,7 +1746,6 @@
       "id": "2_19",
       "name": "Complejo Deportivo V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1836,7 +1755,6 @@
       "id": "2_190",
       "name": "Jédula V",
       "parentStationId": null,
-      "placeId": "jedula",
       "municipalityId": "10",
       "localAreaId": "19"
     },
@@ -1846,7 +1764,6 @@
       "id": "2_191",
       "name": "Estación De Autobuses Arcos",
       "parentStationId": null,
-      "placeId": "arcos-de-la-frontera",
       "municipalityId": "10",
       "localAreaId": "20"
     },
@@ -1856,7 +1773,6 @@
       "id": "2_193",
       "name": "Terminal Marítima Cádiz",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -1866,7 +1782,6 @@
       "id": "2_194",
       "name": "Terminal Marítima El Puerto De Santa María",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -1876,7 +1791,6 @@
       "id": "2_195",
       "name": "Terminal Marítima Rota",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -1886,7 +1800,6 @@
       "id": "2_196",
       "name": "Centro P. Puerto Iii",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
@@ -1896,7 +1809,6 @@
       "id": "2_197",
       "name": "Centro P. Puerto I Y Ii",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
@@ -1906,7 +1818,6 @@
       "id": "2_198",
       "name": "Manuel De Falla",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1916,7 +1827,6 @@
       "id": "2_199",
       "name": "Manuel De Falla V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1926,7 +1836,6 @@
       "id": "2_20",
       "name": "La Ardila",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1936,7 +1845,6 @@
       "id": "2_200",
       "name": "Ronda Del Estero",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1946,7 +1854,6 @@
       "id": "2_201",
       "name": "Ronda Del Estero V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1956,7 +1863,6 @@
       "id": "2_202",
       "name": "Hospital De Jerez-Carretera A-2000",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1966,7 +1872,6 @@
       "id": "2_203",
       "name": "Hospital De Jerez-Carretera A-2000 V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1976,7 +1881,6 @@
       "id": "2_206",
       "name": "Torres Blancas V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -1986,7 +1890,6 @@
       "id": "2_207",
       "name": "Parque Almirante Laulhé V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -1996,7 +1899,6 @@
       "id": "2_222",
       "name": "Estación De Autobuses Sanlúcar",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2006,7 +1908,6 @@
       "id": "2_223",
       "name": "Avda. V Centenario V",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2016,7 +1917,6 @@
       "id": "2_224",
       "name": "Avda. V Centenario",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2026,7 +1926,6 @@
       "id": "2_225",
       "name": "Hospital Virgen Del Camino V",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2036,7 +1935,6 @@
       "id": "2_226",
       "name": "Hospital Virgen Del Camino",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2046,7 +1944,6 @@
       "id": "2_227",
       "name": "Avda. Pto. Sta. Mª (El Palmar)",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2056,7 +1953,6 @@
       "id": "2_228",
       "name": "Avda. Pto. Sta. Mª (El Palmar) V",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2066,7 +1962,6 @@
       "id": "2_229",
       "name": "Avda. Constitución",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2076,7 +1971,6 @@
       "id": "2_23",
       "name": "Avda. Al-Andalus",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2086,7 +1980,6 @@
       "id": "2_230",
       "name": "Avda. De Trebujena",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2096,7 +1989,6 @@
       "id": "2_231",
       "name": "Avda. Del Puerto V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2106,7 +1998,6 @@
       "id": "2_232",
       "name": "Plaza De España",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2116,7 +2007,6 @@
       "id": "2_233",
       "name": "Apeadero De Autobuses De Costa Ballena",
       "parentStationId": null,
-      "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
@@ -2126,7 +2016,6 @@
       "id": "2_234",
       "name": "Plaza De Las Marinas",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2136,7 +2025,6 @@
       "id": "2_235",
       "name": "Plaza De Las Marinas V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2146,7 +2034,6 @@
       "id": "2_236",
       "name": "Reyes Católicos",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2156,7 +2043,6 @@
       "id": "2_237",
       "name": "Reyes Católicos V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2166,7 +2052,6 @@
       "id": "2_238",
       "name": "Plaza De España V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2176,7 +2061,6 @@
       "id": "2_24",
       "name": "Avda. Al-Andalus V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2186,7 +2070,6 @@
       "id": "2_241",
       "name": "Camino Del Arroyo",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2196,7 +2079,6 @@
       "id": "2_243",
       "name": "Camino Del Arroyo V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2206,7 +2088,6 @@
       "id": "2_244",
       "name": "Camino De Algodonales V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2216,7 +2097,6 @@
       "id": "2_245",
       "name": "Camino De Algodonales",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2226,7 +2106,6 @@
       "id": "2_247",
       "name": "Ruiz Marcet",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2236,7 +2115,6 @@
       "id": "2_248",
       "name": "Ruiz Marcet V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2246,7 +2124,6 @@
       "id": "2_249",
       "name": "Tres Caminos",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "31"
     },
@@ -2256,7 +2133,6 @@
       "id": "2_25",
       "name": "Avda. Almirante León Herrero",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2266,7 +2142,6 @@
       "id": "2_251",
       "name": "C.C. Las Dunas",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2276,7 +2151,6 @@
       "id": "2_254",
       "name": "Avda. De La Marina",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -2286,7 +2160,6 @@
       "id": "2_255",
       "name": "Avda. De La Marina V",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
@@ -2296,7 +2169,6 @@
       "id": "2_257",
       "name": "Casines",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -2306,7 +2178,6 @@
       "id": "2_258",
       "name": "Casines V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -2316,7 +2187,6 @@
       "id": "2_259",
       "name": "Ciudad Jardín",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -2326,7 +2196,6 @@
       "id": "2_26",
       "name": "Avda. Almirante León Herrero V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2336,7 +2205,6 @@
       "id": "2_260",
       "name": "Ciudad Jardín V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -2346,7 +2214,6 @@
       "id": "2_261",
       "name": "Recinto Ferial",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "21"
     },
@@ -2356,7 +2223,6 @@
       "id": "2_262",
       "name": "Escuela Ingeniería",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -2366,7 +2232,6 @@
       "id": "2_263",
       "name": "Escuela Ingeniería V",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -2376,7 +2241,6 @@
       "id": "2_264",
       "name": "Escuela Ingeniería (Interior)",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -2386,7 +2250,6 @@
       "id": "2_265",
       "name": "Las Aletas",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -2396,7 +2259,6 @@
       "id": "2_266",
       "name": "Estación De Autobuses Chipiona",
       "parentStationId": null,
-      "placeId": "chipiona",
       "municipalityId": "15",
       "localAreaId": "44"
     },
@@ -2406,7 +2268,6 @@
       "id": "2_268",
       "name": "Los Esteros V",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2416,7 +2277,6 @@
       "id": "2_269",
       "name": "Las Redes/Los Esteros",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2426,7 +2286,6 @@
       "id": "2_27",
       "name": "Parque Almirante Laulhé",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2436,7 +2295,6 @@
       "id": "2_270",
       "name": "Avda. Del Comercio V",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2446,7 +2304,6 @@
       "id": "2_271",
       "name": "Avda. Del Comercio",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2456,7 +2313,6 @@
       "id": "2_272",
       "name": "Río Iro",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2466,7 +2322,6 @@
       "id": "2_273",
       "name": "A-480 Venta El Menuito",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2476,7 +2331,6 @@
       "id": "2_274",
       "name": "A-480 Venta El Menuito V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2486,7 +2340,6 @@
       "id": "2_277",
       "name": "Pocito Blanco",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "45"
     },
@@ -2496,7 +2349,6 @@
       "id": "2_278",
       "name": "Pocito Blanco V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "45"
     },
@@ -2506,7 +2358,6 @@
       "id": "2_279",
       "name": "Casa De Postas",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2516,7 +2367,6 @@
       "id": "2_280",
       "name": "Casa De Postas V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2526,7 +2376,6 @@
       "id": "2_282",
       "name": "El Canario V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2536,7 +2385,6 @@
       "id": "2_283",
       "name": "Chinarejos",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2546,7 +2394,6 @@
       "id": "2_284",
       "name": "Chinarejos V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2556,7 +2403,6 @@
       "id": "2_285",
       "name": "El Colorado-1",
       "parentStationId": null,
-      "placeId": "el-colorado",
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2566,7 +2412,6 @@
       "id": "2_287",
       "name": "El Colorado-2 V",
       "parentStationId": null,
-      "placeId": "el-colorado",
       "municipalityId": "16",
       "localAreaId": "46"
     },
@@ -2576,7 +2421,6 @@
       "id": "2_289",
       "name": "San Andrés Golf",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "48"
     },
@@ -2586,7 +2430,6 @@
       "id": "2_29",
       "name": "Avda. Constitución 1.978-Comisaría",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2596,7 +2439,6 @@
       "id": "2_291",
       "name": "Avda. Las Cortes",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2606,7 +2448,6 @@
       "id": "2_292",
       "name": "Avda. Las Cortes V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2616,7 +2457,6 @@
       "id": "2_296",
       "name": "Apeadero De Autobuses Conil",
       "parentStationId": null,
-      "placeId": "conil-de-la-frontera",
       "municipalityId": "16",
       "localAreaId": "45"
     },
@@ -2626,7 +2466,6 @@
       "id": "2_3",
       "name": "Puerta Tierra",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2636,7 +2475,6 @@
       "id": "2_30",
       "name": "Avda. Constitución 1.978-Comisaría V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2646,7 +2484,6 @@
       "id": "2_300",
       "name": "Plaza De España V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2656,7 +2493,6 @@
       "id": "2_301",
       "name": "Cañada De Los Barrancos-Los Cazadores",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2666,7 +2502,6 @@
       "id": "2_302",
       "name": "Cañada De Los Barrancos-Los Cazadores V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -2676,7 +2511,6 @@
       "id": "2_303",
       "name": "Av. Astilleros-Estación Autobuses",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2686,7 +2520,6 @@
       "id": "2_304",
       "name": "Av. Astilleros-Estación Autobuses V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2696,7 +2529,6 @@
       "id": "2_305",
       "name": "Plaza De Sevilla",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2706,7 +2538,6 @@
       "id": "2_306",
       "name": "Plaza De Sevilla V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2716,7 +2547,6 @@
       "id": "2_31",
       "name": "Avda. Constitución 1.978-Instituto",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2726,7 +2556,6 @@
       "id": "2_310",
       "name": "Avda. De Andalucía",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2736,7 +2565,6 @@
       "id": "2_311",
       "name": "Avda. De Andalucía V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2746,7 +2574,6 @@
       "id": "2_312",
       "name": "Carretera De Jerez",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2756,7 +2583,6 @@
       "id": "2_313",
       "name": "Carretera De Jerez V",
       "parentStationId": null,
-      "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
@@ -2766,7 +2592,6 @@
       "id": "2_314",
       "name": "El Berrueco",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "8",
       "localAreaId": "18"
     },
@@ -2776,7 +2601,6 @@
       "id": "2_315",
       "name": "El Berrueco V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "8",
       "localAreaId": "18"
     },
@@ -2786,7 +2610,6 @@
       "id": "2_316",
       "name": "General Lobo",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2796,7 +2619,6 @@
       "id": "2_317",
       "name": "General Lobo V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2806,7 +2628,6 @@
       "id": "2_318",
       "name": "Hospital S. Carlos",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2816,7 +2637,6 @@
       "id": "2_319",
       "name": "Hospital S. Carlos V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2826,7 +2646,6 @@
       "id": "2_32",
       "name": "Avda. Constitución 1.978-Instituto V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2836,7 +2655,6 @@
       "id": "2_320",
       "name": "Puerta Tierra V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2846,7 +2664,6 @@
       "id": "2_321",
       "name": "Avda. Campo Del Sur-Catedral V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2856,7 +2673,6 @@
       "id": "2_322",
       "name": "Avda. De Huelva V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2866,7 +2682,6 @@
       "id": "2_33",
       "name": "San Onofre",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2876,7 +2691,6 @@
       "id": "2_34",
       "name": "San Onofre V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2886,7 +2700,6 @@
       "id": "2_345",
       "name": "Avda. De Huelva",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2896,7 +2709,6 @@
       "id": "2_346",
       "name": "Avda. Campo Del Sur-Mercado",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2906,7 +2718,6 @@
       "id": "2_347",
       "name": "F. Ciencias Empresariales",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2916,7 +2727,6 @@
       "id": "2_348",
       "name": "F. Ciencias Empresariales V",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2926,7 +2736,6 @@
       "id": "2_349",
       "name": "Av. De María Auxiliadora",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": null
     },
@@ -2936,7 +2745,6 @@
       "id": "2_35",
       "name": "San Marcos",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -2946,7 +2754,6 @@
       "id": "2_350",
       "name": "Av. De María Auxiliadora V",
       "parentStationId": null,
-      "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": null
     },
@@ -2956,7 +2763,6 @@
       "id": "2_351",
       "name": "Plaza Asdrúbal",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2966,7 +2772,6 @@
       "id": "2_352",
       "name": "Avda. Tomás García Figueras",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2976,7 +2781,6 @@
       "id": "2_353",
       "name": "Avda. Tomás García Figueras V",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -2986,7 +2790,6 @@
       "id": "2_354",
       "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -2996,7 +2799,6 @@
       "id": "2_355",
       "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3006,7 +2808,6 @@
       "id": "2_356",
       "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3016,7 +2817,6 @@
       "id": "2_357",
       "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3026,7 +2826,6 @@
       "id": "2_359",
       "name": "Hospital De Puerto Real",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "43"
     },
@@ -3036,7 +2835,6 @@
       "id": "2_36",
       "name": "San Marcos V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3046,7 +2844,6 @@
       "id": "2_360",
       "name": "Intercambiador De Transporte",
       "parentStationId": null,
-      "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
@@ -3056,7 +2853,6 @@
       "id": "2_361",
       "name": "Hospital Universitario De Jerez",
       "parentStationId": null,
-      "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
@@ -3066,7 +2862,6 @@
       "id": "2_37",
       "name": "Avda. San Juan Bosco",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3076,7 +2871,6 @@
       "id": "2_38",
       "name": "Avda. San Juan Bosco V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3086,7 +2880,6 @@
       "id": "2_4",
       "name": "Plaza Asdrúbal",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3096,7 +2889,6 @@
       "id": "2_40",
       "name": "Ponce De León",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3106,7 +2898,6 @@
       "id": "2_41",
       "name": "Ponce De León V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3116,7 +2907,6 @@
       "id": "2_42",
       "name": "Plaza De Juan Vargas V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3126,7 +2916,6 @@
       "id": "2_43",
       "name": "Plaza Del Castillo",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3136,7 +2925,6 @@
       "id": "2_47",
       "name": "Estación Fc-Bahía Sur",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3146,7 +2934,6 @@
       "id": "2_48",
       "name": "Estación Fc-Bahía Sur V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3156,7 +2943,6 @@
       "id": "2_49",
       "name": "Bahía Sur",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3166,7 +2952,6 @@
       "id": "2_5",
       "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3176,7 +2961,6 @@
       "id": "2_50",
       "name": "Apeadero Fc-Hospital S.Carlos V",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3186,7 +2970,6 @@
       "id": "2_51",
       "name": "Cantabria",
       "parentStationId": null,
-      "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
@@ -3196,7 +2979,6 @@
       "id": "2_56",
       "name": "Cementerio Mancomunado",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3206,7 +2988,6 @@
       "id": "2_57",
       "name": "Jardines Del Marquesado",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3216,7 +2997,6 @@
       "id": "2_58",
       "name": "Jardines Del Marquesado V",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3226,7 +3006,6 @@
       "id": "2_59",
       "name": "Venta El Pino",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3236,7 +3015,6 @@
       "id": "2_6",
       "name": "Ingeniero La Cierva",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3246,7 +3024,6 @@
       "id": "2_60",
       "name": "Venta El Pino V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3256,7 +3033,6 @@
       "id": "2_61",
       "name": "Cañada De Los Barrancos",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3266,7 +3042,6 @@
       "id": "2_62",
       "name": "Cañada De Los Barrancos V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3276,7 +3051,6 @@
       "id": "2_63",
       "name": "Venta Pololo",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3286,7 +3060,6 @@
       "id": "2_64",
       "name": "Venta Pololo V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3296,7 +3069,6 @@
       "id": "2_65",
       "name": "Camino Lagunetas",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3306,7 +3078,6 @@
       "id": "2_66",
       "name": "Camino Lagunetas V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3316,7 +3087,6 @@
       "id": "2_67",
       "name": "Manuel Aragón",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3326,7 +3096,6 @@
       "id": "2_68",
       "name": "Manuel Aragón V",
       "parentStationId": null,
-      "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3336,7 +3105,6 @@
       "id": "2_69",
       "name": "Camino Del Cañaveral",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3346,7 +3114,6 @@
       "id": "2_7",
       "name": "Telegrafía Sin Hilos",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3356,7 +3123,6 @@
       "id": "2_70",
       "name": "Camino Del Cañaveral V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3366,7 +3132,6 @@
       "id": "2_71",
       "name": "Arroyo Del Aljibe",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3376,7 +3141,6 @@
       "id": "2_72",
       "name": "Arroyo Del Aljibe V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3386,7 +3150,6 @@
       "id": "2_73",
       "name": "Águila-El Término",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3396,7 +3159,6 @@
       "id": "2_74",
       "name": "Águila-El Término V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3406,7 +3168,6 @@
       "id": "2_75",
       "name": "Avda. Argentina-Edif. Bahía",
       "parentStationId": null,
-      "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
@@ -3416,7 +3177,6 @@
       "id": "2_76",
       "name": "Avda. Argentina-Edif. Bahía V",
       "parentStationId": null,
-      "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
@@ -3426,7 +3186,6 @@
       "id": "2_77",
       "name": "Avda. Argentina-Instituto",
       "parentStationId": null,
-      "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
@@ -3436,7 +3195,6 @@
       "id": "2_78",
       "name": "Avda. Argentina-Instituto V",
       "parentStationId": null,
-      "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
@@ -3446,7 +3204,6 @@
       "id": "2_79",
       "name": "Campus-C. Educación",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -3456,7 +3213,6 @@
       "id": "2_8",
       "name": "Complejo Deportivo",
       "parentStationId": null,
-      "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
@@ -3466,7 +3222,6 @@
       "id": "2_80",
       "name": "Campus-C. Educación V",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -3476,7 +3231,6 @@
       "id": "2_81",
       "name": "Campus-Ciencias",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -3486,7 +3240,6 @@
       "id": "2_82",
       "name": "Campus-Ciencias V",
       "parentStationId": null,
-      "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
@@ -3496,7 +3249,6 @@
       "id": "2_83",
       "name": "El Cartabón",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3506,7 +3258,6 @@
       "id": "2_84",
       "name": "El Cartabón V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3516,7 +3267,6 @@
       "id": "2_85",
       "name": "Huerta Pley",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3526,7 +3276,6 @@
       "id": "2_86",
       "name": "Estación Fc Puerto Real",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3536,7 +3285,6 @@
       "id": "2_87",
       "name": "Estación Fc Puerto Real V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3546,7 +3294,6 @@
       "id": "2_88",
       "name": "Plaza Iglesia",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3556,7 +3303,6 @@
       "id": "2_90",
       "name": "Campo De Fútbol Pto. Real",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3566,7 +3312,6 @@
       "id": "2_91",
       "name": "512 Viviendas",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3576,7 +3321,6 @@
       "id": "2_92",
       "name": "512 Viviendas V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3586,7 +3330,6 @@
       "id": "2_93",
       "name": "Marina De La Bahía",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3596,7 +3339,6 @@
       "id": "2_94",
       "name": "Marina De La Bahía V",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3606,7 +3348,6 @@
       "id": "2_95",
       "name": "Hospital De Puerto Real",
       "parentStationId": null,
-      "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "43"
     },
@@ -3616,7 +3357,6 @@
       "id": "2_96",
       "name": "La Romera-Venta Rosario",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3626,7 +3366,6 @@
       "id": "2_97",
       "name": "La Romera-Venta Rosario V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
@@ -3636,7 +3375,6 @@
       "id": "2_98",
       "name": "Pinar De Los Franceses",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
@@ -3646,2656 +3384,8 @@
       "id": "2_99",
       "name": "Pinar De Los Franceses V",
       "parentStationId": null,
-      "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
-    }
-  ],
-  "patterns": [
-    {
-      "routeId": "2_10",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_3",
-        "2_351",
-        "2_356",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92"
-      ]
-    },
-    {
-      "routeId": "2_10",
-      "directionId": "1",
-      "stopIds": [
-        "2_91",
-        "2_93",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_11",
-      "directionId": "1",
-      "stopIds": [
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_18",
-        "2_5",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_12",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_3",
-        "2_351",
-        "2_356",
-        "2_7",
-        "2_102",
-        "2_100",
-        "2_359"
-      ]
-    },
-    {
-      "routeId": "2_12",
-      "directionId": "1",
-      "stopIds": [
-        "2_359",
-        "2_91",
-        "2_93",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_13",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133"
-      ]
-    },
-    {
-      "routeId": "2_13",
-      "directionId": "1",
-      "stopIds": [
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_14",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_265",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133"
-      ]
-    },
-    {
-      "routeId": "2_14",
-      "directionId": "1",
-      "stopIds": [
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_262",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_15",
-      "directionId": "0",
-      "stopIds": [
-        "2_193",
-        "2_194"
-      ]
-    },
-    {
-      "routeId": "2_15",
-      "directionId": "1",
-      "stopIds": [
-        "2_194",
-        "2_193"
-      ]
-    },
-    {
-      "routeId": "2_155",
-      "directionId": "0",
-      "stopIds": [
-        "2_296",
-        "2_272",
-        "2_86",
-        "2_360",
-        "2_161",
-        "2_172"
-      ]
-    },
-    {
-      "routeId": "2_156",
-      "directionId": "0",
-      "stopIds": [
-        "2_296",
-        "2_272",
-        "2_86",
-        "2_360",
-        "2_161",
-        "2_172"
-      ]
-    },
-    {
-      "routeId": "2_156",
-      "directionId": "1",
-      "stopIds": [
-        "2_171",
-        "2_161",
-        "2_360",
-        "2_272",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_16",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_354",
-        "2_160",
-        "2_161",
-        "2_179",
-        "2_311",
-        "2_173"
-      ]
-    },
-    {
-      "routeId": "2_16",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_159",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_16",
-      "directionId": "1",
-      "stopIds": [
-        "2_173",
-        "2_310",
-        "2_180",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_16",
-      "directionId": "1",
-      "stopIds": [
-        "2_173",
-        "2_310",
-        "2_180",
-        "2_161",
-        "2_159",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_163",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_163",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_197",
-        "2_196",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_163",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_197",
-        "2_196",
-        "2_261",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_163",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_197",
-        "2_196",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_274",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_163",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_274",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_164",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_164",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_197",
-        "2_196",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_164",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_165",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_87",
-        "2_95",
-        "2_101",
-        "2_249",
-        "2_42"
-      ]
-    },
-    {
-      "routeId": "2_165",
-      "directionId": "1",
-      "stopIds": [
-        "2_42",
-        "2_249",
-        "2_100",
-        "2_95",
-        "2_86",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_166",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_166",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_313",
-        "2_229",
-        "2_223",
-        "2_222",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_167",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_203",
-        "2_361",
-        "2_235",
-        "2_180",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_167",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_202",
-        "2_361",
-        "2_229",
-        "2_223",
-        "2_222",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_168",
-      "directionId": "0",
-      "stopIds": [
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_168",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_313",
-        "2_223",
-        "2_222"
-      ]
-    },
-    {
-      "routeId": "2_169",
-      "directionId": "0",
-      "stopIds": [
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_202",
-        "2_361",
-        "2_235",
-        "2_180",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_169",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_202",
-        "2_361",
-        "2_313",
-        "2_229",
-        "2_223",
-        "2_222"
-      ]
-    },
-    {
-      "routeId": "2_170",
-      "directionId": "0",
-      "stopIds": [
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_203",
-        "2_361",
-        "2_170",
-        "2_165",
-        "2_180",
-        "2_174",
-        "2_172"
-      ]
-    },
-    {
-      "routeId": "2_170",
-      "directionId": "1",
-      "stopIds": [
-        "2_172",
-        "2_163",
-        "2_179",
-        "2_164",
-        "2_169",
-        "2_202",
-        "2_361",
-        "2_313",
-        "2_229",
-        "2_223",
-        "2_222"
-      ]
-    },
-    {
-      "routeId": "2_17",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_354",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_160",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_17",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_159",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_172",
-      "directionId": "0",
-      "stopIds": [
-        "2_187",
-        "2_233",
-        "2_266",
-        "2_274",
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_203",
-        "2_361",
-        "2_235",
-        "2_180",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_172",
-      "directionId": "0",
-      "stopIds": [
-        "2_187",
-        "2_233",
-        "2_266",
-        "2_274",
-        "2_222",
-        "2_224",
-        "2_229",
-        "2_312",
-        "2_361",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_172",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_202",
-        "2_361",
-        "2_313",
-        "2_223",
-        "2_222",
-        "2_273",
-        "2_266",
-        "2_233",
-        "2_186",
-        "2_187"
-      ]
-    },
-    {
-      "routeId": "2_172",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_361",
-        "2_313",
-        "2_223",
-        "2_222",
-        "2_273",
-        "2_266",
-        "2_233",
-        "2_186",
-        "2_187"
-      ]
-    },
-    {
-      "routeId": "2_175",
-      "directionId": "0",
-      "stopIds": [
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_175",
-      "directionId": "0",
-      "stopIds": [
-        "2_361",
-        "2_353",
-        "2_235",
-        "2_180",
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_175",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_175",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_352",
-        "2_361"
-      ]
-    },
-    {
-      "routeId": "2_177",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_354",
-        "2_7",
-        "2_203",
-        "2_361",
-        "2_235",
-        "2_180",
-        "2_161",
-        "2_179",
-        "2_311",
-        "2_173"
-      ]
-    },
-    {
-      "routeId": "2_177",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_202",
-        "2_361",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_18",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_354",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_160",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_18",
-      "directionId": "1",
-      "stopIds": [
-        "2_173",
-        "2_310",
-        "2_180",
-        "2_161",
-        "2_159",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_262",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_19",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_144",
-        "2_142",
-        "2_146",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_19",
-      "directionId": "1",
-      "stopIds": [
-        "2_181",
-        "2_145",
-        "2_141",
-        "2_143",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_19",
-      "directionId": "1",
-      "stopIds": [
-        "2_233",
-        "2_181",
-        "2_145",
-        "2_141",
-        "2_143",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_20",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_265",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_144",
-        "2_142",
-        "2_146",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_20",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_265",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_144",
-        "2_142",
-        "2_146",
-        "2_181",
-        "2_233"
-      ]
-    },
-    {
-      "routeId": "2_20",
-      "directionId": "1",
-      "stopIds": [
-        "2_233",
-        "2_181",
-        "2_145",
-        "2_141",
-        "2_143",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_262",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_2",
-      "directionId": "0",
-      "stopIds": [
-        "2_232",
-        "2_1",
-        "2_3",
-        "2_4",
-        "2_5",
-        "2_6",
-        "2_7",
-        "2_8",
-        "2_41",
-        "2_24",
-        "2_26",
-        "2_207",
-        "2_237",
-        "2_248",
-        "2_317",
-        "2_319"
-      ]
-    },
-    {
-      "routeId": "2_21",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_21",
-      "directionId": "1",
-      "stopIds": [
-        "2_181",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_2",
-      "directionId": "1",
-      "stopIds": [
-        "2_318",
-        "2_316",
-        "2_247",
-        "2_236",
-        "2_27",
-        "2_25",
-        "2_23",
-        "2_40",
-        "2_19",
-        "2_18",
-        "2_17",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_232"
-      ]
-    },
-    {
-      "routeId": "2_219",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_233",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_219",
-      "directionId": "1",
-      "stopIds": [
-        "2_181",
-        "2_233",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_220",
-      "directionId": "0",
-      "stopIds": [
-        "2_232",
-        "2_1",
-        "2_3",
-        "2_351",
-        "2_356",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_220",
-      "directionId": "1",
-      "stopIds": [
-        "2_264",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_22",
-      "directionId": "0",
-      "stopIds": [
-        "2_193",
-        "2_195"
-      ]
-    },
-    {
-      "routeId": "2_221",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_98",
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_80",
-        "2_82",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_221",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_98",
-        "2_80",
-        "2_82",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_221",
-      "directionId": "1",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_264",
-        "2_94",
-        "2_92",
-        "2_88",
-        "2_84",
-        "2_260",
-        "2_258",
-        "2_99",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_221",
-      "directionId": "1",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_264",
-        "2_99",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_22",
-      "directionId": "1",
-      "stopIds": [
-        "2_195",
-        "2_193"
-      ]
-    },
-    {
-      "routeId": "2_222",
-      "directionId": "0",
-      "stopIds": [
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_223",
-      "directionId": "0",
-      "stopIds": [
-        "2_161",
-        "2_159",
-        "2_262",
-        "2_81",
-        "2_79"
-      ]
-    },
-    {
-      "routeId": "2_223",
-      "directionId": "1",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_160",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_224",
-      "directionId": "1",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_170",
-        "2_165",
-        "2_180",
-        "2_162",
-        "2_206",
-        "2_168"
-      ]
-    },
-    {
-      "routeId": "2_225",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_227",
-        "2_251",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_262",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_306",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_225",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_225",
-      "directionId": "1",
-      "stopIds": [
-        "2_14",
-        "2_305",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_261",
-        "2_251",
-        "2_228",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_226",
-      "directionId": "0",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133"
-      ]
-    },
-    {
-      "routeId": "2_230",
-      "directionId": "0",
-      "stopIds": [
-        "2_266",
-        "2_274",
-        "2_225",
-        "2_222",
-        "2_230"
-      ]
-    },
-    {
-      "routeId": "2_230",
-      "directionId": "1",
-      "stopIds": [
-        "2_229",
-        "2_222",
-        "2_226",
-        "2_273",
-        "2_266"
-      ]
-    },
-    {
-      "routeId": "2_23",
-      "directionId": "0",
-      "stopIds": [
-        "2_236",
-        "2_27",
-        "2_25",
-        "2_23",
-        "2_40",
-        "2_31",
-        "2_29",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_231",
-      "directionId": "0",
-      "stopIds": [
-        "2_233",
-        "2_266",
-        "2_274",
-        "2_226",
-        "2_222",
-        "2_230"
-      ]
-    },
-    {
-      "routeId": "2_231",
-      "directionId": "1",
-      "stopIds": [
-        "2_229",
-        "2_222",
-        "2_225",
-        "2_273",
-        "2_266",
-        "2_233"
-      ]
-    },
-    {
-      "routeId": "2_23",
-      "directionId": "1",
-      "stopIds": [
-        "2_264",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_30",
-        "2_32",
-        "2_41",
-        "2_24",
-        "2_26",
-        "2_207",
-        "2_237"
-      ]
-    },
-    {
-      "routeId": "2_234",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_4",
-        "2_354",
-        "2_42",
-        "2_272",
-        "2_289",
-        "2_285",
-        "2_283",
-        "2_279",
-        "2_277",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_234",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_4",
-        "2_354",
-        "2_42",
-        "2_289",
-        "2_285",
-        "2_283",
-        "2_279",
-        "2_277",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_234",
-      "directionId": "1",
-      "stopIds": [
-        "2_296",
-        "2_278",
-        "2_280",
-        "2_282",
-        "2_284",
-        "2_287",
-        "2_289",
-        "2_272",
-        "2_42",
-        "2_5",
-        "2_4",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_234",
-      "directionId": "1",
-      "stopIds": [
-        "2_296",
-        "2_278",
-        "2_280",
-        "2_282",
-        "2_284",
-        "2_287",
-        "2_289",
-        "2_42",
-        "2_5",
-        "2_4",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_235",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_4",
-        "2_354",
-        "2_42",
-        "2_272",
-        "2_289",
-        "2_285",
-        "2_283",
-        "2_279",
-        "2_277",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_235",
-      "directionId": "1",
-      "stopIds": [
-        "2_296",
-        "2_278",
-        "2_280",
-        "2_282",
-        "2_284",
-        "2_287",
-        "2_289",
-        "2_272",
-        "2_42",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_236",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_4",
-        "2_354",
-        "2_95",
-        "2_272",
-        "2_289",
-        "2_285",
-        "2_283",
-        "2_279",
-        "2_277",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_236",
-      "directionId": "1",
-      "stopIds": [
-        "2_296",
-        "2_278",
-        "2_280",
-        "2_282",
-        "2_284",
-        "2_287",
-        "2_289",
-        "2_272",
-        "2_95",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_237",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_4",
-        "2_354",
-        "2_42",
-        "2_272",
-        "2_289",
-        "2_285",
-        "2_283",
-        "2_279",
-        "2_277",
-        "2_296"
-      ]
-    },
-    {
-      "routeId": "2_239",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_303",
-        "2_291",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92",
-        "2_88",
-        "2_84",
-        "2_260",
-        "2_257"
-      ]
-    },
-    {
-      "routeId": "2_239",
-      "directionId": "1",
-      "stopIds": [
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_292",
-        "2_304",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_240",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_303",
-        "2_291",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_264"
-      ]
-    },
-    {
-      "routeId": "2_26",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_57",
-        "2_59",
-        "2_61",
-        "2_63",
-        "2_241",
-        "2_65",
-        "2_245",
-        "2_67",
-        "2_69",
-        "2_71",
-        "2_73",
-        "2_119",
-        "2_117",
-        "2_115",
-        "2_113",
-        "2_111",
-        "2_109",
-        "2_107",
-        "2_105",
-        "2_103",
-        "2_100",
-        "2_359"
-      ]
-    },
-    {
-      "routeId": "2_26",
-      "directionId": "1",
-      "stopIds": [
-        "2_359",
-        "2_101",
-        "2_104",
-        "2_106",
-        "2_108",
-        "2_110",
-        "2_112",
-        "2_114",
-        "2_116",
-        "2_118",
-        "2_120",
-        "2_74",
-        "2_72",
-        "2_70",
-        "2_68",
-        "2_244",
-        "2_66",
-        "2_243",
-        "2_64",
-        "2_62",
-        "2_60",
-        "2_58",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_267",
-      "directionId": "0",
-      "stopIds": [
-        "2_347",
-        "2_346",
-        "2_345",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_92",
-        "2_88",
-        "2_84",
-        "2_260",
-        "2_258"
-      ]
-    },
-    {
-      "routeId": "2_267",
-      "directionId": "1",
-      "stopIds": [
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_322",
-        "2_15",
-        "2_320",
-        "2_321",
-        "2_348"
-      ]
-    },
-    {
-      "routeId": "2_27",
-      "directionId": "0",
-      "stopIds": [
-        "2_167",
-        "2_166",
-        "2_163",
-        "2_179",
-        "2_164",
-        "2_169",
-        "2_262",
-        "2_81",
-        "2_79"
-      ]
-    },
-    {
-      "routeId": "2_27",
-      "directionId": "1",
-      "stopIds": [
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_265",
-        "2_170",
-        "2_165",
-        "2_180",
-        "2_162",
-        "2_206",
-        "2_168"
-      ]
-    },
-    {
-      "routeId": "2_28",
-      "directionId": "0",
-      "stopIds": [
-        "2_181",
-        "2_145",
-        "2_141",
-        "2_143",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_129",
-        "2_127",
-        "2_125",
-        "2_123",
-        "2_121",
-        "2_95"
-      ]
-    },
-    {
-      "routeId": "2_28",
-      "directionId": "1",
-      "stopIds": [
-        "2_95",
-        "2_122",
-        "2_124",
-        "2_126",
-        "2_128",
-        "2_130",
-        "2_132",
-        "2_133",
-        "2_131",
-        "2_144",
-        "2_142",
-        "2_146",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_3",
-      "directionId": "0",
-      "stopIds": [
-        "2_232",
-        "2_1",
-        "2_3",
-        "2_4",
-        "2_5",
-        "2_6",
-        "2_7",
-        "2_8",
-        "2_30",
-        "2_32",
-        "2_201",
-        "2_34",
-        "2_199",
-        "2_36",
-        "2_38",
-        "2_42"
-      ]
-    },
-    {
-      "routeId": "2_3",
-      "directionId": "1",
-      "stopIds": [
-        "2_42",
-        "2_37",
-        "2_35",
-        "2_198",
-        "2_33",
-        "2_200",
-        "2_31",
-        "2_29",
-        "2_19",
-        "2_18",
-        "2_17",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_232"
-      ]
-    },
-    {
-      "routeId": "2_32",
-      "directionId": "0",
-      "stopIds": [
-        "2_181",
-        "2_254",
-        "2_349",
-        "2_182",
-        "2_155",
-        "2_203",
-        "2_361",
-        "2_180",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_32",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_179",
-        "2_202",
-        "2_361",
-        "2_156",
-        "2_183",
-        "2_350",
-        "2_255",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_36",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_360",
-        "2_160",
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_36",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161",
-        "2_159",
-        "2_360",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_38",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_351",
-        "2_355",
-        "2_7",
-        "2_80",
-        "2_82",
-        "2_263",
-        "2_360",
-        "2_160",
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_38",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161",
-        "2_159",
-        "2_360",
-        "2_262",
-        "2_81",
-        "2_79",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_39",
-      "directionId": "0",
-      "stopIds": [
-        "2_181",
-        "2_182",
-        "2_155",
-        "2_160",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_39",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_159",
-        "2_156",
-        "2_183",
-        "2_181"
-      ]
-    },
-    {
-      "routeId": "2_4",
-      "directionId": "0",
-      "stopIds": [
-        "2_300",
-        "2_1",
-        "2_3",
-        "2_4",
-        "2_355",
-        "2_7",
-        "2_99",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_41",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_355",
-        "2_42",
-        "2_268",
-        "2_272",
-        "2_269",
-        "2_59",
-        "2_301",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_41",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_302",
-        "2_60",
-        "2_268",
-        "2_272",
-        "2_269",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_4",
-      "directionId": "1",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_98",
-        "2_19",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_300"
-      ]
-    },
-    {
-      "routeId": "2_43",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_355",
-        "2_87",
-        "2_95",
-        "2_268",
-        "2_272",
-        "2_269",
-        "2_59",
-        "2_301",
-        "2_314",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_43",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_302",
-        "2_60",
-        "2_268",
-        "2_272",
-        "2_269",
-        "2_95",
-        "2_86",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_43",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_315",
-        "2_302",
-        "2_60",
-        "2_268",
-        "2_272",
-        "2_269",
-        "2_95",
-        "2_86",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_44",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_355",
-        "2_87",
-        "2_95",
-        "2_96",
-        "2_175",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_44",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_176",
-        "2_97",
-        "2_95",
-        "2_86",
-        "2_16",
-        "2_15",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_46",
-      "directionId": "0",
-      "stopIds": [
-        "2_188",
-        "2_178",
-        "2_177",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_46",
-      "directionId": "1",
-      "stopIds": [
-        "2_161",
-        "2_177",
-        "2_178",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_48",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_269",
-        "2_59",
-        "2_301",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_48",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_269",
-        "2_59",
-        "2_301",
-        "2_314",
-        "2_188"
-      ]
-    },
-    {
-      "routeId": "2_48",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_302",
-        "2_60",
-        "2_268",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_48",
-      "directionId": "1",
-      "stopIds": [
-        "2_188",
-        "2_315",
-        "2_302",
-        "2_60",
-        "2_268",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_49",
-      "directionId": "0",
-      "stopIds": [
-        "2_14",
-        "2_3",
-        "2_11",
-        "2_351",
-        "2_357",
-        "2_7",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_49",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_12",
-        "2_10",
-        "2_14"
-      ]
-    },
-    {
-      "routeId": "2_50",
-      "directionId": "0",
-      "stopIds": [
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_50",
-      "directionId": "0",
-      "stopIds": [
-        "2_361",
-        "2_353",
-        "2_235",
-        "2_180",
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_50",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_50",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161",
-        "2_179",
-        "2_234",
-        "2_352",
-        "2_361"
-      ]
-    },
-    {
-      "routeId": "2_5",
-      "directionId": "0",
-      "stopIds": [
-        "2_300",
-        "2_1",
-        "2_3",
-        "2_4",
-        "2_355",
-        "2_7",
-        "2_20",
-        "2_42",
-        "2_56"
-      ]
-    },
-    {
-      "routeId": "2_51",
-      "directionId": "0",
-      "stopIds": [
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_51",
-      "directionId": "0",
-      "stopIds": [
-        "2_361",
-        "2_353",
-        "2_235",
-        "2_180",
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_51",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_5",
-      "directionId": "1",
-      "stopIds": [
-        "2_56",
-        "2_42",
-        "2_20",
-        "2_19",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_300"
-      ]
-    },
-    {
-      "routeId": "2_54",
-      "directionId": "0",
-      "stopIds": [
-        "2_161",
-        "2_172",
-        "2_206",
-        "2_168",
-        "2_189",
-        "2_191"
-      ]
-    },
-    {
-      "routeId": "2_54",
-      "directionId": "1",
-      "stopIds": [
-        "2_191",
-        "2_190",
-        "2_167",
-        "2_166",
-        "2_171",
-        "2_161"
-      ]
-    },
-    {
-      "routeId": "2_6",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_3",
-        "2_351",
-        "2_356",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92",
-        "2_88",
-        "2_84",
-        "2_260",
-        "2_258",
-        "2_359"
-      ]
-    },
-    {
-      "routeId": "2_6",
-      "directionId": "1",
-      "stopIds": [
-        "2_359",
-        "2_257",
-        "2_259",
-        "2_83",
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
-    },
-    {
-      "routeId": "2_7",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_98",
-        "2_249",
-        "2_48",
-        "2_49"
-      ]
-    },
-    {
-      "routeId": "2_7",
-      "directionId": "0",
-      "stopIds": [
-        "2_272",
-        "2_271",
-        "2_269",
-        "2_98",
-        "2_48",
-        "2_49"
-      ]
-    },
-    {
-      "routeId": "2_7",
-      "directionId": "1",
-      "stopIds": [
-        "2_49",
-        "2_47",
-        "2_26",
-        "2_207",
-        "2_237",
-        "2_50",
-        "2_51",
-        "2_43",
-        "2_249",
-        "2_99",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_7",
-      "directionId": "1",
-      "stopIds": [
-        "2_49",
-        "2_47",
-        "2_26",
-        "2_207",
-        "2_237",
-        "2_50",
-        "2_51",
-        "2_43",
-        "2_99",
-        "2_268",
-        "2_270",
-        "2_272"
-      ]
-    },
-    {
-      "routeId": "2_9",
-      "directionId": "0",
-      "stopIds": [
-        "2_238",
-        "2_1",
-        "2_3",
-        "2_351",
-        "2_356",
-        "2_7",
-        "2_75",
-        "2_77",
-        "2_80",
-        "2_82",
-        "2_94",
-        "2_92",
-        "2_88",
-        "2_85"
-      ]
-    },
-    {
-      "routeId": "2_9",
-      "directionId": "1",
-      "stopIds": [
-        "2_85",
-        "2_90",
-        "2_91",
-        "2_93",
-        "2_81",
-        "2_79",
-        "2_78",
-        "2_76",
-        "2_18",
-        "2_16",
-        "2_15",
-        "2_10",
-        "2_231",
-        "2_238"
-      ]
     }
   ],
   "trips": [

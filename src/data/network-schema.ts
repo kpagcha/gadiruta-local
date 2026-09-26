@@ -5,7 +5,6 @@
  */
 import { z } from 'zod';
 import { isCalendarDate, shiftCalendarDate } from './calendar-date.ts';
-import { places } from './places.ts';
 import { stopUrlToken } from './stop-url.ts';
 
 const name = z.string().refine((value) => value.trim() !== '', 'must be a non-empty string');
@@ -28,7 +27,6 @@ const stopSchema = coordinateSchema.extend({
   id: name,
   name,
   parentStationId: name.nullable(),
-  placeId: name.nullable(),
   municipalityId: name.nullable(),
   localAreaId: name.nullable(),
 });
@@ -62,7 +60,7 @@ const calendarSchema = z
   })
   .refine((calendar) => calendar.startDate <= calendar.endDate, 'invalid calendar dates');
 const datasetSchema = z.object({
-  formatVersion: z.literal(5, { error: 'formatVersion must be 5' }),
+  formatVersion: z.literal(6, { error: 'formatVersion must be 6' }),
   source: z.object({
     url: name,
     generatedAt: name.refine((value) => !Number.isNaN(Date.parse(value)), 'invalid generation date-time'),
@@ -85,15 +83,6 @@ const datasetSchema = z.object({
   municipalities: z.array(municipalitySchema),
   localAreas: z.array(localAreaSchema),
   stops: z.array(stopSchema).min(1),
-  patterns: z
-    .array(
-      z.object({
-        routeId: name,
-        directionId: name.nullable(),
-        stopIds: z.array(name).min(1),
-      }),
-    )
-    .min(1),
   trips: z.array(tripSchema).min(1),
   calendars: z.array(calendarSchema).min(1),
   calendarExceptions: z.array(z.object({ serviceId: name, date, type: z.literal([1, 2]) })),
@@ -102,11 +91,11 @@ const datasetSchema = z.object({
     .refine((coverage) => coverage.startDate <= coverage.endDate, 'coverage has reversed dates'),
 });
 
-/** Version-five application data after shape and relationship checks. */
+/** Version-six application data after shape and relationship checks. */
 export type NetworkDataset = z.infer<typeof datasetSchema>;
 /** A route's official labels and transport mode. */
 export type NetworkRoute = NetworkDataset['routes'][number];
-/** A physical stop, including reviewed place membership. */
+/** A physical stop, including its reviewed municipality and local area. */
 export type NetworkStop = z.infer<typeof stopSchema>;
 /** One visit; minutes may extend into the following calendar day. */
 export type NetworkStopTime = z.infer<typeof stopTimeSchema>;
@@ -144,18 +133,8 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     throw new NetworkDataError('dataset.' + issue.path.join('.') + ': ' + issue.message);
   }
   const dataset = parsed.data;
-  const {
-    agencies,
-    routes,
-    municipalities,
-    localAreas,
-    stops,
-    patterns,
-    trips,
-    calendars,
-    calendarExceptions,
-    coverage,
-  } = dataset;
+  const { agencies, routes, municipalities, localAreas, stops, trips, calendars, calendarExceptions, coverage } =
+    dataset;
   // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
@@ -176,7 +155,6 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   if (serviceIds.size !== calendars.length) {
     throw new NetworkDataError('dataset contains duplicate calendars.');
   }
-  const placeIds = new Set(places.map((place) => place.id));
   // A service dated yesterday can still board just after midnight on the first visible day.
   const earliestServiceDate = shiftCalendarDate(coverage.startDate, -1);
   if (
@@ -201,32 +179,16 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
   }
 
-  // A parent station and a pattern stop must both refer to records in this same local file.
+  // Parent stations and reviewed locations must refer to records in this same local file.
   for (const stop of stops) {
     if (stop.parentStationId !== null && !stopIds.has(stop.parentStationId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown parent station.`);
-    }
-    if (stop.placeId !== null && !placeIds.has(stop.placeId)) {
-      throw new NetworkDataError(`stop ${stop.id} references an unknown place.`);
     }
     if (stop.municipalityId !== null && !municipalityIds.has(stop.municipalityId)) {
       throw new NetworkDataError(`stop ${stop.id} references an unknown municipality.`);
     }
     if (stop.localAreaId !== null && localAreasById.get(stop.localAreaId)?.municipalityId !== stop.municipalityId) {
       throw new NetworkDataError(`stop ${stop.id} references a local area outside its municipality.`);
-    }
-  }
-
-  // Patterns complete the graph by connecting route IDs to their ordered stop IDs.
-  for (const pattern of patterns) {
-    if (!routeIds.has(pattern.routeId)) {
-      throw new NetworkDataError(`a pattern references unknown route ${pattern.routeId}.`);
-    }
-
-    for (const stopId of pattern.stopIds) {
-      if (!stopIds.has(stopId)) {
-        throw new NetworkDataError(`a pattern references unknown stop ${stopId}.`);
-      }
     }
   }
 

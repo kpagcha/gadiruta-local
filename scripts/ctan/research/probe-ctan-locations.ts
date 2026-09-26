@@ -121,16 +121,16 @@ function compareText(first: string, second: string): number {
   return first.localeCompare(second, 'en');
 }
 
-/** Index each selected GTFS stop by the routes that actually include it in a route pattern. */
+/** Index each selected GTFS stop by the routes of trips that visit it. */
 function createRouteIdsByStopId(
-  patterns: readonly { routeId: string; stopIds: readonly string[] }[],
+  trips: readonly { routeId: string; stopTimes: readonly { stopId: string }[] }[],
 ): Map<string, readonly string[]> {
   const routeIdsByStopId = new Map<string, Set<string>>();
 
-  for (const pattern of patterns) {
-    for (const stopId of pattern.stopIds) {
+  for (const trip of trips) {
+    for (const { stopId } of trip.stopTimes) {
       const routeIds = routeIdsByStopId.get(stopId) ?? new Set<string>();
-      routeIds.add(pattern.routeId);
+      routeIds.add(trip.routeId);
       routeIdsByStopId.set(stopId, routeIds);
     }
   }
@@ -151,7 +151,7 @@ async function loadBahiaGtfsProbeInput(inputPath: string): Promise<BahiaGtfsProb
   return {
     archiveSha256: dataset.source.archiveSha256,
     stopIds: dataset.stops.map((stop) => stop.id),
-    routeIdsByStopId: createRouteIdsByStopId(dataset.patterns),
+    routeIdsByStopId: createRouteIdsByStopId(dataset.trips),
   };
 }
 
