@@ -15,10 +15,10 @@ import { readGtfsTables } from './archive.ts';
 import { createNetworkDataset, sourceUrl, type SnapshotDateRange } from './convert.ts';
 import { locationDirectorySchema } from './location-directory.ts';
 
-const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
+const defaultInputPath = resolve('data/source/ctan/gtfs.zip');
 const outputPath = resolve('public/data/bahia-cadiz-network.json');
-const placeAssignmentsPath = resolve('data/reviewed/place-stop-assignments.json');
-const locationDirectoryPath = resolve('data/reviewed/ctan-location-directory.json');
+const placeAssignmentsPath = resolve('data/reviewed/ctan/place-stop-assignments.json');
+const locationDirectoryPath = resolve('data/reviewed/ctan/location-directory.json');
 
 /** Stop before doing IO when command options contradict the supported build workflow. */
 function fail(message: string): never {

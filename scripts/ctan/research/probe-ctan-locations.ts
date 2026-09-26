@@ -2,7 +2,7 @@
  * Checks whether CTAN's location lists can match GTFS stops to municipalities and smaller areas.
  *
  * A developer runs this investigation with `just locations-probe`. It contacts CTAN and saves the
- * replies and a coverage report under ignored `data/source/ctan-location-probe/`; it never changes
+ * replies and a coverage report under ignored `data/source/ctan/location-probe/`; it never changes
  * the JSON used by the website.
  */
 import { createHash } from 'node:crypto';
@@ -10,7 +10,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { createNetworkDataset } from '../network/convert.ts';
+import { createNetworkDataset } from '../convert.ts';
 import {
   createCtanLocationProbeReport,
   getCtanLineId,
@@ -27,19 +27,19 @@ import {
   type CtanLocationProbeReport,
   type CtanLocalArea,
 } from './ctan-location-crosswalk.ts';
-import { readGtfsTables } from '../network/archive.ts';
+import { readGtfsTables } from '../archive.ts';
 
 /** CTAN's stable API root for the Bahia de Cadiz consortium. */
 const ctanApiRoot = 'http://api.ctan.es/v1/Consorcios/2/';
 
 /** The ignored GTFS input that the probe compares with CTAN's location directory. */
-const defaultInputPath = resolve('data/source/ctan-gtfs.zip');
+const defaultInputPath = resolve('data/source/ctan/gtfs.zip');
 
 /** The ignored parent directory for timestamped, reproducible CTAN API captures. */
-const defaultOutputParentPath = resolve('data/source/ctan-location-probe');
+const defaultOutputParentPath = resolve('data/source/ctan/location-probe');
 
 /** The ignored root that contains every source-data file written by this developer-only command. */
-const sourceDataPath = resolve('data/source');
+const sourceDataPath = resolve('data/source/ctan');
 
 /** Parsed command-line settings for one explicit, developer-only probe run. */
 interface ProbeArguments {
@@ -196,7 +196,7 @@ function parseProbeArguments(arguments_: readonly string[]): ProbeArguments {
 
     // This command is investigative only; prevent a custom option from writing into application assets.
     if (!isSourceDataPath(outputParentPath)) {
-      fail('--output must stay within data/source.');
+      fail('--output must stay within data/source/ctan.');
     }
 
     return { inputPath: values.input === undefined ? defaultInputPath : resolve(values.input), outputParentPath };

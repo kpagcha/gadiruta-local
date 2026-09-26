@@ -17,9 +17,9 @@ import {
   parseCtanMunicipalities,
   parseCtanLocalAreas,
   parseCtanStops,
-} from '../../../scripts/location-research/ctan-location-crosswalk.ts';
-import { probeCtanLocations } from '../../../scripts/location-research/probe-ctan-locations.ts';
-import { ctanLocationFixture } from '../../fixtures/ctan-location.ts';
+} from '../../../../scripts/ctan/research/ctan-location-crosswalk.ts';
+import { probeCtanLocations } from '../../../../scripts/ctan/research/probe-ctan-locations.ts';
+import { ctanLocationFixture } from '../../../fixtures/ctan-location.ts';
 
 test('proves a complete CTAN hierarchy using the exact consortium-prefixed GTFS stop ID', () => {
   const directory = {
@@ -158,5 +158,8 @@ test('rejects malformed CTAN location identifiers before they can be used in a s
 });
 
 test('rejects a capture location outside ignored source data before reading or contacting CTAN', async () => {
-  await assert.rejects(probeCtanLocations(['--output', '../outside-source-data']), /must stay within data\/source/);
+  await assert.rejects(
+    probeCtanLocations(['--output', '../outside-source-data']),
+    /must stay within data\/source\/ctan/,
+  );
 });

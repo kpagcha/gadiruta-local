@@ -67,13 +67,13 @@ export default defineConfig([
     },
   },
   {
-    files: ['scripts/network/*.ts'],
+    files: ['scripts/ctan/*.ts'],
     ignores: ['**/*.test.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
-          patterns: ['**/location-research/**', '**/components/**', '**/pages/**', '**/hooks/**'],
+          patterns: ['**/research/**', '**/components/**', '**/pages/**', '**/hooks/**'],
         },
       ],
     },

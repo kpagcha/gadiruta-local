@@ -12,7 +12,7 @@ install:
 dev:
     npm run dev
 
-# Build this and next year's tracked snapshot from data/source/ctan-gtfs.zip.
+# Build this and next year's tracked snapshot from data/source/ctan/gtfs.zip.
 data:
     npm run data -- --current-and-next-year
 

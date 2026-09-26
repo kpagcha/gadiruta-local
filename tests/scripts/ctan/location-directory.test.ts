@@ -2,11 +2,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { locationDirectorySchema } from '../../../scripts/network/location-directory.ts';
+import { locationDirectorySchema } from '../../../scripts/ctan/location-directory.ts';
 
 test('accepts the reviewed directory without discarding its metadata or candidate points', () => {
   const input: unknown = JSON.parse(
-    readFileSync(new URL('../../../data/reviewed/ctan-location-directory.json', import.meta.url), 'utf8'),
+    readFileSync(new URL('../../../data/reviewed/ctan/location-directory.json', import.meta.url), 'utf8'),
   );
   assert.deepEqual(locationDirectorySchema.parse(input), input);
 });

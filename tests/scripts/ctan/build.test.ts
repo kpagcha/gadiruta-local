@@ -1,7 +1,7 @@
 /** Checks CLI errors before the builder can read or download data. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildNetworkData } from '../../../scripts/network/build.ts';
+import { buildNetworkData } from '../../../scripts/ctan/build.ts';
 
 test("rejects invalid arguments through Node's strict parser", async () => {
   await assert.rejects(buildNetworkData(['--unknown']), /GTFS data error: Unknown option '--unknown'/);

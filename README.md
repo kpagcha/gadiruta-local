@@ -43,7 +43,7 @@ just check
 ```
 
 The committed network snapshot makes normal development work offline. To rebuild it from a local
-CTAN archive, place the unmodified file at `data/source/ctan-gtfs.zip` and run `just data`. It keeps
+CTAN archive, place the unmodified file at `data/source/ctan/gtfs.zip` and run `just data`. It keeps
 the current Cádiz calendar year and the next, clipped to the dates present in the feed. To download
 a fresh archive from `https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip` before rebuilding, run
 `just data-refresh`.

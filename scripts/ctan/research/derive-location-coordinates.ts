@@ -6,9 +6,9 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { parseNetworkDataset, type NetworkDataset, type NetworkStop } from '../../src/data/network-schema.ts';
+import { parseNetworkDataset, type NetworkDataset, type NetworkStop } from '../../../src/data/network-schema.ts';
 
-import { locationDirectorySchema, type LocationDirectory } from '../network/location-directory.ts';
+import { locationDirectorySchema, type LocationDirectory } from '../location-directory.ts';
 
 /** Candidate points produced for a local area with resolved stops. */
 type DerivedCoordinates = NonNullable<LocationDirectory['localAreas'][number]['derivedCoordinates']>;
@@ -126,7 +126,7 @@ export function deriveLocationCoordinates(directory: LocationDirectory, dataset:
 /** Read the checked-in snapshot and update only the reviewed directory when its contents change. */
 export async function writeDerivedLocationCoordinates(): Promise<{ localAreas: number; changed: boolean }> {
   const snapshotPath = resolve('public/data/bahia-cadiz-network.json');
-  const directoryPath = resolve('data/reviewed/ctan-location-directory.json');
+  const directoryPath = resolve('data/reviewed/ctan/location-directory.json');
   const dataset = parseNetworkDataset(JSON.parse(await readFile(snapshotPath, 'utf8')) as unknown);
   const before = await readFile(directoryPath, 'utf8');
   const directory = locationDirectorySchema.parse(JSON.parse(before));
