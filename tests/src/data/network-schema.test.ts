@@ -1,7 +1,7 @@
 /** Checks that the browser rejects broken timetable assets before searching them. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parseNetworkDataset } from './network-schema.ts';
+import { parseNetworkDataset } from '../../../src/data/network-schema.ts';
 
 const dataset = {
   formatVersion: 5,

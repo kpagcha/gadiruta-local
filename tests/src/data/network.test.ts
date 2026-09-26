@@ -6,7 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { loadNetworkDataset } from './network.ts';
+import { loadNetworkDataset } from '../../../src/data/network.ts';
 
 const dataset = {
   formatVersion: 5,

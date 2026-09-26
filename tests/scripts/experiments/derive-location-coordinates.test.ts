@@ -1,9 +1,9 @@
 /** Checks offline coordinate derivation without changing the reviewed directory or contacting CTAN. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import type { NetworkDataset, NetworkStop } from '../../src/data/network-schema.ts';
-import { deriveLocationCoordinates } from './derive-location-coordinates.ts';
-import type { LocationDirectory } from '../reviewed/location-directory.ts';
+import type { NetworkDataset, NetworkStop } from '../../../src/data/network-schema.ts';
+import { deriveLocationCoordinates } from '../../../scripts/experiments/derive-location-coordinates.ts';
+import type { LocationDirectory } from '../../../scripts/reviewed/location-directory.ts';
 
 /** Make one coordinate-bearing stop with no unrelated timetable data. */
 function stop(

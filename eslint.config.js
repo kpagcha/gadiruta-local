@@ -26,12 +26,11 @@ export default defineConfig([
     },
   },
   {
-    files: ['*.{js,mjs,cjs,ts}', 'scripts/**/*.{js,mjs,cjs,ts}'],
+    files: ['*.{js,mjs,cjs,ts}', 'scripts/**/*.{js,mjs,cjs,ts}', 'tests/**/*.{js,mjs,cjs,ts}'],
     languageOptions: { globals: globals.node },
   },
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/**/*.test.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -44,7 +43,6 @@ export default defineConfig([
   },
   {
     files: ['src/data/**/*.ts'],
-    ignores: ['src/data/**/*.test.ts'],
     rules: {
       'no-restricted-imports': [
         'error',

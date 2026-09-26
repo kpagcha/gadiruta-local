@@ -15,7 +15,7 @@
     "data:refresh": "npm run data -- --download --current-and-next-year",
     "locations:probe": "node --experimental-strip-types scripts/experiments/probe-ctan-locations.ts",
     "locations:coordinates": "node --experimental-strip-types scripts/experiments/derive-location-coordinates.ts",
-    "test": "node --experimental-strip-types --test --test-isolation=none \"scripts/**/*.test.ts\" \"src/**/*.test.ts\"",
+    "test": "node --experimental-strip-types --test --test-isolation=none \"tests/**/*.test.ts\"",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.tools.json --noEmit",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",

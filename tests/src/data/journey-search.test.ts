@@ -1,9 +1,9 @@
 /** Checks the search submission boundary with a tiny local timetable and a fixed clock. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { submitJourneySearch, type TripSearchDraft } from './journey-search.ts';
-import type { NetworkDataset } from './network-schema.ts';
-import { resolveSearchUrl } from './search-url.ts';
+import { submitJourneySearch, type TripSearchDraft } from '../../../src/data/journey-search.ts';
+import type { NetworkDataset } from '../../../src/data/network-schema.ts';
+import { resolveSearchUrl } from '../../../src/data/search-url.ts';
 
 const origin = { kind: 'stop' as const, id: 'a', name: 'A', routeLabels: [] };
 const destination = { kind: 'stop' as const, id: 'b', name: 'B', routeLabels: [] };

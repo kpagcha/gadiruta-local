@@ -1,8 +1,8 @@
 /** Checks real ZIP/CSV decoding with saved examples and no upstream requests. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ctanMalformedQuoteArchiveFixture } from '../fixtures/gtfs-topology.ts';
-import { parseCsv, readGtfsTable, readZipTextFiles } from './archive.ts';
+import { ctanMalformedQuoteArchiveFixture } from '../../fixtures/gtfs-topology.ts';
+import { parseCsv, readGtfsTable, readZipTextFiles } from '../../../scripts/gtfs/archive.ts';
 
 test('reads CTAN CSV quirks from a ZIP archive without changing GTFS field values', async () => {
   const files = await readZipTextFiles(ctanMalformedQuoteArchiveFixture);

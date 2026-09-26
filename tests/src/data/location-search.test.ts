@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { locationAliasGroups } from './location-search-aliases.ts';
+import { locationAliasGroups } from '../../../src/data/location-search-aliases.ts';
 import {
   createLocationMunicipalities,
   createLocationOptions,
@@ -13,10 +13,10 @@ import {
   isSameLocationChoice,
   locationLabel,
   searchLocations,
-} from './location-search.ts';
-import { parseNetworkDataset, type NetworkDataset } from './network-schema.ts';
-import { places } from './places.ts';
-import { resolveSearchUrl, searchQuery } from './search-url.ts';
+} from '../../../src/data/location-search.ts';
+import { parseNetworkDataset, type NetworkDataset } from '../../../src/data/network-schema.ts';
+import { places } from '../../../src/data/places.ts';
+import { resolveSearchUrl, searchQuery } from '../../../src/data/search-url.ts';
 
 const dataset: NetworkDataset = {
   formatVersion: 5,
@@ -317,7 +317,7 @@ test('search returns every matching stop for the picker to reveal within its gro
 
 test('curated hub aliases refer to existing choices in the tracked network snapshot', () => {
   const snapshot = parseNetworkDataset(
-    JSON.parse(readFileSync(new URL('../../public/data/bahia-cadiz-network.json', import.meta.url), 'utf8')),
+    JSON.parse(readFileSync(new URL('../../../public/data/bahia-cadiz-network.json', import.meta.url), 'utf8')),
   );
   const snapshotOptions = createLocationOptions(places, snapshot);
   const placeIds = new Set(snapshotOptions.filter((option) => option.kind === 'place').map((option) => option.id));

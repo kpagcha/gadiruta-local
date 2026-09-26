@@ -1,8 +1,8 @@
 /** Checks time entry, Madrid clock conversion, and date-boundary stepping without a browser. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isCalendarDate, madridToday, shiftCalendarDate } from './calendar-date.ts';
-import { clockTime, currentMadridTime, normalizeJourneyTime, stepJourneyTime } from './journey-time.ts';
+import { isCalendarDate, madridToday, shiftCalendarDate } from '../../../src/data/calendar-date.ts';
+import { clockTime, currentMadridTime, normalizeJourneyTime, stepJourneyTime } from '../../../src/data/journey-time.ts';
 
 test('keeps exact minutes, compact entry conventions, and invalid input behavior', () => {
   for (const [input, expected] of [

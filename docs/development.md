@@ -33,7 +33,8 @@ works from the saved file even when the original ZIP is unavailable.
 | Change timetable conversion          | `scripts/gtfs/` and `scripts/build-network-data.ts` |
 | Investigate or review stop locations | `scripts/experiments/` and `scripts/reviewed/`      |
 
-Tests sit beside the code they check. `public/data/bahia-cadiz-network.json` is the reviewed file
+Tests mirror the source folders under `tests/src/` and `tests/scripts/`, with saved examples in
+`tests/fixtures/`. `public/data/bahia-cadiz-network.json` is the reviewed file
 served to the browser. `data/source/` holds downloaded inputs and investigation results on your
 machine; Git ignores it.
 
@@ -58,7 +59,7 @@ under ignored `data/source/`; `just locations-coordinates` writes candidate poin
 location directory. Review those findings before using them to rebuild the network file or
 committing them. CTAN location information can be incomplete or misleading: leave an area unknown
 when it cannot be established, rather than inferring it from a stop name or coordinates. The tests
-beside the research code record the specific provider quirks.
+under `tests/scripts/experiments/` record the specific provider quirks.
 
 ## Working on the app
 

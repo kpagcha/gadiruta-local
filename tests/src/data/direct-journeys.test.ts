@@ -1,10 +1,10 @@
 /** Exercises local direct journeys with small timetables, without an upstream service. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { madridToday } from './calendar-date.ts';
-import { findDirectJourneys, splitDirectJourneys } from './direct-journeys.ts';
-import type { NetworkDataset } from './network-schema.ts';
-import type { LocationOption } from './location-search.ts';
+import { madridToday } from '../../../src/data/calendar-date.ts';
+import { findDirectJourneys, splitDirectJourneys } from '../../../src/data/direct-journeys.ts';
+import type { NetworkDataset } from '../../../src/data/network-schema.ts';
+import type { LocationOption } from '../../../src/data/location-search.ts';
 
 const stop = (id: string, placeId: string | null) => ({
   id,
