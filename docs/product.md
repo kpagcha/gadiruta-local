@@ -1,56 +1,30 @@
-# Product
+# Product guide
 
-## Purpose
+Gadiruta Local helps people find scheduled bus journeys around the Bay of Cádiz. Its first useful
+task is simple: choose where to board and where to get off, then see which direct services run.
 
-Gadiruta Local helps people explore public transport in Cádiz and the surrounding area. It is a
-focused alternative to broad travel planners, built around the information needed for everyday
-local trips.
+## What people can do today
 
-## Intended experience
+- Search between familiar places or choose an exact bus stop. A place covers an area; a stop is one
+  boarding point.
+- Choose a travel date and, if useful, a departure time. Results come from a saved timetable, so
+  they show scheduled services rather than live arrivals.
+- Share a search link or return to a recent search.
+- Use the interface in English or Spanish. Official route and stop names keep their source names.
 
-The app should be fast, friendly, mobile-first, and easy to scan. Its core tasks are:
+A direct journey stays on one bus trip. The app does not plan transfers.
 
-- choose origin and destination places such as Cádiz, San Fernando, El Puerto de Santa María, or
-  Jerez, or choose an exact physical stop;
-- find scheduled direct services for a chosen date and optional departure time, then browse them in
-  manageable groups;
-- revisit recent routes or share a search URL;
-- browse lines, stops, and timetables;
-- view useful network information and relevant service notices.
+## Where the product is going
 
-Places are names people recognize when describing an area; stops are exact boarding points. A plain
-municipality name selects its matching town area when one is available, while an explicit all-stops
-choice covers the municipality. Search also reveals its served local areas and the town area's stops;
-people can choose a named local area or an exact stop. A direct journey is one
-scheduled trip that serves the origin before the destination; transfer routing is not part of the
-first product.
+The next useful views are lines, stops, and timetables; a map may help people explore them. Keeping
+travel data available offline and showing reliable service notices are possible later steps, once
+their data and behavior are clear.
 
-From and To also offer a municipality and local-area selector. Its default All choice covers every
-stop in the selected municipality; a named local area narrows that end of the journey. The selector
-lists only places served by stops in the loaded network.
+The app is focused on local public transport. It does not aim to provide door-to-door directions,
+travel across all of Andalusia, tickets or payments, accounts, or flight and train journey planning.
 
-The interface supports English and Spanish. Official place, operator, and line names remain as
-provided by their source.
-Search also recognizes English and Spanish terms for the airport and named bus and rail station
-access stops, regardless of the interface language. Rail station results are bus boarding points;
-the app does not search train journeys.
+## Experience
 
-## Product boundaries
-
-The first product does not include transfer routing, street-address routing, walking or driving
-directions, flights, payments, accounts, push notifications, full-Andalusia coverage, or a custom
-general-purpose routing algorithm.
-
-## Design direction
-
-The visual language is spacious and calm: strong typography, generous whitespace, comfortable
-controls, restrained colour, and one clear task at a time. The inspiration from
-[clicks.coffee](https://clicks.coffee/) is directional, not a template to copy.
-
-On mobile, the origin and destination search must be visible on arrival without scrolling past
-introductory copy. Desktop can pair that search with a larger editorial introduction.
-
-The search form stays visible when results appear, beside the results card on desktop and above it
-on mobile. Short, restrained transitions help show where content appears and how a choice changes the
-journey. Controls should work with keyboard and touch. Transitions should respect reduced-motion
-preferences.
+The main search should be easy to find immediately on a phone. Pages should feel calm and easy to
+scan, with comfortable controls that work by touch and keyboard. Motion should be restrained and
+respect reduced-motion preferences.

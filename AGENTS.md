@@ -1,7 +1,7 @@
 # Gadiruta Local agent instructions
 
 Gadiruta Local is a Cádiz-focused, local-first static React application. Its product scope is in
-`docs/product.md`, and its current technical boundary is in `docs/architecture.md`.
+`docs/product.md`, and its technical and data workflow is in `docs/development.md`.
 
 ## Workflow
 
@@ -12,8 +12,8 @@ durable technical decisions or data assumptions, or contributor workflow. Do not
 control styling and interaction details in documentation.
 
 Do not retain or introduce a permanent application backend, database, or direct CTAN REST calls
-without a concrete, documented need. The browser should eventually consume preprocessed static
-transit data and query it locally.
+without a concrete, documented need. The browser consumes preprocessed static transit data and
+queries it locally.
 
 ## Engineering practice
 
@@ -52,7 +52,8 @@ transit data and query it locally.
 
 Do not design a complete GTFS importer or local database before a feature needs it. Verify uncertain
 upstream data assumptions and save small representative fixtures when they affect code. Record
-important source-data findings in `docs/architecture.md` until they justify their own document.
+durable source-data cautions briefly in `docs/development.md`; keep exact provider quirks in code
+comments and focused tests.
 
 Use the existing focused test runner for meaningful behaviour. Add Vitest and Testing Library only
 when browser interaction tests make them a concrete need. Tests must not rely on live upstream
@@ -68,11 +69,10 @@ Keep the small documentation set concise and non-overlapping:
 
 - `README.md`: orientation, commands, and milestone checklist.
 - `docs/product.md`: user goals, capabilities, scope, and broad design direction.
-- `docs/architecture.md`: current boundaries, data direction, and durable technical choices.
-- `docs/development.md`: contributor workflow, tool explanation, and repository layout.
+- `docs/development.md`: how the app and data fit together, where to work, and contributor workflow.
 
-Keep the repository-layout overview in `docs/development.md` current when a tracked directory gains
-or changes a responsibility.
+Keep the short "where to look" guide in `docs/development.md` current when a directory changes its
+responsibility. Avoid exhaustive file trees and implementation details that belong in code.
 
 ## Git
 

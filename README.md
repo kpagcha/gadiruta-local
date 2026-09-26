@@ -24,8 +24,8 @@ persistence are still ahead.
 - [ ] **Offline experience:** Add local data persistence and deliberate PWA caching once real data
       needs it.
 
-Each completed milestone is checked here. Technical design belongs in the architecture and source
-code.
+Each completed milestone is checked here. Implementation details belong in the development guide
+and source code.
 
 ## Development
 
@@ -48,12 +48,9 @@ the current Cádiz calendar year and the next, clipped to the dates present in t
 a fresh archive from `https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip` before rebuilding, run
 `just data-refresh`.
 
-[The development guide](docs/development.md) explains the project tools and commands.
-
 ## Documentation
 
 - [Product scope](docs/product.md)
-- [Architecture](docs/architecture.md)
-- [Development conventions](docs/development.md)
+- [Developer guide](docs/development.md)
 
 Gadiruta Local is independent and is not an official CTAN or Junta de Andalucía service.
