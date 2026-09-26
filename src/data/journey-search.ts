@@ -33,10 +33,10 @@ export interface JourneySearch {
   departAfter: string;
 }
 
-/** Results retain the cutoff that was current when the search was submitted. */
+/** Submitted journeys grouped around the departure cutoff captured for this search. */
 export interface JourneySearchResult {
-  departAfter: string;
-  journeys: DirectJourney[];
+  earlier: DirectJourney[];
+  later: DirectJourney[];
 }
 
 /** Reject incomplete or unavailable criteria, resolving Leave now from one captured instant. */
@@ -72,6 +72,6 @@ export function submitJourneySearch(
   return {
     search,
     query: searchQuery(origin, destination, search.departureMode, date, departAfter),
-    result: { departAfter, journeys: findDirectJourneys(dataset, date, origin, destination) },
+    result: findDirectJourneys(dataset, date, origin, destination, departAfter),
   };
 }

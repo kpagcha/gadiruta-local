@@ -7,35 +7,12 @@ import { shiftCalendarDate } from './calendar-date.ts';
 import { townLocalAreaId, type LocationOption } from './location-search.ts';
 import type { NetworkDataset, NetworkStop, NetworkStopTime, NetworkTrip } from './network-schema.ts';
 
-/** A reachable destination on the same trip after one chosen boarding visit. */
-export interface AlightingChoice {
-  index: number;
-  stopId: string;
-  arrivalMinute: number;
-  distanceKm: number;
-}
-
-/** One boardable visit and all later alighting visits matching the destination. */
-export interface BoardingChoice {
-  index: number;
-  stopId: string;
-  departureMinute: number;
-  distanceKm: number;
-  alightings: AlightingChoice[];
-}
-
-/** One trip occurrence on a service date, with all legal matching stop pairs. */
+/** One trip occurrence and the stop pair initially shown on its result card. */
 export interface DirectJourney {
   id: string;
-  tripId: string;
-  routeId: string;
+  trip: NetworkTrip;
   serviceDate: string;
-  boardings: BoardingChoice[];
-}
-
-/** One trip card with the boarding that places it in a time-anchored result list. */
-export interface TimedJourney {
-  journey: DirectJourney;
+  minuteOffset: 0 | -1440;
   boardingIndex: number;
   alightingIndex: number;
   departureMinute: number;
@@ -114,20 +91,25 @@ export function boardableTripStopIndices(trip: NetworkTrip): number[] {
   );
 }
 
-/** Find each direct trip occurrence whose boarding lies within the selected full calendar day. */
+/** Choose one reachable stop pair per trip, preferring departures at or after the cutoff. */
 export function findDirectJourneys(
   dataset: NetworkDataset,
   date: string,
   origin: LocationOption,
   destination: LocationOption,
-): DirectJourney[] {
+  departAfter = '',
+): { earlier: DirectJourney[]; later: DirectJourney[] } {
+  const earlier: DirectJourney[] = [];
+  const later: DirectJourney[] = [];
   if (
     date < dataset.coverage.startDate ||
     date > dataset.coverage.endDate ||
     (origin.kind === 'stop' && destination.kind === 'stop' && origin.id === destination.id)
   )
-    return [];
+    return { earlier, later };
 
+  // The caller supplies an empty or normalized HH:mm cutoff; an empty value means the full day.
+  const cutoff = departAfter === '' ? 0 : Number(departAfter.slice(0, 2)) * 60 + Number(departAfter.slice(3, 5));
   const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
   const originPoint = locationReferencePoint(dataset, origin, stopsById);
   const destinationPoint = locationReferencePoint(dataset, destination, stopsById);
@@ -135,117 +117,82 @@ export function findDirectJourneys(
   const exceptions = new Map(
     dataset.calendarExceptions.map((exception) => [`${exception.serviceId}:${exception.date}`, exception.type]),
   );
-  const journeys: DirectJourney[] = [];
-
   // A GTFS trip dated yesterday can board after midnight today with a 24:xx time.
   for (const serviceDate of [shiftCalendarDate(date, -1), date]) {
-    const offset = serviceDate === date ? 0 : -1440;
+    const minuteOffset: 0 | -1440 = serviceDate === date ? 0 : -1440;
     for (const trip of dataset.trips) {
       if (!runsOnDate(trip.serviceId, serviceDate, calendars, exceptions)) continue;
-      const boardings: BoardingChoice[] = [];
-      for (const [index, time] of trip.stopTimes.entries()) {
-        const departureMinute = time.departureMinutes + offset;
-        const boardingStop = stopsById.get(time.stopId)!;
+      let selected: {
+        boardingIndex: number;
+        alightingIndex: number;
+        departureMinute: number;
+        arrivalMinute: number;
+        distanceKm: number;
+        afterCutoff: boolean;
+      } | null = null;
+      for (const [boardingIndex, boarding] of trip.stopTimes.entries()) {
+        const departureMinute = boarding.departureMinutes + minuteOffset;
+        const boardingStop = stopsById.get(boarding.stopId)!;
         if (
           departureMinute < 0 ||
           departureMinute >= 1440 ||
-          !permitsAction(time, 'pickup') ||
+          !permitsAction(boarding, 'pickup') ||
           !matchesLocation(origin, boardingStop)
         )
           continue;
-        const alightings = trip.stopTimes.slice(index + 1).flatMap((later, relativeIndex) => {
-          const alightingStop = stopsById.get(later.stopId)!;
-          return permitsAction(later, 'dropOff') &&
-            matchesLocation(destination, alightingStop) &&
-            later.arrivalMinutes >= time.departureMinutes
-            ? [
-                {
-                  index: index + relativeIndex + 1,
-                  stopId: later.stopId,
-                  arrivalMinute: later.arrivalMinutes + offset,
-                  distanceKm: distanceKm(alightingStop, destinationPoint),
-                },
-              ]
-            : [];
-        });
-        if (alightings.length > 0)
-          boardings.push({
-            index,
-            stopId: time.stopId,
-            departureMinute,
-            distanceKm: distanceKm(boardingStop, originPoint),
-            alightings,
-          });
-      }
-      if (boardings.length > 0)
-        journeys.push({
-          id: `${trip.id}:${serviceDate}`,
-          tripId: trip.id,
-          routeId: trip.routeId,
-          serviceDate,
-          boardings,
-        });
-    }
-  }
-  return journeys.sort(
-    (a, b) => a.boardings[0]!.departureMinute - b.boardings[0]!.departureMinute || a.id.localeCompare(b.id),
-  );
-}
+        const boardingDistance = distanceKm(boardingStop, originPoint);
+        const afterCutoff = departureMinute >= cutoff;
+        for (let alightingIndex = boardingIndex + 1; alightingIndex < trip.stopTimes.length; alightingIndex += 1) {
+          const alighting = trip.stopTimes[alightingIndex]!;
+          const alightingStop = stopsById.get(alighting.stopId)!;
+          if (
+            !permitsAction(alighting, 'dropOff') ||
+            !matchesLocation(destination, alightingStop) ||
+            alighting.arrivalMinutes < boarding.departureMinutes
+          )
+            continue;
 
-/** Split complete local results around an empty or validated HH:mm time without duplicating a trip card. */
-export function splitDirectJourneys(
-  journeys: readonly DirectJourney[],
-  departAfter: string,
-): { earlier: TimedJourney[]; later: TimedJourney[] } {
-  const cutoff = departAfter === '' ? 0 : Number(departAfter.slice(0, 2)) * 60 + Number(departAfter.slice(3, 5));
-  const earlier: TimedJourney[] = [];
-  const later: TimedJourney[] = [];
+          // A boarding at or after the cutoff wins first; then proximity and time choose the pair.
+          const arrivalMinute = alighting.arrivalMinutes + minuteOffset;
+          const totalDistance = boardingDistance + distanceKm(alightingStop, destinationPoint);
+          if (selected?.afterCutoff && !afterCutoff) continue;
+          if (selected !== null && selected.afterCutoff === afterCutoff) {
+            if (totalDistance > selected.distanceKm) continue;
+            if (totalDistance === selected.distanceKm && departureMinute > selected.departureMinute) continue;
+            if (
+              totalDistance === selected.distanceKm &&
+              departureMinute === selected.departureMinute &&
+              arrivalMinute >= selected.arrivalMinute
+            )
+              continue;
+          }
 
-  for (const journey of journeys) {
-    // The time cutoff determines the result group before proximity chooses a pair.
-    const hasLaterBoarding = journey.boardings.some((boarding) => boarding.departureMinute >= cutoff);
-    let selected: {
-      boardingIndex: number;
-      alightingIndex: number;
-      departureMinute: number;
-      arrivalMinute: number;
-      distanceKm: number;
-    } | null = null;
-    for (const [boardingIndex, boarding] of journey.boardings.entries()) {
-      if (hasLaterBoarding && boarding.departureMinute < cutoff) continue;
-      for (const alighting of boarding.alightings) {
-        // Both endpoint distances count equally; an unavailable reference contributes zero.
-        const totalDistanceKm = boarding.distanceKm + alighting.distanceKm;
-        if (
-          selected === null ||
-          totalDistanceKm < selected.distanceKm ||
-          (totalDistanceKm === selected.distanceKm &&
-            (boarding.departureMinute < selected.departureMinute ||
-              (boarding.departureMinute === selected.departureMinute &&
-                alighting.arrivalMinute < selected.arrivalMinute)))
-        ) {
           selected = {
             boardingIndex,
-            alightingIndex: alighting.index,
-            departureMinute: boarding.departureMinute,
-            arrivalMinute: alighting.arrivalMinute,
-            distanceKm: totalDistanceKm,
+            alightingIndex,
+            departureMinute,
+            arrivalMinute,
+            distanceKm: totalDistance,
+            afterCutoff,
           };
         }
       }
+      if (selected !== null) {
+        (selected.afterCutoff ? later : earlier).push({
+          id: `${trip.id}:${serviceDate}`,
+          trip,
+          serviceDate,
+          minuteOffset,
+          boardingIndex: selected.boardingIndex,
+          alightingIndex: selected.alightingIndex,
+          departureMinute: selected.departureMinute,
+        });
+      }
     }
-    if (selected === null) continue;
-    (hasLaterBoarding ? later : earlier).push({
-      journey,
-      boardingIndex: selected.boardingIndex,
-      alightingIndex: selected.alightingIndex,
-      departureMinute: selected.departureMinute,
-    });
   }
-
   /** Order the cards by their displayed default boarding, then by their stable trip ID. */
-  function byDeparture(first: TimedJourney, second: TimedJourney): number {
-    return first.departureMinute - second.departureMinute || first.journey.id.localeCompare(second.journey.id);
+  function byDeparture(first: DirectJourney, second: DirectJourney): number {
+    return first.departureMinute - second.departureMinute || first.id.localeCompare(second.id);
   }
 
   return { earlier: earlier.sort(byDeparture), later: later.sort(byDeparture) };

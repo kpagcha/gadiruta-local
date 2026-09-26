@@ -134,7 +134,7 @@ test('clips the requested range to source coverage and keeps overnight journeys 
       '2026-01-01',
       { kind: 'stop', id: 'cadiz', name: 'Cádiz', routeLabels: [] },
       { kind: 'stop', id: 'puerto', name: 'El Puerto', routeLabels: [] },
-    ).some((journey) => journey.id === 'outbound-two:2025-12-31'),
+    ).later.some((journey) => journey.id === 'outbound-two:2025-12-31'),
   );
 });
 
@@ -204,7 +204,7 @@ test('keeps a service added by exception outside its weekly calendar dates', () 
       '2026-02-01',
       { kind: 'stop', id: 'cadiz', name: 'Cádiz', routeLabels: [] },
       { kind: 'stop', id: 'puerto', name: 'El Puerto', routeLabels: [] },
-    ).length > 0,
+    ).later.length > 0,
   );
 });
 

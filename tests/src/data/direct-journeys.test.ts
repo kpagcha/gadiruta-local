@@ -2,7 +2,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { madridToday } from '../../../src/data/calendar-date.ts';
-import { findDirectJourneys, splitDirectJourneys } from '../../../src/data/direct-journeys.ts';
+import {
+  alightableTripStopIndices,
+  boardableTripStopIndices,
+  findDirectJourneys,
+} from '../../../src/data/direct-journeys.ts';
 import type { NetworkDataset } from '../../../src/data/network-schema.ts';
 import type { LocationOption } from '../../../src/data/location-search.ts';
 
@@ -75,32 +79,28 @@ const exactA: LocationOption = { kind: 'stop', id: 'a', name: 'A', routeLabels: 
 const exactB: LocationOption = { kind: 'stop', id: 'b', name: 'B', routeLabels: [] };
 
 test('returns one trip card with reachable alternatives and respects stop direction', () => {
-  const journeys = findDirectJourneys(dataset, '2026-09-22', cadiz, rota);
+  const { later: journeys } = findDirectJourneys(dataset, '2026-09-22', cadiz, rota);
   assert.deepEqual(
-    journeys.map((journey) => journey.tripId),
+    journeys.map((journey) => journey.trip.id),
     ['night', 'morning', 'night'],
   );
+  assert.equal(journeys[1]?.trip.stopTimes[journeys[1].boardingIndex]?.stopId, 'a');
+  assert.equal(journeys[1]?.trip.stopTimes[journeys[1].alightingIndex]?.stopId, 'b');
+  assert.deepEqual(boardableTripStopIndices(journeys[1]!.trip), [0, 1, 2]);
+  assert.deepEqual(alightableTripStopIndices(journeys[1]!.trip, 0), [1, 2, 3]);
   assert.deepEqual(
-    journeys[1]?.boardings.map((boarding) => boarding.stopId),
-    ['a', 'a2'],
-  );
-  assert.deepEqual(
-    journeys[1]?.boardings[0]?.alightings.map((choice) => choice.stopId),
-    ['b', 'b2'],
-  );
-  assert.deepEqual(
-    findDirectJourneys(dataset, '2026-09-22', exactA, exactB).map((journey) => journey.tripId),
+    findDirectJourneys(dataset, '2026-09-22', exactA, exactB).later.map((journey) => journey.trip.id),
     ['morning', 'night'],
   );
   assert.deepEqual(
-    findDirectJourneys(dataset, '2026-09-22', exactB, exactA).map((journey) => journey.tripId),
+    findDirectJourneys(dataset, '2026-09-22', exactB, exactA).later.map((journey) => journey.trip.id),
     ['reverse'],
   );
 });
 
 test('applies exceptions and includes after-midnight boarding from yesterday', () => {
   assert.deepEqual(
-    findDirectJourneys(dataset, '2026-09-23', cadiz, rota).map((journey) => journey.tripId),
+    findDirectJourneys(dataset, '2026-09-23', cadiz, rota).later.map((journey) => journey.trip.id),
     ['night', 'added'],
   );
   const afterMidnight = findDirectJourneys(
@@ -108,20 +108,27 @@ test('applies exceptions and includes after-midnight boarding from yesterday', (
     '2026-09-23',
     { kind: 'stop', id: 'a2', name: 'A2', routeLabels: [] },
     rota,
+  ).later[0]!;
+  assert.equal(afterMidnight.departureMinute, 10);
+  assert.equal(
+    afterMidnight.trip.stopTimes[afterMidnight.alightingIndex]!.arrivalMinutes + afterMidnight.minuteOffset,
+    60,
   );
-  assert.equal(afterMidnight[0]?.boardings[0]?.departureMinute, 10);
-  assert.equal(afterMidnight[0]?.boardings[0]?.alightings[0]?.arrivalMinute, 60);
+  assert.equal(afterMidnight.serviceDate, '2026-09-22');
 });
 
 test('handles no results, forbidden pickup, same stop, and expired coverage', () => {
-  assert.deepEqual(findDirectJourneys(dataset, '2026-09-22', exactA, exactA), []);
-  assert.deepEqual(findDirectJourneys(dataset, '2027-01-01', cadiz, rota), []);
-  assert.deepEqual(findDirectJourneys(dataset, '2026-09-27', cadiz, rota), []);
+  const empty = { earlier: [], later: [] };
+  assert.deepEqual(findDirectJourneys(dataset, '2026-09-22', exactA, exactA), empty);
+  assert.deepEqual(findDirectJourneys(dataset, '2027-01-01', cadiz, rota), empty);
+  assert.deepEqual(findDirectJourneys(dataset, '2026-09-27', cadiz, rota), empty);
   assert.deepEqual(
     findDirectJourneys(dataset, '2026-09-22', { kind: 'stop', id: 'road', name: 'Road', routeLabels: [] }, rota),
-    [],
+    empty,
   );
-  assert.ok(!findDirectJourneys(dataset, '2026-09-22', cadiz, rota).some((journey) => journey.tripId === 'no-pickup'));
+  assert.ok(
+    !findDirectJourneys(dataset, '2026-09-22', cadiz, rota).later.some((journey) => journey.trip.id === 'no-pickup'),
+  );
 });
 
 test('uses the Madrid calendar date around UTC midnight', () => {
@@ -178,13 +185,12 @@ const townA: LocationOption = { kind: 'place', id: 'town-a', name: 'Town A', mun
 const townB: LocationOption = { kind: 'place', id: 'town-b', name: 'Town B', municipalityId: 'b' };
 
 test('covers every local area and selects the nearest valid pair on each trip', () => {
-  const journeys = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB);
-  const { later } = splitDirectJourneys(journeys, '');
+  const { later } = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB);
   assert.deepEqual(
-    later.map(({ journey, boardingIndex, alightingIndex }) => ({
-      trip: journey.tripId,
-      board: journey.boardings[boardingIndex]?.stopId,
-      alight: journey.boardings[boardingIndex]?.alightings.find((choice) => choice.index === alightingIndex)?.stopId,
+    later.map(({ trip, boardingIndex, alightingIndex }) => ({
+      trip: trip.id,
+      board: trip.stopTimes[boardingIndex]?.stopId,
+      alight: trip.stopTimes[alightingIndex]?.stopId,
     })),
     [
       { trip: 'conflict', board: 'a-out', alight: 'b-town' },
@@ -196,37 +202,41 @@ test('covers every local area and selects the nearest valid pair on each trip', 
 });
 
 test('may board later for a closer pair, then returns to the earliest pair without reference points', () => {
-  const withPoints = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB).find(
-    (journey) => journey.tripId === 'both',
+  const closest = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB).later.find(
+    (journey) => journey.trip.id === 'both',
   )!;
-  const closest = splitDirectJourneys([withPoints], '').later[0]!;
-  assert.equal(withPoints.boardings[closest.boardingIndex]?.stopId, 'a-town');
+  assert.equal(closest.trip.stopTimes[closest.boardingIndex]?.stopId, 'a-town');
   assert.equal(closest.departureMinute, 610);
 
   const withoutPoints: NetworkDataset = {
     ...hierarchyDataset,
     localAreas: hierarchyDataset.localAreas.map((localArea) => ({ ...localArea, referencePoint: null })),
   };
-  const without = findDirectJourneys(withoutPoints, '2026-09-22', townA, townB).find(
-    (journey) => journey.tripId === 'both',
+  const earliest = findDirectJourneys(withoutPoints, '2026-09-22', townA, townB).later.find(
+    (journey) => journey.trip.id === 'both',
   )!;
-  const earliest = splitDirectJourneys([without], '').later[0]!;
-  assert.equal(without.boardings[earliest.boardingIndex]?.stopId, 'a-out');
+  assert.equal(earliest.trip.stopTimes[earliest.boardingIndex]?.stopId, 'a-out');
   assert.equal(earliest.departureMinute, 600);
 });
 
 test('matches a named local area and applies the cutoff before proximity ranking', () => {
   const localAreaB: LocationOption = { kind: 'place', id: 'b-localArea', name: 'Town B', localAreaId: 'b-town' };
   assert.deepEqual(
-    findDirectJourneys(hierarchyDataset, '2026-09-22', townA, localAreaB).map((journey) => journey.tripId),
+    findDirectJourneys(hierarchyDataset, '2026-09-22', townA, localAreaB).later.map((journey) => journey.trip.id),
     ['conflict', 'both', 'cutoff'],
   );
-  const cutoff = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB).find(
-    (journey) => journey.tripId === 'cutoff',
-  )!;
-  const { later } = splitDirectJourneys([cutoff], '13:25');
-  assert.equal(cutoff.boardings[later[0]!.boardingIndex]?.stopId, 'a-out');
-  assert.equal(later[0]?.departureMinute, 810);
+  const results = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB, '13:30');
+  assert.deepEqual(
+    results.earlier.map((journey) => journey.trip.id),
+    ['conflict', 'both', 'outlying-only'],
+  );
+  const cutoff = results.later.find((journey) => journey.trip.id === 'cutoff')!;
+  assert.equal(cutoff.trip.stopTimes[cutoff.boardingIndex]?.stopId, 'a-out');
+  assert.equal(cutoff.departureMinute, 810);
+  const pastCutoff = findDirectJourneys(hierarchyDataset, '2026-09-22', townA, townB, '13:31');
+  assert.equal(pastCutoff.later.length, 0);
+  const lastEarlier = pastCutoff.earlier.at(-1)!;
+  assert.equal(lastEarlier.trip.stopTimes[lastEarlier.boardingIndex]?.stopId, 'a-town');
 });
 
 test('uses CTAN membership over an older conflicting place assignment', () => {
@@ -235,9 +245,9 @@ test('uses CTAN membership over an older conflicting place assignment', () => {
     stops: hierarchyDataset.stops.map((stop) => (stop.id === 'a-out' ? { ...stop, placeId: 'town-b' } : stop)),
   };
   const exactTownB: LocationOption = { kind: 'stop', id: 'b-town', name: 'Town B stop', routeLabels: [] };
-  const journeys = findDirectJourneys(conflictingAssignment, '2026-09-22', townB, exactTownB);
+  const journeys = findDirectJourneys(conflictingAssignment, '2026-09-22', townB, exactTownB).later;
   assert.equal(
-    journeys.some((journey) => journey.tripId === 'conflict'),
+    journeys.some((journey) => journey.trip.id === 'conflict'),
     false,
   );
 });
@@ -250,10 +260,10 @@ test('accepts a unique shortened town name and ignores a municipality with no to
       { id: 'b', name: 'Town B' },
     ],
   };
-  const [conflict] = findDirectJourneys(shortened, '2026-09-22', townA, townB);
-  assert.equal(conflict?.tripId, 'conflict');
-  assert.equal(conflict.boardings.find((boarding) => boarding.stopId === 'a-town')?.distanceKm, 0);
-  assert.ok((conflict.boardings.find((boarding) => boarding.stopId === 'a-out')?.distanceKm ?? 0) > 0);
+  const shortenedJourneys = findDirectJourneys(shortened, '2026-09-22', townA, townB).later;
+  assert.equal(shortenedJourneys[0]?.trip.id, 'conflict');
+  const shortenedTown = shortenedJourneys.find((journey) => journey.trip.id === 'both')!;
+  assert.equal(shortenedTown.trip.stopTimes[shortenedTown.boardingIndex]?.stopId, 'a-town');
 
   const unmatched: NetworkDataset = {
     ...hierarchyDataset,
@@ -263,12 +273,12 @@ test('accepts a unique shortened town name and ignores a municipality with no to
     ],
   };
   const exactOutlying: LocationOption = { kind: 'stop', id: 'b-out', name: 'B Outer', routeLabels: [] };
-  const [withoutTown] = findDirectJourneys(unmatched, '2026-09-22', townA, exactOutlying);
-  assert.equal(withoutTown?.tripId, 'conflict');
-  assert.equal(withoutTown.boardings[splitDirectJourneys([withoutTown], '').later[0]!.boardingIndex]?.stopId, 'a-out');
-  const [destinationOnly] = findDirectJourneys(unmatched, '2026-09-22', townA, townB);
-  assert.equal(destinationOnly?.tripId, 'conflict');
-  assert.equal(splitDirectJourneys([destinationOnly], '').later[0]?.alightingIndex, 1);
+  const [withoutTown] = findDirectJourneys(unmatched, '2026-09-22', townA, exactOutlying).later;
+  assert.equal(withoutTown?.trip.id, 'conflict');
+  assert.equal(withoutTown.trip.stopTimes[withoutTown.boardingIndex]?.stopId, 'a-out');
+  const [destinationOnly] = findDirectJourneys(unmatched, '2026-09-22', townA, townB).later;
+  assert.equal(destinationOnly?.trip.id, 'conflict');
+  assert.equal(destinationOnly.alightingIndex, 1);
 
   const ambiguous: NetworkDataset = {
     ...shortened,
@@ -277,10 +287,7 @@ test('accepts a unique shortened town name and ignores a municipality with no to
       { id: 'another-prefix', municipalityId: 'a', name: 'Town', referencePoint: null },
     ],
   };
-  const [withoutUniqueTown] = findDirectJourneys(ambiguous, '2026-09-22', townA, exactOutlying);
-  assert.equal(withoutUniqueTown?.tripId, 'conflict');
-  assert.equal(
-    withoutUniqueTown.boardings[splitDirectJourneys([withoutUniqueTown], '').later[0]!.boardingIndex]?.stopId,
-    'a-out',
-  );
+  const [withoutUniqueTown] = findDirectJourneys(ambiguous, '2026-09-22', townA, exactOutlying).later;
+  assert.equal(withoutUniqueTown?.trip.id, 'conflict');
+  assert.equal(withoutUniqueTown.trip.stopTimes[withoutUniqueTown.boardingIndex]?.stopId, 'a-out');
 });

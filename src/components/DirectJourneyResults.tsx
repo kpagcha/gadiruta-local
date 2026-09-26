@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
-import { splitDirectJourneys } from '../data/direct-journeys.ts';
 import type { JourneySearchResult } from '../data/journey-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { JourneyCard } from './JourneyCard';
@@ -20,14 +19,12 @@ export function DirectJourneyResults({
   const reducedMotion = useReducedMotion();
   const [earlierCount, setEarlierCount] = useState(0);
   const [laterCount, setLaterCount] = useState(4);
-  const split = result === null ? { earlier: [], later: [] } : splitDirectJourneys(result.journeys, result.departAfter);
-  const visible = [
-    ...split.earlier.slice(Math.max(0, split.earlier.length - earlierCount)),
-    ...split.later.slice(0, laterCount),
-  ];
-  const total = split.earlier.length + split.later.length;
-  const hasEarlier = earlierCount < split.earlier.length;
-  const hasLater = laterCount < split.later.length;
+  const earlier = result?.earlier ?? [];
+  const later = result?.later ?? [];
+  const visible = [...earlier.slice(Math.max(0, earlier.length - earlierCount)), ...later.slice(0, laterCount)];
+  const total = earlier.length + later.length;
+  const hasEarlier = earlierCount < earlier.length;
+  const hasLater = laterCount < later.length;
 
   return (
     <section
@@ -64,7 +61,7 @@ export function DirectJourneyResults({
             </p>
           ) : (
             <div className="mt-4 grid gap-4">
-              {visible.map(({ journey, boardingIndex, alightingIndex }, index) => (
+              {visible.map((journey, index) => (
                 <motion.div
                   key={journey.id}
                   layout={!reducedMotion}
@@ -76,12 +73,7 @@ export function DirectJourneyResults({
                     y: { duration: 0.2, delay: Math.min(index, 3) * 0.035 },
                   }}
                 >
-                  <JourneyCard
-                    journey={journey}
-                    dataset={dataset}
-                    defaultBoardingIndex={boardingIndex}
-                    defaultAlightingIndex={alightingIndex}
-                  />
+                  <JourneyCard journey={journey} dataset={dataset} />
                 </motion.div>
               ))}
             </div>

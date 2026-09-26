@@ -231,37 +231,25 @@ function StopTimelineList({
 }
 
 /** Show one trip and allow a rider to choose another reachable stop pair on that trip. */
-export function JourneyCard({
-  journey,
-  dataset,
-  defaultBoardingIndex,
-  defaultAlightingIndex,
-}: {
-  journey: DirectJourney;
-  dataset: NetworkDataset;
-  defaultBoardingIndex: number;
-  defaultAlightingIndex: number;
-}) {
+export function JourneyCard({ journey, dataset }: { journey: DirectJourney; dataset: NetworkDataset }) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const stopLabelId = useId();
   const stopListId = useId();
   const boardTriggerRef = useRef<HTMLButtonElement>(null);
   const alightTriggerRef = useRef<HTMLButtonElement>(null);
-  const initialBoarding = journey.boardings[defaultBoardingIndex]!;
-  const [boardingIndex, setBoardingIndex] = useState(initialBoarding.index);
-  const [alightingIndex, setAlightingIndex] = useState(defaultAlightingIndex);
+  const [boardingIndex, setBoardingIndex] = useState(journey.boardingIndex);
+  const [alightingIndex, setAlightingIndex] = useState(journey.alightingIndex);
   const [openStop, setOpenStop] = useState<'board' | 'alight' | null>(null);
   const stopsById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
-  const route = dataset.routes.find((route) => route.id === journey.routeId);
-  const trip = dataset.trips.find((trip) => trip.id === journey.tripId)!;
+  const trip = journey.trip;
+  const route = dataset.routes.find((route) => route.id === trip.routeId);
   const boarding = trip.stopTimes[boardingIndex]!;
   const alighting = trip.stopTimes[alightingIndex]!;
   const boardingStop = stopsById.get(boarding.stopId);
   const alightingStop = stopsById.get(alighting.stopId);
-  // The journey's recorded boarding time gives every trip visit the same service-day offset.
-  const firstBoarding = journey.boardings[0]!;
-  const minuteOffset = firstBoarding.departureMinute - trip.stopTimes[firstBoarding.index]!.departureMinutes;
+  // Yesterday's service can appear in today's results when its GTFS time runs past midnight.
+  const minuteOffset = journey.minuteOffset;
   const boardableIndices = boardableTripStopIndices(trip);
   const alightableIndices = alightableTripStopIndices(trip, boardingIndex);
   const boardingOptions = trip.stopTimes.map((time, index) => ({
@@ -289,7 +277,7 @@ export function JourneyCard({
       tabIndex={hasLongNameTooltip ? 0 : undefined}
     >
       <Icon name={routeIcon(route?.type)} size={15} strokeWidth={1.8} />
-      {t('journey.line', { line: route === undefined ? journey.routeId : getRouteLabel(route) })}
+      {t('journey.line', { line: route === undefined ? trip.routeId : getRouteLabel(route) })}
     </span>
   );
 

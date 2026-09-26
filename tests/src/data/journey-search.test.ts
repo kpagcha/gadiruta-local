@@ -61,8 +61,8 @@ const now = new Date('2026-09-26T07:15:00Z');
 test('normalizes committed times and produces results and a restorable link from the same criteria', () => {
   const submitted = submitJourneySearch(dataset, draft, now)!;
   assert.equal(submitted.search.departAfter, '09:07');
-  assert.equal(submitted.result.departAfter, '09:07');
-  assert.equal(submitted.result.journeys[0]?.tripId, 'trip');
+  assert.equal(submitted.result.later[0]?.trip.id, 'trip');
+  assert.equal(submitted.result.earlier.length, 0);
   const restored = resolveSearchUrl(submitted.query, [origin, destination], dataset.coverage, draft.date);
   assert.equal(restored.complete, true);
   assert.equal(restored.origin?.id, origin.id);
@@ -77,7 +77,7 @@ test('captures one Madrid instant for Leave now while keeping saved criteria rel
     new Date('2026-09-26T22:05:00Z'),
   )!;
   assert.equal(submitted.search.date, '2026-09-27');
-  assert.equal(submitted.result.departAfter, '00:05');
+  assert.equal(submitted.result.later[0]?.trip.id, 'trip');
   assert.equal(submitted.search.departAfter, '');
   assert.equal(new URLSearchParams(submitted.query).get('mode'), 'now');
   assert.equal(new URLSearchParams(submitted.query).has('date'), false);
@@ -96,6 +96,7 @@ test('rejects unresolved, identical, past, invalid, and uncovered criteria befor
 
 test('unrecognized typed time retains the existing all-day search behavior', () => {
   const submitted = submitJourneySearch(dataset, { ...draft, departAfter: '25:99' }, now)!;
-  assert.equal(submitted.result.departAfter, '');
+  assert.equal(submitted.result.later[0]?.trip.id, 'trip');
+  assert.equal(submitted.result.earlier.length, 0);
   assert.equal(new URLSearchParams(submitted.query).has('depart_after'), false);
 });
