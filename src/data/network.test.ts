@@ -99,3 +99,14 @@ test('rejects a missing static network asset', async () => {
     globalThis.fetch = originalFetch;
   }
 });
+
+test('distinguishes malformed JSON from a rejected dataset and forwards cancellation', async (context) => {
+  const controller = new AbortController();
+  const fetchMock = context.mock.method(globalThis, 'fetch', async (_input: unknown, init?: RequestInit) => {
+    assert.equal(init?.signal, controller.signal);
+    return new Response('{broken');
+  });
+  await assert.rejects(loadNetworkDataset(controller.signal), /not valid JSON/);
+  fetchMock.mock.mockImplementation(async () => new Response(JSON.stringify({ ...dataset, stops: [] })));
+  await assert.rejects(loadNetworkDataset(), /stops/);
+});

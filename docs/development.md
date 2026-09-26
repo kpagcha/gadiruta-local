@@ -18,23 +18,20 @@ gadiruta-local/
 │   ├── components/               Reusable interface pieces and their Storybook stories
 │   │   └── ui/                   Shared Base UI select and tooltip wrappers with app styling
 │   ├── data/                     Browser-side network loading, journey search, recent history, URL and calendar helpers
+│   ├── hooks/                    React lifecycle for dataset loading and theme preference
 │   ├── i18n/                     English/Spanish text and language setup
-│   ├── styles/                   Global CSS and Tailwind entry point
-│   └── theme.ts                  Browser theme preference and document synchronization
+│   └── styles/                   Global CSS and Tailwind entry point
 ├── public/                       Files copied as-is to the site root during build
 │   ├── data/                     Checked-in network JSON fetched by the browser
 │   ├── fonts/                    Font license and other public font files
 │   └── favicon.svg               Browser tab icon
 ├── scripts/                      Developer-run data tools; never imported by the website
-│   ├── gtfs-archive.ts           Reads ZIP entries and parses GTFS CSV tables
-│   ├── build-network-data.ts     Selects and writes the browser network snapshot
-│   ├── place-stop-assignments.json Reviewed stop-to-place IDs used during snapshot generation
-│   ├── ctan-location-directory.json Reviewed CTAN hierarchy used during snapshot generation
-│   ├── derive-location-coordinates.ts Writes candidate local-area points from tracked network stops
-│   ├── ctan-location-crosswalk.ts Parses CTAN location replies and checks stop coverage
-│   ├── probe-ctan-locations.ts   Explicit live CTAN investigation; saves audit evidence
-│   ├── *.test.ts                 Offline tests for data tooling
-│   └── fixtures/                 Small saved input examples used by those tests
+│   ├── build-network-data.ts     CLI, explicit download, file reading and snapshot writing
+│   ├── gtfs/                     ZIP/CSV reading and GTFS conversion; adjacent tests
+│   ├── reviewed/                 Curated JSON inputs; shared input schema and tests
+│   ├── experiments/              Probing, crosswalk and coordinate tools; adjacent tests/fixtures
+│   ├── build-network-data.test.ts CLI boundary tests
+│   └── fixtures/                 Small GTFS examples for tooling tests
 ├── data/source/                  Ignored downloaded GTFS ZIP and probe captures (local only)
 ├── docs/                         Product, architecture, and contributor guides
 ├── .storybook/                   Storybook configuration; stories sit by components in src/
@@ -42,11 +39,12 @@ gadiruta-local/
 ├── package-lock.json             Exact installed dependency versions
 ├── justfile                      Friendly command names that call npm scripts
 ├── vite.config.ts                Vite development server and build configuration
-└── tsconfig.json                 Strict TypeScript settings
+├── tsconfig.json                 Strict browser TypeScript settings, without Node globals
+└── tsconfig.tools.json           Node tooling, tests, Storybook, and Vite configuration
 ```
 
 Generated or local-only directories such as `node_modules/`, `dist/`, `storybook-static/`, and
-`.idea/` are omitted from the tree. The two directories with the word `data` have different roles:
+`.idea/` are omitted from the tree. The data paths have different roles:
 
 - `data/source/` is ignored local input/evidence for developer tools. It is not shipped and is not
   needed to run the checked-in app.
@@ -60,17 +58,20 @@ Generated or local-only directories such as `node_modules/`, `dist/`, `storybook
 Browser opens index.html
   → src/main.tsx mounts React and initializes translations/styles
   → App.tsx renders the shared header, HomePage, and footer
-  → HomePage uses useNetworkDataset()
+  → HomePage uses src/hooks/use-network-dataset.ts
   → src/data/network.ts fetches /data/bahia-cadiz-network.json
   → network-schema.ts validates the JSON before use
   → location-search.ts combines network stops with curated places
   → TripLocationPicker displays local search choices
-  → direct-journeys.ts searches trips and calendars after date/location selection
+  → journey-search.ts validates submitted criteria and creates the URL and local results
+  → direct-journeys.ts searches trips and calendars
 ```
 
 After a search, `HomePage` places the persistent form next to a separate `DirectJourneyResults`
-card on desktop, or above it on mobile. Motion animates the page entrance, search layout, and journey
-cards; CSS handles short control and popup transitions.
+card on desktop, or above it on mobile. `LocationField` owns each endpoint's suggestions and place
+picker; `TripLocationPicker` composes the whole form. `JourneyCard` owns stop selection and its
+timeline; `DirectJourneyResults` owns result pagination. Motion animates the page entrance, search
+layout, and journey cards; CSS handles short control and popup transitions.
 `search-url.ts` maps shareable browser URLs to local places,
 stops, dates, and times; `direct-journeys.ts` supplies and divides the local journey list.
 
@@ -84,10 +85,10 @@ handled in the browser and may be saved in local storage.
 ```text
 CTAN GTFS ZIP
   → data/source/ctan-gtfs.zip (local input, ignored by Git)
-  → scripts/gtfs-archive.ts reads ZIP and CSV
-  → scripts/build-network-data.ts selects Bahía routes, stops, trips, and calendars
-  → scripts/place-stop-assignments.json adds reviewed place IDs
-  → scripts/ctan-location-directory.json adds reviewed CTAN location IDs and local-area reference points
+  → scripts/gtfs/archive.ts reads ZIP and CSV
+  → scripts/gtfs/network-dataset.ts selects Bahía routes, stops, trips, and calendars
+  → scripts/reviewed/place-stop-assignments.json adds reviewed place IDs
+  → scripts/reviewed/ctan-location-directory.json adds reviewed CTAN location IDs and local-area reference points
   → public/data/bahia-cadiz-network.json (reviewed and tracked)
   → browser loads and validates it as above
 ```
@@ -101,14 +102,19 @@ the JSON diff before committing. Update the tracked location directory from a ne
 when CTAN adds stops or changes its hierarchy. The app can be developed from a fresh
 checkout without the ZIP because the reviewed JSON is already present.
 
+`build-network-data.ts` handles arguments, explicit downloads, file IO, and provenance. The GTFS
+conversion in `scripts/gtfs/network-dataset.ts` can be tested without those side effects. ZIP/CSV
+decoding uses `yauzl` and `csv-parse`; arguments use Node's `parseArgs`. JSON boundaries use Zod,
+with explicit transit relationship checks in the shared `src/data/network-schema.ts` contract.
+
 The underlying builder keeps the full source span when no range is given: `npm run data`. For an
 inclusive custom range, run `npm run data -- --start-date 2026-07-01 --end-date 2026-09-30`. These
 commands read the local ZIP; only the explicit `--download` option fetches CTAN data.
 
 `just locations-probe` is a separate investigation. It contacts CTAN location endpoints, compares
 their identifiers with stops in the local ZIP, and writes raw replies and a report under
-`data/source/ctan-location-probe/`. It never edits the browser JSON. The corresponding parser and
-crosswalk rules are tested offline; tests do not contact transit services. Review its captured
+`data/source/ctan-location-probe/`. It never edits the browser JSON. The commands and crosswalk code live under
+`scripts/experiments/`. Their rules are tested offline; tests do not contact transit services. Review its captured
 hierarchy before updating the tracked directory that the snapshot builder reads.
 
 `just locations-coordinates` uses the checked-in network snapshot to write two candidate points
@@ -164,6 +170,16 @@ demonstrate and can be opened in Storybook without running the app flow.
   indexing, and search logic in cohesive `src/data/` modules.
 - Put every user-facing string in both `src/i18n/en.json` and `src/i18n/es.json`.
 - Keep tests offline and focused on meaningful behavior and failure cases.
+
+Tests sit next to the responsibility they exercise: GTFS archive/conversion tests in `scripts/gtfs/`,
+reviewed-input tests in `scripts/reviewed/`, experimental tests in `scripts/experiments/`, and browser
+data tests in `src/data/`. `npm test` discovers `*.test.ts` in both trees using Node's test runner.
+Fixtures remain small and local to tooling; application tests use application-shaped data.
+
+`npm run typecheck` checks browser code without Node globals, then tooling, tests, and stories with
+Node types. ESLint rejects Node/tooling imports in browser code, React imports in data modules, and
+experimental imports in production data generation. Tests can use Node for offline fixtures.
+Formatting skips generated sites, caches, and ignored source evidence.
 
 See [Architecture](architecture.md) for the current data boundaries and [Product](product.md) for
 what the app is meant to do.

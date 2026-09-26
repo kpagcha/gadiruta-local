@@ -1,5 +1,3 @@
-/** Render the persistent data attribution and independence statement in the page footer. */
-
 import { Trans, useTranslation } from 'react-i18next';
 
 /** Render global source attribution once, outside feature-specific interface content. */

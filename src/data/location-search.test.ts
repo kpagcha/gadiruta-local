@@ -3,7 +3,9 @@
  * choices, town areas, outlying areas, and physical stops keep distinct scopes and URL identities.
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { locationAliasGroups } from './location-search-aliases.ts';
 import {
   createLocationMunicipalities,
   createLocationOptions,
@@ -12,7 +14,7 @@ import {
   locationLabel,
   searchLocations,
 } from './location-search.ts';
-import type { NetworkDataset } from './network-schema.ts';
+import { parseNetworkDataset, type NetworkDataset } from './network-schema.ts';
 import { places } from './places.ts';
 import { resolveSearchUrl, searchQuery } from './search-url.ts';
 
@@ -311,4 +313,62 @@ test('search returns every matching stop for the picker to reveal within its gro
     routeLabels: [],
   }));
   assert.equal(searchLocations(repeatedStops, 'hospital').stops.length, 9);
+});
+
+test('curated hub aliases refer to existing choices in the tracked network snapshot', () => {
+  const snapshot = parseNetworkDataset(
+    JSON.parse(readFileSync(new URL('../../public/data/bahia-cadiz-network.json', import.meta.url), 'utf8')),
+  );
+  const snapshotOptions = createLocationOptions(places, snapshot);
+  const placeIds = new Set(snapshotOptions.filter((option) => option.kind === 'place').map((option) => option.id));
+  const stopIds = new Set(snapshot.stops.map((stop) => stop.id));
+
+  for (const group of locationAliasGroups) {
+    for (const id of group.placeIds ?? []) assert.ok(placeIds.has(id), `Missing alias place: ${id}`);
+    for (const id of group.stopIds ?? []) assert.ok(stopIds.has(id), `Missing alias stop: ${id}`);
+  }
+
+  /** Compare matching stops regardless of how suggestions are ranked. */
+  const matchingStopIds = (query: string) =>
+    searchLocations(snapshotOptions, query)
+      .stops.map((stop) => stop.id)
+      .sort();
+  const busStops = ['2_14', '2_161', '2_181', '2_188', '2_191', '2_222', '2_266', '2_303', '2_304'].sort();
+  const railStops = ['2_125', '2_126', '2_163', '2_174', '2_47', '2_48', '2_86', '2_87'].sort();
+
+  assert.deepEqual(matchingStopIds('bus station'), busStops);
+  assert.deepEqual(matchingStopIds('train station'), railStops);
+  assert.deepEqual(matchingStopIds('estación de tren'), railStops);
+  assert.deepEqual(matchingStopIds('Cádiz bus station'), ['2_14', '2_303', '2_304']);
+  assert.deepEqual(matchingStopIds('station train Bahía Sur'), ['2_47', '2_48']);
+  assert.deepEqual(matchingStopIds('jerez airport'), ['2_173']);
+  assert.deepEqual(
+    searchLocations(snapshotOptions, 'airport').areas.map((area) => area.id),
+    ['aeropuerto-jerez'],
+  );
+
+  const airport = searchLocations(snapshotOptions, 'airport').areas[0]!;
+  const cadiz = snapshotOptions.find((option) => option.id === 'cadiz')!;
+  const query = searchQuery(airport, cadiz, 'leave-now', snapshot.coverage.startDate, '');
+  assert.equal(
+    resolveSearchUrl(query, snapshotOptions, snapshot.coverage, snapshot.coverage.startDate).origin?.id,
+    airport.id,
+  );
+  const stationStop = searchLocations(snapshotOptions, 'Jerez bus station').stops[0]!;
+  const stationQuery = searchQuery(stationStop, cadiz, 'leave-now', snapshot.coverage.startDate, '');
+  assert.equal(
+    resolveSearchUrl(stationQuery, snapshotOptions, snapshot.coverage, snapshot.coverage.startDate).origin?.id,
+    '2_161',
+  );
+});
+
+test('official names rank ahead of aliases without repeating a choice', () => {
+  const choices = [
+    { kind: 'stop' as const, id: 'alias', name: 'Another stop', searchAliases: ['bus station'], routeLabels: [] },
+    { kind: 'stop' as const, id: 'name', name: 'Bus Station', searchAliases: ['bus station'], routeLabels: [] },
+  ];
+  assert.deepEqual(
+    searchLocations(choices, 'bus station').stops.map((stop) => stop.id),
+    ['name', 'alias'],
+  );
 });

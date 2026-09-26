@@ -3,6 +3,7 @@
  * Times are minutes from a GTFS service day, which may continue after midnight. This module makes
  * no network requests and leaves display formatting to the interface.
  */
+import { shiftCalendarDate } from './calendar-date.ts';
 import { townLocalAreaId, type LocationOption } from './location-search.ts';
 import type { NetworkDataset, NetworkStop, NetworkStopTime, NetworkTrip } from './network-schema.ts';
 
@@ -38,25 +39,6 @@ export interface TimedJourney {
   boardingIndex: number;
   alightingIndex: number;
   departureMinute: number;
-}
-
-/** Return today's calendar date in Cádiz even when the browser is in another time zone. */
-export function madridToday(now = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en', {
-    timeZone: 'Europe/Madrid',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(now);
-  const field = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
-  return `${field('year')}-${field('month')}-${field('day')}`;
-}
-
-/** Shift an ISO calendar date without applying the browser's local time zone. */
-function previousDate(date: string): string {
-  const day = new Date(`${date}T00:00:00Z`);
-  day.setUTCDate(day.getUTCDate() - 1);
-  return day.toISOString().slice(0, 10);
 }
 
 /** Check whether a service runs after a date exception overrides its weekly calendar. */
@@ -156,7 +138,7 @@ export function findDirectJourneys(
   const journeys: DirectJourney[] = [];
 
   // A GTFS trip dated yesterday can board after midnight today with a 24:xx time.
-  for (const serviceDate of [previousDate(date), date]) {
+  for (const serviceDate of [shiftCalendarDate(date, -1), date]) {
     const offset = serviceDate === date ? 0 : -1440;
     for (const trip of dataset.trips) {
       if (!runsOnDate(trip.serviceId, serviceDate, calendars, exceptions)) continue;
@@ -267,10 +249,4 @@ export function splitDirectJourneys(
   }
 
   return { earlier: earlier.sort(byDeparture), later: later.sort(byDeparture) };
-}
-
-/** Display an absolute trip minute as a clock time, wrapping at midnight. */
-export function clockTime(minute: number): string {
-  const withinDay = ((minute % 1440) + 1440) % 1440;
-  return `${String(Math.floor(withinDay / 60)).padStart(2, '0')}:${String(withinDay % 60).padStart(2, '0')}`;
 }

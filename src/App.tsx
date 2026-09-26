@@ -1,4 +1,3 @@
-/** Render the global application shell and synchronize its document metadata. */
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from './components/AppFooter';

@@ -2,8 +2,8 @@
   "formatVersion": 5,
   "source": {
     "url": "https://api.ctan.es/v1/datos/UNIFICADO/gtfs.zip",
-    "generatedAt": "2026-09-25T10:06:59.822Z",
-    "archiveSha256": "05dbac999e552f9d8164d3581b86dfe97cb71e111fc86deaa1e8fe7b13c4f844"
+    "generatedAt": "2026-09-26T09:04:50.824Z",
+    "archiveSha256": "e07f803aa6936ac11e9155fcf45527020d1e4eabaea58787afb5abd4f7f2c6e2"
   },
   "agencies": [
     {
@@ -681,8 +681,8 @@
   "localAreas": [
     {
       "id": "1",
-      "municipalityId": "1",
       "name": "Cádiz",
+      "municipalityId": "1",
       "referencePoint": {
         "latitude": 36.521701,
         "longitude": -6.285631
@@ -690,8 +690,8 @@
     },
     {
       "id": "11",
-      "municipalityId": "4",
       "name": "Barrio Jarana",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.502844,
         "longitude": -6.143829
@@ -699,8 +699,8 @@
     },
     {
       "id": "12",
-      "municipalityId": "4",
       "name": "Río San Pedro",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.525028,
         "longitude": -6.22286
@@ -708,14 +708,14 @@
     },
     {
       "id": "13",
-      "municipalityId": "5",
       "name": "Doña Blanca",
+      "municipalityId": "5",
       "referencePoint": null
     },
     {
       "id": "14",
-      "municipalityId": "6",
       "name": "Jerez",
+      "municipalityId": "6",
       "referencePoint": {
         "latitude": 36.693656,
         "longitude": -6.130328
@@ -723,8 +723,8 @@
     },
     {
       "id": "15",
-      "municipalityId": "7",
       "name": "Rota",
+      "municipalityId": "7",
       "referencePoint": {
         "latitude": 36.62353,
         "longitude": -6.359879
@@ -732,14 +732,14 @@
     },
     {
       "id": "16",
-      "municipalityId": "6",
       "name": "El Portal",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "17",
-      "municipalityId": "7",
       "name": "Costa Ballena (Rota)",
+      "municipalityId": "7",
       "referencePoint": {
         "latitude": 36.692467,
         "longitude": -6.410083
@@ -747,8 +747,8 @@
     },
     {
       "id": "18",
-      "municipalityId": "8",
       "name": "Medina",
+      "municipalityId": "8",
       "referencePoint": {
         "latitude": 36.438228,
         "longitude": -6.021544
@@ -756,8 +756,8 @@
     },
     {
       "id": "19",
-      "municipalityId": "10",
       "name": "Jédula",
+      "municipalityId": "10",
       "referencePoint": {
         "latitude": 36.724754,
         "longitude": -5.92982
@@ -765,8 +765,8 @@
     },
     {
       "id": "2",
-      "municipalityId": "2",
       "name": "San Fernando",
+      "municipalityId": "2",
       "referencePoint": {
         "latitude": 36.464473,
         "longitude": -6.201655
@@ -774,8 +774,8 @@
     },
     {
       "id": "20",
-      "municipalityId": "10",
       "name": "Arcos",
+      "municipalityId": "10",
       "referencePoint": {
         "latitude": 36.749337,
         "longitude": -5.818322
@@ -783,8 +783,8 @@
     },
     {
       "id": "21",
-      "municipalityId": "5",
       "name": "Penal",
+      "municipalityId": "5",
       "referencePoint": {
         "latitude": 36.666621,
         "longitude": -6.246744
@@ -792,38 +792,38 @@
     },
     {
       "id": "22",
-      "municipalityId": "6",
       "name": "La Barca de la Florida",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "23",
-      "municipalityId": "6",
       "name": "Torrecera",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "24",
-      "municipalityId": "6",
       "name": "Guadalcín",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "25",
-      "municipalityId": "6",
       "name": "Nueva Jarilla",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "26",
-      "municipalityId": "6",
       "name": "Estella del Marqués",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "28",
-      "municipalityId": "11",
       "name": "Sanlúcar de Barrameda",
+      "municipalityId": "11",
       "referencePoint": {
         "latitude": 36.766917,
         "longitude": -6.346745
@@ -831,8 +831,8 @@
     },
     {
       "id": "3",
-      "municipalityId": "3",
       "name": "Chiclana",
+      "municipalityId": "3",
       "referencePoint": {
         "latitude": 36.435623,
         "longitude": -6.124618
@@ -840,14 +840,14 @@
     },
     {
       "id": "30",
-      "municipalityId": "6",
       "name": "El Torno",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "31",
-      "municipalityId": "4",
       "name": "Tres Caminos",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.469027,
         "longitude": -6.173693
@@ -855,20 +855,20 @@
     },
     {
       "id": "32",
-      "municipalityId": "6",
       "name": "Torremelgarejo",
+      "municipalityId": "6",
       "referencePoint": null
     },
     {
       "id": "4",
-      "municipalityId": "3",
       "name": "Chiclana Costa",
+      "municipalityId": "3",
       "referencePoint": null
     },
     {
       "id": "40",
-      "municipalityId": "4",
       "name": "El Marquesado",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.480496,
         "longitude": -6.117084
@@ -876,8 +876,8 @@
     },
     {
       "id": "41",
-      "municipalityId": "4",
       "name": "Campus Universitario",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.530915,
         "longitude": -6.210186
@@ -885,8 +885,8 @@
     },
     {
       "id": "42",
-      "municipalityId": "6",
       "name": "Aeropuerto",
+      "municipalityId": "6",
       "referencePoint": {
         "latitude": 36.750337,
         "longitude": -6.064587
@@ -894,8 +894,8 @@
     },
     {
       "id": "43",
-      "municipalityId": "4",
       "name": "Hospital Pto. Real",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.519346,
         "longitude": -6.15175
@@ -903,8 +903,8 @@
     },
     {
       "id": "44",
-      "municipalityId": "15",
       "name": "Chipiona",
+      "municipalityId": "15",
       "referencePoint": {
         "latitude": 36.736829,
         "longitude": -6.428472
@@ -912,8 +912,8 @@
     },
     {
       "id": "45",
-      "municipalityId": "16",
       "name": "Conil",
+      "municipalityId": "16",
       "referencePoint": {
         "latitude": 36.285625,
         "longitude": -6.080686
@@ -921,8 +921,8 @@
     },
     {
       "id": "46",
-      "municipalityId": "16",
       "name": "El Colorado",
+      "municipalityId": "16",
       "referencePoint": {
         "latitude": 36.321138,
         "longitude": -6.088644
@@ -930,14 +930,14 @@
     },
     {
       "id": "47",
-      "municipalityId": "16",
       "name": "Barrio Nuevo",
+      "municipalityId": "16",
       "referencePoint": null
     },
     {
       "id": "48",
-      "municipalityId": "3",
       "name": "San Andrés Golf",
+      "municipalityId": "3",
       "referencePoint": {
         "latitude": 36.35478,
         "longitude": -6.105598
@@ -945,56 +945,56 @@
     },
     {
       "id": "49",
-      "municipalityId": "15",
       "name": "Costa Ballena (Chipiona)",
+      "municipalityId": "15",
       "referencePoint": null
     },
     {
       "id": "50",
-      "municipalityId": "17",
       "name": "Vejer de la Frontera",
+      "municipalityId": "17",
       "referencePoint": null
     },
     {
       "id": "51",
-      "municipalityId": "18",
       "name": "Barbate",
+      "municipalityId": "18",
       "referencePoint": null
     },
     {
       "id": "55",
-      "municipalityId": "17",
       "name": "El Palmar",
+      "municipalityId": "17",
       "referencePoint": null
     },
     {
       "id": "56",
-      "municipalityId": "18",
       "name": "Zahora",
+      "municipalityId": "18",
       "referencePoint": null
     },
     {
       "id": "57",
-      "municipalityId": "18",
       "name": "Caños de Meca",
+      "municipalityId": "18",
       "referencePoint": null
     },
     {
       "id": "58",
-      "municipalityId": "19",
       "name": "Atlanterra",
+      "municipalityId": "19",
       "referencePoint": null
     },
     {
       "id": "59",
-      "municipalityId": "19",
       "name": "Zahara de los Atunes",
+      "municipalityId": "19",
       "referencePoint": null
     },
     {
       "id": "6",
-      "municipalityId": "4",
       "name": "Puerto Real",
+      "municipalityId": "4",
       "referencePoint": {
         "latitude": 36.528564,
         "longitude": -6.18511
@@ -1002,8 +1002,8 @@
     },
     {
       "id": "8",
-      "municipalityId": "5",
       "name": "El Puerto de Santa María",
+      "municipalityId": "5",
       "referencePoint": {
         "latitude": 36.593778,
         "longitude": -6.226493
@@ -1011,8 +1011,8 @@
     },
     {
       "id": "9",
-      "municipalityId": "5",
       "name": "Costa Oeste",
+      "municipalityId": "5",
       "referencePoint": {
         "latitude": 36.609376,
         "longitude": -6.278192
@@ -1021,2630 +1021,2630 @@
   ],
   "stops": [
     {
-      "id": "2_1",
-      "name": "Avda. Del Puerto-Edif. Trocadero",
       "latitude": 36.53021016116525,
       "longitude": -6.2909189520454385,
+      "id": "2_1",
+      "name": "Avda. Del Puerto-Edif. Trocadero",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_10",
-      "name": "Audiencia Provincial V",
       "latitude": 36.527229903333485,
       "longitude": -6.288757091579435,
+      "id": "2_10",
+      "name": "Audiencia Provincial V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_100",
-      "name": "Barrio Jarana",
       "latitude": 36.502917,
       "longitude": -6.143661,
+      "id": "2_100",
+      "name": "Barrio Jarana",
       "parentStationId": null,
       "placeId": "barrio-jarana",
       "municipalityId": "4",
       "localAreaId": "11"
     },
     {
-      "id": "2_101",
-      "name": "Barrio Jarana V",
       "latitude": 36.502844,
       "longitude": -6.143829,
+      "id": "2_101",
+      "name": "Barrio Jarana V",
       "parentStationId": null,
       "placeId": "barrio-jarana",
       "municipalityId": "4",
       "localAreaId": "11"
     },
     {
-      "id": "2_102",
-      "name": "Venta Santa Ana",
       "latitude": 36.491921,
       "longitude": -6.1423,
+      "id": "2_102",
+      "name": "Venta Santa Ana",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "11"
     },
     {
-      "id": "2_103",
-      "name": "Venta Paquete",
       "latitude": 36.496422,
       "longitude": -6.139463,
+      "id": "2_103",
+      "name": "Venta Paquete",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_104",
-      "name": "Venta Paquete V",
       "latitude": 36.496326,
       "longitude": -6.139463,
+      "id": "2_104",
+      "name": "Venta Paquete V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_105",
-      "name": "Club Hípico",
       "latitude": 36.496177,
       "longitude": -6.133945,
+      "id": "2_105",
+      "name": "Club Hípico",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_106",
-      "name": "Club Hípico V",
       "latitude": 36.496057,
       "longitude": -6.134278,
+      "id": "2_106",
+      "name": "Club Hípico V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_107",
-      "name": "Finca Villanueva Y Rosal",
       "latitude": 36.496047,
       "longitude": -6.130434,
+      "id": "2_107",
+      "name": "Finca Villanueva Y Rosal",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_108",
-      "name": "Finca Villanueva Y Rosal V",
       "latitude": 36.495915,
       "longitude": -6.130379,
+      "id": "2_108",
+      "name": "Finca Villanueva Y Rosal V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_109",
-      "name": "Cuartel",
       "latitude": 36.49389,
       "longitude": -6.115483,
+      "id": "2_109",
+      "name": "Cuartel",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_11",
-      "name": "Comisaría",
       "latitude": 36.521808460123054,
       "longitude": -6.285879081306455,
+      "id": "2_11",
+      "name": "Comisaría",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_110",
-      "name": "Cuartel V",
       "latitude": 36.493934,
       "longitude": -6.115563,
+      "id": "2_110",
+      "name": "Cuartel V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_111",
-      "name": "Campo De Fútbol",
       "latitude": 36.486832,
       "longitude": -6.116635,
+      "id": "2_111",
+      "name": "Campo De Fútbol",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_112",
-      "name": "Campo De Fútbol V",
       "latitude": 36.486799,
       "longitude": -6.11674,
+      "id": "2_112",
+      "name": "Campo De Fútbol V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_113",
-      "name": "Matadero",
       "latitude": 36.480557,
       "longitude": -6.11695,
+      "id": "2_113",
+      "name": "Matadero",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_114",
-      "name": "Matadero V",
       "latitude": 36.480496,
       "longitude": -6.117084,
+      "id": "2_114",
+      "name": "Matadero V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_115",
-      "name": "Mirlo",
       "latitude": 36.476511,
       "longitude": -6.11725,
+      "id": "2_115",
+      "name": "Mirlo",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_116",
-      "name": "Mirlo V",
       "latitude": 36.476513,
       "longitude": -6.117374,
+      "id": "2_116",
+      "name": "Mirlo V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_117",
-      "name": "Venta El Chirimono",
       "latitude": 36.471414,
       "longitude": -6.118335,
+      "id": "2_117",
+      "name": "Venta El Chirimono",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_118",
-      "name": "Venta El Chirimono V",
       "latitude": 36.471373,
       "longitude": -6.118447,
+      "id": "2_118",
+      "name": "Venta El Chirimono V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_119",
-      "name": "El Marquesado-Venta Nicolás",
       "latitude": 36.469496,
       "longitude": -6.118366,
+      "id": "2_119",
+      "name": "El Marquesado-Venta Nicolás",
       "parentStationId": null,
       "placeId": "el-marquesado",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_12",
-      "name": "Comisaría V",
       "latitude": 36.52170122369042,
       "longitude": -6.285630976972578,
+      "id": "2_12",
+      "name": "Comisaría V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_120",
-      "name": "El Marquesado-Venta Nicolás V",
       "latitude": 36.469479,
       "longitude": -6.118493,
+      "id": "2_120",
+      "name": "El Marquesado-Venta Nicolás V",
       "parentStationId": null,
       "placeId": "el-marquesado",
       "municipalityId": "4",
       "localAreaId": "40"
     },
     {
-      "id": "2_121",
-      "name": "Los Toruños",
       "latitude": 36.57923384877586,
       "longitude": -6.214028769346247,
+      "id": "2_121",
+      "name": "Los Toruños",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_122",
-      "name": "Los Toruños V",
       "latitude": 36.579645,
       "longitude": -6.214024,
+      "id": "2_122",
+      "name": "Los Toruños V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_123",
-      "name": "Valdelagrana-Caballo Blanco",
       "latitude": 36.583432,
       "longitude": -6.217442,
+      "id": "2_123",
+      "name": "Valdelagrana-Caballo Blanco",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_124",
-      "name": "Valdelagrana-Caballo Blanco V",
       "latitude": 36.58469,
       "longitude": -6.218058,
+      "id": "2_124",
+      "name": "Valdelagrana-Caballo Blanco V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_125",
-      "name": "Estación Fc El Pto. De Sta. María",
       "latitude": 36.604761,
       "longitude": -6.218873,
+      "id": "2_125",
+      "name": "Estación Fc El Pto. De Sta. María",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_126",
-      "name": "Estación Fc El Pto. De Sta. María V",
       "latitude": 36.604685,
       "longitude": -6.21863,
+      "id": "2_126",
+      "name": "Estación Fc El Pto. De Sta. María V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_127",
-      "name": "Parque Vino Fino",
       "latitude": 36.607108316360744,
       "longitude": -6.221217346234019,
+      "id": "2_127",
+      "name": "Parque Vino Fino",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_128",
-      "name": "Parque Vino Fino V",
       "latitude": 36.607183,
       "longitude": -6.219736,
+      "id": "2_128",
+      "name": "Parque Vino Fino V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_129",
-      "name": "Avda. Sanlúcar",
       "latitude": 36.604638,
       "longitude": -6.228673,
+      "id": "2_129",
+      "name": "Avda. Sanlúcar",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_130",
-      "name": "Avda. Sanlúcar V",
       "latitude": 36.604675,
       "longitude": -6.229028,
+      "id": "2_130",
+      "name": "Avda. Sanlúcar V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_131",
-      "name": "Cl. Valdés-Hospital",
       "latitude": 36.59845,
       "longitude": -6.236959,
+      "id": "2_131",
+      "name": "Cl. Valdés-Hospital",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_132",
-      "name": "Cl. Valdés-Hospital V",
       "latitude": 36.598339,
       "longitude": -6.237023,
+      "id": "2_132",
+      "name": "Cl. Valdés-Hospital V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_133",
-      "name": "Plaza De Toros",
       "latitude": 36.597182,
       "longitude": -6.232289,
+      "id": "2_133",
+      "name": "Plaza De Toros",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_14",
-      "name": "Estación De Autobuses Cádiz",
       "latitude": 36.52722370886567,
       "longitude": -6.2853893637657166,
+      "id": "2_14",
+      "name": "Estación De Autobuses Cádiz",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_141",
-      "name": "Fuenterrabía",
       "latitude": 36.609399,
       "longitude": -6.278401,
+      "id": "2_141",
+      "name": "Fuenterrabía",
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_142",
-      "name": "Fuenterrabía V",
       "latitude": 36.609376,
       "longitude": -6.278192,
+      "id": "2_142",
+      "name": "Fuenterrabía V",
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_143",
-      "name": "Vistahermosa",
       "latitude": 36.60042,
       "longitude": -6.250995,
+      "id": "2_143",
+      "name": "Vistahermosa",
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_144",
-      "name": "Vistahermosa V",
       "latitude": 36.601004,
       "longitude": -6.251889,
+      "id": "2_144",
+      "name": "Vistahermosa V",
       "parentStationId": null,
       "placeId": "costa-oeste",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_145",
-      "name": "Las Tórtolas",
       "latitude": 36.617615,
       "longitude": -6.277921,
+      "id": "2_145",
+      "name": "Las Tórtolas",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_146",
-      "name": "Las Tórtolas V",
       "latitude": 36.616435,
       "longitude": -6.276822,
+      "id": "2_146",
+      "name": "Las Tórtolas V",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "9"
     },
     {
-      "id": "2_15",
-      "name": "Plaza Asdrúbal V",
       "latitude": 36.51777055559838,
       "longitude": -6.283383285818098,
+      "id": "2_15",
+      "name": "Plaza Asdrúbal V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_155",
-      "name": "A-2078 Venta El Cepo",
       "latitude": 36.666621,
       "longitude": -6.246744,
+      "id": "2_155",
+      "name": "A-2078 Venta El Cepo",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
     {
-      "id": "2_156",
-      "name": "A-2078 Venta El Cepo V",
       "latitude": 36.666777,
       "longitude": -6.247073,
+      "id": "2_156",
+      "name": "A-2078 Venta El Cepo V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
     {
-      "id": "2_159",
-      "name": "Cuatro Caminos",
       "latitude": 36.677662,
       "longitude": -6.14502,
+      "id": "2_159",
+      "name": "Cuatro Caminos",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_16",
-      "name": "Hospital Puerta Del Mar V",
       "latitude": 36.50875847325536,
       "longitude": -6.278260266599653,
+      "id": "2_16",
+      "name": "Hospital Puerta Del Mar V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_160",
-      "name": "Cuatro Caminos V",
       "latitude": 36.677576,
       "longitude": -6.144948,
+      "id": "2_160",
+      "name": "Cuatro Caminos V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_161",
-      "name": "Estación De Autobuses Jerez",
       "latitude": 36.679414,
       "longitude": -6.126668,
+      "id": "2_161",
+      "name": "Estación De Autobuses Jerez",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_162",
-      "name": "Avda. Ntra. Sra. De La Paz",
       "latitude": 36.681659,
       "longitude": -6.128064,
+      "id": "2_162",
+      "name": "Avda. Ntra. Sra. De La Paz",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_163",
-      "name": "Avda.Cartuja-Estación Fc",
       "latitude": 36.680821,
       "longitude": -6.127525,
+      "id": "2_163",
+      "name": "Avda.Cartuja-Estación Fc",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_164",
-      "name": "Parque Juan Carlos Durán (La Unión)",
       "latitude": 36.695612,
       "longitude": -6.135986,
+      "id": "2_164",
+      "name": "Parque Juan Carlos Durán (La Unión)",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_165",
-      "name": "Parque Juan Carlos Durán (La Unión) V",
       "latitude": 36.695488,
       "longitude": -6.136216,
+      "id": "2_165",
+      "name": "Parque Juan Carlos Durán (La Unión) V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_166",
-      "name": "Torres Blancas",
       "latitude": 36.68760813398017,
       "longitude": -6.113221049308777,
+      "id": "2_166",
+      "name": "Torres Blancas",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_167",
-      "name": "La Granja-Hogar Del Pensionista",
       "latitude": 36.69322461018721,
       "longitude": -6.103653609752655,
+      "id": "2_167",
+      "name": "La Granja-Hogar Del Pensionista",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_168",
-      "name": "La Granja-Hogar Del Pensionista V",
       "latitude": 36.693075572792075,
       "longitude": -6.103569120168686,
+      "id": "2_168",
+      "name": "La Granja-Hogar Del Pensionista V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_169",
-      "name": "Avda M Álvarez Beigbeder",
       "latitude": 36.697053,
       "longitude": -6.143516,
+      "id": "2_169",
+      "name": "Avda M Álvarez Beigbeder",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_17",
-      "name": "Ingeniero La Cierva V",
       "latitude": 36.50627379526967,
       "longitude": -6.27683333140373,
+      "id": "2_17",
+      "name": "Ingeniero La Cierva V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_170",
-      "name": "Avda M Álvarez Beigbeder V",
       "latitude": 36.696897,
       "longitude": -6.143476,
+      "id": "2_170",
+      "name": "Avda M Álvarez Beigbeder V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_171",
-      "name": "Campus De Jerez",
       "latitude": 36.686249,
       "longitude": -6.119375,
+      "id": "2_171",
+      "name": "Campus De Jerez",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_172",
-      "name": "Campus De Jerez V",
       "latitude": 36.686025,
       "longitude": -6.119362,
+      "id": "2_172",
+      "name": "Campus De Jerez V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_173",
-      "name": "Aeropuerto",
       "latitude": 36.75033683761318,
       "longitude": -6.064587212548067,
+      "id": "2_173",
+      "name": "Aeropuerto",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
       "localAreaId": "42"
     },
     {
-      "id": "2_174",
-      "name": "Avda.Cartuja-Estación Fc V",
       "latitude": 36.68055,
       "longitude": -6.127447,
+      "id": "2_174",
+      "name": "Avda.Cartuja-Estación Fc V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_175",
-      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso",
       "latitude": 36.52513,
       "longitude": -5.982413,
+      "id": "2_175",
+      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_176",
-      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso V",
       "latitude": 36.525248,
       "longitude": -5.98246,
+      "id": "2_176",
+      "name": "Enlace A-381-Ctra. Paterna-V. El Pedroso V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_177",
-      "name": "Baldío Gallardo",
       "latitude": 36.564217,
       "longitude": -6.010452,
+      "id": "2_177",
+      "name": "Baldío Gallardo",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_178",
-      "name": "El Mojo",
       "latitude": 36.580883,
       "longitude": -6.016463,
+      "id": "2_178",
+      "name": "El Mojo",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_179",
-      "name": "Plaza Del Caballo",
       "latitude": 36.693608,
       "longitude": -6.129309,
+      "id": "2_179",
+      "name": "Plaza Del Caballo",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_18",
-      "name": "Telegrafía Sin Hilos V",
       "latitude": 36.50027844018818,
       "longitude": -6.2733156142806985,
+      "id": "2_18",
+      "name": "Telegrafía Sin Hilos V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_180",
-      "name": "Plaza Del Caballo V",
       "latitude": 36.693656,
       "longitude": -6.130328,
+      "id": "2_180",
+      "name": "Plaza Del Caballo V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_181",
-      "name": "Estación De Autobuses Rota",
       "latitude": 36.627986,
       "longitude": -6.355891,
+      "id": "2_181",
+      "name": "Estación De Autobuses Rota",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_182",
-      "name": "Cementerio",
       "latitude": 36.659012,
       "longitude": -6.370426,
+      "id": "2_182",
+      "name": "Cementerio",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_183",
-      "name": "Cementerio V",
       "latitude": 36.659056,
       "longitude": -6.3708,
+      "id": "2_183",
+      "name": "Cementerio V",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_186",
-      "name": "Avda. Juan Carlos I-H. Colón",
       "latitude": 36.692467,
       "longitude": -6.410083,
+      "id": "2_186",
+      "name": "Avda. Juan Carlos I-H. Colón",
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
     {
-      "id": "2_187",
-      "name": "Avda. Juan Carlos I-H. Playa",
       "latitude": 36.688138,
       "longitude": -6.41723,
+      "id": "2_187",
+      "name": "Avda. Juan Carlos I-H. Playa",
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
     {
-      "id": "2_188",
-      "name": "Estación De Autobuses Medina",
       "latitude": 36.462408,
       "longitude": -5.930291,
+      "id": "2_188",
+      "name": "Estación De Autobuses Medina",
       "parentStationId": null,
       "placeId": "medina-sidonia",
       "municipalityId": "8",
       "localAreaId": "18"
     },
     {
-      "id": "2_189",
-      "name": "Jédula",
       "latitude": 36.724754,
       "longitude": -5.92982,
+      "id": "2_189",
+      "name": "Jédula",
       "parentStationId": null,
       "placeId": "jedula",
       "municipalityId": "10",
       "localAreaId": "19"
     },
     {
-      "id": "2_19",
-      "name": "Complejo Deportivo V",
       "latitude": 36.49781923454934,
       "longitude": -6.271917123126218,
+      "id": "2_19",
+      "name": "Complejo Deportivo V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_190",
-      "name": "Jédula V",
       "latitude": 36.725011,
       "longitude": -5.929644,
+      "id": "2_190",
+      "name": "Jédula V",
       "parentStationId": null,
       "placeId": "jedula",
       "municipalityId": "10",
       "localAreaId": "19"
     },
     {
-      "id": "2_191",
-      "name": "Estación De Autobuses Arcos",
       "latitude": 36.749337,
       "longitude": -5.818322,
+      "id": "2_191",
+      "name": "Estación De Autobuses Arcos",
       "parentStationId": null,
       "placeId": "arcos-de-la-frontera",
       "municipalityId": "10",
       "localAreaId": "20"
     },
     {
-      "id": "2_193",
-      "name": "Terminal Marítima Cádiz",
       "latitude": 36.530915,
       "longitude": -6.289546,
+      "id": "2_193",
+      "name": "Terminal Marítima Cádiz",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_194",
-      "name": "Terminal Marítima El Puerto De Santa María",
       "latitude": 36.593778,
       "longitude": -6.226493,
+      "id": "2_194",
+      "name": "Terminal Marítima El Puerto De Santa María",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_195",
-      "name": "Terminal Marítima Rota",
       "latitude": 36.615357,
       "longitude": -6.352778,
+      "id": "2_195",
+      "name": "Terminal Marítima Rota",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_196",
-      "name": "Centro P. Puerto Iii",
       "latitude": 36.664249,
       "longitude": -6.256196,
+      "id": "2_196",
+      "name": "Centro P. Puerto Iii",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
     {
-      "id": "2_197",
-      "name": "Centro P. Puerto I Y Ii",
       "latitude": 36.6634,
       "longitude": -6.246123,
+      "id": "2_197",
+      "name": "Centro P. Puerto I Y Ii",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "5",
       "localAreaId": "21"
     },
     {
-      "id": "2_198",
-      "name": "Manuel De Falla",
       "latitude": 36.457785,
       "longitude": -6.198996,
+      "id": "2_198",
+      "name": "Manuel De Falla",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_199",
-      "name": "Manuel De Falla V",
       "latitude": 36.457479,
       "longitude": -6.19901,
+      "id": "2_199",
+      "name": "Manuel De Falla V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_20",
-      "name": "La Ardila",
       "latitude": 36.455872605383455,
       "longitude": -6.214650338706968,
+      "id": "2_20",
+      "name": "La Ardila",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_200",
-      "name": "Ronda Del Estero",
       "latitude": 36.45174793639307,
       "longitude": -6.205760000000016,
+      "id": "2_200",
+      "name": "Ronda Del Estero",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_201",
-      "name": "Ronda Del Estero V",
       "latitude": 36.451438,
       "longitude": -6.205556,
+      "id": "2_201",
+      "name": "Ronda Del Estero V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_202",
-      "name": "Hospital De Jerez-Carretera A-2000",
       "latitude": 36.699575,
       "longitude": -6.14593,
+      "id": "2_202",
+      "name": "Hospital De Jerez-Carretera A-2000",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_203",
-      "name": "Hospital De Jerez-Carretera A-2000 V",
       "latitude": 36.700154,
       "longitude": -6.146432,
+      "id": "2_203",
+      "name": "Hospital De Jerez-Carretera A-2000 V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_206",
-      "name": "Torres Blancas V",
       "latitude": 36.687529047173,
       "longitude": -6.1129045486450195,
+      "id": "2_206",
+      "name": "Torres Blancas V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_207",
-      "name": "Parque Almirante Laulhé V",
       "latitude": 36.46447342713473,
       "longitude": -6.2016550419029155,
+      "id": "2_207",
+      "name": "Parque Almirante Laulhé V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_222",
-      "name": "Estación De Autobuses Sanlúcar",
       "latitude": 36.78157949665965,
       "longitude": -6.358451783497618,
+      "id": "2_222",
+      "name": "Estación De Autobuses Sanlúcar",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_223",
-      "name": "Avda. V Centenario V",
       "latitude": 36.77198805523583,
       "longitude": -6.356999367316054,
+      "id": "2_223",
+      "name": "Avda. V Centenario V",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_224",
-      "name": "Avda. V Centenario",
       "latitude": 36.77142406819268,
       "longitude": -6.356657385666655,
+      "id": "2_224",
+      "name": "Avda. V Centenario",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_225",
-      "name": "Hospital Virgen Del Camino V",
       "latitude": 36.76810559184053,
       "longitude": -6.358388751585768,
+      "id": "2_225",
+      "name": "Hospital Virgen Del Camino V",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_226",
-      "name": "Hospital Virgen Del Camino",
       "latitude": 36.76814319273308,
       "longitude": -6.35866099580078,
+      "id": "2_226",
+      "name": "Hospital Virgen Del Camino",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_227",
-      "name": "Avda. Pto. Sta. Mª (El Palmar)",
       "latitude": 36.76691739413688,
       "longitude": -6.34674528225212,
+      "id": "2_227",
+      "name": "Avda. Pto. Sta. Mª (El Palmar)",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_228",
-      "name": "Avda. Pto. Sta. Mª (El Palmar) V",
       "latitude": 36.76695392128419,
       "longitude": -6.346570938666152,
+      "id": "2_228",
+      "name": "Avda. Pto. Sta. Mª (El Palmar) V",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_229",
-      "name": "Avda. Constitución",
       "latitude": 36.76979957546195,
       "longitude": -6.346879836069508,
+      "id": "2_229",
+      "name": "Avda. Constitución",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_23",
-      "name": "Avda. Al-Andalus",
       "latitude": 36.45947743713433,
       "longitude": -6.208618050632475,
+      "id": "2_23",
+      "name": "Avda. Al-Andalus",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_230",
-      "name": "Avda. De Trebujena",
       "latitude": 36.76998776245468,
       "longitude": -6.345768958170699,
+      "id": "2_230",
+      "name": "Avda. De Trebujena",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_231",
-      "name": "Avda. Del Puerto V",
       "latitude": 36.53168650743388,
       "longitude": -6.292225187835691,
+      "id": "2_231",
+      "name": "Avda. Del Puerto V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_232",
-      "name": "Plaza De España",
       "latitude": 36.53324687781956,
       "longitude": -6.293276613769529,
+      "id": "2_232",
+      "name": "Plaza De España",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_233",
-      "name": "Apeadero De Autobuses De Costa Ballena",
       "latitude": 36.69267585556875,
       "longitude": -6.407162643357848,
+      "id": "2_233",
+      "name": "Apeadero De Autobuses De Costa Ballena",
       "parentStationId": null,
       "placeId": "costa-ballena",
       "municipalityId": "7",
       "localAreaId": "17"
     },
     {
-      "id": "2_234",
-      "name": "Plaza De Las Marinas",
       "latitude": 36.69774139541855,
       "longitude": -6.137006203041078,
+      "id": "2_234",
+      "name": "Plaza De Las Marinas",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_235",
-      "name": "Plaza De Las Marinas V",
       "latitude": 36.69748332381943,
       "longitude": -6.136633375988008,
+      "id": "2_235",
+      "name": "Plaza De Las Marinas V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_236",
-      "name": "Reyes Católicos",
       "latitude": 36.46828169535278,
       "longitude": -6.200212013452903,
+      "id": "2_236",
+      "name": "Reyes Católicos",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_237",
-      "name": "Reyes Católicos V",
       "latitude": 36.469463073798345,
       "longitude": -6.198961553846683,
+      "id": "2_237",
+      "name": "Reyes Católicos V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_238",
-      "name": "Plaza De España V",
       "latitude": 36.534726398838174,
       "longitude": -6.291927462635038,
+      "id": "2_238",
+      "name": "Plaza De España V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_24",
-      "name": "Avda. Al-Andalus V",
       "latitude": 36.45926926319895,
       "longitude": -6.208403473911283,
+      "id": "2_24",
+      "name": "Avda. Al-Andalus V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_241",
-      "name": "Camino Del Arroyo",
       "latitude": 36.43977465050151,
       "longitude": -6.121705070114185,
+      "id": "2_241",
+      "name": "Camino Del Arroyo",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_243",
-      "name": "Camino Del Arroyo V",
       "latitude": 36.43835915987877,
       "longitude": -6.122581863224021,
+      "id": "2_243",
+      "name": "Camino Del Arroyo V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_244",
-      "name": "Camino De Algodonales V",
       "latitude": 36.44740316594242,
       "longitude": -6.118354701816551,
+      "id": "2_244",
+      "name": "Camino De Algodonales V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_245",
-      "name": "Camino De Algodonales",
       "latitude": 36.44621645900167,
       "longitude": -6.1186124831199935,
+      "id": "2_245",
+      "name": "Camino De Algodonales",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_247",
-      "name": "Ruiz Marcet",
       "latitude": 36.47055843000482,
       "longitude": -6.198037200022721,
+      "id": "2_247",
+      "name": "Ruiz Marcet",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_248",
-      "name": "Ruiz Marcet V",
       "latitude": 36.47080431274299,
       "longitude": -6.197586579982218,
+      "id": "2_248",
+      "name": "Ruiz Marcet V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_249",
-      "name": "Tres Caminos",
       "latitude": 36.469026950332044,
       "longitude": -6.173693007049598,
+      "id": "2_249",
+      "name": "Tres Caminos",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "31"
     },
     {
-      "id": "2_25",
-      "name": "Avda. Almirante León Herrero",
       "latitude": 36.462013231240284,
       "longitude": -6.205045348224638,
+      "id": "2_25",
+      "name": "Avda. Almirante León Herrero",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_251",
-      "name": "C.C. Las Dunas",
       "latitude": 36.74914487225048,
       "longitude": -6.336783170700073,
+      "id": "2_251",
+      "name": "C.C. Las Dunas",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_254",
-      "name": "Avda. De La Marina",
       "latitude": 36.62310164168587,
       "longitude": -6.361879706355467,
+      "id": "2_254",
+      "name": "Avda. De La Marina",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_255",
-      "name": "Avda. De La Marina V",
       "latitude": 36.62353033128876,
       "longitude": -6.359878522921463,
+      "id": "2_255",
+      "name": "Avda. De La Marina V",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": "15"
     },
     {
-      "id": "2_257",
-      "name": "Casines",
       "latitude": 36.52205713228747,
       "longitude": -6.170787960290909,
+      "id": "2_257",
+      "name": "Casines",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_258",
-      "name": "Casines V",
       "latitude": 36.52196121257755,
       "longitude": -6.170778572559357,
+      "id": "2_258",
+      "name": "Casines V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_259",
-      "name": "Ciudad Jardín",
       "latitude": 36.52316289473787,
       "longitude": -6.175190806388855,
+      "id": "2_259",
+      "name": "Ciudad Jardín",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_26",
-      "name": "Avda. Almirante León Herrero V",
       "latitude": 36.462049903111584,
       "longitude": -6.204723483142851,
+      "id": "2_26",
+      "name": "Avda. Almirante León Herrero V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_260",
-      "name": "Ciudad Jardín V",
       "latitude": 36.523071287338,
       "longitude": -6.175255179405212,
+      "id": "2_260",
+      "name": "Ciudad Jardín V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_261",
-      "name": "Recinto Ferial",
       "latitude": 36.61375793480854,
       "longitude": -6.241360902786255,
+      "id": "2_261",
+      "name": "Recinto Ferial",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "21"
     },
     {
-      "id": "2_262",
-      "name": "Escuela Ingeniería",
       "latitude": 36.53687476012414,
       "longitude": -6.200977563858032,
+      "id": "2_262",
+      "name": "Escuela Ingeniería",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_263",
-      "name": "Escuela Ingeniería V",
       "latitude": 36.53683596858676,
       "longitude": -6.200854182243347,
+      "id": "2_263",
+      "name": "Escuela Ingeniería V",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_264",
-      "name": "Escuela Ingeniería (Interior)",
       "latitude": 36.536704179923404,
       "longitude": -6.20187939574726,
+      "id": "2_264",
+      "name": "Escuela Ingeniería (Interior)",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_265",
-      "name": "Las Aletas",
       "latitude": 36.54456587548587,
       "longitude": -6.199142932891846,
+      "id": "2_265",
+      "name": "Las Aletas",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_266",
-      "name": "Estación De Autobuses Chipiona",
       "latitude": 36.736829230805995,
       "longitude": -6.428471803665161,
+      "id": "2_266",
+      "name": "Estación De Autobuses Chipiona",
       "parentStationId": null,
       "placeId": "chipiona",
       "municipalityId": "15",
       "localAreaId": "44"
     },
     {
-      "id": "2_268",
-      "name": "Los Esteros V",
       "latitude": 36.42992355995217,
       "longitude": -6.144657290680287,
+      "id": "2_268",
+      "name": "Los Esteros V",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_269",
-      "name": "Las Redes/Los Esteros",
       "latitude": 36.42969612822568,
       "longitude": -6.144150942564011,
+      "id": "2_269",
+      "name": "Las Redes/Los Esteros",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_27",
-      "name": "Parque Almirante Laulhé",
       "latitude": 36.466547451970136,
       "longitude": -6.202521395414726,
+      "id": "2_27",
+      "name": "Parque Almirante Laulhé",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_270",
-      "name": "Avda. Del Comercio V",
       "latitude": 36.42623558881636,
       "longitude": -6.1479878425598145,
+      "id": "2_270",
+      "name": "Avda. Del Comercio V",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_271",
-      "name": "Avda. Del Comercio",
       "latitude": 36.426464353900435,
       "longitude": -6.1477330327034,
+      "id": "2_271",
+      "name": "Avda. Del Comercio",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_272",
-      "name": "Río Iro",
       "latitude": 36.42284935511073,
       "longitude": -6.149012446403503,
+      "id": "2_272",
+      "name": "Río Iro",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_273",
-      "name": "A-480 Venta El Menuito",
       "latitude": 36.748809603470434,
       "longitude": -6.380444169044495,
+      "id": "2_273",
+      "name": "A-480 Venta El Menuito",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_274",
-      "name": "A-480 Venta El Menuito V",
       "latitude": 36.7484184547089,
       "longitude": -6.381315886974335,
+      "id": "2_274",
+      "name": "A-480 Venta El Menuito V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_277",
-      "name": "Pocito Blanco",
       "latitude": 36.28734491029222,
       "longitude": -6.079431921243668,
+      "id": "2_277",
+      "name": "Pocito Blanco",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "45"
     },
     {
-      "id": "2_278",
-      "name": "Pocito Blanco V",
       "latitude": 36.28562500540278,
       "longitude": -6.08068585395813,
+      "id": "2_278",
+      "name": "Pocito Blanco V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "45"
     },
     {
-      "id": "2_279",
-      "name": "Casa De Postas",
       "latitude": 36.295076987330354,
       "longitude": -6.07407420873642,
+      "id": "2_279",
+      "name": "Casa De Postas",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_280",
-      "name": "Casa De Postas V",
       "latitude": 36.2944760033553,
       "longitude": -6.073215901851654,
+      "id": "2_280",
+      "name": "Casa De Postas V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_282",
-      "name": "El Canario V",
       "latitude": 36.3115373918375,
       "longitude": -6.082891970872879,
+      "id": "2_282",
+      "name": "El Canario V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_283",
-      "name": "Chinarejos",
       "latitude": 36.32113750990034,
       "longitude": -6.088643968105316,
+      "id": "2_283",
+      "name": "Chinarejos",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_284",
-      "name": "Chinarejos V",
       "latitude": 36.32250654341758,
       "longitude": -6.0887981951236725,
+      "id": "2_284",
+      "name": "Chinarejos V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_285",
-      "name": "El Colorado-1",
       "latitude": 36.33182116766874,
       "longitude": -6.090564429759979,
+      "id": "2_285",
+      "name": "El Colorado-1",
       "parentStationId": null,
       "placeId": "el-colorado",
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_287",
-      "name": "El Colorado-2 V",
       "latitude": 36.33498449396479,
       "longitude": -6.091635972261429,
+      "id": "2_287",
+      "name": "El Colorado-2 V",
       "parentStationId": null,
       "placeId": "el-colorado",
       "municipalityId": "16",
       "localAreaId": "46"
     },
     {
-      "id": "2_289",
-      "name": "San Andrés Golf",
       "latitude": 36.35478045485695,
       "longitude": -6.105598211288452,
+      "id": "2_289",
+      "name": "San Andrés Golf",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "48"
     },
     {
-      "id": "2_29",
-      "name": "Avda. Constitución 1.978-Comisaría",
       "latitude": 36.452110112753,
       "longitude": -6.216447418746946,
+      "id": "2_29",
+      "name": "Avda. Constitución 1.978-Comisaría",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_291",
-      "name": "Avda. Las Cortes",
       "latitude": 36.52179847212352,
       "longitude": -6.276908218860626,
+      "id": "2_291",
+      "name": "Avda. Las Cortes",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_292",
-      "name": "Avda. Las Cortes V",
       "latitude": 36.52178446133996,
       "longitude": -6.27649113535881,
+      "id": "2_292",
+      "name": "Avda. Las Cortes V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_296",
-      "name": "Apeadero De Autobuses Conil",
       "latitude": 36.28192562206986,
       "longitude": -6.081410050392151,
+      "id": "2_296",
+      "name": "Apeadero De Autobuses Conil",
       "parentStationId": null,
       "placeId": "conil-de-la-frontera",
       "municipalityId": "16",
       "localAreaId": "45"
     },
     {
-      "id": "2_3",
-      "name": "Puerta Tierra",
       "latitude": 36.52605953745319,
       "longitude": -6.2892090437984445,
+      "id": "2_3",
+      "name": "Puerta Tierra",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_30",
-      "name": "Avda. Constitución 1.978-Comisaría V",
       "latitude": 36.45194183186898,
       "longitude": -6.216259664115904,
+      "id": "2_30",
+      "name": "Avda. Constitución 1.978-Comisaría V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_300",
-      "name": "Plaza De España V",
       "latitude": 36.534506852336875,
       "longitude": -6.292211562395096,
+      "id": "2_300",
+      "name": "Plaza De España V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_301",
-      "name": "Cañada De Los Barrancos-Los Cazadores",
       "latitude": 36.42186086643798,
       "longitude": -6.124802827835083,
+      "id": "2_301",
+      "name": "Cañada De Los Barrancos-Los Cazadores",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_302",
-      "name": "Cañada De Los Barrancos-Los Cazadores V",
       "latitude": 36.42207993215277,
       "longitude": -6.124805510044098,
+      "id": "2_302",
+      "name": "Cañada De Los Barrancos-Los Cazadores V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_303",
-      "name": "Av. Astilleros-Estación Autobuses",
       "latitude": 36.52731210460236,
       "longitude": -6.28530889749527,
+      "id": "2_303",
+      "name": "Av. Astilleros-Estación Autobuses",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_304",
-      "name": "Av. Astilleros-Estación Autobuses V",
       "latitude": 36.52746527283803,
       "longitude": -6.284932047128677,
+      "id": "2_304",
+      "name": "Av. Astilleros-Estación Autobuses V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_305",
-      "name": "Plaza De Sevilla",
       "latitude": 36.530139952837146,
       "longitude": -6.2889352440834045,
+      "id": "2_305",
+      "name": "Plaza De Sevilla",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_306",
-      "name": "Plaza De Sevilla V",
       "latitude": 36.529921257403295,
       "longitude": -6.289133056998253,
+      "id": "2_306",
+      "name": "Plaza De Sevilla V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_31",
-      "name": "Avda. Constitución 1.978-Instituto",
       "latitude": 36.4520669638431,
       "longitude": -6.2097204385375955,
+      "id": "2_31",
+      "name": "Avda. Constitución 1.978-Instituto",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_310",
-      "name": "Avda. De Andalucía",
       "latitude": 36.70521618846066,
       "longitude": -6.117768883461606,
+      "id": "2_310",
+      "name": "Avda. De Andalucía",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_311",
-      "name": "Avda. De Andalucía V",
       "latitude": 36.705044040788934,
       "longitude": -6.117529394175983,
+      "id": "2_311",
+      "name": "Avda. De Andalucía V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_312",
-      "name": "Carretera De Jerez",
       "latitude": 36.7648275805982,
       "longitude": -6.342550813855808,
+      "id": "2_312",
+      "name": "Carretera De Jerez",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_313",
-      "name": "Carretera De Jerez V",
       "latitude": 36.7648876416888,
       "longitude": -6.342341568997988,
+      "id": "2_313",
+      "name": "Carretera De Jerez V",
       "parentStationId": null,
       "placeId": "sanlucar-de-barrameda",
       "municipalityId": "11",
       "localAreaId": "28"
     },
     {
-      "id": "2_314",
-      "name": "El Berrueco",
       "latitude": 36.43822774664942,
       "longitude": -6.021543920873059,
+      "id": "2_314",
+      "name": "El Berrueco",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "8",
       "localAreaId": "18"
     },
     {
-      "id": "2_315",
-      "name": "El Berrueco V",
       "latitude": 36.43827966851398,
       "longitude": -6.02193014997476,
+      "id": "2_315",
+      "name": "El Berrueco V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "8",
       "localAreaId": "18"
     },
     {
-      "id": "2_316",
-      "name": "General Lobo",
       "latitude": 36.474772340495385,
       "longitude": -6.195007783417189,
+      "id": "2_316",
+      "name": "General Lobo",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_317",
-      "name": "General Lobo V",
       "latitude": 36.47490612630914,
       "longitude": -6.19447153200973,
+      "id": "2_317",
+      "name": "General Lobo V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_318",
-      "name": "Hospital S. Carlos",
       "latitude": 36.47931003858101,
       "longitude": -6.195349549614012,
+      "id": "2_318",
+      "name": "Hospital S. Carlos",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_319",
-      "name": "Hospital S. Carlos V",
       "latitude": 36.4795343793609,
       "longitude": -6.194936245040586,
+      "id": "2_319",
+      "name": "Hospital S. Carlos V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_32",
-      "name": "Avda. Constitución 1.978-Instituto V",
       "latitude": 36.45183395931541,
       "longitude": -6.2096936164474466,
+      "id": "2_32",
+      "name": "Avda. Constitución 1.978-Instituto V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_320",
-      "name": "Puerta Tierra V",
       "latitude": 36.526362988126415,
       "longitude": -6.289908753174425,
+      "id": "2_320",
+      "name": "Puerta Tierra V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_321",
-      "name": "Avda. Campo Del Sur-Catedral V",
       "latitude": 36.53169747747063,
       "longitude": -6.3054697276509755,
+      "id": "2_321",
+      "name": "Avda. Campo Del Sur-Catedral V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_322",
-      "name": "Avda. De Huelva V",
       "latitude": 36.52047729359471,
       "longitude": -6.276453000667986,
+      "id": "2_322",
+      "name": "Avda. De Huelva V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_33",
-      "name": "San Onofre",
       "latitude": 36.45552714170314,
       "longitude": -6.201299428939819,
+      "id": "2_33",
+      "name": "San Onofre",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_34",
-      "name": "San Onofre V",
       "latitude": 36.45487346194542,
       "longitude": -6.201371848583221,
+      "id": "2_34",
+      "name": "San Onofre V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_345",
-      "name": "Avda. De Huelva",
       "latitude": 36.51935382183055,
       "longitude": -6.278385040952424,
+      "id": "2_345",
+      "name": "Avda. De Huelva",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_346",
-      "name": "Avda. Campo Del Sur-Mercado",
       "latitude": 36.52878168661495,
       "longitude": -6.298829126284983,
+      "id": "2_346",
+      "name": "Avda. Campo Del Sur-Mercado",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_347",
-      "name": "F. Ciencias Empresariales",
       "latitude": 36.53151436143342,
       "longitude": -6.305470381012,
+      "id": "2_347",
+      "name": "F. Ciencias Empresariales",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_348",
-      "name": "F. Ciencias Empresariales V",
       "latitude": 36.53173008854554,
       "longitude": -6.30545409268817,
+      "id": "2_348",
+      "name": "F. Ciencias Empresariales V",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_349",
-      "name": "Av. De María Auxiliadora",
       "latitude": 36.62743140679498,
       "longitude": -6.364939600449971,
+      "id": "2_349",
+      "name": "Av. De María Auxiliadora",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": null
     },
     {
-      "id": "2_35",
-      "name": "San Marcos",
       "latitude": 36.461352102035576,
       "longitude": -6.196463484256598,
+      "id": "2_35",
+      "name": "San Marcos",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_350",
-      "name": "Av. De María Auxiliadora V",
       "latitude": 36.626545498314236,
       "longitude": -6.364661617773433,
+      "id": "2_350",
+      "name": "Av. De María Auxiliadora V",
       "parentStationId": null,
       "placeId": "rota",
       "municipalityId": "7",
       "localAreaId": null
     },
     {
-      "id": "2_351",
-      "name": "Plaza Asdrúbal",
       "latitude": 36.51833347122721,
       "longitude": -6.283853592528017,
+      "id": "2_351",
+      "name": "Plaza Asdrúbal",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_352",
-      "name": "Avda. Tomás García Figueras",
       "latitude": 36.70067483881514,
       "longitude": -6.141437308963645,
+      "id": "2_352",
+      "name": "Avda. Tomás García Figueras",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_353",
-      "name": "Avda. Tomás García Figueras V",
       "latitude": 36.69973714869114,
       "longitude": -6.140830918081077,
+      "id": "2_353",
+      "name": "Avda. Tomás García Figueras V",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_354",
-      "name": "Hospital Puerta Del Mar",
       "latitude": 36.5085324881102,
       "longitude": -6.2784447361305045,
+      "id": "2_354",
+      "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_355",
-      "name": "Hospital Puerta Del Mar",
       "latitude": 36.50858203795657,
       "longitude": -6.2783348011775635,
+      "id": "2_355",
+      "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_356",
-      "name": "Hospital Puerta Del Mar",
       "latitude": 36.50946374914346,
       "longitude": -6.278802997610547,
+      "id": "2_356",
+      "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_357",
-      "name": "Hospital Puerta Del Mar",
       "latitude": 36.509606136566184,
       "longitude": -6.278905688681334,
+      "id": "2_357",
+      "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_359",
-      "name": "Hospital De Puerto Real",
       "latitude": 36.51934562282705,
       "longitude": -6.151750414591955,
+      "id": "2_359",
+      "name": "Hospital De Puerto Real",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "43"
     },
     {
-      "id": "2_36",
-      "name": "San Marcos V",
       "latitude": 36.460923240375976,
       "longitude": -6.196589331282798,
+      "id": "2_36",
+      "name": "San Marcos V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_360",
-      "name": "Intercambiador De Transporte",
       "latitude": 36.60440093320923,
       "longitude": -6.217192866107507,
+      "id": "2_360",
+      "name": "Intercambiador De Transporte",
       "parentStationId": null,
       "placeId": "el-puerto-de-santa-maria",
       "municipalityId": "5",
       "localAreaId": "8"
     },
     {
-      "id": "2_361",
-      "name": "Hospital Universitario De Jerez",
       "latitude": 36.699289838552495,
       "longitude": -6.148633480981442,
+      "id": "2_361",
+      "name": "Hospital Universitario De Jerez",
       "parentStationId": null,
       "placeId": "jerez-de-la-frontera",
       "municipalityId": "6",
       "localAreaId": "14"
     },
     {
-      "id": "2_37",
-      "name": "Avda. San Juan Bosco",
       "latitude": 36.46440380402708,
       "longitude": -6.1927323147193825,
+      "id": "2_37",
+      "name": "Avda. San Juan Bosco",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_38",
-      "name": "Avda. San Juan Bosco V",
       "latitude": 36.46415034402248,
       "longitude": -6.192692081584159,
+      "id": "2_38",
+      "name": "Avda. San Juan Bosco V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_4",
-      "name": "Plaza Asdrúbal",
       "latitude": 36.51749323128765,
       "longitude": -6.283438271102903,
+      "id": "2_4",
+      "name": "Plaza Asdrúbal",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_40",
-      "name": "Ponce De León",
       "latitude": 36.45615267513754,
       "longitude": -6.210423839286802,
+      "id": "2_40",
+      "name": "Ponce De León",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_41",
-      "name": "Ponce De León V",
       "latitude": 36.45628858696246,
       "longitude": -6.21023608465576,
+      "id": "2_41",
+      "name": "Ponce De León V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_42",
-      "name": "Plaza De Juan Vargas V",
       "latitude": 36.466743471012485,
       "longitude": -6.19060680270195,
+      "id": "2_42",
+      "name": "Plaza De Juan Vargas V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_43",
-      "name": "Plaza Del Castillo",
       "latitude": 36.46784010550127,
       "longitude": -6.190936259187963,
+      "id": "2_43",
+      "name": "Plaza Del Castillo",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_47",
-      "name": "Estación Fc-Bahía Sur",
       "latitude": 36.46924203486384,
       "longitude": -6.206721375836555,
+      "id": "2_47",
+      "name": "Estación Fc-Bahía Sur",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_48",
-      "name": "Estación Fc-Bahía Sur V",
       "latitude": 36.46905006444781,
       "longitude": -6.206614087475959,
+      "id": "2_48",
+      "name": "Estación Fc-Bahía Sur V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_49",
-      "name": "Bahía Sur",
       "latitude": 36.47277506839376,
       "longitude": -6.2067388101951515,
+      "id": "2_49",
+      "name": "Bahía Sur",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_5",
-      "name": "Hospital Puerta Del Mar",
       "latitude": 36.50903119010323,
       "longitude": -6.278618341503141,
+      "id": "2_5",
+      "name": "Hospital Puerta Del Mar",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_50",
-      "name": "Apeadero Fc-Hospital S.Carlos V",
       "latitude": 36.47536326914427,
       "longitude": -6.19404659713668,
+      "id": "2_50",
+      "name": "Apeadero Fc-Hospital S.Carlos V",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_51",
-      "name": "Cantabria",
       "latitude": 36.47500955347344,
       "longitude": -6.18805454219741,
+      "id": "2_51",
+      "name": "Cantabria",
       "parentStationId": null,
       "placeId": "san-fernando",
       "municipalityId": "2",
       "localAreaId": "2"
     },
     {
-      "id": "2_56",
-      "name": "Cementerio Mancomunado",
       "latitude": 36.42153388542836,
       "longitude": -6.093550941016199,
+      "id": "2_56",
+      "name": "Cementerio Mancomunado",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_57",
-      "name": "Jardines Del Marquesado",
       "latitude": 36.43007,
       "longitude": -6.140354,
+      "id": "2_57",
+      "name": "Jardines Del Marquesado",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_58",
-      "name": "Jardines Del Marquesado V",
       "latitude": 36.4302,
       "longitude": -6.140269,
+      "id": "2_58",
+      "name": "Jardines Del Marquesado V",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_59",
-      "name": "Venta El Pino",
       "latitude": 36.431565,
       "longitude": -6.135204,
+      "id": "2_59",
+      "name": "Venta El Pino",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_6",
-      "name": "Ingeniero La Cierva",
       "latitude": 36.506289425814266,
       "longitude": -6.277057295856474,
+      "id": "2_6",
+      "name": "Ingeniero La Cierva",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_60",
-      "name": "Venta El Pino V",
       "latitude": 36.431615,
       "longitude": -6.135438,
+      "id": "2_60",
+      "name": "Venta El Pino V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_61",
-      "name": "Cañada De Los Barrancos",
       "latitude": 36.432902007264104,
       "longitude": -6.13138010943027,
+      "id": "2_61",
+      "name": "Cañada De Los Barrancos",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_62",
-      "name": "Cañada De Los Barrancos V",
       "latitude": 36.43296672394737,
       "longitude": -6.131388005615276,
+      "id": "2_62",
+      "name": "Cañada De Los Barrancos V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_63",
-      "name": "Venta Pololo",
       "latitude": 36.435422,
       "longitude": -6.124686,
+      "id": "2_63",
+      "name": "Venta Pololo",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_64",
-      "name": "Venta Pololo V",
       "latitude": 36.435623,
       "longitude": -6.124618,
+      "id": "2_64",
+      "name": "Venta Pololo V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_65",
-      "name": "Camino Lagunetas",
       "latitude": 36.442686,
       "longitude": -6.120368,
+      "id": "2_65",
+      "name": "Camino Lagunetas",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_66",
-      "name": "Camino Lagunetas V",
       "latitude": 36.442701,
       "longitude": -6.120468,
+      "id": "2_66",
+      "name": "Camino Lagunetas V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_67",
-      "name": "Manuel Aragón",
       "latitude": 36.451805,
       "longitude": -6.118891,
+      "id": "2_67",
+      "name": "Manuel Aragón",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_68",
-      "name": "Manuel Aragón V",
       "latitude": 36.452707,
       "longitude": -6.1191,
+      "id": "2_68",
+      "name": "Manuel Aragón V",
       "parentStationId": null,
       "placeId": "chiclana-de-la-frontera",
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_69",
-      "name": "Camino Del Cañaveral",
       "latitude": 36.456257,
       "longitude": -6.11856,
+      "id": "2_69",
+      "name": "Camino Del Cañaveral",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_7",
-      "name": "Telegrafía Sin Hilos",
       "latitude": 36.500057150866574,
       "longitude": -6.273421347141266,
+      "id": "2_7",
+      "name": "Telegrafía Sin Hilos",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_70",
-      "name": "Camino Del Cañaveral V",
       "latitude": 36.456977,
       "longitude": -6.118562,
+      "id": "2_70",
+      "name": "Camino Del Cañaveral V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_71",
-      "name": "Arroyo Del Aljibe",
       "latitude": 36.461041,
       "longitude": -6.118616,
+      "id": "2_71",
+      "name": "Arroyo Del Aljibe",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_72",
-      "name": "Arroyo Del Aljibe V",
       "latitude": 36.462239,
       "longitude": -6.118723,
+      "id": "2_72",
+      "name": "Arroyo Del Aljibe V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_73",
-      "name": "Águila-El Término",
       "latitude": 36.467022,
       "longitude": -6.118394,
+      "id": "2_73",
+      "name": "Águila-El Término",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_74",
-      "name": "Águila-El Término V",
       "latitude": 36.467212,
       "longitude": -6.118493,
+      "id": "2_74",
+      "name": "Águila-El Término V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_75",
-      "name": "Avda. Argentina-Edif. Bahía",
       "latitude": 36.524031,
       "longitude": -6.227945,
+      "id": "2_75",
+      "name": "Avda. Argentina-Edif. Bahía",
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
     {
-      "id": "2_76",
-      "name": "Avda. Argentina-Edif. Bahía V",
       "latitude": 36.524244,
       "longitude": -6.22798,
+      "id": "2_76",
+      "name": "Avda. Argentina-Edif. Bahía V",
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
     {
-      "id": "2_77",
-      "name": "Avda. Argentina-Instituto",
       "latitude": 36.524832,
       "longitude": -6.222788,
+      "id": "2_77",
+      "name": "Avda. Argentina-Instituto",
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
     {
-      "id": "2_78",
-      "name": "Avda. Argentina-Instituto V",
       "latitude": 36.525028,
       "longitude": -6.22286,
+      "id": "2_78",
+      "name": "Avda. Argentina-Instituto V",
       "parentStationId": null,
       "placeId": "rio-san-pedro",
       "municipalityId": "4",
       "localAreaId": "12"
     },
     {
-      "id": "2_79",
-      "name": "Campus-C. Educación",
       "latitude": 36.527558,
       "longitude": -6.213559,
+      "id": "2_79",
+      "name": "Campus-C. Educación",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_8",
-      "name": "Complejo Deportivo",
       "latitude": 36.49696012447015,
       "longitude": -6.271749204216001,
+      "id": "2_8",
+      "name": "Complejo Deportivo",
       "parentStationId": null,
       "placeId": "cadiz",
       "municipalityId": "1",
       "localAreaId": "1"
     },
     {
-      "id": "2_80",
-      "name": "Campus-C. Educación V",
       "latitude": 36.527449,
       "longitude": -6.213339,
+      "id": "2_80",
+      "name": "Campus-C. Educación V",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_81",
-      "name": "Campus-Ciencias",
       "latitude": 36.530918,
       "longitude": -6.210391,
+      "id": "2_81",
+      "name": "Campus-Ciencias",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_82",
-      "name": "Campus-Ciencias V",
       "latitude": 36.530915,
       "longitude": -6.210186,
+      "id": "2_82",
+      "name": "Campus-Ciencias V",
       "parentStationId": null,
       "placeId": "campus-universitario",
       "municipalityId": "4",
       "localAreaId": "41"
     },
     {
-      "id": "2_83",
-      "name": "El Cartabón",
       "latitude": 36.526036,
       "longitude": -6.182332,
+      "id": "2_83",
+      "name": "El Cartabón",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_84",
-      "name": "El Cartabón V",
       "latitude": 36.526808,
       "longitude": -6.183799,
+      "id": "2_84",
+      "name": "El Cartabón V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_85",
-      "name": "Huerta Pley",
       "latitude": 36.528564,
       "longitude": -6.18511,
+      "id": "2_85",
+      "name": "Huerta Pley",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_86",
-      "name": "Estación Fc Puerto Real",
       "latitude": 36.530555,
       "longitude": -6.185302,
+      "id": "2_86",
+      "name": "Estación Fc Puerto Real",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_87",
-      "name": "Estación Fc Puerto Real V",
       "latitude": 36.530454,
       "longitude": -6.185305,
+      "id": "2_87",
+      "name": "Estación Fc Puerto Real V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_88",
-      "name": "Plaza Iglesia",
       "latitude": 36.528436,
       "longitude": -6.189262,
+      "id": "2_88",
+      "name": "Plaza Iglesia",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_90",
-      "name": "Campo De Fútbol Pto. Real",
       "latitude": 36.531574,
       "longitude": -6.193957,
+      "id": "2_90",
+      "name": "Campo De Fútbol Pto. Real",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_91",
-      "name": "512 Viviendas",
       "latitude": 36.530574,
       "longitude": -6.196301,
+      "id": "2_91",
+      "name": "512 Viviendas",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_92",
-      "name": "512 Viviendas V",
       "latitude": 36.530409,
       "longitude": -6.196348,
+      "id": "2_92",
+      "name": "512 Viviendas V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_93",
-      "name": "Marina De La Bahía",
       "latitude": 36.530703,
       "longitude": -6.199554,
+      "id": "2_93",
+      "name": "Marina De La Bahía",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_94",
-      "name": "Marina De La Bahía V",
       "latitude": 36.530667,
       "longitude": -6.199933,
+      "id": "2_94",
+      "name": "Marina De La Bahía V",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_95",
-      "name": "Hospital De Puerto Real",
       "latitude": 36.51928966617859,
       "longitude": -6.152954202760202,
+      "id": "2_95",
+      "name": "Hospital De Puerto Real",
       "parentStationId": null,
       "placeId": "puerto-real",
       "municipalityId": "4",
       "localAreaId": "43"
     },
     {
-      "id": "2_96",
-      "name": "La Romera-Venta Rosario",
       "latitude": 36.517358,
       "longitude": -6.04446,
+      "id": "2_96",
+      "name": "La Romera-Venta Rosario",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_97",
-      "name": "La Romera-Venta Rosario V",
       "latitude": 36.517486,
       "longitude": -6.044727,
+      "id": "2_97",
+      "name": "La Romera-Venta Rosario V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "4",
       "localAreaId": "6"
     },
     {
-      "id": "2_98",
-      "name": "Pinar De Los Franceses",
       "latitude": 36.440655103661825,
       "longitude": -6.143926978111267,
+      "id": "2_98",
+      "name": "Pinar De Los Franceses",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
       "localAreaId": "3"
     },
     {
-      "id": "2_99",
-      "name": "Pinar De Los Franceses V",
       "latitude": 36.441012,
       "longitude": -6.14423,
+      "id": "2_99",
+      "name": "Pinar De Los Franceses V",
       "parentStationId": null,
       "placeId": null,
       "municipalityId": "3",
@@ -120448,50 +120448,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 906,
-          "departureMinutes": 906,
+          "arrivalMinutes": 912,
+          "departureMinutes": 912,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 907,
-          "departureMinutes": 907,
+          "arrivalMinutes": 914,
+          "departureMinutes": 914,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 908,
-          "departureMinutes": 908,
+          "arrivalMinutes": 917,
+          "departureMinutes": 917,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 909,
-          "departureMinutes": 909,
+          "arrivalMinutes": 919,
+          "departureMinutes": 919,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 910,
-          "departureMinutes": 910,
+          "arrivalMinutes": 921,
+          "departureMinutes": 921,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 911,
-          "departureMinutes": 911,
+          "arrivalMinutes": 923,
+          "departureMinutes": 923,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 912,
-          "departureMinutes": 912,
+          "arrivalMinutes": 925,
+          "departureMinutes": 925,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -120539,50 +120539,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 1111,
-          "departureMinutes": 1111,
+          "arrivalMinutes": 1117,
+          "departureMinutes": 1117,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 1132,
-          "departureMinutes": 1132,
+          "arrivalMinutes": 1119,
+          "departureMinutes": 1119,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 1133,
-          "departureMinutes": 1133,
+          "arrivalMinutes": 1122,
+          "departureMinutes": 1122,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 1134,
-          "departureMinutes": 1134,
+          "arrivalMinutes": 1124,
+          "departureMinutes": 1124,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 1135,
-          "departureMinutes": 1135,
+          "arrivalMinutes": 1126,
+          "departureMinutes": 1126,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 1136,
-          "departureMinutes": 1136,
+          "arrivalMinutes": 1128,
+          "departureMinutes": 1128,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 1137,
-          "departureMinutes": 1137,
+          "arrivalMinutes": 1130,
+          "departureMinutes": 1130,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -120630,50 +120630,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 1176,
-          "departureMinutes": 1176,
+          "arrivalMinutes": 1182,
+          "departureMinutes": 1182,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 1177,
-          "departureMinutes": 1177,
+          "arrivalMinutes": 1184,
+          "departureMinutes": 1184,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 1178,
-          "departureMinutes": 1178,
+          "arrivalMinutes": 1187,
+          "departureMinutes": 1187,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 1179,
-          "departureMinutes": 1179,
+          "arrivalMinutes": 1189,
+          "departureMinutes": 1189,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 1180,
-          "departureMinutes": 1180,
+          "arrivalMinutes": 1191,
+          "departureMinutes": 1191,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 1181,
-          "departureMinutes": 1181,
+          "arrivalMinutes": 1193,
+          "departureMinutes": 1193,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 1182,
-          "departureMinutes": 1182,
+          "arrivalMinutes": 1195,
+          "departureMinutes": 1195,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -120812,50 +120812,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 711,
-          "departureMinutes": 711,
+          "arrivalMinutes": 717,
+          "departureMinutes": 717,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 712,
-          "departureMinutes": 712,
+          "arrivalMinutes": 719,
+          "departureMinutes": 719,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 713,
-          "departureMinutes": 713,
+          "arrivalMinutes": 722,
+          "departureMinutes": 722,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 714,
-          "departureMinutes": 714,
+          "arrivalMinutes": 724,
+          "departureMinutes": 724,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 715,
-          "departureMinutes": 715,
+          "arrivalMinutes": 726,
+          "departureMinutes": 726,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 716,
-          "departureMinutes": 716,
+          "arrivalMinutes": 728,
+          "departureMinutes": 728,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 717,
-          "departureMinutes": 717,
+          "arrivalMinutes": 730,
+          "departureMinutes": 730,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -121176,50 +121176,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 906,
-          "departureMinutes": 906,
+          "arrivalMinutes": 912,
+          "departureMinutes": 912,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 907,
-          "departureMinutes": 907,
+          "arrivalMinutes": 914,
+          "departureMinutes": 914,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 908,
-          "departureMinutes": 908,
+          "arrivalMinutes": 917,
+          "departureMinutes": 917,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 909,
-          "departureMinutes": 909,
+          "arrivalMinutes": 919,
+          "departureMinutes": 919,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 910,
-          "departureMinutes": 910,
+          "arrivalMinutes": 921,
+          "departureMinutes": 921,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 911,
-          "departureMinutes": 911,
+          "arrivalMinutes": 923,
+          "departureMinutes": 923,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 912,
-          "departureMinutes": 912,
+          "arrivalMinutes": 925,
+          "departureMinutes": 925,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -121358,50 +121358,50 @@
         },
         {
           "stopId": "2_30",
-          "arrivalMinutes": 711,
-          "departureMinutes": 711,
+          "arrivalMinutes": 717,
+          "departureMinutes": 717,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_32",
-          "arrivalMinutes": 712,
-          "departureMinutes": 712,
+          "arrivalMinutes": 719,
+          "departureMinutes": 719,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_41",
-          "arrivalMinutes": 713,
-          "departureMinutes": 713,
+          "arrivalMinutes": 722,
+          "departureMinutes": 722,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_24",
-          "arrivalMinutes": 714,
-          "departureMinutes": 714,
+          "arrivalMinutes": 724,
+          "departureMinutes": 724,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_26",
-          "arrivalMinutes": 715,
-          "departureMinutes": 715,
+          "arrivalMinutes": 726,
+          "departureMinutes": 726,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_207",
-          "arrivalMinutes": 716,
-          "departureMinutes": 716,
+          "arrivalMinutes": 728,
+          "departureMinutes": 728,
           "pickupType": 0,
           "dropOffType": 0
         },
         {
           "stopId": "2_237",
-          "arrivalMinutes": 717,
-          "departureMinutes": 717,
+          "arrivalMinutes": 730,
+          "departureMinutes": 730,
           "pickupType": 0,
           "dropOffType": 0
         }
@@ -129759,6 +129759,11 @@
     },
     {
       "serviceId": "2_1083_1840_6_26_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1083_1840_6_26_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -129849,6 +129854,11 @@
     },
     {
       "serviceId": "2_1086_20_8_5_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1086_20_8_5_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -129939,6 +129949,11 @@
     },
     {
       "serviceId": "2_1306_2737_8_155_7",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1306_2737_8_155_7",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130029,6 +130044,11 @@
     },
     {
       "serviceId": "2_1408_2961_6_7_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1408_2961_6_7_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130119,6 +130139,11 @@
     },
     {
       "serviceId": "2_1417_1852_8_13_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1417_1852_8_13_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130209,6 +130234,11 @@
     },
     {
       "serviceId": "2_1417_1860_8_16_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1417_1860_8_16_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130299,6 +130329,11 @@
     },
     {
       "serviceId": "2_1417_1888_8_19_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1417_1888_8_19_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130389,6 +130424,11 @@
     },
     {
       "serviceId": "2_1417_2236_8_36_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1417_2236_8_36_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130479,6 +130519,11 @@
     },
     {
       "serviceId": "2_1449_2999_8_43_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1449_2999_8_43_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130569,6 +130614,11 @@
     },
     {
       "serviceId": "2_1465_3070_8_6_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1465_3070_8_6_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130659,6 +130709,11 @@
     },
     {
       "serviceId": "2_1580_2604_8_4_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1580_2604_8_4_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130749,6 +130804,11 @@
     },
     {
       "serviceId": "2_1581_3068_8_9_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1581_3068_8_9_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130839,6 +130899,11 @@
     },
     {
       "serviceId": "2_1583_2230_24_49_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_2230_24_49_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -130929,6 +130994,11 @@
     },
     {
       "serviceId": "2_1583_2251_24_164_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_2251_24_164_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131019,6 +131089,11 @@
     },
     {
       "serviceId": "2_1583_2611_24_231_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_2611_24_231_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131109,6 +131184,11 @@
     },
     {
       "serviceId": "2_1583_2815_24_163_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_2815_24_163_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131199,6 +131279,11 @@
     },
     {
       "serviceId": "2_1583_3044_24_50_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_3044_24_50_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131289,6 +131374,11 @@
     },
     {
       "serviceId": "2_1583_3046_24_175_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_3046_24_175_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131379,6 +131469,11 @@
     },
     {
       "serviceId": "2_1583_3275_24_230_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1583_3275_24_230_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131469,6 +131564,11 @@
     },
     {
       "serviceId": "2_1589_3149_8_39_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1589_3149_8_39_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131559,6 +131659,11 @@
     },
     {
       "serviceId": "2_1592_3137_8_234_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1592_3137_8_234_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131649,6 +131754,11 @@
     },
     {
       "serviceId": "2_1592_3139_8_235_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1592_3139_8_235_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131739,6 +131849,11 @@
     },
     {
       "serviceId": "2_1592_3141_8_236_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1592_3141_8_236_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131829,6 +131944,11 @@
     },
     {
       "serviceId": "2_1593_3160_27_172_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1593_3160_27_172_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -131919,6 +132039,11 @@
     },
     {
       "serviceId": "2_1593_3162_27_167_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1593_3162_27_167_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132009,6 +132134,11 @@
     },
     {
       "serviceId": "2_1593_3167_27_166_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1593_3167_27_166_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132099,6 +132229,11 @@
     },
     {
       "serviceId": "2_1597_2666_8_2_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1597_2666_8_2_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132189,6 +132324,11 @@
     },
     {
       "serviceId": "2_1597_2669_8_3_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1597_2669_8_3_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132279,6 +132419,11 @@
     },
     {
       "serviceId": "2_1598_2661_5_2_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1598_2661_5_2_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132369,6 +132514,11 @@
     },
     {
       "serviceId": "2_1598_2664_5_3_4",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1598_2664_5_3_4",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132459,6 +132609,11 @@
     },
     {
       "serviceId": "2_1599_3285_28_22_2",
+      "date": "2026-10-01",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1599_3285_28_22_2",
       "date": "2026-10-12",
       "type": 1
     },
@@ -132545,6 +132700,11 @@
     {
       "serviceId": "2_1599_3286_28_15_2",
       "date": "2026-08-15",
+      "type": 1
+    },
+    {
+      "serviceId": "2_1599_3286_28_15_2",
+      "date": "2026-10-01",
       "type": 1
     },
     {

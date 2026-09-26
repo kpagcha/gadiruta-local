@@ -1,200 +1,125 @@
 /**
- * Describes the local network and timetable JSON and checks its fields and references.
- *
- * The data-building script uses the same checks before writing the file, and the browser checks it
- * again after loading it. This catches bad data before search code tries to use it.
+ * Defines the JSON contract shared by the static-data builder and browser loader.
+ * Shapes are parsed once at those boundaries; explicit checks then verify transit relationships.
+ * TypeScript types come from the same schemas, so field definitions cannot drift apart.
  */
-import { shiftCalendarDate } from './calendar-date.ts';
+import { z } from 'zod';
+import { isCalendarDate, shiftCalendarDate } from './calendar-date.ts';
 import { places } from './places.ts';
 import { stopUrlToken } from './stop-url.ts';
 
-/** App-facing topology stored in Gadiruta Local's static network snapshot. */
-export interface NetworkAgency {
-  id: string;
-  name: string;
-}
+const name = z.string().refine((value) => value.trim() !== '', 'must be a non-empty string');
+const date = z.string().refine(isCalendarDate, 'must be a valid YYYY-MM-DD date');
+const minute = z.number().int().min(0).max(143999);
+const permission = z.number().refine((value) => [0, 1, 2, 3].includes(value), 'invalid pickup or drop-off value');
 
-/** A public route in the locally bundled network. */
-export interface NetworkRoute {
-  id: string;
-  agencyId: string;
-  shortName: string | null;
-  longName: string | null;
-  type: number;
-  color: string | null;
-  textColor: string | null;
-}
+/** Decimal coordinates used by stops and reviewed area reference points. */
+export const coordinateSchema = z.object({
+  latitude: z.number().min(-90, 'invalid reference coordinates').max(90, 'invalid reference coordinates'),
+  longitude: z.number().min(-180, 'invalid reference coordinates').max(180, 'invalid reference coordinates'),
+});
+/** A reviewed municipality, reused when reading the builder's location input. */
+export const municipalitySchema = z.object({ id: name, name });
+const localAreaSchema = municipalitySchema.extend({
+  municipalityId: name,
+  referencePoint: coordinateSchema.nullable(),
+});
+const stopSchema = coordinateSchema.extend({
+  id: name,
+  name,
+  parentStationId: name.nullable(),
+  placeId: name.nullable(),
+  municipalityId: name.nullable(),
+  localAreaId: name.nullable(),
+});
+const stopTimeSchema = z
+  .object({
+    stopId: name,
+    arrivalMinutes: minute,
+    departureMinutes: minute,
+    pickupType: permission,
+    dropOffType: permission,
+  })
+  .refine((time) => time.arrivalMinutes <= time.departureMinutes, 'invalid arrival or departure values');
+const tripSchema = z.object({
+  id: name,
+  routeId: name,
+  serviceId: name,
+  stopTimes: z
+    .array(stopTimeSchema)
+    .min(2)
+    .refine(
+      (times) => times.every((time, index) => index === 0 || time.arrivalMinutes >= times[index - 1]!.departureMinutes),
+      'stopTimes must be ordered',
+    ),
+});
+const calendarSchema = z
+  .object({
+    serviceId: name,
+    startDate: date,
+    endDate: date,
+    weekdays: z.array(z.boolean()).length(7),
+  })
+  .refine((calendar) => calendar.startDate <= calendar.endDate, 'invalid calendar dates');
+const datasetSchema = z.object({
+  formatVersion: z.literal(5, { error: 'formatVersion must be 5' }),
+  source: z.object({
+    url: name,
+    generatedAt: name.refine((value) => !Number.isNaN(Date.parse(value)), 'invalid generation date-time'),
+    archiveSha256: z.string().regex(/^[a-f0-9]{64}$/, 'must be a lowercase SHA-256 hash'),
+  }),
+  agencies: z.array(z.object({ id: name, name })).min(1),
+  routes: z
+    .array(
+      z.object({
+        id: name,
+        agencyId: name,
+        shortName: name.nullable(),
+        longName: name.nullable(),
+        type: z.number(),
+        color: name.nullable(),
+        textColor: name.nullable(),
+      }),
+    )
+    .min(1),
+  municipalities: z.array(municipalitySchema),
+  localAreas: z.array(localAreaSchema),
+  stops: z.array(stopSchema).min(1),
+  patterns: z
+    .array(
+      z.object({
+        routeId: name,
+        directionId: name.nullable(),
+        stopIds: z.array(name).min(1),
+      }),
+    )
+    .min(1),
+  trips: z.array(tripSchema).min(1),
+  calendars: z.array(calendarSchema).min(1),
+  calendarExceptions: z.array(z.object({ serviceId: name, date, type: z.literal([1, 2]) })),
+  coverage: z
+    .object({ startDate: date, endDate: date })
+    .refine((coverage) => coverage.startDate <= coverage.endDate, 'coverage has reversed dates'),
+});
 
-/** One municipality in the reviewed CTAN location hierarchy. */
-export interface NetworkMunicipality {
-  id: string;
-  name: string;
-}
+/** Version-five application data after shape and relationship checks. */
+export type NetworkDataset = z.infer<typeof datasetSchema>;
+/** A route's official labels and transport mode. */
+export type NetworkRoute = NetworkDataset['routes'][number];
+/** A physical stop, including reviewed place membership. */
+export type NetworkStop = z.infer<typeof stopSchema>;
+/** One visit; minutes may extend into the following calendar day. */
+export type NetworkStopTime = z.infer<typeof stopTimeSchema>;
+/** Ordered visits belonging to one scheduled service. */
+export type NetworkTrip = z.infer<typeof tripSchema>;
 
-/** One named area within a CTAN municipality. */
-export interface NetworkLocalArea {
-  id: string;
-  municipalityId: string;
-  name: string;
-  /** The reviewed representative stop's position, when the area has one. */
-  referencePoint: { latitude: number; longitude: number } | null;
-}
-
-/** A physical boarding location, kept distinct from a future user-facing place. */
-export interface NetworkStop {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-  parentStationId: string | null;
-  placeId: string | null;
-  municipalityId: string | null;
-  localAreaId: string | null;
-}
-
-/** One stop visit with GTFS minutes measured from the trip's service date. */
-export interface NetworkStopTime {
-  stopId: string;
-  arrivalMinutes: number;
-  departureMinutes: number;
-  pickupType: number;
-  dropOffType: number;
-}
-
-/** One scheduled vehicle journey, including its ordered stop visits. */
-export interface NetworkTrip {
-  id: string;
-  routeId: string;
-  serviceId: string;
-  stopTimes: NetworkStopTime[];
-}
-
-/** GTFS weekdays run Monday through Sunday. */
-export interface NetworkCalendar {
-  serviceId: string;
-  startDate: string;
-  endDate: string;
-  weekdays: boolean[];
-}
-
-/** An added or removed service on one specific date. */
-export interface NetworkCalendarException {
-  serviceId: string;
-  date: string;
-  type: 1 | 2;
-}
-
-/** One unique ordered stop sequence used by a route and direction. */
-export interface RoutePattern {
-  routeId: string;
-  directionId: string | null;
-  stopIds: string[];
-}
-
-/** Provenance recorded for a generated local snapshot. */
-export interface NetworkSource {
-  url: string;
-  generatedAt: string;
-  archiveSha256: string;
-}
-
-/** The version-five local network, location hierarchy, and timetable contract. */
-export interface NetworkDataset {
-  formatVersion: 5;
-  source: NetworkSource;
-  agencies: NetworkAgency[];
-  routes: NetworkRoute[];
-  municipalities: NetworkMunicipality[];
-  localAreas: NetworkLocalArea[];
-  stops: NetworkStop[];
-  patterns: RoutePattern[];
-  trips: NetworkTrip[];
-  calendars: NetworkCalendar[];
-  calendarExceptions: NetworkCalendarException[];
-  coverage: { startDate: string; endDate: string };
-}
-
-/** Describe a malformed local-data file without exposing an implementation-specific exception. */
+/** Identify rejected static assets independently of the schema library's error representation. */
 export class NetworkDataError extends Error {
+  /** Preserve a useful field or relationship diagnostic for tooling and loader callers. */
   constructor(message: string) {
     super(message);
     this.name = 'NetworkDataError';
   }
-}
-
-/** A JSON object before its individual properties have been validated. */
-type UnknownRecord = Record<string, unknown>;
-
-/** Narrow unknown JSON to a non-array object before reading named properties from it. */
-function isRecord(value: unknown): value is UnknownRecord {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-/** Require a non-blank string so source identifiers cannot be replaced by empty display values. */
-function requiredString(value: unknown, label: string): string {
-  if (typeof value !== 'string' || value.trim() === '') {
-    throw new NetworkDataError(`${label} must be a non-empty string.`);
-  }
-
-  return value;
-}
-
-/** Accept null for an optional field, otherwise apply the same non-blank string invariant. */
-function optionalString(value: unknown, label: string): string | null {
-  if (value === null) {
-    return null;
-  }
-
-  return requiredString(value, label);
-}
-
-/** Require a finite JSON number before it can be used as a coordinate or GTFS route type. */
-function requiredNumber(value: unknown, label: string): number {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    throw new NetworkDataError(`${label} must be a finite number.`);
-  }
-
-  return value;
-}
-
-/** Require an integer within GTFS's supported non-negative minute range. */
-function requiredMinute(value: unknown, label: string): number {
-  const minute = requiredNumber(value, label);
-  if (!Number.isInteger(minute) || minute < 0 || minute > 143999) {
-    throw new NetworkDataError(`${label} must be a non-negative integer minute.`);
-  }
-  return minute;
-}
-
-/** Check date spelling and real Gregorian dates before lexical date comparisons. */
-function requiredDate(value: unknown, label: string): string {
-  const date = requiredString(value, label);
-  if (
-    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-    Number.isNaN(Date.parse(`${date}T00:00:00Z`)) ||
-    new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date
-  ) {
-    throw new NetworkDataError(`${label} must be a valid YYYY-MM-DD date.`);
-  }
-  return date;
-}
-
-/** Require an array while retaining unknown elements for each shape-specific parser. */
-function requiredArray(value: unknown, label: string): unknown[] {
-  if (!Array.isArray(value)) {
-    throw new NetworkDataError(`${label} must be an array.`);
-  }
-
-  return value;
-}
-
-/** Require a JSON object before a parser reads its contract-defined fields. */
-function requiredRecord(value: unknown, label: string): UnknownRecord {
-  if (!isRecord(value)) {
-    throw new NetworkDataError(`${label} must be an object.`);
-  }
-
-  return value;
 }
 
 /** Collect stable IDs and reject duplicates that would make cross-reference validation ambiguous. */
@@ -211,241 +136,26 @@ function uniqueIds(items: readonly { id: string }[], label: string): Set<string>
   return ids;
 }
 
-/** Validate an agency record at its source-array position for a precise error message. */
-function parseAgency(value: unknown, index: number): NetworkAgency {
-  const record = requiredRecord(value, `agencies[${index}]`);
-  return {
-    id: requiredString(record.id, `agencies[${index}].id`),
-    name: requiredString(record.name, `agencies[${index}].name`),
-  };
-}
-
-/** Validate a route record without letting raw GTFS field names leak into UI-facing data. */
-function parseRoute(value: unknown, index: number): NetworkRoute {
-  const record = requiredRecord(value, `routes[${index}]`);
-  return {
-    id: requiredString(record.id, `routes[${index}].id`),
-    agencyId: requiredString(record.agencyId, `routes[${index}].agencyId`),
-    shortName: optionalString(record.shortName, `routes[${index}].shortName`),
-    longName: optionalString(record.longName, `routes[${index}].longName`),
-    type: requiredNumber(record.type, `routes[${index}].type`),
-    color: optionalString(record.color, `routes[${index}].color`),
-    textColor: optionalString(record.textColor, `routes[${index}].textColor`),
-  };
-}
-
-/** Validate one municipality's stable ID and rider-facing source name. */
-function parseMunicipality(value: unknown, index: number): NetworkMunicipality {
-  const record = requiredRecord(value, `municipalities[${index}]`);
-  return {
-    id: requiredString(record.id, `municipalities[${index}].id`),
-    name: requiredString(record.name, `municipalities[${index}].name`),
-  };
-}
-
-/** Validate a local area and the municipality that contains it. */
-function parseLocalArea(value: unknown, index: number): NetworkLocalArea {
-  const record = requiredRecord(value, `localAreas[${index}]`);
-  const point =
-    record.referencePoint === null
-      ? null
-      : requiredRecord(record.referencePoint, `localAreas[${index}].referencePoint`);
-  const latitude =
-    point === null ? null : requiredNumber(point.latitude, `localAreas[${index}].referencePoint.latitude`);
-  const longitude =
-    point === null ? null : requiredNumber(point.longitude, `localAreas[${index}].referencePoint.longitude`);
-  if (
-    latitude !== null &&
-    longitude !== null &&
-    (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
-  ) {
-    throw new NetworkDataError(`localAreas[${index}] has invalid reference coordinates.`);
-  }
-  return {
-    id: requiredString(record.id, `localAreas[${index}].id`),
-    municipalityId: requiredString(record.municipalityId, `localAreas[${index}].municipalityId`),
-    name: requiredString(record.name, `localAreas[${index}].name`),
-    referencePoint: latitude === null || longitude === null ? null : { latitude, longitude },
-  };
-}
-
-/** Validate a physical stop and reject impossible coordinates before map features consume them. */
-function parseStop(value: unknown, index: number): NetworkStop {
-  const record = requiredRecord(value, `stops[${index}]`);
-
-  // Parse coordinates separately because their geographic bounds need a second validation step.
-  const latitude = requiredNumber(record.latitude, `stops[${index}].latitude`);
-  const longitude = requiredNumber(record.longitude, `stops[${index}].longitude`);
-
-  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
-    throw new NetworkDataError(`stops[${index}] has invalid coordinates.`);
-  }
-
-  return {
-    id: requiredString(record.id, `stops[${index}].id`),
-    name: requiredString(record.name, `stops[${index}].name`),
-    latitude,
-    longitude,
-    parentStationId: optionalString(record.parentStationId, `stops[${index}].parentStationId`),
-    placeId: optionalString(record.placeId, `stops[${index}].placeId`),
-    municipalityId: optionalString(record.municipalityId, `stops[${index}].municipalityId`),
-    localAreaId: optionalString(record.localAreaId, `stops[${index}].localAreaId`),
-  };
-}
-
-/** Validate one trip and the timetable at each ordered stop visit. */
-function parseTrip(value: unknown, index: number): NetworkTrip {
-  const record = requiredRecord(value, `trips[${index}]`);
-  const stopTimes = requiredArray(record.stopTimes, `trips[${index}].stopTimes`).map((value, stopIndex) => {
-    const label = `trips[${index}].stopTimes[${stopIndex}]`;
-    const time = requiredRecord(value, label);
-    const arrivalMinutes = requiredMinute(time.arrivalMinutes, `${label}.arrivalMinutes`);
-    const departureMinutes = requiredMinute(time.departureMinutes, `${label}.departureMinutes`);
-    const pickupType = requiredNumber(time.pickupType, `${label}.pickupType`);
-    const dropOffType = requiredNumber(time.dropOffType, `${label}.dropOffType`);
-    if (
-      arrivalMinutes > departureMinutes ||
-      ![0, 1, 2, 3].includes(pickupType) ||
-      ![0, 1, 2, 3].includes(dropOffType)
-    ) {
-      throw new NetworkDataError(`${label} has invalid arrival, departure, pickup, or drop-off values.`);
-    }
-    return {
-      stopId: requiredString(time.stopId, `${label}.stopId`),
-      arrivalMinutes,
-      departureMinutes,
-      pickupType,
-      dropOffType,
-    };
-  });
-  if (
-    stopTimes.length < 2 ||
-    stopTimes.some(
-      (time, timeIndex) => timeIndex > 0 && time.arrivalMinutes < stopTimes[timeIndex - 1]!.departureMinutes,
-    )
-  ) {
-    throw new NetworkDataError(`trips[${index}].stopTimes must be ordered and contain at least two stops.`);
-  }
-  return {
-    id: requiredString(record.id, `trips[${index}].id`),
-    routeId: requiredString(record.routeId, `trips[${index}].routeId`),
-    serviceId: requiredString(record.serviceId, `trips[${index}].serviceId`),
-    stopTimes,
-  };
-}
-
-/** Validate the weekly service span and its seven weekday switches. */
-function parseCalendar(value: unknown, index: number): NetworkCalendar {
-  const record = requiredRecord(value, `calendars[${index}]`);
-  const startDate = requiredDate(record.startDate, `calendars[${index}].startDate`);
-  const endDate = requiredDate(record.endDate, `calendars[${index}].endDate`);
-  const weekdays = requiredArray(record.weekdays, `calendars[${index}].weekdays`);
-  if (startDate > endDate || weekdays.length !== 7 || weekdays.some((day) => typeof day !== 'boolean')) {
-    throw new NetworkDataError(`calendars[${index}] has invalid dates or weekdays.`);
-  }
-  return {
-    serviceId: requiredString(record.serviceId, `calendars[${index}].serviceId`),
-    startDate,
-    endDate,
-    weekdays: weekdays as boolean[],
-  };
-}
-
-/** Validate one GTFS added or removed service exception. */
-function parseCalendarException(value: unknown, index: number): NetworkCalendarException {
-  const record = requiredRecord(value, `calendarExceptions[${index}]`);
-  if (record.type !== 1 && record.type !== 2) {
-    throw new NetworkDataError(`calendarExceptions[${index}].type must be 1 or 2.`);
-  }
-  return {
-    serviceId: requiredString(record.serviceId, `calendarExceptions[${index}].serviceId`),
-    date: requiredDate(record.date, `calendarExceptions[${index}].date`),
-    type: record.type,
-  };
-}
-
-/** Validate an ordered route-stop sequence while preserving a nullable GTFS direction identifier. */
-function parsePattern(value: unknown, index: number): RoutePattern {
-  const record = requiredRecord(value, `patterns[${index}]`);
-
-  // Preserve stop order: it represents a route traversal, not a set of stops.
-  const stopIds = requiredArray(record.stopIds, `patterns[${index}].stopIds`).map((stopId, stopIndex) =>
-    requiredString(stopId, `patterns[${index}].stopIds[${stopIndex}]`),
-  );
-
-  if (stopIds.length === 0) {
-    throw new NetworkDataError(`patterns[${index}].stopIds must not be empty.`);
-  }
-
-  return {
-    routeId: requiredString(record.routeId, `patterns[${index}].routeId`),
-    directionId: optionalString(record.directionId, `patterns[${index}].directionId`),
-    stopIds,
-  };
-}
-
-/**
- * Validate unknown JSON before it becomes data used by the interface.
- *
- * The generated file is a deployment asset, so validating both primitive fields and references
- * makes a partial upload fail visibly instead of producing subtly broken local queries.
- */
+/** Parse an untrusted static asset and reject broken references before local queries use it. */
 export function parseNetworkDataset(value: unknown): NetworkDataset {
-  // Validate the outer version before treating any file contents as the current contract.
-  const record = requiredRecord(value, 'dataset');
-
-  if (record.formatVersion !== 5) {
-    throw new NetworkDataError('dataset.formatVersion must be 5.');
+  const parsed = datasetSchema.safeParse(value);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0]!;
+    throw new NetworkDataError('dataset.' + issue.path.join('.') + ': ' + issue.message);
   }
-
-  const sourceRecord = requiredRecord(record.source, 'dataset.source');
-
-  // Provenance is shown to users and supports review, so validate it with the transit topology.
-  const source = {
-    url: requiredString(sourceRecord.url, 'dataset.source.url'),
-    generatedAt: requiredString(sourceRecord.generatedAt, 'dataset.source.generatedAt'),
-    archiveSha256: requiredString(sourceRecord.archiveSha256, 'dataset.source.archiveSha256'),
-  };
-
-  if (Number.isNaN(Date.parse(source.generatedAt))) {
-    throw new NetworkDataError('dataset.source.generatedAt must be an ISO date-time.');
-  }
-  if (!/^[a-f0-9]{64}$/.test(source.archiveSha256)) {
-    throw new NetworkDataError('dataset.source.archiveSha256 must be a lowercase SHA-256 hash.');
-  }
-
-  // Shape-check each collection before examining relationships between their IDs.
-  const agencies = requiredArray(record.agencies, 'dataset.agencies').map(parseAgency);
-  const routes = requiredArray(record.routes, 'dataset.routes').map(parseRoute);
-  const municipalities = requiredArray(record.municipalities, 'dataset.municipalities').map(parseMunicipality);
-  const localAreas = requiredArray(record.localAreas, 'dataset.localAreas').map(parseLocalArea);
-  const stops = requiredArray(record.stops, 'dataset.stops').map(parseStop);
-  const patterns = requiredArray(record.patterns, 'dataset.patterns').map(parsePattern);
-  const trips = requiredArray(record.trips, 'dataset.trips').map(parseTrip);
-  const calendars = requiredArray(record.calendars, 'dataset.calendars').map(parseCalendar);
-  const calendarExceptions = requiredArray(record.calendarExceptions, 'dataset.calendarExceptions').map(
-    parseCalendarException,
-  );
-  const coverageRecord = requiredRecord(record.coverage, 'dataset.coverage');
-  const coverage = {
-    startDate: requiredDate(coverageRecord.startDate, 'dataset.coverage.startDate'),
-    endDate: requiredDate(coverageRecord.endDate, 'dataset.coverage.endDate'),
-  };
-  if (coverage.startDate > coverage.endDate) {
-    throw new NetworkDataError('dataset.coverage has reversed dates.');
-  }
-
-  if (
-    agencies.length === 0 ||
-    routes.length === 0 ||
-    stops.length === 0 ||
-    patterns.length === 0 ||
-    trips.length === 0 ||
-    calendars.length === 0
-  ) {
-    throw new NetworkDataError('dataset must contain agencies, routes, stops, patterns, trips, and calendars.');
-  }
-
+  const dataset = parsed.data;
+  const {
+    agencies,
+    routes,
+    municipalities,
+    localAreas,
+    stops,
+    patterns,
+    trips,
+    calendars,
+    calendarExceptions,
+    coverage,
+  } = dataset;
   // Build lookup sets once; the following loops validate every cross-reference in the snapshot.
   const agencyIds = uniqueIds(agencies, 'dataset.agencies');
   const routeIds = uniqueIds(routes, 'dataset.routes');
@@ -461,10 +171,10 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     }
     stopUrlTokens.add(token);
   }
-  const tripIds = uniqueIds(trips, 'dataset.trips');
+  uniqueIds(trips, 'dataset.trips');
   const serviceIds = new Set(calendars.map((calendar) => calendar.serviceId));
-  if (tripIds.size !== trips.length || serviceIds.size !== calendars.length) {
-    throw new NetworkDataError('dataset contains duplicate trips or calendars.');
+  if (serviceIds.size !== calendars.length) {
+    throw new NetworkDataError('dataset contains duplicate calendars.');
   }
   const placeIds = new Set(places.map((place) => place.id));
   // A service dated yesterday can still board just after midnight on the first visible day.
@@ -538,18 +248,5 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
     exceptionKeys.add(key);
   }
 
-  return {
-    formatVersion: 5,
-    source,
-    agencies,
-    routes,
-    municipalities,
-    localAreas,
-    stops,
-    patterns,
-    trips,
-    calendars,
-    calendarExceptions,
-    coverage,
-  };
+  return dataset;
 }

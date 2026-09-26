@@ -3,6 +3,7 @@
  * matching places, local areas, and physical stops. No search requests leave the browser.
  */
 import { MIN_LOCATION_QUERY_LENGTH } from '../config.ts';
+import { locationAliasGroups } from './location-search-aliases.ts';
 import { getRouteLabel } from './network.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import type { Place } from './places.ts';
@@ -13,6 +14,7 @@ export type LocationOption =
       kind: 'place';
       id: string;
       name: string;
+      searchAliases?: readonly string[];
       municipalityId?: string;
       localAreaId?: string;
       parentMunicipalityId?: string;
@@ -25,6 +27,7 @@ export type LocationOption =
       kind: 'stop';
       id: string;
       name: string;
+      searchAliases?: readonly string[];
       routeLabels: string[];
       municipalityId?: string | null;
       localAreaId?: string | null;
@@ -81,6 +84,12 @@ export function townLocalAreaId(dataset: NetworkDataset, municipalityId: string)
 export function createLocationOptions(places: readonly Place[], dataset: NetworkDataset): LocationOption[] {
   const routeLabelsById = new Map(dataset.routes.map((route) => [route.id, getRouteLabel(route)]));
   const routeIdsByStopId = new Map<string, Set<string>>();
+  const aliasesByPlaceId = new Map<string, readonly string[]>();
+  const aliasesByStopId = new Map<string, readonly string[]>();
+  for (const group of locationAliasGroups) {
+    for (const id of group.placeIds ?? []) aliasesByPlaceId.set(id, group.aliases);
+    for (const id of group.stopIds ?? []) aliasesByStopId.set(id, group.aliases);
+  }
   const servedAreaIds = new Set(dataset.stops.map((stop) => stop.localAreaId).filter((id) => id !== null));
   const areaById = new Map(dataset.localAreas.map((area) => [area.id, area]));
   const municipalityById = new Map(dataset.municipalities.map((municipality) => [municipality.id, municipality]));
@@ -117,6 +126,7 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
         {
           kind: 'place',
           ...place,
+          searchAliases: aliasesByPlaceId.get(place.id),
           name: isTown ? (parentName ?? place.name) : place.name,
           parentMunicipalityId: area.municipalityId,
           parentName,
@@ -129,17 +139,19 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
         {
           kind: 'place',
           ...place,
+          searchAliases: aliasesByPlaceId.get(place.id),
           townAreaId: townByMunicipality.get(place.municipalityId) ?? null,
           isBroad: hasOtherStops.has(place.municipalityId),
         },
       ];
     }
-    return [{ kind: 'place', ...place }];
+    return [{ kind: 'place', ...place, searchAliases: aliasesByPlaceId.get(place.id) }];
   });
   const stopOptions: LocationOption[] = dataset.stops.map((stop) => ({
     kind: 'stop',
     id: stop.id,
     name: stop.name,
+    searchAliases: aliasesByStopId.get(stop.id),
     municipalityId: stop.municipalityId,
     localAreaId: stop.localAreaId,
     areaName:
@@ -231,6 +243,15 @@ function parentAreaRank(option: LocationOption, query: string): number {
   return matchRank(`${option.parentName} ${option.name}`, query);
 }
 
+/** Keep official names ahead of search aliases while preserving the usual matching rules. */
+function optionMatchRank(option: LocationOption, query: string): number {
+  let rank = Math.min(matchRank(option.name, query), parentAreaRank(option, query));
+  for (const alias of option.searchAliases ?? []) {
+    rank = Math.min(rank, matchRank(alias, query) + 4);
+  }
+  return rank;
+}
+
 /** Find direct place hits, their child areas, and stops within the matched town or local areas. */
 export function searchLocations(options: readonly LocationOption[], query: string): LocationResults {
   const empty = { places: [], areas: [], stops: [] };
@@ -238,7 +259,7 @@ export function searchLocations(options: readonly LocationOption[], query: strin
   if (!hasMinimumLocationQuery(normalizedQuery)) return empty;
   const ranked = options.map((option) => ({
     option,
-    rank: Math.min(matchRank(option.name, normalizedQuery), parentAreaRank(option, normalizedQuery)),
+    rank: optionMatchRank(option, normalizedQuery),
   }));
   const byRank = (first: { option: LocationOption; rank: number }, second: { option: LocationOption; rank: number }) =>
     first.rank - second.rank ||

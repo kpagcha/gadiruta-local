@@ -1,3 +1,4 @@
+/** Configure the local dev server and static production build; this file runs in Node. */
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';

@@ -3,7 +3,7 @@
  * already loaded local place and stop options; it never requests a server or changes browser history.
  */
 import { isCalendarDate } from './calendar-date.ts';
-import type { DepartureMode } from './journey-time.ts';
+import { isClockTime, type DepartureMode } from './journey-time.ts';
 import { isSameLocationChoice, type LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
 import { stopTokenFromUrl, stopUrlToken, stopUrlValue } from './stop-url.ts';
@@ -17,11 +17,6 @@ export interface ResolvedSearchUrl {
   departureMode: DepartureMode;
   invalid: boolean;
   complete: boolean;
-}
-
-/** Accept any valid minute of the selected local day. */
-export function isClockTime(value: string): boolean {
-  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 }
 
 /** Resolve stored IDs and readable stop links against the current local selections. */

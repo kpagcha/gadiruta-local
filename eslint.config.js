@@ -1,5 +1,6 @@
 /** Lint browser code and build configuration without weakening React's hook rules. */
 import js from '@eslint/js';
+import { builtinModules } from 'node:module';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -7,7 +8,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist', 'storybook-static']),
+  globalIgnores(['dist', 'storybook-static', '.npm-cache', 'data/source', 'docs/local']),
   {
     files: ['**/*.{js,mjs,cjs,jsx}'],
     extends: [js.configs.recommended],
@@ -27,5 +28,56 @@ export default defineConfig([
   {
     files: ['*.{js,mjs,cjs,ts}', 'scripts/**/*.{js,mjs,cjs,ts}'],
     languageOptions: { globals: globals.node },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: builtinModules,
+          patterns: ['node:*', '**/scripts/**', 'csv-parse', 'csv-parse/**', 'yauzl'],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/data/**/*.ts'],
+    ignores: ['src/data/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: builtinModules,
+          patterns: [
+            'node:*',
+            '**/scripts/**',
+            'csv-parse',
+            'csv-parse/**',
+            'yauzl',
+            'react',
+            'react/*',
+            'react-dom',
+            'react-dom/*',
+            '**/components/**',
+            '**/pages/**',
+            '**/hooks/**',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['scripts/build-network-data.ts', 'scripts/gtfs/*.ts', 'scripts/reviewed/*.ts'],
+    ignores: ['**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: ['**/experiments/**', '**/components/**', '**/pages/**', '**/hooks/**'],
+        },
+      ],
+    },
   },
 ]);

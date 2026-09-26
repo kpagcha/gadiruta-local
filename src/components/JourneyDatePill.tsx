@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { calendarDays, monthKey, parseCalendarDate, shiftCalendarDate, shiftMonth } from '../data/calendar-date.ts';
-import { madridToday } from '../data/direct-journeys.ts';
+import { madridToday } from '../data/calendar-date.ts';
 import { Icon } from './Icon';
 import { JourneyPickerPill } from './JourneyPickerPill';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';

@@ -1,2 +1,2 @@
-# Keep source checkouts consistent with Ruff and Prettier on Windows and Unix.
+# Keep source checkouts consistent with Prettier on Windows and Unix.
 * text=auto eol=lf

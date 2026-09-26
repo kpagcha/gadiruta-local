@@ -6,30 +6,13 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { parseNetworkDataset, type NetworkDataset, type NetworkStop } from '../src/data/network-schema.ts';
+import { parseNetworkDataset, type NetworkDataset, type NetworkStop } from '../../src/data/network-schema.ts';
 
-/** A geographic point in decimal degrees. */
-interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
+import { locationDirectorySchema, type LocationDirectory } from '../reviewed/location-directory.ts';
 
-/** Two candidate points and the number of stops used to derive them. */
-interface DerivedCoordinates {
-  stopCount: number;
-  average: Coordinate;
-  representativeStop: Coordinate & { stopId: string };
-}
-
-/** The reviewed hierarchy, including older municipality points that the tool removes. */
-export interface LocationDirectory {
-  retrievedAt: string;
-  municipalities: (NetworkDataset['municipalities'][number] & { derivedCoordinates?: DerivedCoordinates })[];
-  localAreas: (Omit<NetworkDataset['localAreas'][number], 'referencePoint'> & {
-    derivedCoordinates?: DerivedCoordinates;
-  })[];
-  stopLocations: Record<string, { municipalityId: string; localAreaId: string | null }>;
-}
+/** Candidate points produced for a local area with resolved stops. */
+type DerivedCoordinates = NonNullable<LocationDirectory['localAreas'][number]['derivedCoordinates']>;
+type Coordinate = DerivedCoordinates['average'];
 
 /** Round a coordinate to roughly 10 cm so generated JSON stays compact and stable. */
 function roundCoordinate(value: number): number {
@@ -81,15 +64,6 @@ function coordinatesFromStops(stops: readonly NetworkStop[]): DerivedCoordinates
 
 /** Refuse to write points when the reviewed directory and network snapshot disagree. */
 function validateDirectory(directory: LocationDirectory, dataset: NetworkDataset): void {
-  if (
-    !Array.isArray(directory.municipalities) ||
-    !Array.isArray(directory.localAreas) ||
-    typeof directory.stopLocations !== 'object' ||
-    directory.stopLocations === null
-  ) {
-    throw new Error('The reviewed location directory is missing its hierarchy or stop relationships.');
-  }
-
   const municipalities = new Map(directory.municipalities.map((item) => [item.id, item]));
   const localAreas = new Map(directory.localAreas.map((item) => [item.id, item]));
   if (municipalities.size !== dataset.municipalities.length || localAreas.size !== dataset.localAreas.length) {
@@ -152,10 +126,10 @@ export function deriveLocationCoordinates(directory: LocationDirectory, dataset:
 /** Read the checked-in snapshot and update only the reviewed directory when its contents change. */
 export async function writeDerivedLocationCoordinates(): Promise<{ localAreas: number; changed: boolean }> {
   const snapshotPath = resolve('public/data/bahia-cadiz-network.json');
-  const directoryPath = resolve('scripts/ctan-location-directory.json');
+  const directoryPath = resolve('scripts/reviewed/ctan-location-directory.json');
   const dataset = parseNetworkDataset(JSON.parse(await readFile(snapshotPath, 'utf8')) as unknown);
   const before = await readFile(directoryPath, 'utf8');
-  const directory = JSON.parse(before) as LocationDirectory;
+  const directory = locationDirectorySchema.parse(JSON.parse(before));
   const updated = deriveLocationCoordinates(directory, dataset);
   const after = `${JSON.stringify(updated, null, 2)}\n`;
   if (after !== before) await writeFile(directoryPath, after);

@@ -3,7 +3,6 @@
  * including a calendar-day change at midnight, while the dropdown offers 30-minute shortcuts.
  */
 import { shiftCalendarDate } from './calendar-date.ts';
-import { isClockTime } from './search-url.ts';
 
 /** The departure choices currently supported by local journey search. */
 export type DepartureMode = 'leave-now' | 'depart-at';
@@ -79,4 +78,15 @@ export function stepJourneyTime(
     date: nextDate,
     time: `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`,
   };
+}
+
+/** Accept any valid minute of the selected local day. */
+export function isClockTime(value: string): boolean {
+  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+
+/** Display an absolute trip minute as a clock time, wrapping at midnight. */
+export function clockTime(minute: number): string {
+  const withinDay = ((minute % 1440) + 1440) % 1440;
+  return `${String(Math.floor(withinDay / 60)).padStart(2, '0')}:${String(withinDay % 60).padStart(2, '0')}`;
 }

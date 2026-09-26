@@ -4,24 +4,16 @@
  */
 import { RECENT_SEARCH_LIMIT } from '../config.ts';
 import { isCalendarDate } from './calendar-date.ts';
-import type { DepartureMode } from './journey-time.ts';
+import { isClockTime } from './journey-time.ts';
+import type { JourneySearch } from './journey-search.ts';
 import type { LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
-import { isClockTime, resolveSearchUrl, searchQuery } from './search-url.ts';
-
-/** A runnable search whose locations come from the current network snapshot. */
-export interface RecentSearch {
-  origin: LocationOption;
-  destination: LocationOption;
-  departureMode: DepartureMode;
-  date: string;
-  departAfter: string;
-}
+import { resolveSearchUrl, searchQuery } from './search-url.ts';
 
 const STORAGE_KEY = 'gadiruta-local.recent-searches.v1';
 
 /** Treat direction and exact stop choice as part of a route's identity. */
-function isSameRoute(first: RecentSearch, second: RecentSearch): boolean {
+function isSameRoute(first: JourneySearch, second: JourneySearch): boolean {
   return (
     first.origin.kind === second.origin.kind &&
     first.origin.id === second.origin.id &&
@@ -36,7 +28,7 @@ function resolveSavedSearch(
   options: readonly LocationOption[],
   coverage: NetworkDataset['coverage'],
   today: string,
-): RecentSearch | null {
+): JourneySearch | null {
   const parameters = new URLSearchParams(query);
   const savedDate = parameters.get('date');
   if (savedDate !== null && isCalendarDate(savedDate) && savedDate < today) {
@@ -63,7 +55,7 @@ export function loadRecentSearches(
   options: readonly LocationOption[],
   coverage: NetworkDataset['coverage'],
   today: string,
-): RecentSearch[] {
+): JourneySearch[] {
   let saved: unknown;
   try {
     const value = window.localStorage.getItem(STORAGE_KEY);
@@ -73,7 +65,7 @@ export function loadRecentSearches(
   }
   if (!Array.isArray(saved)) return [];
 
-  const recent: RecentSearch[] = [];
+  const recent: JourneySearch[] = [];
   for (const value of saved) {
     if (typeof value !== 'string') continue;
     const search = resolveSavedSearch(value, options, coverage, today);
@@ -84,12 +76,12 @@ export function loadRecentSearches(
 }
 
 /** Move a successful search to the front, replacing older criteria for the same route. */
-export function prependRecentSearch(current: readonly RecentSearch[], search: RecentSearch): RecentSearch[] {
+export function prependRecentSearch(current: readonly JourneySearch[], search: JourneySearch): JourneySearch[] {
   return [search, ...current.filter((entry) => !isSameRoute(entry, search))].slice(0, RECENT_SEARCH_LIMIT);
 }
 
 /** Save current search links when browser storage allows it. */
-export function persistRecentSearches(searches: readonly RecentSearch[]): void {
+export function persistRecentSearches(searches: readonly JourneySearch[]): void {
   try {
     window.localStorage.setItem(
       STORAGE_KEY,

@@ -8,6 +8,12 @@ runtime proxy, or browser request to CTAN.
 
 The step-by-step app flow and the commands that prepare the JSON are in the [development guide](development.md).
 
+`src/data/` holds ordinary TypeScript for contracts, calendar rules, location matching, journey
+queries, URL parsing, and browser storage/loading boundaries. `src/hooks/` owns dataset-fetch and
+theme lifecycle. Components retain focus and interaction state; `HomePage` coordinates history and
+visible state while `journey-search.ts` validates and submits searches without browser side effects.
+TypeScript and ESLint enforce the browser/Node, data/React, and production/experiment import boundaries.
+
 ## Network data shape
 
 The browser-facing file, `public/data/bahia-cadiz-network.json`, contains the parts of GTFS needed by
@@ -23,6 +29,11 @@ The file also records its format version and the hash of the GTFS ZIP used to pr
 processor and browser both check that the data has the expected fields and that routes and stops
 refer to entries that exist. ZIP and CSV details stay in developer scripts, so browser code only
 needs to handle this smaller format.
+
+The application contract lives in `src/data/network-schema.ts`. Zod defines JSON shapes and
+infers their TypeScript types; plain loops check transit references. The browser loader and builder
+each validate at their own input boundary. Date clipping operates on the validated dataset without
+parsing it again. GTFS row conversion remains explicit and validates only the selected transit slice.
 
 The processor selects agency `CMTBC` only when its name matches the expected Bahía de Cádiz
 Consortium. The agency ID defines which network is in scope; stop names and coordinates do not. The
@@ -45,7 +56,11 @@ served local areas, and exact stops. A matched municipality expands stops only f
 town area; a matched local area expands its own stops. Name matching ignores accent, case, and word
 order. A query can combine a municipality and one of its local-area names without expanding stops
 from the municipality's other areas. The picker reveals further matches within each group on request.
-The earlier reviewed assignments in `scripts/place-stop-assignments.json` remain in the snapshot
+Curated bilingual search aliases attach to existing place and stop IDs in browser code. Official
+names rank first, and aliases do not create new choices or change URL identities. The station aliases
+refer to bus stops in the snapshot, including separate directional stops where present.
+
+The earlier reviewed assignments in `scripts/reviewed/place-stop-assignments.json` remain in the snapshot
 for places without a CTAN link. The ignored geographic report was used as a review checklist and
 is never browser input.
 
@@ -113,6 +128,10 @@ municipality, but it does not establish the local area a stop belongs to. The cu
 probe report keeps those cases unresolved. Coordinates and stop names are not used to guess missing
 relationships.
 
+Live probing, crosswalk diagnostics, and coordinate derivation live in `scripts/experiments/`.
+They are exploratory tools, not a settled mapping strategy. Production builds never import them.
+The reviewed directory in `scripts/reviewed/` is the explicit handoff: its JSON shape is validated
+when read, and its selected relationships are checked by the application contract.
 The tracked directory is reviewed before it enters the static snapshot. These findings are
 source-data limitations, not part of the website's runtime request flow.
 

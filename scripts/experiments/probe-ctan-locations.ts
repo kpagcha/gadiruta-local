@@ -10,7 +10,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { createNetworkDataset } from './build-network-data.ts';
+import { createNetworkDataset } from '../gtfs/network-dataset.ts';
 import {
   createCtanLocationProbeReport,
   getCtanLineId,
@@ -27,7 +27,7 @@ import {
   type CtanLocationProbeReport,
   type CtanLocalArea,
 } from './ctan-location-crosswalk.ts';
-import { readGtfsTable, readZipTextFiles, type CsvRow } from './gtfs-archive.ts';
+import { readGtfsTables } from '../gtfs/archive.ts';
 
 /** CTAN's stable API root for the Bahia de Cadiz consortium. */
 const ctanApiRoot = 'http://api.ctan.es/v1/Consorcios/2/';
@@ -142,25 +142,8 @@ function createRouteIdsByStopId(
 async function loadBahiaGtfsProbeInput(inputPath: string): Promise<BahiaGtfsProbeInput> {
   // Reuse the snapshot generator's selection rules rather than creating a subtly different GTFS slice.
   const archive = await readFile(inputPath);
-  const files = await readZipTextFiles(archive);
   const dataset = createNetworkDataset(
-    {
-      agency: readGtfsTable(files, 'agency.txt'),
-      routes: readGtfsTable(files, 'routes.txt'),
-      stops: readGtfsTable(files, 'stops.txt'),
-      trips: readGtfsTable(files, 'trips.txt'),
-      stopTimes: readGtfsTable(files, 'stop_times.txt'),
-      calendar: readGtfsTable(files, 'calendar.txt'),
-      calendarDates: readGtfsTable(files, 'calendar_dates.txt'),
-    } satisfies {
-      agency: readonly CsvRow[];
-      routes: readonly CsvRow[];
-      stops: readonly CsvRow[];
-      trips: readonly CsvRow[];
-      stopTimes: readonly CsvRow[];
-      calendar: readonly CsvRow[];
-      calendarDates: readonly CsvRow[];
-    },
+    await readGtfsTables(archive),
     createHash('sha256').update(archive).digest('hex'),
   );
 

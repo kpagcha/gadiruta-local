@@ -1,5 +1,9 @@
 dist/
 node_modules/
+storybook-static/
+.npm-cache/
+data/source/
+docs/local/
 package-lock.json
 
 # Data snapshots are deterministically formatted by their generator.

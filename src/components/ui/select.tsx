@@ -2,7 +2,7 @@ import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { Check, ChevronDown } from 'lucide-react';
 import type { ReactNode, RefObject } from 'react';
 
-/** The shadcn Base UI select parts, styled with Gadiruta's existing colors and spacing. */
+/** The Base UI select parts, styled with Gadiruta's existing colors and spacing. */
 export const Select = SelectPrimitive.Root;
 export const SelectValue = SelectPrimitive.Value;
 
@@ -31,18 +31,16 @@ export function SelectContent({
   children,
   className,
   portalContainer,
-  wide = false,
 }: {
   children: ReactNode;
   className?: string;
   portalContainer?: RefObject<HTMLElement | null>;
-  wide?: boolean;
 }) {
   return (
     <SelectPrimitive.Portal container={portalContainer}>
       <SelectPrimitive.Positioner align="start" alignItemWithTrigger={false} className="z-100" sideOffset={6}>
         <SelectPrimitive.Popup
-          className={`motion-base-popup ${wide ? 'max-h-[min(20rem,calc(100dvh-2rem))] w-[min(28rem,calc(100vw-2rem))]' : 'max-h-64 w-[var(--anchor-width)]'} max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-[var(--shadow-popover)] outline-none ${className ?? ''}`}
+          className={`motion-base-popup max-h-64 w-[var(--anchor-width)] max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-[var(--shadow-popover)] outline-none ${className ?? ''}`}
         >
           <SelectPrimitive.List>{children}</SelectPrimitive.List>
         </SelectPrimitive.Popup>

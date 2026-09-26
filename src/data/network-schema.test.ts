@@ -61,6 +61,24 @@ test('accepts the version-five timetable contract', () => {
   assert.throws(() => parseNetworkDataset({ ...dataset, formatVersion: 3 }), /formatVersion must be 5/);
 });
 
+test('rejects duplicate IDs, invalid primitives, missing nullable fields', () => {
+  assert.throws(() => parseNetworkDataset({ ...dataset, stops: [dataset.stops[0], dataset.stops[0]] }), /duplicate ID/);
+  assert.throws(
+    () => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], latitude: '36.5' }] }),
+    /latitude/,
+  );
+  assert.throws(() => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], latitude: NaN }] }), /latitude/);
+  assert.throws(
+    () => parseNetworkDataset({ ...dataset, stops: [{ ...dataset.stops[0], placeId: undefined }] }),
+    /placeId/,
+  );
+  assert.throws(() => parseNetworkDataset({ ...dataset, routes: [{ ...dataset.routes[0], id: ' ' }] }), /non-empty/);
+  assert.throws(
+    () => parseNetworkDataset({ ...dataset, source: { ...dataset.source, archiveSha256: 'bad' } }),
+    /SHA-256/,
+  );
+});
+
 test('rejects broken stop, route, service, and place references', () => {
   assert.throws(
     () => parseNetworkDataset({ ...dataset, trips: [{ ...dataset.trips[0], serviceId: 'missing' }] }),
@@ -93,7 +111,7 @@ test('validates municipality and local-area relationships while allowing an unre
         ...withLocations,
         localAreas: [{ id: 'localArea', municipalityId: 'municipality', name: 'Town' }],
       }),
-    /referencePoint must be an object/,
+    /referencePoint/,
   );
   assert.throws(
     () =>

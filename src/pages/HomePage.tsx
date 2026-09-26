@@ -1,42 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { DirectJourneyResults, type JourneySearchResult } from '../components/DirectJourneyResults';
+import { DirectJourneyResults } from '../components/DirectJourneyResults';
 import { Icon } from '../components/Icon';
-import { TripLocationPicker, type TripSearchDraft } from '../components/TripLocationPicker';
-import { isCalendarDate } from '../data/calendar-date.ts';
-import { findDirectJourneys, madridToday } from '../data/direct-journeys.ts';
-import { currentMadridTime, normalizeJourneyTime } from '../data/journey-time.ts';
+import { TripLocationPicker } from '../components/TripLocationPicker';
+import { madridToday } from '../data/calendar-date.ts';
 import {
-  createLocationOptions,
-  isSameLocationChoice,
-  locationLabel,
-  type LocationOption,
-} from '../data/location-search.ts';
-import type { NetworkDataset } from '../data/network-schema.ts';
+  submitJourneySearch,
+  type TripSearchDraft,
+  type JourneySearchResult,
+  type JourneySearch,
+} from '../data/journey-search.ts';
+import { createLocationOptions, isSameLocationChoice, locationLabel } from '../data/location-search.ts';
 import { places } from '../data/places.ts';
-import {
-  loadRecentSearches,
-  persistRecentSearches,
-  prependRecentSearch,
-  type RecentSearch,
-} from '../data/recent-searches.ts';
-import { resolveSearchUrl, searchQuery } from '../data/search-url.ts';
-import { useNetworkDataset, type NetworkDatasetState } from '../data/use-network-dataset.ts';
-
-/** Search the checked-in timetable and retain the cutoff needed by the result card. */
-function localSearch(
-  dataset: NetworkDataset,
-  date: string,
-  origin: LocationOption,
-  destination: LocationOption,
-  departAfter: string,
-): JourneySearchResult {
-  return {
-    departAfter,
-    journeys: findDirectJourneys(dataset, date, origin, destination),
-  };
-}
+import { loadRecentSearches, persistRecentSearches, prependRecentSearch } from '../data/recent-searches.ts';
+import { resolveSearchUrl } from '../data/search-url.ts';
+import { useNetworkDataset, type NetworkDatasetState } from '../hooks/use-network-dataset.ts';
 
 /** Remount search state only when the network loads or browser history selects another URL. */
 export function HomePage() {
@@ -101,18 +80,12 @@ function SearchContent({
   const [urlError, setUrlError] = useState(restored?.invalid ?? false);
   const [hasSearched, setHasSearched] = useState(restored?.complete ?? false);
   const [result, setResult] = useState<JourneySearchResult | null>(() =>
-    restored?.complete && restored.origin !== null && restored.destination !== null && networkState.status === 'ready'
-      ? localSearch(
-          networkState.dataset,
-          restored.departureMode === 'leave-now' ? madridToday(restoredNow) : restored.date,
-          restored.origin,
-          restored.destination,
-          restored.departureMode === 'leave-now' ? currentMadridTime(restoredNow) : restored.departAfter,
-        )
+    restored?.complete && networkState.status === 'ready'
+      ? (submitJourneySearch(networkState.dataset, draft, restoredNow)?.result ?? null)
       : null,
   );
   const [searchNumber, setSearchNumber] = useState(0);
-  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>(() => {
+  const [recentSearches, setRecentSearches] = useState<JourneySearch[]>(() => {
     if (networkState.status !== 'ready') return [];
     const saved = loadRecentSearches(options, networkState.dataset.coverage, madridToday(restoredNow));
     // A valid link already ran a search while restoring the page, so it belongs in recent history.
@@ -151,52 +124,32 @@ function SearchContent({
 
   /** Search immediately after a committed location, departure mode, date, or time change. */
   function handleSearch(nextDraft: TripSearchDraft) {
-    const origin = nextDraft.origin.choice;
-    const destination = nextDraft.destination.choice;
-    if (networkState.status !== 'ready' || origin === null || destination === null) return;
-    const now = new Date();
-    const today = madridToday(now);
-    const date = nextDraft.departureMode === 'leave-now' ? today : nextDraft.date;
-    const { startDate, endDate } = networkState.dataset.coverage;
-    if (!isCalendarDate(date) || date < today || date < startDate || date > endDate) return;
-    if (isSameLocationChoice(origin, destination)) return;
-
-    const departAfter =
-      nextDraft.departureMode === 'leave-now' ? currentMadridTime(now) : normalizeJourneyTime(nextDraft.departAfter);
-    const nextResult = localSearch(networkState.dataset, date, origin, destination, departAfter);
-    const query = searchQuery(origin, destination, nextDraft.departureMode, date, departAfter);
-    const recentSearch: RecentSearch = {
-      origin,
-      destination,
-      departureMode: nextDraft.departureMode,
-      date,
-      departAfter: nextDraft.departureMode === 'depart-at' ? departAfter : '',
-    };
+    if (networkState.status !== 'ready') return;
+    const submitted = submitJourneySearch(networkState.dataset, nextDraft, new Date());
+    if (submitted === null) return;
+    const { query, search, result: nextResult } = submitted;
     if (query !== window.location.search) {
       window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
     }
     setUrlError(false);
 
-    /** Commit related state together so the new layout has complete results. */
-    function showResult() {
-      setDraft({
-        ...nextDraft,
-        departAfter: nextDraft.departureMode === 'depart-at' ? departAfter : nextDraft.departAfter,
-      });
-      setResult(nextResult);
-      setHasSearched(true);
-      setSearchNumber((number) => number + 1);
-      setRecentSearches((current) => prependRecentSearch(current, recentSearch));
-    }
+    // Commit the draft and result together before revealing the panel.
+    setDraft({
+      ...nextDraft,
+      departAfter: nextDraft.departureMode === 'depart-at' ? search.departAfter : nextDraft.departAfter,
+    });
+    setResult(nextResult);
+    setHasSearched(true);
+    setSearchNumber((number) => number + 1);
+    setRecentSearches((current) => prependRecentSearch(current, search));
 
     // Only a fresh search waits for the results card entrance before scrolling to it.
     revealAfterEntrance.current = !hasSearched && !reducedMotion;
-    showResult();
     if (!hasSearched && reducedMotion) revealResults();
   }
 
   /** Apply a recent route through the same validation and URL update as a new search. */
-  function handleRecentSearch(search: RecentSearch) {
+  function handleRecentSearch(search: JourneySearch) {
     const today = madridToday();
     const departureMode =
       search.departureMode === 'depart-at' && search.date < today ? 'leave-now' : search.departureMode;

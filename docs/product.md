@@ -31,6 +31,9 @@ lists only places served by stops in the loaded network.
 
 The interface supports English and Spanish. Official place, operator, and line names remain as
 provided by their source.
+Search also recognizes English and Spanish terms for the airport and named bus and rail station
+access stops, regardless of the interface language. Rail station results are bus boarding points;
+the app does not search train journeys.
 
 ## Product boundaries
 

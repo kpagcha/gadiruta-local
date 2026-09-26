@@ -1,6 +1,6 @@
 /**
- * Provides date-only calendar helpers for the browser's journey picker. UTC arithmetic keeps a
- * selected Cádiz calendar day unchanged when the browser runs in another time zone.
+ * Provides date-only arithmetic for the browser's journey picker and offline snapshot clipping.
+ * UTC arithmetic keeps a selected Cádiz calendar day unchanged in any host time zone.
  */
 
 /** Parse an ISO calendar date for display without applying the browser's local time zone. */
@@ -52,4 +52,16 @@ export function calendarDays(value: string): Array<string | null> {
       formatCalendarDate(new Date(Date.UTC(year, month - 1, index + 1))),
     ),
   ];
+}
+
+/** Return today's calendar date in Cádiz even when the browser is in another time zone. */
+export function madridToday(now = new Date()): string {
+  const parts = new Intl.DateTimeFormat('en', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now);
+  const field = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
+  return `${field('year')}-${field('month')}-${field('day')}`;
 }

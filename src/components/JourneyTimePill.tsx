@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { madridToday } from '../data/direct-journeys.ts';
+import { madridToday } from '../data/calendar-date.ts';
 import { currentMadridQuarterHour, normalizeJourneyTime, stepJourneyTime } from '../data/journey-time.ts';
-import { isClockTime } from '../data/search-url.ts';
+import { isClockTime } from '../data/journey-time.ts';
 import { Icon } from './Icon';
 import { JourneyPickerPill } from './JourneyPickerPill';
 

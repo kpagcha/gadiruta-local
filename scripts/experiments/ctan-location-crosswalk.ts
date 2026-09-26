@@ -4,29 +4,23 @@
  * These checks are kept separate from the network-requesting probe so they can be tested with
  * saved examples and do not need a live connection to CTAN.
  */
-/** One municipality listed by CTAN's Bahia de Cadiz location API. */
-export interface CtanMunicipality {
-  id: string;
-}
+import { z } from 'zod';
 
-/** One named local area listed beneath a CTAN municipality. */
-export interface CtanLocalArea {
-  id: string;
-  municipalityId: string;
-}
+// CTAN IDs must be decimal strings before they can become URLs or capture filenames.
+const identifier = z.string().regex(/^\d+$/, 'must be a non-empty decimal identifier');
+const municipalityResponse = z.object({ idMunicipio: identifier });
+const localAreaResponse = z.object({ idNucleo: identifier, idMunicipio: identifier });
+const stopResponse = z.object({ idParada: identifier, idMunicipio: identifier, idNucleo: identifier });
+const lineStopResponse = z.object({ idParada: identifier, idNucleo: identifier });
 
-/** One CTAN boarding location with the hierarchy it declares. */
-export interface CtanStop {
-  id: string;
-  municipalityId: string;
-  localAreaId: string;
-}
-
-/** One line-itinerary stop with CTAN's municipality value carried in its mislabeled field. */
-export interface CtanLineStop {
-  id: string;
-  municipalityId: string;
-}
+/** One municipality reduced to its authoritative identifier. */
+export type CtanMunicipality = ReturnType<typeof parseCtanMunicipalities>[number];
+/** One local area's declared municipality relationship. */
+export type CtanLocalArea = ReturnType<typeof parseCtanLocalAreas>[number];
+/** A physical stop's declared location relationship. */
+export type CtanStop = ReturnType<typeof parseCtanStop>;
+/** The municipality identified by CTAN's mislabeled line-stop field. */
+export type CtanLineStop = ReturnType<typeof parseCtanLineStops>[number];
 
 /** One exact GTFS stop match resolved by CTAN's line itinerary endpoint. */
 export interface CtanLineFallback {
@@ -64,87 +58,37 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-/** Require a non-empty decimal CTAN identifier so it remains safe in URLs and capture filenames. */
-function requiredIdentifier(value: unknown, label: string): string {
-  if (typeof value !== 'string' || !/^\d+$/.test(value)) {
-    fail(`${label} must be a non-empty decimal identifier.`);
-  }
-
-  return value;
+/** Parse a municipality reply once and discard fields irrelevant to the crosswalk. */
+export function parseCtanMunicipalities(value: unknown) {
+  const { municipios } = z.object({ municipios: z.array(municipalityResponse) }).parse(value);
+  return municipios.map((item) => ({ id: item.idMunicipio }));
 }
 
-/** Require a response array while retaining unknown records for its specific parser. */
-function requiredArray(value: unknown, label: string): unknown[] {
-  if (!Array.isArray(value)) {
-    fail(`${label} must be an array.`);
-  }
-
-  return value;
+/** Read the explicit municipality relationship in a local-area collection. */
+export function parseCtanLocalAreas(value: unknown) {
+  const { nucleos } = z.object({ nucleos: z.array(localAreaResponse) }).parse(value);
+  return nucleos.map((item) => ({ id: item.idNucleo, municipalityId: item.idMunicipio }));
 }
 
-/** Require a JSON object with a source-specific label for diagnostics. */
-function requiredRecord(value: unknown, label: string): Record<string, unknown> {
-  if (!isRecord(value)) {
-    fail(`${label} must be an object.`);
-  }
-
-  return value;
+/** Read the hierarchy declared by CTAN's all-stops collection. */
+export function parseCtanStops(value: unknown) {
+  const { paradas } = z.object({ paradas: z.array(stopResponse) }).parse(value);
+  return paradas.map((item) => ({ id: item.idParada, municipalityId: item.idMunicipio, localAreaId: item.idNucleo }));
 }
 
-/** Parse CTAN's municipality-list response without relying on names for the crosswalk. */
-export function parseCtanMunicipalities(value: unknown): CtanMunicipality[] {
-  const record = requiredRecord(value, 'municipalities response');
-  return requiredArray(record.municipios, 'municipalities response.municipios').map((item, index) => {
-    const municipality = requiredRecord(item, `municipalities[${index}]`);
-    return { id: requiredIdentifier(municipality.idMunicipio, `municipalities[${index}].idMunicipio`) };
-  });
-}
-
-/** Parse CTAN's local-area list and retain its explicit municipality relationship. */
-export function parseCtanLocalAreas(value: unknown): CtanLocalArea[] {
-  const record = requiredRecord(value, 'localAreas response');
-  return requiredArray(record.nucleos, 'localAreas response.nucleos').map((item, index) => {
-    const localArea = requiredRecord(item, `localAreas[${index}]`);
-    return {
-      id: requiredIdentifier(localArea.idNucleo, `localAreas[${index}].idNucleo`),
-      municipalityId: requiredIdentifier(localArea.idMunicipio, `localAreas[${index}].idMunicipio`),
-    };
-  });
-}
-
-/** Parse CTAN's consortium-wide stops response and retain only authoritative hierarchy IDs. */
-export function parseCtanStops(value: unknown): CtanStop[] {
-  const record = requiredRecord(value, 'stops response');
-  return requiredArray(record.paradas, 'stops response.paradas').map((item, index) =>
-    parseCtanStop(item, `stops[${index}]`),
-  );
-}
-
-/** Parse a single CTAN stop response before it supplements an incomplete collection response. */
-export function parseCtanStop(value: unknown, label = 'stop response'): CtanStop {
-  const stop = requiredRecord(value, label);
-  return {
-    id: requiredIdentifier(stop.idParada, `${label}.idParada`),
-    municipalityId: requiredIdentifier(stop.idMunicipio, `${label}.idMunicipio`),
-    localAreaId: requiredIdentifier(stop.idNucleo, `${label}.idNucleo`),
-  };
+/** Read a detail response before it supplements an incomplete collection. */
+export function parseCtanStop(value: unknown) {
+  const item = stopResponse.parse(value);
+  return { id: item.idParada, municipalityId: item.idMunicipio, localAreaId: item.idNucleo };
 }
 
 /**
- * Parse CTAN line stops, treating its `idNucleo` field as a municipality ID.
- *
- * The current Bahia API was checked across all selected line itineraries: 1,493 comparable stop
- * rows matched their directory `idMunicipio` and none matched only `idNucleo`.
+ * Treat line-stop idNucleo as a municipality ID, never as evidence of local-area membership.
+ * The source audit found 1,493 comparable rows matching idMunicipio and none matching only idNucleo.
  */
-export function parseCtanLineStops(value: unknown): CtanLineStop[] {
-  const record = requiredRecord(value, 'line stops response');
-  return requiredArray(record.paradas, 'line stops response.paradas').map((item, index) => {
-    const stop = requiredRecord(item, `line stops[${index}]`);
-    return {
-      id: requiredIdentifier(stop.idParada, `line stops[${index}].idParada`),
-      municipalityId: requiredIdentifier(stop.idNucleo, `line stops[${index}].idNucleo`),
-    };
-  });
+export function parseCtanLineStops(value: unknown) {
+  const { paradas } = z.object({ paradas: z.array(lineStopResponse) }).parse(value);
+  return paradas.map((item) => ({ id: item.idParada, municipalityId: item.idNucleo }));
 }
 
 /** Index identifiers and reject duplicates that would make a location membership ambiguous. */

@@ -1,4 +1,3 @@
-/** Shared interface icons, including Gadiruta's custom brand mark. */
 import {
   ArrowRight,
   BusFront,

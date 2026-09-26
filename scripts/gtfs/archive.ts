@@ -11,6 +11,17 @@ import { fromBufferPromise, type Entry, type ZipFile } from 'yauzl';
 /** A decoded GTFS CSV row keyed by its trimmed header names. */
 export type CsvRow = Record<string, string>;
 
+/** GTFS tables needed for the current direct-journey snapshot. */
+export interface GtfsTables {
+  agency: readonly CsvRow[];
+  routes: readonly CsvRow[];
+  stops: readonly CsvRow[];
+  trips: readonly CsvRow[];
+  stopTimes: readonly CsvRow[];
+  calendar: readonly CsvRow[];
+  calendarDates: readonly CsvRow[];
+}
+
 /** Throw a consistent data error when an archive cannot produce a trustworthy snapshot. */
 function fail(message: string): never {
   throw new Error(`GTFS data error: ${message}`);
@@ -94,7 +105,7 @@ async function readZipEntryText(archive: ZipFile, entry: Entry): Promise<string>
  * Read UTF-8 text entries from a GTFS ZIP archive, rejecting duplicate filenames.
  *
  * `yauzl` owns ZIP metadata, ZIP64, compression, size, and stream-integrity handling. This
- * module only retains the decoded files needed by the GTFS processor and its useful diagnostics.
+ * module decodes the archive's text entries; readGtfsTables selects the tables used by the processor.
  */
 export async function readZipTextFiles(bytes: Uint8Array): Promise<Map<string, string>> {
   let archive: ZipFile;
@@ -143,4 +154,18 @@ export function readGtfsTable(files: ReadonlyMap<string, string>, filename: stri
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`${filename}: ${message}`, { cause: error });
   }
+}
+
+/** Decode the seven tables used by both snapshot generation and the location probe. */
+export async function readGtfsTables(bytes: Uint8Array): Promise<GtfsTables> {
+  const files = await readZipTextFiles(bytes);
+  return {
+    agency: readGtfsTable(files, 'agency.txt'),
+    routes: readGtfsTable(files, 'routes.txt'),
+    stops: readGtfsTable(files, 'stops.txt'),
+    trips: readGtfsTable(files, 'trips.txt'),
+    stopTimes: readGtfsTable(files, 'stop_times.txt'),
+    calendar: readGtfsTable(files, 'calendar.txt'),
+    calendarDates: readGtfsTable(files, 'calendar_dates.txt'),
+  };
 }

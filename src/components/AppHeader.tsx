@@ -1,8 +1,6 @@
-/** Render application identity, theme controls, and language selection in the page header. */
-
 import { useTranslation } from 'react-i18next';
 import { changeLanguage } from '../i18n';
-import { useTheme } from '../theme';
+import { useTheme } from '../hooks/use-theme';
 import { Icon } from './Icon';
 
 /** Render the persistent site header while keeping preferences owned by their dedicated hooks. */

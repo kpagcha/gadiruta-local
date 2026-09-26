@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { shiftCalendarDate } from '../data/calendar-date.ts';
-import { madridToday } from '../data/direct-journeys.ts';
+import { madridToday } from '../data/calendar-date.ts';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
 
