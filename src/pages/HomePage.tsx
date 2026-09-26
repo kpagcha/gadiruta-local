@@ -21,7 +21,6 @@ import { useNetworkDataset, type NetworkDatasetState } from '../hooks/use-networ
 export function HomePage() {
   const networkState = useNetworkDataset();
   const [historyVersion, setHistoryVersion] = useState(0);
-  const [initialNetworkStatus] = useState(networkState.status);
 
   useEffect(() => {
     /** Restore the URL's submitted criteria when browser Back or Forward is used. */
@@ -36,7 +35,7 @@ export function HomePage() {
     <SearchContent
       key={`${networkState.status}:${historyVersion}`}
       networkState={networkState}
-      animateArrival={networkState.status === initialNetworkStatus && historyVersion === 0}
+      animateArrival={networkState.status === 'loading' && historyVersion === 0}
     />
   );
 }
@@ -51,7 +50,9 @@ function SearchContent({
 }) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
+  // Use one instant for URL restoration, the initial form date, and recent links across midnight.
   const [restoredNow] = useState(() => new Date());
+  const restoredToday = madridToday(restoredNow);
   const options = useMemo(
     () => (networkState.status === 'ready' ? createLocationOptions(places, networkState.dataset) : []),
     [networkState],
@@ -60,9 +61,9 @@ function SearchContent({
   const restored = useMemo(
     () =>
       networkState.status === 'ready'
-        ? resolveSearchUrl(window.location.search, options, networkState.dataset.coverage, madridToday(restoredNow))
+        ? resolveSearchUrl(window.location.search, options, networkState.dataset.coverage, restoredToday)
         : null,
-    [networkState, options, restoredNow],
+    [networkState, options, restoredToday],
   );
   const [draft, setDraft] = useState<TripSearchDraft>(() => ({
     origin: {
@@ -73,21 +74,22 @@ function SearchContent({
       text: restored?.destination ? locationLabel(restored.destination, t('search.allStops')) : '',
       choice: restored?.destination ?? null,
     },
-    date: restored?.date ?? madridToday(),
+    date: restored?.date ?? restoredToday,
     departAfter: restored?.departAfter ?? '',
     departureMode: restored?.departureMode ?? 'leave-now',
   }));
   const [urlError, setUrlError] = useState(restored?.invalid ?? false);
-  const [hasSearched, setHasSearched] = useState(restored?.complete ?? false);
   const [result, setResult] = useState<JourneySearchResult | null>(() =>
     restored?.complete && networkState.status === 'ready'
       ? (submitJourneySearch(networkState.dataset, draft, restoredNow)?.result ?? null)
       : null,
   );
+  // Each submission remounts result pagination and marks the first completed search.
   const [searchNumber, setSearchNumber] = useState(0);
+  const hasSearched = (restored?.complete ?? false) || searchNumber > 0;
   const [recentSearches, setRecentSearches] = useState<JourneySearch[]>(() => {
     if (networkState.status !== 'ready') return [];
-    const saved = loadRecentSearches(options, networkState.dataset.coverage, madridToday(restoredNow));
+    const saved = loadRecentSearches(options, networkState.dataset.coverage, restoredToday);
     // A valid link already ran a search while restoring the page, so it belongs in recent history.
     if (restored?.complete && restored.origin !== null && restored.destination !== null) {
       return prependRecentSearch(saved, {
@@ -112,8 +114,8 @@ function SearchContent({
     requestAnimationFrame(() => {
       const panel = resultsRef.current;
       if (panel === null) return;
-      const { top, bottom } = panel.getBoundingClientRect();
-      if (top < 0 || top + 72 > window.innerHeight || bottom <= 0) {
+      const { top } = panel.getBoundingClientRect();
+      if (top < 0 || top + 72 > window.innerHeight) {
         panel.scrollIntoView({
           behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
           block: 'start',
@@ -139,13 +141,13 @@ function SearchContent({
       departAfter: nextDraft.departureMode === 'depart-at' ? search.departAfter : nextDraft.departAfter,
     });
     setResult(nextResult);
-    setHasSearched(true);
     setSearchNumber((number) => number + 1);
     setRecentSearches((current) => prependRecentSearch(current, search));
 
     // Only a fresh search waits for the results card entrance before scrolling to it.
-    revealAfterEntrance.current = !hasSearched && !reducedMotion;
-    if (!hasSearched && reducedMotion) revealResults();
+    const firstSearch = !hasSearched;
+    revealAfterEntrance.current = firstSearch && !reducedMotion;
+    if (firstSearch && reducedMotion) revealResults();
   }
 
   /** Apply a recent route through the same validation and URL update as a new search. */
