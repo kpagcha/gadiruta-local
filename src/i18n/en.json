@@ -94,6 +94,9 @@
     "placeFilterPlaceholder": "Place or area",
     "lineFilterPlaceholder": "Name or line number",
     "filterStops": "Filter stops",
+    "path": "Path",
+    "pathStopCount": "{{count}} stops",
+    "pathVariant": "Variant {{number}}",
     "stopFilterPlaceholder": "Stop or area",
     "noMatches": "No matches in this list.",
     "loading": "Loading local network…",
@@ -105,9 +108,8 @@
     "searchFromHere": "Search from here",
     "searchFromStop": "Search from {{stop}}",
     "search": "Search",
-    "linesServing": "Lines serving this place",
-    "stopsServed": "Stops served",
-    "lineStopsNote": "These stops are listed alphabetically. Individual buses may stop at different places."
+    "map": "Map",
+    "linesServing": "Lines serving this place"
   },
   "footer": {
     "region": "Made for the Bay of Cádiz.",

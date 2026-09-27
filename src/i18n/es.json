@@ -94,6 +94,9 @@
     "placeFilterPlaceholder": "Lugar o zona",
     "lineFilterPlaceholder": "Nombre o número de línea",
     "filterStops": "Filtrar paradas",
+    "path": "Recorrido",
+    "pathStopCount": "{{count}} paradas",
+    "pathVariant": "Variante {{number}}",
     "stopFilterPlaceholder": "Parada o zona",
     "noMatches": "No hay resultados en esta lista.",
     "loading": "Cargando la red local…",
@@ -105,9 +108,8 @@
     "searchFromHere": "Buscar desde aquí",
     "searchFromStop": "Buscar desde {{stop}}",
     "search": "Buscar",
-    "linesServing": "Líneas que pasan por este lugar",
-    "stopsServed": "Paradas de la línea",
-    "lineStopsNote": "Estas paradas aparecen por orden alfabético. Cada autobús puede parar en lugares distintos."
+    "map": "Mapa",
+    "linesServing": "Líneas que pasan por este lugar"
   },
   "footer": {
     "region": "Hecho para la Bahía de Cádiz.",

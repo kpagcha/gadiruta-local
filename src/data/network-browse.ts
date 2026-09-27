@@ -53,14 +53,50 @@ export function linesForStops(dataset: NetworkDataset, stops: readonly NetworkSt
     );
 }
 
-/** List each physical stop visited by any saved trip on a line, without implying one travel order. */
-export function stopsForLine(dataset: NetworkDataset, routeId: string): NetworkStop[] {
-  const stopIds = new Set(
-    dataset.trips
-      .filter((trip) => trip.routeId === routeId)
-      .flatMap((trip) => trip.stopTimes.map((time) => time.stopId)),
+/** One distinct ordered stop sequence and the number of saved trips following it. */
+export interface LineStopPattern {
+  stops: NetworkStop[];
+  tripCount: number;
+}
+
+/** Group trips with identical stop orders while keeping reverse journeys and variants separate. */
+export function lineStopPatterns(dataset: NetworkDataset, routeId: string): LineStopPattern[] {
+  const stopById = new Map(dataset.stops.map((stop) => [stop.id, stop]));
+  const bySequence = new Map<string, { ids: string[]; tripCount: number }>();
+  for (const trip of dataset.trips) {
+    if (trip.routeId !== routeId) continue;
+    const ids = trip.stopTimes.map((time) => time.stopId);
+    const key = JSON.stringify(ids);
+    const existing = bySequence.get(key);
+    if (existing) {
+      existing.tripCount += 1;
+    } else {
+      bySequence.set(key, { ids, tripCount: 1 });
+    }
+  }
+
+  // The most common saved path is the useful default; break ties by the full source sequence.
+  return [...bySequence.entries()]
+    .sort(
+      ([firstKey, first], [secondKey, second]) =>
+        second.tripCount - first.tripCount || firstKey.localeCompare(secondKey),
+    )
+    .map(([, pattern]) => ({
+      // The network schema has already checked that every visited stop exists.
+      stops: pattern.ids.map((id) => stopById.get(id)!),
+      tripCount: pattern.tripCount,
+    }));
+}
+
+/** Find paths containing a matching stop without dropping the stops between matches. */
+export function filterLineStopPatterns(
+  dataset: NetworkDataset,
+  patterns: readonly LineStopPattern[],
+  query: string,
+): LineStopPattern[] {
+  return patterns.filter((pattern) =>
+    pattern.stops.some((stop) => matchesBrowseQuery(`${stop.name} ${stopLocality(dataset, stop) ?? ''}`, query)),
   );
-  return dataset.stops.filter((stop) => stopIds.has(stop.id)).sort(byName);
 }
 
 /** Use the most specific reviewed area name available for a stop. */

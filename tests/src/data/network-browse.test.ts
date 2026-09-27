@@ -1,6 +1,6 @@
 /**
- * Checks that browsing describes all saved line patterns without duplicating stops or losing the
- * distinction between a whole municipality and one of its local areas.
+ * Checks that browsing keeps saved line paths in travel order and distinguishes a whole
+ * municipality from one of its local areas.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -8,10 +8,11 @@ import test from 'node:test';
 import { createLocationOptions } from '../../../src/data/location-search.ts';
 import { lineFromUrl, lineUrl, validateLineUrls } from '../../../src/data/line-url.ts';
 import {
+  filterLineStopPatterns,
   linesForStops,
+  lineStopPatterns,
   matchesBrowseQuery,
   stopLocality,
-  stopsForLine,
   stopsForPlace,
 } from '../../../src/data/network-browse.ts';
 import type { NetworkDataset } from '../../../src/data/network-schema.ts';
@@ -115,11 +116,34 @@ test('a broad place includes child stops while one area keeps its narrower scope
   );
 });
 
-test('a line with different trip patterns lists each served stop once', () => {
+test('a line keeps directions and variants as ordered paths while grouping repeated trips', () => {
+  const repeatedTrip = { ...dataset.trips[0]!, id: 'repeated' };
+  const reverseTrip = {
+    ...dataset.trips[0]!,
+    id: 'reverse',
+    stopTimes: [...dataset.trips[0]!.stopTimes].reverse().map((time, index) => ({
+      ...time,
+      arrivalMinutes: 800 + index * 10,
+      departureMinutes: 800 + index * 10,
+    })),
+  };
+  const paths = lineStopPatterns({ ...dataset, trips: [...dataset.trips, repeatedTrip, reverseTrip] }, 'line');
   assert.deepEqual(
-    stopsForLine(dataset, 'line').map((stop) => stop.id),
-    ['a', 'b', 'c'],
+    paths.map((path) => ({ stops: path.stops.map((stop) => stop.id), tripCount: path.tripCount })),
+    [
+      { stops: ['a', 'b', 'c'], tripCount: 2 },
+      { stops: ['a', 'c'], tripCount: 1 },
+      { stops: ['c', 'b', 'a'], tripCount: 1 },
+    ],
   );
+  assert.deepEqual(
+    filterLineStopPatterns(dataset, paths, 'Pláya').map((path) => path.stops.map((stop) => stop.id)),
+    [
+      ['a', 'b', 'c'],
+      ['c', 'b', 'a'],
+    ],
+  );
+  assert.equal(filterLineStopPatterns(dataset, paths, '').length, 3);
   assert.equal(stopLocality(dataset, dataset.stops[2]!), 'Rota');
   assert.equal(matchesBrowseQuery('Cádiz–Rota', 'cadiz'), true);
 });
