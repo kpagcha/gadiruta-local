@@ -225,25 +225,22 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
           {t('explore.todayUnavailable')}
         </p>
       )}
-      <h3 className="mt-8 text-xl font-bold">{date === null ? t('explore.stops') : t('explore.timetable')}</h3>
+      <h3 className="sr-only">{date === null ? t('explore.stops') : t('explore.timetable')}</h3>
       {activeChoice === undefined || activePattern === undefined ? (
-        <p className="mt-5 text-muted">{t('explore.noMatches')}</p>
+        <p className="mt-6 text-muted">{t('explore.noMatches')}</p>
       ) : (
         <>
           {listedChoices.length === 0 ? null : singleListedChoiceIsActive ? (
-            <h4 className="mt-5 font-semibold">{activeChoice.shortLabel}</h4>
+            <h4 className="mt-6 font-semibold">{activeChoice.shortLabel}</h4>
           ) : patterns.length === 2 || listedChoices.length === 1 ? (
-            <div className="mt-5 flex max-w-170 flex-col gap-2">
-              <p className="text-sm font-semibold" id="line-path-label">
-                {t('explore.path')}
-              </p>
-              <div aria-labelledby="line-path-label" className="grid gap-2 sm:grid-cols-2" role="group">
+            <div className="mt-6 max-w-170">
+              <div aria-label={t('explore.path')} className="grid gap-1.5 sm:grid-cols-2" role="group">
                 {listedChoices.map((choice) => (
                   <button
                     key={choice.value}
                     aria-label={choice.label}
                     aria-pressed={choice.value === activeChoice.value}
-                    className={`motion-interactive min-h-11 min-w-0 rounded-xl border px-3 py-2 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                    className={`motion-interactive min-h-11 min-w-0 rounded-xl border px-2.5 py-1 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
                     onClick={() => updateLineUrl(choice.value, date)}
                     type="button"
                   >
@@ -253,21 +250,18 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </div>
             </div>
           ) : (
-            <div className="mt-5 max-w-170">
-              <p className="text-sm font-semibold" id="line-path-label">
-                {t('explore.path')}
-              </p>
+            <div className="mt-6 max-w-170">
               <div
-                aria-labelledby="line-path-label"
-                className={`mt-3 grid gap-5 ${listedDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
+                aria-label={t('explore.path')}
+                className={`grid gap-3 ${listedDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
                 role="group"
               >
                 {listedDirections.map((direction, directionIndex) => (
                   <div key={direction} aria-labelledby={`line-direction-${directionIndex}`} role="group">
-                    <h4 className="mb-2 text-sm font-semibold text-muted" id={`line-direction-${directionIndex}`}>
+                    <h4 className="mb-1 text-sm font-semibold text-muted" id={`line-direction-${directionIndex}`}>
                       {direction}
                     </h4>
-                    <div className="grid gap-2">
+                    <div className="grid gap-1.5">
                       {listedChoices
                         .filter((choice) => choice.direction === direction)
                         .map((choice) => {
@@ -279,7 +273,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                             <button
                               key={choice.value}
                               aria-pressed={choice.value === activeChoice.value}
-                              className={`motion-interactive flex min-h-14 min-w-0 flex-col justify-center gap-1 rounded-xl border px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                              className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
                               onClick={() => updateLineUrl(choice.value, date)}
                               type="button"
                             >
@@ -301,7 +295,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </div>
             </div>
           )}
-          <div className="mt-5 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_16rem] desktop:gap-8">
+          <div className="mt-4 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_16rem] desktop:gap-8">
             <aside
               className="min-w-0 desktop:col-start-2 desktop:row-start-1"
               aria-label={t('explore.timetableControls')}
@@ -346,19 +340,19 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                       <button
                         key={view}
                         aria-pressed={timetableView === view}
-                        className={`motion-interactive inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-2 sm:px-3 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
+                        className={`motion-interactive inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-1.5 sm:px-2.5 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
                         onClick={() =>
                           updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
                         }
                         type="button"
                       >
-                        <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={16} className="shrink-0" />
+                        <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={14} className="shrink-0" />
                         <span>{t(view === 'trips' ? 'explore.tripList' : 'explore.timesByStop')}</span>
                       </button>
                     ))}
                   </div>
                   {trips.length > 0 && timetableView === 'stops' && (
-                    <p className="mt-3 text-sm text-muted">
+                    <p className="mt-2 text-sm text-muted">
                       {t('explore.selectRunHint')}{' '}
                       {selectedRun !== undefined && (
                         <button
