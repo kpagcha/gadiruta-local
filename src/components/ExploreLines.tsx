@@ -158,7 +158,8 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       ? undefined
       : visibleChoices.find((choice) => {
           const pattern = patterns[pathChoices.indexOf(choice)]!;
-          return datedLineTrips(dataset, route.id, pattern, date).length > 0;
+          const scheduled = datedLineTrips(dataset, route.id, pattern, date);
+          return timetableView === 'trips' ? scheduled.some((run) => run.minuteOffset === 0) : scheduled.length > 0;
         });
   // Keep a shared path when possible; a stop filter may temporarily choose another one.
   const activeChoice =
@@ -166,7 +167,10 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
   const trips =
     date !== null && activePattern !== undefined ? datedLineTrips(dataset, route.id, activePattern, date) : [];
-  const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
+  // The stop timetable includes visits carried over from yesterday; the trip list starts on this date.
+  const listedTrips = trips.filter((run) => run.minuteOffset === 0);
+  const visibleTrips = timetableView === 'trips' ? listedTrips : trips;
+  const selectedRun = rawRun === null ? undefined : lineRunFromAlias(visibleTrips, rawRun);
 
   /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
   function updateLineUrl(
@@ -321,7 +325,14 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                         aria-pressed={timetableView === view}
                         className={`motion-interactive inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-2 sm:px-3 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
                         onClick={() =>
-                          updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
+                          updateLineUrl(
+                            activeChoice.value,
+                            date,
+                            selectedRun === undefined || (view === 'trips' && selectedRun.minuteOffset < 0)
+                              ? null
+                              : rawRun,
+                            view,
+                          )
                         }
                         type="button"
                       >
@@ -344,7 +355,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                       )}
                     </p>
                   )}
-                  {trips.length === 0 ? (
+                  {visibleTrips.length === 0 ? (
                     <p className="mt-5 text-muted" role="status">
                       {t('explore.noLineTrips')}{' '}
                       <button
@@ -359,7 +370,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                     <LineTripList
                       dataset={dataset}
                       stops={activePattern.stops}
-                      trips={trips}
+                      trips={listedTrips}
                       query={stopQuery}
                       selectedRun={selectedRun}
                       onSelectRun={toggleRun}
@@ -444,7 +455,6 @@ function LineTripList({
                 {firstMinute < 0 && <span className="ml-1 text-xs text-muted">{t('explore.previousDay')}</span>}
                 {' → '}
                 {clockTime(lastMinute)}
-                {lastMinute >= 1440 && <span className="ml-1 text-xs text-muted">{t('explore.nextDay')}</span>}
               </span>
               <span className="text-sm text-muted">
                 {expanded ? t('explore.hideStopTimes') : t('explore.showStopTimes')}
