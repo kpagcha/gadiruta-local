@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
+import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { madridToday } from '../data/calendar-date.ts';
+import { madridToday, parseCalendarDate } from '../data/calendar-date.ts';
 import { getRouteLabel } from '../data/network.ts';
 import { selectedAccentColors } from '../data/dev-settings.ts';
 import { lineAreaColors, lineStopAreaKey, type LineAreaColors } from '../data/line-area-colors.ts';
@@ -17,10 +18,12 @@ import { reviewedLinePathLabel } from '../data/line-path-labels.ts';
 import {
   datedLineTrips,
   lineDateFromQuery,
+  linePathAverageDurationMinutes,
   linePathAlias,
   lineRunAlias,
   lineRunFromAlias,
   lineStopTimesAtStop,
+  lineTripDurationMinutes,
   type DatedLineTrip,
 } from '../data/line-timetable.ts';
 import { clockTime } from '../data/journey-time.ts';
@@ -33,6 +36,58 @@ import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
 import { StopTimelineTrack } from './StopTimelineTrack';
 import { AppTooltip } from './ui/tooltip';
+
+// Keep the tray's open state aligned with the custom desktop breakpoint in app.css.
+const DESKTOP_MEDIA_QUERY = '(min-width: 53.125rem)';
+
+/** Format end-to-end timetable minutes for path averages and individual trips. */
+function LineDuration({ minutes, average = false }: { minutes: number; average?: boolean }) {
+  const { t } = useTranslation();
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const duration =
+    hours === 0
+      ? t('explore.durationMinutes', { minutes })
+      : rest === 0
+        ? t('explore.durationHours', { hours })
+        : t('explore.durationHoursMinutes', { hours, minutes: rest });
+  return average ? t('explore.averageDuration', { duration }) : duration;
+}
+
+/** Place a path's departures and average duration on one compact metadata line. */
+function LinePathMeta({
+  runs,
+  averageDurationMinutes,
+  showDepartures,
+}: {
+  runs: readonly DatedLineTrip[];
+  averageDurationMinutes: number | null;
+  showDepartures: boolean;
+}) {
+  const { t } = useTranslation();
+  const departures = showDepartures ? runs.map((run) => clockTime(run.trip.stopTimes[0]!.departureMinutes)) : [];
+  if (departures.length === 0 && averageDurationMinutes === null) return null;
+  return (
+    <span className="flex min-w-0 items-baseline text-xs font-normal text-muted tabular-nums">
+      {departures.length > 0 && (
+        <span className="min-w-0 truncate">
+          {departures.slice(0, 4).join('  ')}
+          {departures.length > 4 && `  ${t('explore.moreTrips', { count: departures.length - 4 })}`}
+        </span>
+      )}
+      {averageDurationMinutes !== null && (
+        <span className="shrink-0 whitespace-nowrap">
+          {departures.length > 0 && (
+            <span aria-hidden="true" className="mx-1.5">
+              ·
+            </span>
+          )}
+          <LineDuration minutes={averageDurationMinutes} average />
+        </span>
+      )}
+    </span>
+  );
+}
 
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
 function googleMapsStopUrl(stop: NetworkStop): string {
@@ -101,6 +156,12 @@ export function ExploreLines({
 /** Show one ordered saved trip path at a time for the selected line. */
 function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: NetworkRoute }) {
   const { t, i18n } = useTranslation();
+  const reducedMotion = useReducedMotion();
+  const trayId = useId();
+  const trayTriggerRef = useRef<HTMLButtonElement>(null);
+  const [trayOpen, setTrayOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_MEDIA_QUERY).matches);
+  const [traySettled, setTraySettled] = useState(true);
   const [stopQuery, setStopQuery] = useState('');
   const [urlSearch, setUrlSearch] = useState(() => window.location.search);
   const patterns = useMemo(() => lineStopPatterns(dataset, route.id), [dataset, route.id]);
@@ -112,6 +173,16 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     window.addEventListener('popstate', restoreLineUrl);
     return () => window.removeEventListener('popstate', restoreLineUrl);
   }, []);
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_MEDIA_QUERY);
+    /** Show the full controls when the layout changes to desktop width. */
+    function syncLayout() {
+      setIsDesktop(media.matches);
+      setTraySettled(true);
+    }
+    media.addEventListener('change', syncLayout);
+    return () => media.removeEventListener('change', syncLayout);
+  }, []);
   const parameters = new URLSearchParams(urlSearch);
   const rawDate = parameters.get('date');
   const rawPath = parameters.get('path');
@@ -119,12 +190,13 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const rawMode = parameters.get('mode');
   const rawRun = parameters.get('run');
   const timetableView = rawMode === 'trips' ? 'trips' : 'stops';
+  const today = madridToday();
   const date =
     rawDate !== null
       ? lineDateFromQuery(rawDate, dataset.coverage)
       : rawView === 'stops'
         ? null
-        : lineDateFromQuery(madridToday(), dataset.coverage);
+        : lineDateFromQuery(today, dataset.coverage);
   const scheduledRuns: DatedLineTrip[][] =
     date === null
       ? patterns.map(() => [])
@@ -152,12 +224,14 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       sameLength.length > 1 ? ` · ${t('explore.pathVariant', { number: sameLength.indexOf(pattern) + 1 })}` : '';
     const value = linePathAlias(dataset, pattern, patterns);
     const reviewedLabel = reviewedLinePathLabel(route, value, i18n.resolvedLanguage ?? i18n.language);
+    const durationTrips = date === null ? dataset.trips : scheduledRuns[index]!.map((run) => run.trip);
     return {
       value,
       label: reviewedLabel ?? `${endpoints.full}${suffix}${variant}`,
       shortLabel: reviewedLabel ?? `${endpoints.short}${suffix}${variant}`,
       direction: endpoints.short,
       runs: scheduledRuns[index]!,
+      averageDurationMinutes: linePathAverageDurationMinutes(durationTrips, route.id, pattern),
     };
   });
   const visibleChoices = pathChoices.filter((_, index) => matchingPatterns.includes(patterns[index]!));
@@ -168,11 +242,27 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const firstScheduledChoice = date === null ? undefined : visibleChoices.find((choice) => choice.runs.length > 0);
   // Keep a shared path when possible; a stop filter may temporarily choose another one.
   const activeChoice =
-    visibleChoices.find((choice) => choice.value === rawPath) ?? firstScheduledChoice ?? visibleChoices[0];
+    visibleChoices.find((choice) => choice.value === rawPath) ??
+    firstScheduledChoice ??
+    visibleChoices[0] ??
+    pathChoices.find((choice) => choice.value === rawPath) ??
+    pathChoices[0];
+  const noMatchingStops = stopQuery.trim() !== '' && visibleChoices.length === 0;
   const singleListedChoiceIsActive = listedChoices.length === 1 && listedChoices[0]?.value === activeChoice?.value;
   const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
   const trips = activeChoice?.runs ?? [];
   const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
+  const trayExpanded = isDesktop || trayOpen;
+  const dateSummary =
+    date === null
+      ? t('explore.stopsOnly')
+      : date === today
+        ? t('search.today')
+        : new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
+            day: 'numeric',
+            month: 'short',
+            timeZone: 'UTC',
+          }).format(parseCalendarDate(date));
 
   /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
   function updateLineUrl(
@@ -197,6 +287,13 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     if (activeChoice === undefined || date === null) return;
     const alias = lineRunAlias(run, trips);
     updateLineUrl(activeChoice.value, date, rawRun === alias ? null : alias);
+  }
+
+  /** Close the mobile controls after the rider confirms their choices. */
+  function confirmTray() {
+    setTraySettled(false);
+    setTrayOpen(false);
+    trayTriggerRef.current?.focus();
   }
   return (
     <article>
@@ -229,177 +326,226 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       {activeChoice === undefined || activePattern === undefined ? (
         <p className="mt-6 text-muted">{t('explore.noMatches')}</p>
       ) : (
-        <>
-          {listedChoices.length === 0 ? null : singleListedChoiceIsActive ? (
-            <h4 className="mt-6 font-semibold">{activeChoice.shortLabel}</h4>
-          ) : patterns.length === 2 || listedChoices.length === 1 ? (
-            <div className="mt-6 max-w-170">
-              <div aria-label={t('explore.path')} className="grid gap-1.5 sm:grid-cols-2" role="group">
-                {listedChoices.map((choice) => (
-                  <button
-                    key={choice.value}
-                    aria-label={choice.label}
-                    aria-pressed={choice.value === activeChoice.value}
-                    className={`motion-interactive min-h-11 min-w-0 rounded-xl border px-2.5 py-1 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
-                    onClick={() => updateLineUrl(choice.value, date)}
-                    type="button"
-                  >
-                    {choice.shortLabel}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="mt-6 max-w-170">
-              <div
-                aria-label={t('explore.path')}
-                className={`grid gap-3 ${listedDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
-                role="group"
-              >
-                {listedDirections.map((direction, directionIndex) => (
-                  <div key={direction} aria-labelledby={`line-direction-${directionIndex}`} role="group">
-                    <h4 className="mb-1 text-sm font-semibold text-muted" id={`line-direction-${directionIndex}`}>
-                      {direction}
-                    </h4>
-                    <div className="grid gap-1.5">
-                      {listedChoices
-                        .filter((choice) => choice.direction === direction)
-                        .map((choice) => {
-                          const departures = choice.runs.map((run) =>
-                            clockTime(run.trip.stopTimes[0]!.departureMinutes),
-                          );
-                          const more = departures.length - 4;
-                          return (
-                            <button
-                              key={choice.value}
-                              aria-pressed={choice.value === activeChoice.value}
-                              className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
-                              onClick={() => updateLineUrl(choice.value, date)}
-                              type="button"
-                            >
-                              <span className="text-sm font-semibold">{choice.shortLabel}</span>
-                              {date !== null && (
-                                <span className="flex flex-wrap gap-x-2 text-xs text-muted tabular-nums">
-                                  {departures.slice(0, 4).map((departure, index) => (
-                                    <span key={index}>{departure}</span>
-                                  ))}
-                                  {more > 0 && <span>{t('explore.moreTrips', { count: more })}</span>}
-                                </span>
-                              )}
-                            </button>
-                          );
-                        })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          <div className="mt-4 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_16rem] desktop:gap-8">
-            <aside
-              className="min-w-0 desktop:col-start-2 desktop:row-start-1"
-              aria-label={t('explore.timetableControls')}
+        <div className="mt-6 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_20rem] desktop:gap-8">
+          <aside
+            className="min-w-0 rounded-2xl border border-line bg-surface-card desktop:col-start-2 desktop:row-start-1 desktop:rounded-none desktop:border-0 desktop:bg-transparent"
+            aria-label={t('explore.timetableControls')}
+          >
+            <button
+              ref={trayTriggerRef}
+              aria-controls={trayId}
+              aria-expanded={trayOpen}
+              className="flex min-h-16 w-full items-center gap-3 rounded-2xl px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-accent desktop:hidden"
+              onClick={() => {
+                setTraySettled(false);
+                setTrayOpen((open) => !open);
+              }}
+              type="button"
             >
-              <ExploreFilterInput
-                label={t('explore.filterStops')}
-                placeholder={t('explore.stopFilterPlaceholder')}
-                value={stopQuery}
-                onChange={setStopQuery}
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-semibold text-ink">{activeChoice.shortLabel}</span>
+                <span className="block truncate text-xs text-muted">
+                  {dateSummary}
+                  {stopQuery.trim() !== '' && ` · ${t('explore.filterSummary', { query: stopQuery.trim() })}`}
+                </span>
+              </span>
+              <Icon
+                name="chevronDown"
+                size={18}
+                className={`shrink-0 text-accent transition-transform duration-200 motion-reduce:transition-none ${trayOpen ? 'rotate-180' : ''}`}
               />
-              <div className="mt-4 flex flex-wrap items-center gap-2 desktop:items-start">
-                <JourneyDatePill
-                  value={date}
-                  onChange={(value) => updateLineUrl(activeChoice.value, value)}
-                  minimum={dataset.coverage.startDate}
-                  maximum={dataset.coverage.endDate}
-                  disabled={false}
-                  allowPast
-                  emptyLabel={t('explore.chooseDate')}
-                  clear={
-                    date === null
-                      ? undefined
-                      : {
-                          label: t('explore.clearDate'),
-                          onClick: () => updateLineUrl(activeChoice.value, null),
-                        }
-                  }
-                />
-              </div>
-            </aside>
-            <div className="min-w-0 desktop:col-start-1 desktop:row-start-1">
-              {date === null ? (
-                <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
-              ) : (
-                <>
+            </button>
+            <motion.div
+              id={trayId}
+              initial={false}
+              animate={{ height: trayExpanded ? 'auto' : 0, opacity: trayExpanded ? 1 : 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.24, ease: 'easeOut' }}
+              onAnimationComplete={() => setTraySettled(true)}
+              style={{ overflow: trayExpanded && (traySettled || reducedMotion) ? 'visible' : 'hidden' }}
+              aria-hidden={!trayExpanded}
+              inert={!trayExpanded}
+            >
+              <div className="border-t border-line px-3 pt-3 pb-3 desktop:border-0 desktop:p-0">
+                {listedChoices.length === 0 ? null : singleListedChoiceIsActive ? (
+                  <div className="text-sm font-semibold text-ink">
+                    {activeChoice.shortLabel}
+                    <LinePathMeta
+                      runs={activeChoice.runs}
+                      averageDurationMinutes={activeChoice.averageDurationMinutes}
+                      showDepartures={date !== null}
+                    />
+                  </div>
+                ) : patterns.length === 2 || listedChoices.length === 1 ? (
                   <div
-                    className="flex w-full overflow-hidden rounded-xl border border-line-input bg-surface-input sm:inline-flex sm:w-auto"
+                    aria-label={t('explore.path')}
+                    className="grid gap-1.5 sm:grid-cols-2 desktop:grid-cols-1"
                     role="group"
-                    aria-label={t('explore.timetableView')}
                   >
-                    {(['stops', 'trips'] as const).map((view) => (
+                    {listedChoices.map((choice) => (
                       <button
-                        key={view}
-                        aria-pressed={timetableView === view}
-                        className={`motion-interactive inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-1.5 sm:px-2.5 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
-                        onClick={() =>
-                          updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
-                        }
+                        key={choice.value}
+                        aria-pressed={choice.value === activeChoice.value}
+                        className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center rounded-xl border px-2.5 py-1 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                        onClick={() => updateLineUrl(choice.value, date)}
                         type="button"
                       >
-                        <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={14} className="shrink-0" />
-                        <span>{t(view === 'trips' ? 'explore.tripList' : 'explore.timesByStop')}</span>
+                        <span>{choice.shortLabel}</span>
+                        <LinePathMeta
+                          runs={choice.runs}
+                          averageDurationMinutes={choice.averageDurationMinutes}
+                          showDepartures={date !== null}
+                        />
                       </button>
                     ))}
                   </div>
-                  {trips.length > 0 && timetableView === 'stops' && (
-                    <p className="mt-2 text-sm text-muted">
-                      {t('explore.selectRunHint')}{' '}
-                      {selectedRun !== undefined && (
-                        <button
-                          className="font-semibold text-accent underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-accent"
-                          onClick={() => updateLineUrl(activeChoice.value, date)}
-                          type="button"
-                        >
-                          {t('explore.clearRunSelection')}
-                        </button>
-                      )}
-                    </p>
-                  )}
-                  {trips.length === 0 ? (
-                    <p className="mt-5 text-muted" role="status">
-                      {t('explore.noLineTrips')}{' '}
+                ) : (
+                  <div
+                    aria-label={t('explore.path')}
+                    className={`grid gap-3 ${listedDirections.length > 1 ? 'sm:grid-cols-2 desktop:grid-cols-1' : ''}`}
+                    role="group"
+                  >
+                    {listedDirections.map((direction) => (
+                      <div key={direction} aria-label={direction} className="grid content-start gap-1.5" role="group">
+                        {listedChoices
+                          .filter((choice) => choice.direction === direction)
+                          .map((choice) => {
+                            return (
+                              <button
+                                key={choice.value}
+                                aria-pressed={choice.value === activeChoice.value}
+                                className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                                onClick={() => updateLineUrl(choice.value, date)}
+                                type="button"
+                              >
+                                <span className="text-sm font-semibold">{choice.shortLabel}</span>
+                                <LinePathMeta
+                                  runs={choice.runs}
+                                  averageDurationMinutes={choice.averageDurationMinutes}
+                                  showDepartures={date !== null}
+                                />
+                              </button>
+                            );
+                          })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className={listedChoices.length > 0 ? 'mt-4' : ''}>
+                  <ExploreFilterInput
+                    label={t('explore.filterStops')}
+                    placeholder={t('explore.stopFilterPlaceholder')}
+                    value={stopQuery}
+                    onChange={setStopQuery}
+                  />
+                  <div className="mt-4 flex flex-wrap items-center gap-2 desktop:items-start">
+                    <JourneyDatePill
+                      value={date}
+                      onChange={(value) => updateLineUrl(activeChoice.value, value)}
+                      minimum={dataset.coverage.startDate}
+                      maximum={dataset.coverage.endDate}
+                      disabled={false}
+                      allowPast
+                      emptyLabel={t('explore.chooseDate')}
+                      clear={
+                        date === null
+                          ? undefined
+                          : {
+                              label: t('explore.clearDate'),
+                              onClick: () => updateLineUrl(activeChoice.value, null),
+                            }
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end border-t border-line pt-3 desktop:hidden">
+                  <button
+                    className="motion-interactive min-h-10 rounded-xl bg-accent px-5 text-sm font-semibold text-on-accent hover:bg-accent-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    onClick={confirmTray}
+                    type="button"
+                  >
+                    {t('explore.done')}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </aside>
+          <div className="min-w-0 desktop:col-start-1 desktop:row-start-1">
+            {noMatchingStops ? (
+              <p className="text-muted" role="status">
+                {t('explore.noMatches')}
+              </p>
+            ) : date === null ? (
+              <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
+            ) : (
+              <>
+                <div
+                  className="flex w-full overflow-hidden rounded-xl border border-line-input bg-surface-input sm:inline-flex sm:w-auto"
+                  role="group"
+                  aria-label={t('explore.timetableView')}
+                >
+                  {(['stops', 'trips'] as const).map((view) => (
+                    <button
+                      key={view}
+                      aria-pressed={timetableView === view}
+                      className={`motion-interactive inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 px-2 py-1 text-sm leading-5 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-1.5 sm:px-2.5 ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
+                      onClick={() =>
+                        updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
+                      }
+                      type="button"
+                    >
+                      <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={14} className="shrink-0" />
+                      <span>{t(view === 'trips' ? 'explore.tripList' : 'explore.timesByStop')}</span>
+                    </button>
+                  ))}
+                </div>
+                {trips.length > 0 && timetableView === 'stops' && (
+                  <p className="mt-2 text-sm text-muted">
+                    {t('explore.selectRunHint')}{' '}
+                    {selectedRun !== undefined && (
                       <button
-                        className="motion-interactive font-semibold text-accent underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-accent"
-                        onClick={() => updateLineUrl(activeChoice.value, null)}
+                        className="font-semibold text-accent underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-accent"
+                        onClick={() => updateLineUrl(activeChoice.value, date)}
                         type="button"
                       >
-                        {t('explore.clearDate')}
+                        {t('explore.clearRunSelection')}
                       </button>
-                    </p>
-                  ) : timetableView === 'trips' ? (
-                    <LineTripList
-                      dataset={dataset}
-                      stops={activePattern.stops}
-                      trips={trips}
-                      query={stopQuery}
-                      selectedRun={selectedRun}
-                      onSelectRun={toggleRun}
-                    />
-                  ) : (
-                    <LineStopTimeline
-                      dataset={dataset}
-                      stops={activePattern.stops}
-                      query={stopQuery}
-                      trips={trips}
-                      selectedRun={selectedRun}
-                      onSelectRun={toggleRun}
-                    />
-                  )}
-                </>
-              )}
-            </div>
+                    )}
+                  </p>
+                )}
+                {trips.length === 0 ? (
+                  <p className="mt-5 text-muted" role="status">
+                    {t('explore.noLineTrips')}{' '}
+                    <button
+                      className="motion-interactive font-semibold text-accent underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-accent"
+                      onClick={() => updateLineUrl(activeChoice.value, null)}
+                      type="button"
+                    >
+                      {t('explore.clearDate')}
+                    </button>
+                  </p>
+                ) : timetableView === 'trips' ? (
+                  <LineTripList
+                    dataset={dataset}
+                    stops={activePattern.stops}
+                    trips={trips}
+                    query={stopQuery}
+                    selectedRun={selectedRun}
+                    onSelectRun={toggleRun}
+                  />
+                ) : (
+                  <LineStopTimeline
+                    dataset={dataset}
+                    stops={activePattern.stops}
+                    query={stopQuery}
+                    trips={trips}
+                    selectedRun={selectedRun}
+                    onSelectRun={toggleRun}
+                  />
+                )}
+              </>
+            )}
           </div>
-        </>
+        </div>
       )}
     </article>
   );
@@ -460,10 +606,15 @@ function LineTripList({
               onClick={() => onSelectRun(run)}
               type="button"
             >
-              <span className="tabular-nums">
-                {clockTime(firstMinute)}
-                {' → '}
-                {clockTime(lastMinute)}
+              <span className="flex min-w-0 flex-wrap items-baseline gap-x-2">
+                <span className="tabular-nums">
+                  {clockTime(firstMinute)}
+                  {' → '}
+                  {clockTime(lastMinute)}
+                </span>
+                <span className="text-xs font-normal text-muted">
+                  <LineDuration minutes={lineTripDurationMinutes(run.trip)} />
+                </span>
               </span>
               <span className="text-sm text-muted">
                 {expanded ? t('explore.hideStopTimes') : t('explore.showStopTimes')}

@@ -6,10 +6,12 @@ import {
   datedLineTrips,
   datedLineUrl,
   lineDateFromQuery,
+  linePathAverageDurationMinutes,
   linePathAlias,
   lineRunAlias,
   lineRunFromAlias,
   lineStopTimesAtStop,
+  lineTripDurationMinutes,
 } from '../../../src/data/line-timetable.ts';
 import { lineStopPatterns } from '../../../src/data/network-browse.ts';
 import type { NetworkDataset, NetworkTrip } from '../../../src/data/network-schema.ts';
@@ -132,6 +134,22 @@ test('stop times keep run order across midnight without repeating yesterday’s 
       ['night', 1445],
     ],
   );
+});
+
+test('path averages and individual trip durations include arrivals after midnight', () => {
+  const pattern = lineStopPatterns(dataset, 'line').find((item) => item.stops.length === 3)!;
+  const runs = datedLineTrips(dataset, 'line', pattern, '2026-09-27');
+  assert.equal(lineTripDurationMinutes(runs[1]!.trip), 45);
+  assert.equal(
+    linePathAverageDurationMinutes(
+      runs.map((run) => run.trip),
+      'line',
+      pattern,
+    ),
+    43,
+  );
+  assert.equal(linePathAverageDurationMinutes(dataset.trips, 'line', pattern), 43);
+  assert.equal(linePathAverageDurationMinutes(dataset.trips, 'other-line', pattern), null);
 });
 
 test('run links use departure times and distinguish buses with the same departure', () => {

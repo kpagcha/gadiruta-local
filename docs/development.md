@@ -28,6 +28,8 @@ Both Stops and Trips include their visits after midnight on the next day. A plai
 and path, with a number when several buses share that time. `mode=trips` restores the trip list with
 the selected run expanded. These links use the saved snapshot's explicit service dates,
 not a generic weekday or holiday timetable.
+Path averages use the saved trips for the chosen path and date, or all saved trips when the date is
+cleared. Durations subtract the first departure from the last arrival, including after midnight.
 The `data/reviewed/ctan/line-path-labels.json` catalogue names paths that need more than a simple
 outward and return pair. It keys each line by its official short name and each exact stop sequence
 by its path URL alias. The line page uses its English and Spanish names, falling back to generated

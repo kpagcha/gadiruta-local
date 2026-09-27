@@ -45,6 +45,27 @@ function followsPath(trip: NetworkTrip, pattern: LineStopPattern): boolean {
   );
 }
 
+/** Measure a trip from its first departure to its last arrival, including time after midnight. */
+export function lineTripDurationMinutes(trip: NetworkTrip): number {
+  return trip.stopTimes[trip.stopTimes.length - 1]!.arrivalMinutes - trip.stopTimes[0]!.departureMinutes;
+}
+
+/** Average the saved trips following one exact path, optionally using only trips on a selected date. */
+export function linePathAverageDurationMinutes(
+  trips: readonly NetworkTrip[],
+  routeId: string,
+  pattern: LineStopPattern,
+): number | null {
+  let total = 0;
+  let count = 0;
+  for (const trip of trips) {
+    if (trip.routeId !== routeId || !followsPath(trip, pattern)) continue;
+    total += lineTripDurationMinutes(trip);
+    count += 1;
+  }
+  return count === 0 ? null : Math.round(total / count);
+}
+
 /** Give an ordered path a natural name and add its stop count only when endpoints repeat. */
 export function linePathAlias(
   dataset: NetworkDataset,
