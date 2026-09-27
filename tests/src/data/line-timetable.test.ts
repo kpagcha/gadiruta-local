@@ -2,7 +2,14 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { datedLineTrips, datedLineUrl, lineDateFromQuery, linePathAlias } from '../../../src/data/line-timetable.ts';
+import {
+  datedLineTrips,
+  datedLineUrl,
+  lineDateFromQuery,
+  linePathAlias,
+  lineRunAlias,
+  lineRunFromAlias,
+} from '../../../src/data/line-timetable.ts';
 import { lineStopPatterns } from '../../../src/data/network-browse.ts';
 import type { NetworkDataset, NetworkTrip } from '../../../src/data/network-schema.ts';
 
@@ -101,6 +108,20 @@ test('the selected calendar day includes its own exact trips and overnight arriv
     ],
   );
   assert.equal(lineDateFromQuery('2026-09-26', dataset.coverage), null);
+});
+
+test('run links use departure times and distinguish buses with the same departure', () => {
+  const pattern = lineStopPatterns(dataset, 'line').find((item) => item.stops.length === 3)!;
+  const runs = datedLineTrips(dataset, 'line', pattern, '2026-09-27');
+  const day = runs.find((run) => run.trip.id === 'day')!;
+  const night = runs.find((run) => run.trip.id === 'night')!;
+  const secondDay = { ...day, trip: { ...day.trip, id: 'day-2' } };
+  const repeated = [...runs, secondDay];
+  assert.equal(lineRunAlias(night, runs), 'previous-day-23-45');
+  assert.equal(lineRunAlias(day, repeated), '09-00');
+  assert.equal(lineRunAlias(secondDay, repeated), '09-00-2');
+  assert.equal(lineRunFromAlias(repeated, '09-00-2')?.trip.id, 'day-2');
+  assert.equal(lineRunFromAlias(repeated, '10-00'), undefined);
 });
 
 test('every reviewed line path has a distinct readable alias', () => {

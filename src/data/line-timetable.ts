@@ -3,12 +3,41 @@
  * The browser uses this after the static dataset loads; it does not contact the transit provider.
  */
 import { isCalendarDate, shiftCalendarDate } from './calendar-date.ts';
+import { clockTime } from './journey-time.ts';
 import { lineUrl } from './line-url.ts';
 import { lineStopPatterns, stopLocality, type LineStopPattern } from './network-browse.ts';
 import type { NetworkDataset, NetworkRoute, NetworkTrip } from './network-schema.ts';
 import { urlSlug } from './url-alias.ts';
 
 export type DatedLineTrip = { trip: NetworkTrip; serviceDate: string; minuteOffset: 0 | -1440; firstMinute: number };
+
+/** Name a run by its first departure on the selected day, including an overnight day marker. */
+function departureAlias(run: DatedLineTrip): string {
+  const minute = run.trip.stopTimes[0]!.departureMinutes + run.minuteOffset;
+  const day = minute < 0 ? 'previous-day-' : minute >= 1440 ? 'next-day-' : '';
+  return `${day}${clockTime(minute).replace(':', '-')}`;
+}
+
+/** Give one run a readable token, numbering buses that depart at the same time on this path. */
+export function lineRunAlias(run: DatedLineTrip, runs: readonly DatedLineTrip[]): string {
+  const base = departureAlias(run);
+  const sameDeparture = runs
+    .filter((other) => departureAlias(other) === base)
+    .sort(
+      (first, second) =>
+        first.serviceDate.localeCompare(second.serviceDate) || first.trip.id.localeCompare(second.trip.id),
+    );
+  const index = sameDeparture.findIndex(
+    (other) => other.trip.id === run.trip.id && other.serviceDate === run.serviceDate,
+  );
+  if (index < 0) throw new Error(`Run ${run.trip.id} is missing from the selected line timetable.`);
+  return index === 0 ? base : `${base}-${index + 1}`;
+}
+
+/** Resolve a shared run token within the already selected date and exact path. */
+export function lineRunFromAlias(runs: readonly DatedLineTrip[], alias: string): DatedLineTrip | undefined {
+  return runs.find((run) => lineRunAlias(run, runs) === alias);
+}
 
 /** Compare exact physical stop orders, including repeated visits. */
 function followsPath(trip: NetworkTrip, pattern: LineStopPattern): boolean {
