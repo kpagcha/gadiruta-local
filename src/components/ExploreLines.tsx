@@ -145,7 +145,29 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
         <p className="mt-5 text-muted">{t('explore.noMatches')}</p>
       ) : (
         <>
-          {patterns.length > 1 ? (
+          {visibleChoices.length === 1 ? (
+            <h4 className="mt-5 font-semibold">{activeChoice.shortLabel}</h4>
+          ) : patterns.length === 2 ? (
+            <div className="mt-5 flex max-w-170 flex-col gap-2">
+              <p className="text-sm font-semibold" id="line-path-label">
+                {t('explore.path')}
+              </p>
+              <div aria-labelledby="line-path-label" className="grid gap-2 sm:grid-cols-2" role="group">
+                {visibleChoices.map((choice) => (
+                  <button
+                    key={choice.value}
+                    aria-label={choice.label}
+                    aria-pressed={choice.value === activeChoice.value}
+                    className={`motion-interactive min-h-11 min-w-0 rounded-xl border px-3 py-2 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                    onClick={() => setSelectedPath(choice.value)}
+                    type="button"
+                  >
+                    {choice.shortLabel}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
             <div className="mt-5 flex max-w-170 flex-col gap-2">
               <label className="text-sm font-semibold" htmlFor="line-path">
                 {t('explore.path')}
@@ -172,8 +194,6 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                 </SelectContent>
               </Select>
             </div>
-          ) : (
-            <h4 className="mt-5 font-semibold">{activeChoice.shortLabel}</h4>
           )}
           <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
         </>
