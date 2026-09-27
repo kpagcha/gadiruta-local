@@ -28,6 +28,8 @@ export function AppRoutes() {
   const [exploreView, setExploreView] = useState<ExploreView | null>(() =>
     exploreViewFromPath(window.location.pathname),
   );
+  // Only the first document visit should play Search's entrance animation.
+  const [hasNavigated, setHasNavigated] = useState(false);
   const firstRoute = useRef(true);
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export function AppRoutes() {
   useEffect(() => {
     /** Restore the visible page when browser Back or Forward changes the path. */
     function restoreView() {
+      setHasNavigated(true);
       setExploreView(exploreViewFromPath(window.location.pathname));
     }
     window.addEventListener('popstate', restoreView);
@@ -94,7 +97,7 @@ export function AppRoutes() {
   return (
     <>
       <AppHeader exploring={exploreView !== null} />
-      {exploreView === null ? <HomePage /> : <ExplorePage view={exploreView} />}
+      {exploreView === null ? <HomePage animateArrival={!hasNavigated} /> : <ExplorePage view={exploreView} />}
     </>
   );
 }

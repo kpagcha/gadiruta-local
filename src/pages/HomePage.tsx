@@ -17,8 +17,8 @@ import { loadRecentSearches, persistRecentSearches, prependRecentSearch } from '
 import { resolveSearchUrl } from '../data/search-url.ts';
 import { useNetworkDataset, type NetworkDatasetState } from '../hooks/use-network-dataset.ts';
 
-/** Remount search state only when the network loads or browser history selects another URL. */
-export function HomePage() {
+/** Remount search state when data or history changes, with entrance motion only on the first visit. */
+export function HomePage({ animateArrival }: { animateArrival: boolean }) {
   const networkState = useNetworkDataset();
   const [historyVersion, setHistoryVersion] = useState(0);
 
@@ -35,7 +35,7 @@ export function HomePage() {
     <SearchContent
       key={`${networkState.status}:${historyVersion}`}
       networkState={networkState}
-      animateArrival={networkState.status === 'loading' && historyVersion === 0}
+      animateArrival={animateArrival && networkState.status === 'loading' && historyVersion === 0}
     />
   );
 }
@@ -189,7 +189,7 @@ function SearchContent({
   return (
     <main
       id="main-content"
-      className={`relative grid flex-1 gap-8 pt-4 pb-12 desktop:items-start desktop:py-20 ${
+      className={`relative grid flex-1 gap-8 pt-4 pb-12 focus:outline-none desktop:items-start desktop:py-20 ${
         hasSearched
           ? 'desktop:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] desktop:gap-8'
           : 'desktop:grid-cols-[1fr_1.12fr] desktop:gap-16'

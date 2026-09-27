@@ -139,7 +139,7 @@ export function TripLocationPicker({
         {recentSearches.length > 0 && (
           <div
             aria-label={t('search.recentSearches')}
-            className="mt-3 flex min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto max-[380px]:gap-1"
+            className="recent-searches-scroll mt-3 flex min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto max-[380px]:gap-1"
             role="group"
           >
             {recentSearches.map((search) => {
@@ -156,7 +156,7 @@ export function TripLocationPicker({
                       origin,
                       destination,
                     })}
-                    className="motion-list-item motion-interactive flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
+                    className="motion-interactive flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
                     onClick={() => onSelectRecentSearch(search)}
                     type="button"
                   >
