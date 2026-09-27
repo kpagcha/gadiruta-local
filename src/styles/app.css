@@ -42,60 +42,12 @@
 }
 
 @layer components {
-  .line-area-tone-0 {
-    --line-area-color: #155f64;
+  .line-area-colored {
+    --line-area-color: var(--line-area-color-light);
   }
 
-  .line-area-tone-1 {
-    --line-area-color: #355e8a;
-  }
-
-  .line-area-tone-2 {
-    --line-area-color: #785078;
-  }
-
-  .line-area-tone-3 {
-    --line-area-color: #91522e;
-  }
-
-  .line-area-tone-4 {
-    --line-area-color: #566a2d;
-  }
-
-  .line-area-tone-5 {
-    --line-area-color: #574f88;
-  }
-
-  .line-area-tone-6 {
-    --line-area-color: #945063;
-  }
-
-  [data-theme='dark'] .line-area-tone-0 {
-    --line-area-color: #79cbc2;
-  }
-
-  [data-theme='dark'] .line-area-tone-1 {
-    --line-area-color: #9ac0ed;
-  }
-
-  [data-theme='dark'] .line-area-tone-2 {
-    --line-area-color: #d6a3d1;
-  }
-
-  [data-theme='dark'] .line-area-tone-3 {
-    --line-area-color: #dfa981;
-  }
-
-  [data-theme='dark'] .line-area-tone-4 {
-    --line-area-color: #c0cf8e;
-  }
-
-  [data-theme='dark'] .line-area-tone-5 {
-    --line-area-color: #b5ace9;
-  }
-
-  [data-theme='dark'] .line-area-tone-6 {
-    --line-area-color: #e2a6b7;
+  [data-theme='dark'] .line-area-colored {
+    --line-area-color: var(--line-area-color-dark);
   }
 
   .line-area-badge {

@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { useTranslation } from 'react-i18next';
 import { getRouteLabel } from '../data/network.ts';
+import { selectedAccentColors } from '../data/dev-settings.ts';
+import { lineAreaColors, lineStopAreaKey, type LineAreaColors } from '../data/line-area-colors.ts';
 import {
   filterLineStopPatterns,
   linesForStops,
@@ -23,21 +25,6 @@ import { AppTooltip } from './ui/tooltip';
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
 function googleMapsStopUrl(stop: NetworkStop): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${stop.latitude},${stop.longitude}`)}`;
-}
-
-/** Identify the reviewed area that should share one badge and timeline color. */
-function stopAreaKey(stop: NetworkStop): string | null {
-  if (stop.localAreaId !== null) return `area:${stop.localAreaId}`;
-  return stop.municipalityId === null ? null : `place:${stop.municipalityId}`;
-}
-
-/** Pick a repeatable palette color from an area's saved ID. */
-function stopAreaTone(key: string | null): string {
-  if (key === null) return '';
-
-  let hash = 0;
-  for (const character of key) hash = Math.imul(hash, 31) + character.charCodeAt(0);
-  return `line-area-tone-${(hash >>> 0) % 7}`;
 }
 
 /** Show the line directory or one selected line from the local network. */
@@ -198,16 +185,20 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
 type LineStopGroup = {
   key: string | null;
   locality: string | null;
-  tone: string;
+  tone: LineAreaColors | null;
   startIndex: number;
   stops: NetworkStop[];
 };
 
 /** Keep consecutive stops in one area together so its side badge fits their whole run. */
-function groupLineStops(dataset: NetworkDataset, stops: readonly NetworkStop[]): LineStopGroup[] {
+function groupLineStops(
+  dataset: NetworkDataset,
+  stops: readonly NetworkStop[],
+  colors: ReadonlyMap<string, LineAreaColors>,
+): LineStopGroup[] {
   const groups: LineStopGroup[] = [];
   for (const [index, stop] of stops.entries()) {
-    const key = stopAreaKey(stop);
+    const key = lineStopAreaKey(stop);
     const current = groups[groups.length - 1];
     if (current !== undefined && current.key === key) {
       current.stops.push(stop);
@@ -215,7 +206,7 @@ function groupLineStops(dataset: NetworkDataset, stops: readonly NetworkStop[]):
       groups.push({
         key,
         locality: stopLocality(dataset, stop),
-        tone: stopAreaTone(key),
+        tone: key === null ? null : (colors.get(key) ?? null),
         startIndex: index,
         stops: [stop],
       });
@@ -237,14 +228,30 @@ function LineStopTimeline({
   const { t } = useTranslation();
   const { settings } = useDevSettings();
   const filtering = query.trim() !== '';
-  const groups = groupLineStops(dataset, stops);
+  const { light, dark } = selectedAccentColors(settings);
+  const colors = useMemo(
+    () => (settings.lineAreaColors ? lineAreaColors(dataset, { light, dark }) : new Map<string, LineAreaColors>()),
+    [dataset, settings.lineAreaColors, light, dark],
+  );
+  const groups = groupLineStops(dataset, stops, colors);
   return (
     <div className="mt-5 max-w-170">
       {groups.map((group) => {
-        const areaColored = settings.lineAreaColors && group.tone !== '';
+        const areaColored = settings.lineAreaColors && group.tone !== null;
         const stopColor = areaColored ? 'text-[var(--line-area-color)]' : 'text-accent';
+        const toneStyle =
+          areaColored && group.tone !== null
+            ? ({
+                '--line-area-color-light': group.tone.light,
+                '--line-area-color-dark': group.tone.dark,
+              } as CSSProperties)
+            : undefined;
         return (
-          <div key={group.startIndex} className={`flex ${settings.lineAreaColors ? `gap-3 ${group.tone}` : ''}`}>
+          <div
+            key={group.startIndex}
+            className={`flex ${settings.lineAreaColors ? 'line-area-colored gap-3' : ''}`}
+            style={toneStyle}
+          >
             {settings.lineAreaColors && group.locality !== null && (
               <div className="relative w-7 shrink-0">
                 <h4>
