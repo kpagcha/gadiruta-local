@@ -100,6 +100,7 @@
     "error": "The local network could not load. Refresh the page to try again.",
     "notFound": "This place or line is not in the saved network. Choose Places or Lines above to keep browsing.",
     "backToPlaces": "All places",
+    "breadcrumb": "Place breadcrumb",
     "backToLines": "All lines",
     "searchFromHere": "Search from here",
     "searchFromStop": "Search from {{stop}}",

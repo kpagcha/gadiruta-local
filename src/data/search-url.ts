@@ -6,6 +6,7 @@ import { isCalendarDate } from './calendar-date.ts';
 import { isClockTime, type DepartureMode } from './journey-time.ts';
 import { isSameLocationChoice, type LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
+import { placeFromUrl, placeUrlValue } from './place-url.ts';
 import { stopUrlValue } from './stop-url.ts';
 import { urlToken, urlTokenFromAlias } from './url-alias.ts';
 
@@ -23,7 +24,9 @@ export interface ResolvedSearchUrl {
 /** Resolve stored IDs and readable stop links against the current local selections. */
 function findUrlLocation(value: string | null, options: readonly LocationOption[]): LocationOption | null {
   if (value === null || value === '') return null;
-  const byId = options.find((option) => option.id === value);
+  const place = placeFromUrl(value, options);
+  if (place) return place;
+  const byId = options.find((option) => option.kind === 'stop' && option.id === value);
   if (byId) return byId;
   const token = urlTokenFromAlias(value);
   return token === null
@@ -86,8 +89,8 @@ export function searchQuery(
   departAfter: string,
 ): string {
   const parameters = new URLSearchParams({
-    from: origin.kind === 'stop' ? stopUrlValue(origin) : origin.id,
-    to: destination.kind === 'stop' ? stopUrlValue(destination) : destination.id,
+    from: origin.kind === 'stop' ? stopUrlValue(origin) : placeUrlValue(origin),
+    to: destination.kind === 'stop' ? stopUrlValue(destination) : placeUrlValue(destination),
   });
   if (departureMode === 'leave-now') {
     parameters.set('mode', 'now');
@@ -95,13 +98,13 @@ export function searchQuery(
     parameters.set('date', date);
     if (departAfter !== '') parameters.set('depart_after', departAfter);
   }
-  return `?${parameters.toString()}`;
+  return `?${parameters.toString().replaceAll('%2Fall', '/all')}`;
 }
 
 /** Open the home search with a selected place or stop as its origin. */
 export function originSearchUrl(
-  origin: { kind: 'place'; id: string } | { kind: 'stop'; id: string; name: string },
+  origin: Extract<LocationOption, { kind: 'place' }> | { kind: 'stop'; id: string; name: string },
 ): string {
-  const from = origin.kind === 'stop' ? stopUrlValue(origin) : origin.id;
-  return `/?${new URLSearchParams({ from }).toString()}`;
+  const from = origin.kind === 'stop' ? stopUrlValue(origin) : placeUrlValue(origin);
+  return `/?${new URLSearchParams({ from }).toString().replaceAll('%2Fall', '/all')}`;
 }

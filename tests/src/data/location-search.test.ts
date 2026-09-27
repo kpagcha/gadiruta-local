@@ -15,6 +15,7 @@ import {
   searchLocations,
 } from '../../../src/data/location-search.ts';
 import { parseNetworkDataset, type NetworkDataset } from '../../../src/data/network-schema.ts';
+import { placeFromUrl, placePageUrl, placeUrlValue } from '../../../src/data/place-url.ts';
 import { places } from '../../../src/data/places.ts';
 import { resolveSearchUrl, searchQuery } from '../../../src/data/search-url.ts';
 
@@ -195,7 +196,7 @@ test('the place picker uses served locations and existing place identities', () 
   assert.deepEqual(hierarchy.find((municipality) => municipality.id === '1')?.areas, []);
   assert.equal(
     searchQuery(puertoReal.choice, puertoReal.areas[0]!.choice, 'leave-now', '2026-09-25', ''),
-    '?from=puerto-real&to=barrio-jarana&mode=now',
+    '?from=puerto-real/all&to=barrio-jarana&mode=now',
   );
 });
 
@@ -229,7 +230,7 @@ test('shared links reject identical choices but allow a town and its all-stops m
   assert.equal(resolve(searchQuery(town, broad, 'leave-now', '2026-09-25', '')).complete, true);
 });
 
-test('plain Puerto Real is the town and the existing municipality URL remains broad', () => {
+test('plain place URLs select an area and /all selects its municipality', () => {
   const results = searchLocations(options, 'Puerto Real');
   assert.equal(results.places[0]?.id, 'puerto-real-town');
   assert.equal(results.places[1]?.id, 'puerto-real');
@@ -246,11 +247,27 @@ test('plain Puerto Real is the town and the existing municipality URL remains br
       '2026-09-25',
       '',
     ),
-    '?from=puerto-real&to=cadiz&mode=now',
+    '?from=puerto-real/all&to=cadiz&mode=now',
   );
   assert.ok(results.areas.some((area) => area.id === 'el-marquesado'));
+  const town = results.places[0]!;
+  const broad = results.places[1]!;
+  assert.equal(town.kind, 'place');
+  assert.equal(broad.kind, 'place');
+  if (town.kind !== 'place' || broad.kind !== 'place') return;
+  assert.equal(placePageUrl(town), '/explore/places/puerto-real');
+  assert.equal(placePageUrl(broad), '/explore/places/puerto-real/all');
+  assert.equal(placeFromUrl('puerto-real', options)?.id, town.id);
+  assert.equal(placeFromUrl('puerto-real/all', options)?.id, broad.id);
+  assert.equal(placeFromUrl('cadiz', options)?.id, 'cadiz');
+  assert.equal(placeFromUrl('cadiz/all', options)?.id, 'cadiz');
+  assert.equal(placeFromUrl('barrio-jarana/all', options), null);
   assert.equal(
     resolveSearchUrl('?from=puerto-real&to=cadiz&mode=now', options, dataset.coverage, '2026-09-25').origin?.id,
+    'puerto-real-town',
+  );
+  assert.equal(
+    resolveSearchUrl('?from=puerto-real/all&to=cadiz&mode=now', options, dataset.coverage, '2026-09-25').origin?.id,
     'puerto-real',
   );
   assert.equal(
@@ -342,6 +359,9 @@ test('curated hub aliases refer to existing choices in the tracked network snaps
     JSON.parse(readFileSync(new URL('../../../public/data/bahia-cadiz-network.json', import.meta.url), 'utf8')),
   );
   const snapshotOptions = createLocationOptions(places, snapshot);
+  const placeUrls = snapshotOptions.filter((option) => option.kind === 'place').map((option) => placeUrlValue(option));
+  assert.equal(new Set(placeUrls).size, placeUrls.length);
+  assert.ok(placeUrls.every((value) => !value.endsWith('-town')));
   const placeIds = new Set(snapshotOptions.filter((option) => option.kind === 'place').map((option) => option.id));
   const stopIds = new Set(snapshot.stops.map((stop) => stop.id));
 

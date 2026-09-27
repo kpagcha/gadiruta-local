@@ -11,6 +11,9 @@ commands that prepare that file and build the website.
 
 Explore uses paths under `/explore/`. A static host serving the production build must return
 `index.html` for direct visits to those paths, while serving assets and `/data/` as files.
+Place paths use the area name alone when it differs from its municipality; `/all` selects the whole
+municipality. When both scopes have the same stops, the plain path and `/all` resolve to the same place.
+Direct-search place values use the same convention.
 Line paths use the official label alone when it is unique. If labels repeat, the official route
 description distinguishes them. Tests check the reviewed snapshot for unresolved collisions after a
 data refresh. Source IDs are not accepted as line paths.

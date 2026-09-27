@@ -5,8 +5,17 @@ import { lineUrl } from '../data/line-url.ts';
 import { getRouteLabel } from '../data/network.ts';
 import { linesForStops, matchesBrowseQuery, stopLocality, stopsForPlace } from '../data/network-browse.ts';
 import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-schema.ts';
+import { placeFromUrl, placePageUrl } from '../data/place-url.ts';
 import { originSearchUrl } from '../data/search-url.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from './ui/breadcrumb';
 
 /** Show the place directory or one selected place from the local network. */
 export function ExplorePlaces({
@@ -26,8 +35,8 @@ export function ExplorePlaces({
   const municipalities = useMemo(() => createLocationMunicipalities(options, dataset), [options, dataset]);
 
   if (selectedId !== null) {
-    const choice = options.find((option) => option.kind === 'place' && option.id === selectedId);
-    return choice?.kind === 'place' ? (
+    const choice = placeFromUrl(selectedId, options);
+    return choice !== null ? (
       <PlaceDetail dataset={dataset} choice={choice} options={options} />
     ) : (
       <p role="alert" className="rounded-2xl border border-line bg-surface-card p-5">
@@ -56,7 +65,7 @@ export function ExplorePlaces({
           <li key={municipality.id} className="rounded-2xl border border-line bg-surface-card p-5">
             <a
               className="text-lg font-bold text-ink underline decoration-line-decoration underline-offset-4 hover:text-accent"
-              href={`/explore/places/${encodeURIComponent(municipality.choice.id)}`}
+              href={placePageUrl(municipality.choice)}
             >
               {municipality.name}
             </a>
@@ -68,7 +77,7 @@ export function ExplorePlaces({
                     <li key={area.id}>
                       <a
                         className="motion-interactive inline-flex min-h-10 items-center rounded-lg bg-surface-active px-3 text-sm text-ink no-underline hover:text-accent"
-                        href={`/explore/places/${encodeURIComponent(area.choice.id)}`}
+                        href={placePageUrl(area.choice)}
                       >
                         {area.name}
                       </a>
@@ -104,16 +113,32 @@ function PlaceDetail({
     choice.municipalityId === undefined || municipality === undefined
       ? []
       : (createLocationMunicipalities(options, dataset).find((item) => item.id === municipality.id)?.areas ?? []);
+  const parentChoice = options.find(
+    (option) => option.kind === 'place' && option.municipalityId === choice.parentMunicipalityId && option.isBroad,
+  );
 
   return (
     <article>
-      <a className="text-sm font-semibold text-accent underline underline-offset-4" href="/explore/places">
-        {t('explore.backToPlaces')}
-      </a>
+      <Breadcrumb aria-label={t('explore.breadcrumb')}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/explore/places">{t('explore.backToPlaces')}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          {parentChoice?.kind === 'place' && (
+            <>
+              <BreadcrumbItem>
+                <BreadcrumbLink href={placePageUrl(parentChoice)}>{parentChoice.name}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+            </>
+          )}
+          <BreadcrumbItem>
+            <BreadcrumbPage>{choice.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h2 className="mt-4 text-3xl font-bold tracking-[-0.8px]">{choice.name}</h2>
-      {choice.municipalityId === undefined && municipality !== undefined && !choice.isTown && (
-        <p className="mt-1 text-sm text-muted">{municipality.name}</p>
-      )}
       <a
         className="motion-interactive mt-5 inline-flex min-h-11 items-center rounded-lg bg-accent px-4 font-semibold text-on-accent no-underline"
         href={originSearchUrl(choice)}
@@ -130,7 +155,7 @@ function PlaceDetail({
               <li key={area.id}>
                 <a
                   className="motion-interactive inline-flex min-h-10 items-center rounded-lg bg-surface-active px-3 text-sm text-ink no-underline hover:text-accent"
-                  href={`/explore/places/${encodeURIComponent(area.choice.id)}`}
+                  href={placePageUrl(area.choice)}
                 >
                   {area.choice.isTown ? area.choice.name : area.name}
                 </a>

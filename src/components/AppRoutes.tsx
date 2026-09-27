@@ -11,6 +11,14 @@ function exploreViewFromPath(path: string): ExploreView | null {
   if (parts[0] !== 'explore') return { kind: 'missing' };
   if (parts.length === 1 || (parts[1] === 'places' && parts.length === 2)) return { kind: 'places' };
   if (parts[1] === 'lines' && parts.length === 2) return { kind: 'lines' };
+  if (parts[1] === 'places' && parts.length === 4 && parts[3] === 'all') {
+    try {
+      const id = decodeURIComponent(parts[2]!);
+      if (id !== '') return { kind: 'place', id: `${id}/all` };
+    } catch {
+      // A malformed shared link has the same visible treatment as an unknown item.
+    }
+  }
   if ((parts[1] === 'places' || parts[1] === 'lines') && parts.length === 3) {
     try {
       const id = decodeURIComponent(parts[2]!);

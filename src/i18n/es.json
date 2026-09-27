@@ -100,6 +100,7 @@
     "error": "No se pudo cargar la red local. Actualiza la página para volver a intentarlo.",
     "notFound": "Este lugar o esta línea no está en la red guardada. Elige Lugares o Líneas arriba para seguir explorando.",
     "backToPlaces": "Todos los lugares",
+    "breadcrumb": "Ruta de lugares",
     "backToLines": "Todas las líneas",
     "searchFromHere": "Buscar desde aquí",
     "searchFromStop": "Buscar desde {{stop}}",

@@ -158,7 +158,11 @@ test('the reviewed network snapshot has distinct readable line paths', () => {
 });
 
 test('browse links prefill the existing search without running an incomplete journey', () => {
-  const placeUrl = originSearchUrl({ kind: 'place', id: 'cadiz' });
+  const broad = options.find((option) => option.kind === 'place' && option.id === 'cadiz');
+  assert.equal(broad?.kind, 'place');
+  if (broad?.kind !== 'place') return;
+  const placeUrl = originSearchUrl(broad);
+  assert.equal(placeUrl, '/?from=cadiz/all');
   const stopUrl = originSearchUrl({ kind: 'stop', id: 'a', name: 'Avenida' });
   assert.equal(
     resolveSearchUrl(new URL(placeUrl, 'https://example.test').search, options, dataset.coverage, '2026-09-26').origin

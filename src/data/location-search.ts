@@ -18,6 +18,7 @@ export type LocationOption =
       municipalityId?: string;
       localAreaId?: string;
       parentMunicipalityId?: string;
+      parentPlaceId?: string;
       parentName?: string;
       townAreaId?: string | null;
       isTown?: boolean;
@@ -93,6 +94,9 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
   const servedAreaIds = new Set(dataset.stops.map((stop) => stop.localAreaId).filter((id) => id !== null));
   const areaById = new Map(dataset.localAreas.map((area) => [area.id, area]));
   const municipalityById = new Map(dataset.municipalities.map((municipality) => [municipality.id, municipality]));
+  const placeIdByMunicipality = new Map(
+    places.flatMap((place) => (place.municipalityId === undefined ? [] : [[place.municipalityId, place.id] as const])),
+  );
   const townByMunicipality = new Map(
     dataset.municipalities.map((municipality) => [municipality.id, townLocalAreaId(dataset, municipality.id)]),
   );
@@ -129,6 +133,7 @@ export function createLocationOptions(places: readonly Place[], dataset: Network
           searchAliases: aliasesByPlaceId.get(place.id),
           name: isTown ? (parentName ?? place.name) : place.name,
           parentMunicipalityId: area.municipalityId,
+          parentPlaceId: placeIdByMunicipality.get(area.municipalityId),
           parentName,
           isTown,
         },
