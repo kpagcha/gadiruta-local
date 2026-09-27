@@ -11,6 +11,9 @@ commands that prepare that file and build the website.
 
 Explore uses paths under `/explore/`. A static host serving the production build must return
 `index.html` for direct visits to those paths, while serving assets and `/data/` as files.
+The local development build also has `/dev/settings` for browser-only experiments with line colors,
+recent searches, and theme palettes. It is absent from production builds; a hidden URL would not be
+access control on a static site. Reset on that page removes its saved browser settings.
 Place paths use the area name alone when it differs from its municipality; `/all` selects the whole
 municipality. When both scopes have the same stops, the plain path and `/all` resolve to the same place.
 Direct-search place values use the same convention.
@@ -44,7 +47,7 @@ The ZIP uses GTFS, a common format for transit schedules. Each folder has one jo
 | If you need to...                     | Start in...                                        |
 | ------------------------------------- | -------------------------------------------------- |
 | Change what people see                | `src/pages/` and `src/components/`                 |
-| Change network loading or theme       | `src/hooks/`                                       |
+| Change network loading or theme       | `src/hooks/` and `src/data/dev-settings.ts`        |
 | Change place, line, or journey lookup | `src/data/`                                        |
 | Change the network file's format      | `src/data/network-schema.ts`                       |
 | Change timetable preparation          | `scripts/ctan/`                                    |

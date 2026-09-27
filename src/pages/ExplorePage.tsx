@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExploreLines } from '../components/ExploreLines';
 import { ExplorePlaces } from '../components/ExplorePlaces';
+import { PageSkeleton } from '../components/PageSkeleton';
 import { createLocationOptions } from '../data/location-search.ts';
 import { places } from '../data/places.ts';
 import { useNetworkDataset } from '../hooks/use-network-dataset.ts';
@@ -45,29 +46,37 @@ export function ExplorePage({ view }: { view: ExploreView }) {
           </a>
         </nav>
       </header>
-      {networkState.status === 'loading' && <p role="status">{t('explore.loading')}</p>}
+      {networkState.status === 'loading' && (
+        <PageSkeleton
+          variant={view.kind === 'place' || view.kind === 'line' ? 'detail' : 'directory'}
+          label={t('explore.loading')}
+        />
+      )}
       {networkState.status === 'error' && <p role="alert">{t('explore.error')}</p>}
-      {networkState.status === 'ready' &&
-        (view.kind === 'places' || view.kind === 'place' ? (
-          <ExplorePlaces
-            dataset={networkState.dataset}
-            options={options}
-            selectedId={view.kind === 'place' ? view.id : null}
-            query={queries.places}
-            onQueryChange={(value) => setQueries((current) => ({ ...current, places: value }))}
-          />
-        ) : view.kind === 'lines' || view.kind === 'line' ? (
-          <ExploreLines
-            dataset={networkState.dataset}
-            selectedId={view.kind === 'line' ? view.id : null}
-            query={queries.lines}
-            onQueryChange={(value) => setQueries((current) => ({ ...current, lines: value }))}
-          />
-        ) : (
-          <p role="alert" className="rounded-2xl border border-line bg-surface-card p-5">
-            {t('explore.notFound')}
-          </p>
-        ))}
+      {networkState.status === 'ready' && (
+        <div className="page-reveal">
+          {view.kind === 'places' || view.kind === 'place' ? (
+            <ExplorePlaces
+              dataset={networkState.dataset}
+              options={options}
+              selectedId={view.kind === 'place' ? view.id : null}
+              query={queries.places}
+              onQueryChange={(value) => setQueries((current) => ({ ...current, places: value }))}
+            />
+          ) : view.kind === 'lines' || view.kind === 'line' ? (
+            <ExploreLines
+              dataset={networkState.dataset}
+              selectedId={view.kind === 'line' ? view.id : null}
+              query={queries.lines}
+              onQueryChange={(value) => setQueries((current) => ({ ...current, lines: value }))}
+            />
+          ) : (
+            <p role="alert" className="rounded-2xl border border-line bg-surface-card p-5">
+              {t('explore.notFound')}
+            </p>
+          )}
+        </div>
+      )}
     </main>
   );
 }

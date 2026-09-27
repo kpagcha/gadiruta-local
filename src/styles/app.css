@@ -42,7 +42,73 @@
 }
 
 @layer components {
+  .line-area-tone-0 {
+    --line-area-color: #155f64;
+  }
+
+  .line-area-tone-1 {
+    --line-area-color: #355e8a;
+  }
+
+  .line-area-tone-2 {
+    --line-area-color: #785078;
+  }
+
+  .line-area-tone-3 {
+    --line-area-color: #91522e;
+  }
+
+  .line-area-tone-4 {
+    --line-area-color: #566a2d;
+  }
+
+  .line-area-tone-5 {
+    --line-area-color: #574f88;
+  }
+
+  .line-area-tone-6 {
+    --line-area-color: #945063;
+  }
+
+  [data-theme='dark'] .line-area-tone-0 {
+    --line-area-color: #79cbc2;
+  }
+
+  [data-theme='dark'] .line-area-tone-1 {
+    --line-area-color: #9ac0ed;
+  }
+
+  [data-theme='dark'] .line-area-tone-2 {
+    --line-area-color: #d6a3d1;
+  }
+
+  [data-theme='dark'] .line-area-tone-3 {
+    --line-area-color: #dfa981;
+  }
+
+  [data-theme='dark'] .line-area-tone-4 {
+    --line-area-color: #c0cf8e;
+  }
+
+  [data-theme='dark'] .line-area-tone-5 {
+    --line-area-color: #b5ace9;
+  }
+
+  [data-theme='dark'] .line-area-tone-6 {
+    --line-area-color: #e2a6b7;
+  }
+
+  .line-area-badge {
+    color: var(--line-area-color, var(--color-accent));
+    background: color-mix(in srgb, var(--line-area-color, var(--color-accent)) 12%, var(--color-paper));
+    border-color: color-mix(in srgb, var(--line-area-color, var(--color-accent)) 32%, var(--color-paper));
+  }
+
   @media (prefers-reduced-motion: no-preference) {
+    .page-reveal {
+      animation: page-reveal 180ms ease-out backwards;
+    }
+
     .motion-arrive {
       animation: motion-rise 260ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
       animation-delay: var(--motion-delay, 0ms);
@@ -138,6 +204,16 @@
     }
   }
 
+  @keyframes page-reveal {
+    from {
+      opacity: 0.72;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
   .journey-card {
     container-type: inline-size;
   }
@@ -148,6 +224,39 @@
 
   .recent-searches-scroll::-webkit-scrollbar {
     display: none;
+  }
+
+  .recent-search-chip {
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: min(22rem, 100%);
+  }
+
+  .color-picker-hue {
+    height: 0.875rem;
+    appearance: none;
+    cursor: pointer;
+    border-radius: 9999px;
+    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+  }
+
+  .color-picker-hue::-webkit-slider-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+    appearance: none;
+    border: 3px solid white;
+    border-radius: 9999px;
+    background: transparent;
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+
+  .color-picker-hue::-moz-range-thumb {
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 3px solid white;
+    border-radius: 9999px;
+    background: transparent;
+    box-shadow: 0 0 0 1px var(--color-ink);
   }
 
   @container (min-width: 28rem) {
@@ -169,6 +278,8 @@
 @layer base {
   :root {
     color-scheme: light;
+    --color-accent: var(--dev-light-accent, #155f64);
+    --color-accent-strong: var(--dev-light-accent-strong, #114e50);
     --shadow-card: 0 14px 50px -35px #16474233;
     --shadow-popover: 0 18px 35px -12px #153a3938;
     --shadow-field-focus: 0 0 0 3px #155f6412;
@@ -187,8 +298,8 @@
     --color-muted: #a8bab3;
     --color-muted-soft: #9bafa7;
     --color-muted-faint: #7f9790;
-    --color-accent: #79cbc2;
-    --color-accent-strong: #a8e2d9;
+    --color-accent: var(--dev-dark-accent, #79cbc2);
+    --color-accent-strong: var(--dev-dark-accent-strong, #a8e2d9);
     --color-warning: #f1b07a;
     --color-icon-muted: #91aea4;
     --color-icon-accent: #76bcae;
@@ -211,6 +322,73 @@
     --shadow-card: 0 12px 20px -18px #071516aa;
     --shadow-popover: 0 18px 35px -12px #071516cc;
     --shadow-field-focus: 0 0 0 3px #79cbc233;
+  }
+
+  /* Keep the shipped Bay palette intact; experiments tint the whole interface. */
+  :root[data-dev-palette] {
+    --color-paper: color-mix(in srgb, var(--dev-light-accent) 4%, #f7f6f0);
+    --color-ink: color-mix(in srgb, var(--dev-light-accent) 35%, #193839);
+    --color-muted: color-mix(in srgb, var(--dev-light-accent) 20%, #5f6f6c);
+    --color-muted-soft: color-mix(in srgb, var(--dev-light-accent) 18%, #727d79);
+    --color-muted-faint: color-mix(in srgb, var(--dev-light-accent) 18%, #b4beb7);
+    --color-icon-muted: color-mix(in srgb, var(--dev-light-accent) 24%, #83978c);
+    --color-icon-accent: color-mix(in srgb, var(--dev-light-accent) 45%, #63877c);
+    --color-icon-strong: color-mix(in srgb, var(--dev-light-accent) 45%, #648478);
+    --color-line: color-mix(in srgb, var(--dev-light-accent) 25%, #dce2dc);
+    --color-line-subtle: color-mix(in srgb, var(--dev-light-accent) 15%, #edf0eb);
+    --color-line-brand: color-mix(in srgb, var(--dev-light-accent) 32%, #b8c9bf);
+    --color-line-decoration: color-mix(in srgb, var(--dev-light-accent) 30%, #adbbb2);
+    --color-line-input: color-mix(in srgb, var(--dev-light-accent) 22%, #c8d2cc);
+    --color-line-popover: color-mix(in srgb, var(--dev-light-accent) 25%, #bfcfc3);
+    --color-line-hover: color-mix(in srgb, var(--dev-light-accent) 35%, #a4b8aa);
+    --color-surface-active: color-mix(in srgb, var(--dev-light-accent) 10%, #e7eee8);
+    --color-surface-hover: color-mix(in srgb, var(--dev-light-accent) 10%, #e6eee8);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-light-accent) 10%, #e4eee6);
+    --color-surface-selected: color-mix(in srgb, var(--dev-light-accent) 10%, #eaf2ec);
+    --color-surface-input: color-mix(in srgb, var(--dev-light-accent) 4%, #f5f9f6);
+    --color-surface-card: color-mix(in srgb, var(--dev-light-accent) 2%, #ffffff);
+    --shadow-field-focus: 0 0 0 3px color-mix(in srgb, var(--dev-light-accent) 12%, transparent);
+  }
+
+  :root[data-dev-palette][data-theme='dark'] {
+    --color-paper: color-mix(in srgb, var(--dev-dark-accent) 3%, #0e191a);
+    --color-ink: color-mix(in srgb, var(--dev-dark-accent) 12%, #edf5ef);
+    --color-muted: color-mix(in srgb, var(--dev-dark-accent) 10%, #a8bab3);
+    --color-muted-soft: color-mix(in srgb, var(--dev-dark-accent) 10%, #9bafa7);
+    --color-muted-faint: color-mix(in srgb, var(--dev-dark-accent) 10%, #7f9790);
+    --color-icon-muted: color-mix(in srgb, var(--dev-dark-accent) 18%, #91aea4);
+    --color-icon-accent: color-mix(in srgb, var(--dev-dark-accent) 30%, #76bcae);
+    --color-icon-strong: color-mix(in srgb, var(--dev-dark-accent) 30%, #8fc6b9);
+    --color-line: color-mix(in srgb, var(--dev-dark-accent) 22%, #34504b);
+    --color-line-subtle: color-mix(in srgb, var(--dev-dark-accent) 16%, #243b38);
+    --color-line-brand: color-mix(in srgb, var(--dev-dark-accent) 22%, #57776d);
+    --color-line-decoration: color-mix(in srgb, var(--dev-dark-accent) 22%, #66877d);
+    --color-line-input: color-mix(in srgb, var(--dev-dark-accent) 20%, #4a625d);
+    --color-line-popover: color-mix(in srgb, var(--dev-dark-accent) 20%, #55736a);
+    --color-line-hover: color-mix(in srgb, var(--dev-dark-accent) 24%, #6a9386);
+    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 12%, #18342f);
+    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 12%, #192d2b);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 12%, #1c3832);
+    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 12%, #1e3c35);
+    --color-surface-input: color-mix(in srgb, var(--dev-dark-accent) 12%, #172d2b);
+    --color-surface-card: color-mix(in srgb, var(--dev-dark-accent) 4%, #142425);
+    --shadow-field-focus: 0 0 0 3px color-mix(in srgb, var(--dev-dark-accent) 22%, transparent);
+  }
+
+  /* The Andalucía experiment pairs a readable dark green with a livelier lime surface. */
+  :root[data-dev-palette='andalusiaLime'] {
+    --color-surface-active: color-mix(in srgb, #c5e86f 28%, #e7eee8);
+    --color-surface-hover: color-mix(in srgb, #c5e86f 23%, #e6eee8);
+    --color-surface-hover-strong: color-mix(in srgb, #c5e86f 30%, #e4eee6);
+    --color-surface-selected: color-mix(in srgb, #c5e86f 30%, #eaf2ec);
+    --color-line-brand: color-mix(in srgb, #a0c04a 38%, #b8c9bf);
+  }
+
+  :root[data-dev-palette='andalusiaLime'][data-theme='dark'] {
+    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 18%, #18342f);
+    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 16%, #192d2b);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 20%, #1c3832);
+    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 22%, #1e3c35);
   }
 
   body {

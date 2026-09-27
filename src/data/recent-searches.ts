@@ -2,7 +2,6 @@
  * Keeps recent direct-journey searches in this browser. Saved links are resolved against the
  * current network snapshot before display, so old place and stop names are never trusted.
  */
-import { RECENT_SEARCH_LIMIT } from '../config.ts';
 import { isCalendarDate } from './calendar-date.ts';
 import { isClockTime } from './journey-time.ts';
 import type { JourneySearch } from './journey-search.ts';
@@ -55,7 +54,9 @@ export function loadRecentSearches(
   options: readonly LocationOption[],
   coverage: NetworkDataset['coverage'],
   today: string,
+  limit: number,
 ): JourneySearch[] {
+  if (limit === 0) return [];
   let saved: unknown;
   try {
     const value = window.localStorage.getItem(STORAGE_KEY);
@@ -70,14 +71,18 @@ export function loadRecentSearches(
     if (typeof value !== 'string') continue;
     const search = resolveSavedSearch(value, options, coverage, today);
     if (search !== null && !recent.some((entry) => isSameRoute(entry, search))) recent.push(search);
-    if (recent.length === RECENT_SEARCH_LIMIT) break;
+    if (recent.length === limit) break;
   }
   return recent;
 }
 
 /** Move a successful search to the front, replacing older criteria for the same route. */
-export function prependRecentSearch(current: readonly JourneySearch[], search: JourneySearch): JourneySearch[] {
-  return [search, ...current.filter((entry) => !isSameRoute(entry, search))].slice(0, RECENT_SEARCH_LIMIT);
+export function prependRecentSearch(
+  current: readonly JourneySearch[],
+  search: JourneySearch,
+  limit: number,
+): JourneySearch[] {
+  return [search, ...current.filter((entry) => !isSameRoute(entry, search))].slice(0, limit);
 }
 
 /** Save current search links when browser storage allows it. */

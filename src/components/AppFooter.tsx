@@ -21,6 +21,11 @@ export function AppFooter() {
           }}
         />
       </p>
+      {import.meta.env.DEV && (
+        <a className="text-xs text-accent underline underline-offset-4" href="/dev/settings">
+          {t('devSettings.link')}
+        </a>
+      )}
     </footer>
   );
 }

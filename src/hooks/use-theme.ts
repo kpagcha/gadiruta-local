@@ -9,11 +9,6 @@ type ResolvedTheme = Exclude<ThemeMode, 'system'>;
 
 const STORAGE_KEY = 'gadiruta-local.theme';
 const MEDIA_QUERY = '(prefers-color-scheme: dark)';
-const THEME_COLORS: Record<ResolvedTheme, string> = {
-  light: '#f7f6f0',
-  dark: '#0e191a',
-};
-
 /** Check whether a stored value is one of the supported theme choices. */
 function isThemeMode(value: string | null): value is ThemeMode {
   return value === 'system' || value === 'light' || value === 'dark';
@@ -45,7 +40,7 @@ function applyTheme(mode: ThemeMode): ResolvedTheme {
   // `data-theme` drives CSS, while these browser hints affect native controls and the address bar.
   root.dataset.theme = theme;
   root.style.colorScheme = theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme]);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getComputedStyle(root).backgroundColor);
   return theme;
 }
 

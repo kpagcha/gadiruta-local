@@ -1,4 +1,5 @@
-import { Fragment, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { useTranslation } from 'react-i18next';
 import { getRouteLabel } from '../data/network.ts';
 import {
@@ -11,6 +12,7 @@ import {
 import { lineFromUrl, lineUrl } from '../data/line-url.ts';
 import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-schema.ts';
 import { originSearchUrl } from '../data/search-url.ts';
+import { useDevSettings } from '../hooks/dev-settings-context.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
 import { ExploreFilterInput } from './ExploreFilterInput';
 import { Icon } from './Icon';
@@ -21,6 +23,21 @@ import { AppTooltip } from './ui/tooltip';
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
 function googleMapsStopUrl(stop: NetworkStop): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${stop.latitude},${stop.longitude}`)}`;
+}
+
+/** Identify the reviewed area that should share one badge and timeline color. */
+function stopAreaKey(stop: NetworkStop): string | null {
+  if (stop.localAreaId !== null) return `area:${stop.localAreaId}`;
+  return stop.municipalityId === null ? null : `place:${stop.municipalityId}`;
+}
+
+/** Pick a repeatable palette color from an area's saved ID. */
+function stopAreaTone(key: string | null): string {
+  if (key === null) return '';
+
+  let hash = 0;
+  for (const character of key) hash = Math.imul(hash, 31) + character.charCodeAt(0);
+  return `line-area-tone-${(hash >>> 0) % 7}`;
 }
 
 /** Show the line directory or one selected line from the local network. */
@@ -178,6 +195,35 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   );
 }
 
+type LineStopGroup = {
+  key: string | null;
+  locality: string | null;
+  tone: string;
+  startIndex: number;
+  stops: NetworkStop[];
+};
+
+/** Keep consecutive stops in one area together so its side badge fits their whole run. */
+function groupLineStops(dataset: NetworkDataset, stops: readonly NetworkStop[]): LineStopGroup[] {
+  const groups: LineStopGroup[] = [];
+  for (const [index, stop] of stops.entries()) {
+    const key = stopAreaKey(stop);
+    const current = groups[groups.length - 1];
+    if (current !== undefined && current.key === key) {
+      current.stops.push(stop);
+    } else {
+      groups.push({
+        key,
+        locality: stopLocality(dataset, stop),
+        tone: stopAreaTone(key),
+        startIndex: index,
+        stops: [stop],
+      });
+    }
+  }
+  return groups;
+}
+
 /** Reuse the journey timeline rail while preserving every stop in the selected trip order. */
 function LineStopTimeline({
   dataset,
@@ -189,70 +235,98 @@ function LineStopTimeline({
   query: string;
 }) {
   const { t } = useTranslation();
+  const { settings } = useDevSettings();
   const filtering = query.trim() !== '';
+  const groups = groupLineStops(dataset, stops);
   return (
-    <ol className="mt-5 ml-2 max-w-170">
-      {stops.map((stop, index) => {
-        const locality = stopLocality(dataset, stop);
-        const previousLocality = index === 0 ? null : stopLocality(dataset, stops[index - 1]!);
-        const matched = filtering && matchesBrowseQuery(`${stop.name} ${locality ?? ''}`, query);
-        const actionColor = filtering && !matched ? 'text-muted hover:text-accent' : 'text-accent';
+    <div className="mt-5 max-w-170">
+      {groups.map((group) => {
+        const areaColored = settings.lineAreaColors && group.tone !== '';
+        const stopColor = areaColored ? 'text-[var(--line-area-color)]' : 'text-accent';
         return (
-          <Fragment key={`${stop.id}-${index}`}>
-            {locality !== null && locality !== previousLocality && (
-              <li role="presentation" className="grid min-h-8 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
-                <span aria-hidden="true" className="relative self-stretch">
-                  {index > 0 && (
-                    <span
-                      className={`absolute -top-2 -bottom-2 left-1/2 w-0.5 -translate-x-1/2 ${filtering ? 'bg-line-brand' : 'bg-accent'}`}
-                    />
-                  )}
-                </span>
-                <h4 className="self-center pb-1 text-xs font-bold tracking-[0.12em] text-muted uppercase">
-                  {locality}
+          <div key={group.startIndex} className={`flex ${settings.lineAreaColors ? `gap-3 ${group.tone}` : ''}`}>
+            {settings.lineAreaColors && group.locality !== null && (
+              <div className="relative w-7 shrink-0">
+                <h4>
+                  <PopoverPrimitive.Root>
+                    <PopoverPrimitive.Trigger
+                      openOnHover
+                      delay={300}
+                      type="button"
+                      className="line-area-badge absolute top-0 left-0 max-h-[calc(100%-0.5rem)] rotate-180 truncate rounded-lg border px-1 py-0.5 text-xs leading-4 font-bold uppercase [writing-mode:vertical-rl] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+                    >
+                      {group.locality}
+                    </PopoverPrimitive.Trigger>
+                    <PopoverPrimitive.Portal>
+                      <PopoverPrimitive.Positioner side="top" sideOffset={7} className="z-100">
+                        <PopoverPrimitive.Popup className="motion-base-popup rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)] outline-none">
+                          <PopoverPrimitive.Title>{group.locality}</PopoverPrimitive.Title>
+                        </PopoverPrimitive.Popup>
+                      </PopoverPrimitive.Positioner>
+                    </PopoverPrimitive.Portal>
+                  </PopoverPrimitive.Root>
                 </h4>
-              </li>
-            )}
-            <li className="grid min-h-14 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
-              <StopTimelineTrack
-                first={index === 0}
-                last={index === stops.length - 1}
-                highlighted={!filtering || matched}
-                highlightStart={filtering || index === 0}
-                highlightEnd={filtering || index === stops.length - 1}
-              />
-              <div className={`flex min-w-0 items-start justify-between gap-3 pb-5 ${matched ? 'text-accent' : ''}`}>
-                <span className={`min-w-0 ${filtering && !matched ? 'opacity-70' : ''}`}>
-                  <span className="block font-semibold">{stop.name}</span>
-                </span>
-                <span className="flex shrink-0 items-center">
-                  <AppTooltip content={t('explore.search')}>
-                    <a
-                      className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
-                      href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
-                      aria-label={t('explore.searchFromStop', { stop: stop.name })}
-                    >
-                      <Icon name="search" size={16} strokeWidth={1.8} />
-                    </a>
-                  </AppTooltip>
-                  <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
-                  <AppTooltip content={t('explore.map')}>
-                    <a
-                      className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
-                      href={googleMapsStopUrl(stop)}
-                      aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <Icon name="stop" size={16} strokeWidth={1.8} />
-                    </a>
-                  </AppTooltip>
-                </span>
               </div>
-            </li>
-          </Fragment>
+            )}
+            <ol start={group.startIndex + 1} className="min-w-0 flex-1">
+              {group.stops.map((stop, groupIndex) => {
+                const index = group.startIndex + groupIndex;
+                const matched = filtering && matchesBrowseQuery(`${stop.name} ${group.locality ?? ''}`, query);
+                const actionColor =
+                  filtering && !matched
+                    ? areaColored
+                      ? 'text-muted hover:text-[var(--line-area-color)]'
+                      : 'text-muted hover:text-accent'
+                    : stopColor;
+                return (
+                  <li key={`${stop.id}-${index}`} className="grid min-h-14 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
+                    <StopTimelineTrack
+                      first={index === 0}
+                      last={index === stops.length - 1}
+                      highlighted={!filtering || matched}
+                      highlightStart={filtering || index === 0}
+                      highlightEnd={filtering || index === stops.length - 1}
+                      areaColored={areaColored}
+                    />
+                    <div className="flex min-w-0 items-start justify-between gap-3 pb-2">
+                      <span className={`min-w-0 ${filtering && !matched ? 'opacity-40' : ''}`}>
+                        <span
+                          className={`block ${matched ? 'font-bold' : 'font-semibold'} ${areaColored || matched ? stopColor : ''}`}
+                        >
+                          {stop.name}
+                        </span>
+                      </span>
+                      <span className="flex shrink-0 items-center">
+                        <AppTooltip content={t('explore.search')}>
+                          <a
+                            className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                            href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
+                            aria-label={t('explore.searchFromStop', { stop: stop.name })}
+                          >
+                            <Icon name="search" size={16} strokeWidth={1.8} />
+                          </a>
+                        </AppTooltip>
+                        <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
+                        <AppTooltip content={t('explore.map')}>
+                          <a
+                            className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                            href={googleMapsStopUrl(stop)}
+                            aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <Icon name="stop" size={16} strokeWidth={1.8} />
+                          </a>
+                        </AppTooltip>
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
         );
       })}
-    </ol>
+    </div>
   );
 }

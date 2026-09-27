@@ -15,6 +15,7 @@ import { createLocationOptions, isSameLocationChoice, locationLabel } from '../d
 import { places } from '../data/places.ts';
 import { loadRecentSearches, persistRecentSearches, prependRecentSearch } from '../data/recent-searches.ts';
 import { resolveSearchUrl } from '../data/search-url.ts';
+import { useDevSettings } from '../hooks/dev-settings-context.ts';
 import { useNetworkDataset, type NetworkDatasetState } from '../hooks/use-network-dataset.ts';
 
 /** Remount search state when data or history changes, with entrance motion only on the first visit. */
@@ -49,6 +50,8 @@ function SearchContent({
   animateArrival: boolean;
 }) {
   const { t } = useTranslation();
+  const { settings } = useDevSettings();
+  const recentSearchLimit = settings.recentSearchLimit;
   const reducedMotion = useReducedMotion();
   // Use one instant for URL restoration, the initial form date, and recent links across midnight.
   const [restoredNow] = useState(() => new Date());
@@ -89,16 +92,20 @@ function SearchContent({
   const hasSearched = (restored?.complete ?? false) || searchNumber > 0;
   const [recentSearches, setRecentSearches] = useState<JourneySearch[]>(() => {
     if (networkState.status !== 'ready') return [];
-    const saved = loadRecentSearches(options, networkState.dataset.coverage, restoredToday);
+    const saved = loadRecentSearches(options, networkState.dataset.coverage, restoredToday, recentSearchLimit);
     // A valid link already ran a search while restoring the page, so it belongs in recent history.
     if (restored?.complete && restored.origin !== null && restored.destination !== null) {
-      return prependRecentSearch(saved, {
-        origin: restored.origin,
-        destination: restored.destination,
-        departureMode: restored.departureMode,
-        date: restored.date,
-        departAfter: restored.departAfter,
-      });
+      return prependRecentSearch(
+        saved,
+        {
+          origin: restored.origin,
+          destination: restored.destination,
+          departureMode: restored.departureMode,
+          date: restored.date,
+          departAfter: restored.departAfter,
+        },
+        recentSearchLimit,
+      );
     }
     return saved;
   });
@@ -142,7 +149,7 @@ function SearchContent({
     });
     setResult(nextResult);
     setSearchNumber((number) => number + 1);
-    setRecentSearches((current) => prependRecentSearch(current, search));
+    setRecentSearches((current) => prependRecentSearch(current, search, recentSearchLimit));
 
     // Only a fresh search waits for the results card entrance before scrolling to it.
     const firstSearch = !hasSearched;

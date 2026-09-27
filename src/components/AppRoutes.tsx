@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExplorePage, type ExploreView } from '../pages/ExplorePage';
 import { HomePage } from '../pages/HomePage';
 import { AppHeader } from './AppHeader';
+import { PageSkeleton } from './PageSkeleton';
+
+const DevSettingsPage = import.meta.env.DEV ? lazy(() => import('../pages/DevSettingsPage')) : null;
+
+type AppView = { kind: 'search' } | { kind: 'settings' } | { kind: 'explore'; view: ExploreView };
 
 /** Read the small set of shareable browse views from the URL path. */
-function exploreViewFromPath(path: string): ExploreView | null {
-  if (path === '/') return null;
+function exploreViewFromPath(path: string): ExploreView {
   const parts = path.split('/').filter(Boolean);
   if (parts[0] !== 'explore') return { kind: 'missing' };
   if (parts.length === 1 || (parts[1] === 'places' && parts.length === 2)) return { kind: 'places' };
@@ -30,25 +34,32 @@ function exploreViewFromPath(path: string): ExploreView | null {
   return { kind: 'missing' };
 }
 
+/** Keep the developer page out of production while routing all other paths normally. */
+function appViewFromPath(path: string): AppView {
+  if (path === '/') return { kind: 'search' };
+  if (import.meta.env.DEV && path === '/dev/settings') return { kind: 'settings' };
+  return { kind: 'explore', view: exploreViewFromPath(path) };
+}
+
 /** Keep the visible page, active navigation link, and title in step with browser history. */
 export function AppRoutes() {
   const { t } = useTranslation();
-  const [exploreView, setExploreView] = useState<ExploreView | null>(() =>
-    exploreViewFromPath(window.location.pathname),
-  );
+  const [appView, setAppView] = useState<AppView>(() => appViewFromPath(window.location.pathname));
   // Only the first document visit should play Search's entrance animation.
   const [hasNavigated, setHasNavigated] = useState(false);
-  const firstRoute = useRef(true);
 
   useEffect(() => {
-    document.title = exploreView === null ? t('app.title') : `${t('explore.title')} · ${t('app.name')}`;
-  }, [exploreView, t]);
+    document.title =
+      appView.kind === 'search'
+        ? t('app.title')
+        : `${t(appView.kind === 'settings' ? 'devSettings.title' : 'explore.title')} · ${t('app.name')}`;
+  }, [appView, t]);
 
   useEffect(() => {
     /** Restore the visible page when browser Back or Forward changes the path. */
     function restoreView() {
       setHasNavigated(true);
-      setExploreView(exploreViewFromPath(window.location.pathname));
+      setAppView(appViewFromPath(window.location.pathname));
     }
     window.addEventListener('popstate', restoreView);
     return () => window.removeEventListener('popstate', restoreView);
@@ -79,7 +90,10 @@ export function AppRoutes() {
       if (
         url.origin !== window.location.origin ||
         url.hash !== '' ||
-        (url.pathname !== '/' && url.pathname !== '/explore' && !url.pathname.startsWith('/explore/'))
+        (url.pathname !== '/' &&
+          url.pathname !== '/explore' &&
+          !url.pathname.startsWith('/explore/') &&
+          !(import.meta.env.DEV && url.pathname === '/dev/settings'))
       ) {
         return;
       }
@@ -95,17 +109,31 @@ export function AppRoutes() {
   }, []);
 
   useEffect(() => {
-    if (firstRoute.current) {
-      firstRoute.current = false;
-      return;
-    }
+    // Strict Mode replays mount effects in development; only a real navigation moves focus.
+    if (!hasNavigated || appView.kind === 'settings') return;
     document.getElementById('main-content')?.focus();
-  }, [exploreView]);
+  }, [appView, hasNavigated]);
 
   return (
     <>
-      <AppHeader exploring={exploreView !== null} />
-      {exploreView === null ? <HomePage animateArrival={!hasNavigated} /> : <ExplorePage view={exploreView} />}
+      <AppHeader activePage={appView.kind === 'settings' ? null : appView.kind === 'search' ? 'search' : 'explore'} />
+      {appView.kind === 'search' ? (
+        <HomePage animateArrival={!hasNavigated} />
+      ) : appView.kind === 'settings' ? (
+        DevSettingsPage === null ? null : (
+          <Suspense
+            fallback={
+              <main id="main-content" className="flex-1 pt-8 pb-12 focus:outline-none" tabIndex={-1}>
+                <PageSkeleton variant="settings" label={t('devSettings.loading')} />
+              </main>
+            }
+          >
+            <DevSettingsPage focusOnLoad={hasNavigated} />
+          </Suspense>
+        )
+      ) : (
+        <ExplorePage view={appView.view} />
+      )}
     </>
   );
 }

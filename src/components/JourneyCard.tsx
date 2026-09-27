@@ -339,7 +339,7 @@ export function JourneyCard({ journey, dataset }: { journey: DirectJourney; data
                 aria-expanded={openStop === 'board'}
                 aria-haspopup="listbox"
                 aria-labelledby={`${stopLabelId}-board ${stopLabelId}-board-trigger`}
-                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'board' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
+                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'board' ? 'bg-accent text-on-accent' : 'hover:text-accent-strong'}`}
                 onClick={() => toggleStopList('board')}
                 onKeyDown={(event) => {
                   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -389,7 +389,7 @@ export function JourneyCard({ journey, dataset }: { journey: DirectJourney; data
                 aria-expanded={openStop === 'alight'}
                 aria-haspopup="listbox"
                 aria-labelledby={`${stopLabelId}-alight ${stopLabelId}-alight-trigger`}
-                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'alight' ? 'bg-[#155f64] text-white' : 'hover:text-accent-strong'}`}
+                className={`motion-timeline-color -ml-2 flex min-h-6 min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 text-left ${openStop === 'alight' ? 'bg-accent text-on-accent' : 'hover:text-accent-strong'}`}
                 onClick={() => toggleStopList('alight')}
                 onKeyDown={(event) => {
                   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

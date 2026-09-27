@@ -1,20 +1,15 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  createLocationMunicipalities,
-  isSameLocationChoice,
-  locationLabel,
-  type LocationOption,
-} from '../data/location-search.ts';
+import { createLocationMunicipalities, isSameLocationChoice, type LocationOption } from '../data/location-search.ts';
 import { madridToday } from '../data/calendar-date.ts';
 import { currentMadridQuarterHour } from '../data/journey-time.ts';
 import type { TripSearchDraft, JourneySearch } from '../data/journey-search.ts';
 import type { NetworkDatasetState } from '../hooks/use-network-dataset.ts';
 import { LocationField } from './LocationField';
-import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
+import { RecentSearches } from './RecentSearches';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
 
@@ -136,38 +131,7 @@ export function TripLocationPicker({
             {t('search.sameLocation')}
           </p>
         )}
-        {recentSearches.length > 0 && (
-          <div
-            aria-label={t('search.recentSearches')}
-            className="recent-searches-scroll mt-3 flex min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto max-[380px]:gap-1"
-            role="group"
-          >
-            {recentSearches.map((search) => {
-              const origin = locationLabel(search.origin, t('search.allStops'));
-              const destination = locationLabel(search.destination, t('search.allStops'));
-              const route = `${origin} → ${destination}`;
-              return (
-                <AppTooltip
-                  content={route}
-                  key={`${search.origin.kind}:${search.origin.id}:${search.destination.kind}:${search.destination.id}`}
-                >
-                  <button
-                    aria-label={t('search.repeatRecentSearch', {
-                      origin,
-                      destination,
-                    })}
-                    className="motion-interactive flex min-h-9 max-w-48 min-w-16 flex-[0_1_auto] items-center gap-1.5 overflow-hidden rounded-full border border-line-input bg-surface-card px-2.5 text-left text-xs font-[650] text-ink hover:bg-surface-hover max-[380px]:gap-1 max-[380px]:px-2"
-                    onClick={() => onSelectRecentSearch(search)}
-                    type="button"
-                  >
-                    <Icon name="search" className="shrink-0" size={15} />
-                    <span className="min-w-0 truncate">{route}</span>
-                  </button>
-                </AppTooltip>
-              );
-            })}
-          </div>
-        )}
+        <RecentSearches searches={recentSearches} onSelect={onSelectRecentSearch} />
         {state.status === 'loading' && (
           <p className="mt-4 text-sm text-muted" role="status">
             {t('search.loading')}

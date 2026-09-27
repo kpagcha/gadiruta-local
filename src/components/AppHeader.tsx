@@ -4,7 +4,7 @@ import { useTheme } from '../hooks/use-theme';
 import { Icon } from './Icon';
 
 /** Render navigation and preferences in the persistent site header. */
-export function AppHeader({ exploring }: { exploring: boolean }) {
+export function AppHeader({ activePage }: { activePage: 'search' | 'explore' | null }) {
   // The resolved language controls which selector button is visually and semantically active.
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage ?? 'en';
@@ -27,15 +27,15 @@ export function AppHeader({ exploring }: { exploring: boolean }) {
       <nav className="col-span-2 flex gap-1 pb-1 desktop:col-auto desktop:pb-0" aria-label={t('app.navigation')}>
         <a
           href="/"
-          aria-current={!exploring ? 'page' : undefined}
-          className={`motion-interactive flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold no-underline ${!exploring ? 'bg-surface-active text-accent' : 'text-muted hover:text-ink'}`}
+          aria-current={activePage === 'search' ? 'page' : undefined}
+          className={`motion-interactive flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold no-underline ${activePage === 'search' ? 'bg-surface-active text-accent' : 'text-muted hover:text-ink'}`}
         >
           {t('app.search')}
         </a>
         <a
           href="/explore/places"
-          aria-current={exploring ? 'page' : undefined}
-          className={`motion-interactive flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold no-underline ${exploring ? 'bg-surface-active text-accent' : 'text-muted hover:text-ink'}`}
+          aria-current={activePage === 'explore' ? 'page' : undefined}
+          className={`motion-interactive flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold no-underline ${activePage === 'explore' ? 'bg-surface-active text-accent' : 'text-muted hover:text-ink'}`}
         >
           {t('app.explore')}
         </a>
