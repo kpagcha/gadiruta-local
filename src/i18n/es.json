@@ -3,7 +3,10 @@
     "name": "Gadiruta",
     "title": "Gadiruta · Muévete por Cádiz",
     "home": "Inicio de Gadiruta",
-    "skipToContent": "Saltar al contenido"
+    "skipToContent": "Saltar al contenido",
+    "navigation": "Navegación principal",
+    "search": "Buscar",
+    "explore": "Explorar"
   },
   "language": {
     "label": "Idioma",
@@ -79,6 +82,31 @@
     "openStopInGoogleMaps": "Abrir {{stop}} en Google Maps (pestaña nueva)",
     "duration": "{{count}} min",
     "nextDay": "Llega al día siguiente"
+  },
+  "explore": {
+    "title": "Explora la red",
+    "navigation": "Explorar lugares y líneas",
+    "places": "Lugares",
+    "lines": "Líneas",
+    "areas": "Zonas",
+    "stops": "Paradas",
+    "filter": "Filtrar lista",
+    "placeFilterPlaceholder": "Lugar o zona",
+    "lineFilterPlaceholder": "Nombre o número de línea",
+    "filterStops": "Filtrar paradas",
+    "stopFilterPlaceholder": "Parada o zona",
+    "noMatches": "No hay resultados en esta lista.",
+    "loading": "Cargando la red local…",
+    "error": "No se pudo cargar la red local. Actualiza la página para volver a intentarlo.",
+    "notFound": "Este lugar o esta línea no está en la red guardada. Elige Lugares o Líneas arriba para seguir explorando.",
+    "backToPlaces": "Todos los lugares",
+    "backToLines": "Todas las líneas",
+    "searchFromHere": "Buscar desde aquí",
+    "searchFromStop": "Buscar desde {{stop}}",
+    "search": "Buscar",
+    "linesServing": "Líneas que pasan por este lugar",
+    "stopsServed": "Paradas de la línea",
+    "lineStopsNote": "Estas paradas aparecen por orden alfabético. Cada autobús puede parar en lugares distintos."
   },
   "footer": {
     "region": "Hecho para la Bahía de Cádiz.",

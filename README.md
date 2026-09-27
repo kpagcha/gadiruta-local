@@ -9,8 +9,8 @@ requests.
 The app bundles a reviewed Bahía de Cádiz timetable snapshot derived from CTAN GTFS. The home page
 loads it locally and finds scheduled direct journeys between places or exact stops on a chosen date
 and optional departure time. Searches have shareable URLs and reveal local results in small slices.
-On mobile, search is visible directly below the header. Network browsing, maps, and offline
-persistence are still ahead.
+Explore lists places, lines, and their stops from the same saved snapshot. On mobile, search stays
+prominent below the header. Timetable browsing, maps, and offline persistence are still ahead.
 
 ## Roadmap
 
@@ -20,7 +20,7 @@ persistence are still ahead.
       queried directly in the browser.
 - [x] **Place search:** Let people select Cádiz-area places or exact stops using local transit data.
 - [x] **Direct journeys:** Find date-aware direct services between selected places on-device.
-- [ ] **Network browsing:** Add line, stop, and timetable views.
+- [ ] **Network browsing:** Place and line browsing are available; add stop and timetable views.
 - [ ] **Offline experience:** Add local data persistence and deliberate PWA caching once real data
       needs it.
 

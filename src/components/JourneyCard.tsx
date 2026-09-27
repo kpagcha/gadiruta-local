@@ -4,9 +4,11 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject 
 import { useTranslation } from 'react-i18next';
 import { alightableTripStopIndices, boardableTripStopIndices, type DirectJourney } from '../data/direct-journeys.ts';
 import { clockTime } from '../data/journey-time.ts';
+import { lineUrl } from '../data/line-url.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset, NetworkStop } from '../data/network-schema.ts';
 import { Icon, type IconName } from './Icon';
+import { StopTimelineTrack } from './StopTimelineTrack';
 import { AppTooltip } from './ui/tooltip';
 
 /** Match the usual GTFS route types to the transport symbols used by the result badge. */
@@ -74,19 +76,13 @@ function StopTimelineOption({
     >
       <div className="grid min-w-0 flex-1 grid-cols-[2.25rem_0.75rem_minmax(0,1fr)] items-start gap-x-2 leading-[20px]">
         <span className="tabular-nums">{choice.time}</span>
-        <span aria-hidden="true" className="relative self-stretch">
-          <span
-            className={`absolute left-1/2 w-0.5 -translate-x-1/2 bg-line-brand ${choice.index === 0 ? 'top-2.5' : '-top-2'} ${choice.index === count - 1 ? 'bottom-[calc(100%-0.625rem)]' : '-bottom-2'}`}
-          />
-          {inJourney && (
-            <span
-              className={`motion-segment absolute left-1/2 w-0.5 -translate-x-1/2 bg-accent ${choice.index === boardingIndex ? 'top-2.5' : '-top-2'} ${choice.index === alightingIndex ? 'bottom-[calc(100%-0.625rem)]' : '-bottom-2'}`}
-            />
-          )}
-          <span
-            className={`motion-timeline-color absolute top-[5px] left-1/2 size-2.5 -translate-x-1/2 rounded-full border-2 ${inJourney ? 'border-accent bg-accent' : 'border-icon-muted bg-surface-input'}`}
-          />
-        </span>
+        <StopTimelineTrack
+          first={choice.index === 0}
+          last={choice.index === count - 1}
+          highlighted={inJourney}
+          highlightStart={choice.index === boardingIndex}
+          highlightEnd={choice.index === alightingIndex}
+        />
         <span className="min-w-0 wrap-anywhere">{choice.name}</span>
       </div>
     </div>
@@ -271,15 +267,25 @@ export function JourneyCard({ journey, dataset }: { journey: DirectJourney; data
     setOpenStop((current) => (current === step ? null : step));
   }
 
-  const lineChip = (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-md bg-surface-active px-2 py-1 text-xs font-[700] text-accent ${hasLongNameTooltip ? 'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent' : ''}`}
-      tabIndex={hasLongNameTooltip ? 0 : undefined}
-    >
+  const lineChipClassName =
+    'inline-flex items-center gap-1.5 rounded-md bg-surface-active px-2 py-1 text-xs font-[700] text-accent';
+  const lineChipContent = (
+    <>
       <Icon name={routeIcon(route?.type)} size={15} strokeWidth={1.8} />
       {t('journey.line', { line: route === undefined ? trip.routeId : getRouteLabel(route) })}
-    </span>
+    </>
   );
+  const lineChip =
+    route === undefined ? (
+      <span className={lineChipClassName}>{lineChipContent}</span>
+    ) : (
+      <a
+        className={`${lineChipClassName} motion-interactive no-underline hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+        href={lineUrl(route, dataset.routes)}
+      >
+        {lineChipContent}
+      </a>
+    );
 
   return (
     <article className="journey-card min-w-0 rounded-xl border border-line-subtle bg-surface-input px-4 py-4">

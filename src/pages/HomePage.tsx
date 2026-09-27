@@ -131,7 +131,7 @@ function SearchContent({
     if (submitted === null) return;
     const { query, search, result: nextResult } = submitted;
     if (query !== window.location.search) {
-      window.history.pushState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
+      window.history.pushState(null, '', `${window.location.pathname}${query}`);
     }
     setUrlError(false);
 

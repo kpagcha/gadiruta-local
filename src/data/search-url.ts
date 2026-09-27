@@ -6,7 +6,8 @@ import { isCalendarDate } from './calendar-date.ts';
 import { isClockTime, type DepartureMode } from './journey-time.ts';
 import { isSameLocationChoice, type LocationOption } from './location-search.ts';
 import type { NetworkDataset } from './network-schema.ts';
-import { stopTokenFromUrl, stopUrlToken, stopUrlValue } from './stop-url.ts';
+import { stopUrlValue } from './stop-url.ts';
+import { urlToken, urlTokenFromAlias } from './url-alias.ts';
 
 /** Values shown in the form and whether a URL describes a runnable local search. */
 export interface ResolvedSearchUrl {
@@ -24,10 +25,10 @@ function findUrlLocation(value: string | null, options: readonly LocationOption[
   if (value === null || value === '') return null;
   const byId = options.find((option) => option.id === value);
   if (byId) return byId;
-  const token = stopTokenFromUrl(value);
+  const token = urlTokenFromAlias(value);
   return token === null
     ? null
-    : (options.find((option) => option.kind === 'stop' && stopUrlToken(option.id) === token) ?? null);
+    : (options.find((option) => option.kind === 'stop' && urlToken(option.id) === token) ?? null);
 }
 
 /** Read valid URL fields independently, but run a search only when all required fields are valid. */
@@ -95,4 +96,12 @@ export function searchQuery(
     if (departAfter !== '') parameters.set('depart_after', departAfter);
   }
   return `?${parameters.toString()}`;
+}
+
+/** Open the home search with a selected place or stop as its origin. */
+export function originSearchUrl(
+  origin: { kind: 'place'; id: string } | { kind: 'stop'; id: string; name: string },
+): string {
+  const from = origin.kind === 'stop' ? stopUrlValue(origin) : origin.id;
+  return `/?${new URLSearchParams({ from }).toString()}`;
 }

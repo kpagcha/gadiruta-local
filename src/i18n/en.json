@@ -3,7 +3,10 @@
     "name": "Gadiruta",
     "title": "Gadiruta · Your way around Cádiz",
     "home": "Gadiruta home",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "navigation": "Main navigation",
+    "search": "Search",
+    "explore": "Explore"
   },
   "language": {
     "label": "Language",
@@ -79,6 +82,31 @@
     "openStopInGoogleMaps": "Open {{stop}} in Google Maps (new tab)",
     "duration": "{{count}} min",
     "nextDay": "Arrives next day"
+  },
+  "explore": {
+    "title": "Explore the network",
+    "navigation": "Explore places and lines",
+    "places": "Places",
+    "lines": "Lines",
+    "areas": "Areas",
+    "stops": "Stops",
+    "filter": "Filter list",
+    "placeFilterPlaceholder": "Place or area",
+    "lineFilterPlaceholder": "Name or line number",
+    "filterStops": "Filter stops",
+    "stopFilterPlaceholder": "Stop or area",
+    "noMatches": "No matches in this list.",
+    "loading": "Loading local network…",
+    "error": "The local network could not load. Refresh the page to try again.",
+    "notFound": "This place or line is not in the saved network. Choose Places or Lines above to keep browsing.",
+    "backToPlaces": "All places",
+    "backToLines": "All lines",
+    "searchFromHere": "Search from here",
+    "searchFromStop": "Search from {{stop}}",
+    "search": "Search",
+    "linesServing": "Lines serving this place",
+    "stopsServed": "Stops served",
+    "lineStopsNote": "These stops are listed alphabetically. Individual buses may stop at different places."
   },
   "footer": {
     "region": "Made for the Bay of Cádiz.",

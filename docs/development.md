@@ -9,6 +9,12 @@ Gadiruta Local is a static website. The deployed app has no server or database o
 browser loads a checked-in timetable file and searches it locally. Node.js runs only the developer
 commands that prepare that file and build the website.
 
+Explore uses paths under `/explore/`. A static host serving the production build must return
+`index.html` for direct visits to those paths, while serving assets and `/data/` as files.
+Line paths use the official label alone when it is unique. If labels repeat, the official route
+description distinguishes them. Tests check the reviewed snapshot for unresolved collisions after a
+data refresh. Source IDs are not accepted as line paths.
+
 CTAN, the regional transit data provider, supplies the timetable ZIP.
 
 ```text
@@ -32,14 +38,14 @@ The ZIP uses GTFS, a common format for transit schedules. Each folder has one jo
 
 ## Where to look
 
-| If you need to...                    | Start in...                                        |
-| ------------------------------------ | -------------------------------------------------- |
-| Change what people see               | `src/pages/` and `src/components/`                 |
-| Change network loading or theme      | `src/hooks/`                                       |
-| Change place or journey search       | `src/data/`                                        |
-| Change the network file's format     | `src/data/network-schema.ts`                       |
-| Change timetable preparation         | `scripts/ctan/`                                    |
-| Investigate or review stop locations | `scripts/ctan/research/` and `data/reviewed/ctan/` |
+| If you need to...                     | Start in...                                        |
+| ------------------------------------- | -------------------------------------------------- |
+| Change what people see                | `src/pages/` and `src/components/`                 |
+| Change network loading or theme       | `src/hooks/`                                       |
+| Change place, line, or journey lookup | `src/data/`                                        |
+| Change the network file's format      | `src/data/network-schema.ts`                       |
+| Change timetable preparation          | `scripts/ctan/`                                    |
+| Investigate or review stop locations  | `scripts/ctan/research/` and `data/reviewed/ctan/` |
 
 Tests mirror the source folders under `tests/src/` and `tests/scripts/`, with saved examples in
 `tests/fixtures/`.

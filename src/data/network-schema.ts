@@ -5,7 +5,7 @@
  */
 import { z } from 'zod';
 import { isCalendarDate, shiftCalendarDate } from './calendar-date.ts';
-import { stopUrlToken } from './stop-url.ts';
+import { urlToken } from './url-alias.ts';
 
 const name = z.string().refine((value) => value.trim() !== '', 'must be a non-empty string');
 const date = z.string().refine(isCalendarDate, 'must be a valid YYYY-MM-DD date');
@@ -134,7 +134,7 @@ export function parseNetworkDataset(value: unknown): NetworkDataset {
   const stopIds = uniqueIds(stops, 'dataset.stops');
   const stopUrlTokens = new Set<string>();
   for (const stop of stops) {
-    const token = stopUrlToken(stop.id);
+    const token = urlToken(stop.id);
     if (stopUrlTokens.has(token)) {
       throw new NetworkDataError(`dataset.stops has a duplicate URL token: ${token}.`);
     }
