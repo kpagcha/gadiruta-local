@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Clock3,
   ExternalLink,
+  ListClock,
   Map,
   MapPin,
   Moon,
@@ -14,6 +15,7 @@ import {
   Search,
   Ship,
   Sun,
+  Timeline,
   TrainFront,
   TramFront,
   X,
@@ -35,6 +37,8 @@ export type IconName =
   | 'moon'
   | 'search'
   | 'clock'
+  | 'timeline'
+  | 'listClock'
   | 'externalLink'
   | 'calendar'
   | 'chevronLeft'
@@ -55,6 +59,8 @@ const iconComponents: Record<Exclude<IconName, 'gadiruta'>, LucideIcon> = {
   moon: Moon,
   search: Search,
   clock: Clock3,
+  timeline: Timeline,
+  listClock: ListClock,
   externalLink: ExternalLink,
   calendar: CalendarDays,
   chevronLeft: ChevronLeft,

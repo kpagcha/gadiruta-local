@@ -1,6 +1,7 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { useTranslation } from 'react-i18next';
+import { madridToday } from '../data/calendar-date.ts';
 import { getRouteLabel } from '../data/network.ts';
 import { selectedAccentColors } from '../data/dev-settings.ts';
 import { lineAreaColors, lineStopAreaKey, type LineAreaColors } from '../data/line-area-colors.ts';
@@ -12,12 +13,15 @@ import {
   stopLocality,
 } from '../data/network-browse.ts';
 import { lineFromUrl, lineUrl } from '../data/line-url.ts';
+import { datedLineTrips, lineDateFromQuery, linePathAlias, type DatedLineTrip } from '../data/line-timetable.ts';
+import { clockTime } from '../data/journey-time.ts';
 import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-schema.ts';
 import { originSearchUrl } from '../data/search-url.ts';
 import { useDevSettings } from '../hooks/dev-settings-context.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
 import { ExploreFilterInput } from './ExploreFilterInput';
 import { Icon } from './Icon';
+import { JourneyDatePill } from './JourneyDatePill';
 import { StopTimelineTrack } from './StopTimelineTrack';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
@@ -90,8 +94,27 @@ export function ExploreLines({
 function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: NetworkRoute }) {
   const { t } = useTranslation();
   const [stopQuery, setStopQuery] = useState('');
-  const [selectedPath, setSelectedPath] = useState('0');
+  const [urlSearch, setUrlSearch] = useState(() => window.location.search);
+  const [timetableView, setTimetableView] = useState<'trips' | 'stops'>('stops');
   const patterns = useMemo(() => lineStopPatterns(dataset, route.id), [dataset, route.id]);
+  useEffect(() => {
+    /** Restore the line's path and date from a shared link or browser history. */
+    function restoreLineUrl() {
+      setUrlSearch(window.location.search);
+    }
+    window.addEventListener('popstate', restoreLineUrl);
+    return () => window.removeEventListener('popstate', restoreLineUrl);
+  }, []);
+  const parameters = new URLSearchParams(urlSearch);
+  const rawDate = parameters.get('date');
+  const rawPath = parameters.get('path');
+  const rawView = parameters.get('view');
+  const date =
+    rawDate !== null
+      ? lineDateFromQuery(rawDate, dataset.coverage)
+      : rawView === 'stops'
+        ? null
+        : lineDateFromQuery(madridToday(), dataset.coverage);
   const matchingPatterns = filterLineStopPatterns(dataset, patterns, stopQuery);
   const pathEndpoints = patterns.map((pattern) => {
     const first = pattern.stops[0]!;
@@ -114,15 +137,36 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     const variant =
       sameLength.length > 1 ? ` · ${t('explore.pathVariant', { number: sameLength.indexOf(pattern) + 1 })}` : '';
     return {
-      value: String(index),
+      value: linePathAlias(dataset, pattern, patterns),
       label: `${endpoints.full}${suffix}${variant}`,
       shortLabel: `${endpoints.short}${suffix}${variant}`,
     };
   });
   const visibleChoices = pathChoices.filter((_, index) => matchingPatterns.includes(patterns[index]!));
-  // Keep a manually selected path when possible; a filter may temporarily choose another one.
-  const activeChoice = visibleChoices.find((choice) => choice.value === selectedPath) ?? visibleChoices[0];
-  const activePattern = activeChoice === undefined ? undefined : patterns[Number(activeChoice.value)];
+  // A plain line link opens a path that actually runs today when one is available.
+  const firstScheduledChoice =
+    date === null
+      ? undefined
+      : visibleChoices.find((choice) => {
+          const pattern = patterns[pathChoices.indexOf(choice)]!;
+          return datedLineTrips(dataset, route.id, pattern, date).length > 0;
+        });
+  // Keep a shared path when possible; a stop filter may temporarily choose another one.
+  const activeChoice =
+    visibleChoices.find((choice) => choice.value === rawPath) ?? firstScheduledChoice ?? visibleChoices[0];
+  const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
+  const trips =
+    date !== null && activePattern !== undefined ? datedLineTrips(dataset, route.id, activePattern, date) : [];
+
+  /** Keep the selected path and optional date in a shareable line URL. */
+  function updateLineUrl(path: string, nextDate: string | null) {
+    const next = new URLSearchParams({ path });
+    if (nextDate !== null) next.set('date', nextDate);
+    else next.set('view', 'stops');
+    const search = `?${next.toString()}`;
+    window.history.pushState(null, '', `${window.location.pathname}${search}`);
+    setUrlSearch(search);
+  }
   return (
     <article>
       <a className="text-sm font-semibold text-accent underline underline-offset-4" href="/explore/lines">
@@ -132,15 +176,19 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       {route.longName !== null && route.longName !== getRouteLabel(route) && (
         <p className="mt-2 max-w-170 leading-6 text-muted">{route.longName}</p>
       )}
-      <div className="mt-8 flex flex-wrap items-end justify-between gap-4">
-        <h3 className="text-xl font-bold">{t('explore.stops')}</h3>
-        <ExploreFilterInput
-          label={t('explore.filterStops')}
-          placeholder={t('explore.stopFilterPlaceholder')}
-          value={stopQuery}
-          onChange={setStopQuery}
-        />
-      </div>
+      {(rawDate !== null && date === null) ||
+      (rawPath !== null && !pathChoices.some((choice) => choice.value === rawPath)) ||
+      (rawView !== null && (rawView !== 'stops' || rawDate !== null)) ? (
+        <p className="mt-4 text-sm text-warning" role="alert">
+          {t('explore.invalidLineLink')}
+        </p>
+      ) : null}
+      {rawDate === null && rawView === null && date === null && (
+        <p className="mt-4 text-sm text-warning" role="status">
+          {t('explore.todayUnavailable')}
+        </p>
+      )}
+      <h3 className="mt-8 text-xl font-bold">{date === null ? t('explore.stops') : t('explore.timetable')}</h3>
       {activeChoice === undefined || activePattern === undefined ? (
         <p className="mt-5 text-muted">{t('explore.noMatches')}</p>
       ) : (
@@ -159,7 +207,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                     aria-label={choice.label}
                     aria-pressed={choice.value === activeChoice.value}
                     className={`motion-interactive min-h-11 min-w-0 rounded-xl border px-3 py-2 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
-                    onClick={() => setSelectedPath(choice.value)}
+                    onClick={() => updateLineUrl(choice.value, date)}
                     type="button"
                   >
                     {choice.shortLabel}
@@ -176,7 +224,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                 items={visibleChoices}
                 value={activeChoice.value}
                 onValueChange={(value) => {
-                  if (value !== null) setSelectedPath(value);
+                  if (value !== null) updateLineUrl(value, date);
                 }}
               >
                 <SelectTrigger
@@ -195,7 +243,80 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </Select>
             </div>
           )}
-          <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
+          <div className="mt-5 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_16rem] desktop:gap-8">
+            <aside
+              className="min-w-0 desktop:col-start-2 desktop:row-start-1"
+              aria-label={t('explore.timetableControls')}
+            >
+              <ExploreFilterInput
+                label={t('explore.filterStops')}
+                placeholder={t('explore.stopFilterPlaceholder')}
+                value={stopQuery}
+                onChange={setStopQuery}
+              />
+              <div className="mt-4 flex flex-wrap items-center gap-2 desktop:items-start">
+                <JourneyDatePill
+                  value={date}
+                  onChange={(value) => updateLineUrl(activeChoice.value, value)}
+                  minimum={dataset.coverage.startDate}
+                  maximum={dataset.coverage.endDate}
+                  disabled={false}
+                  allowPast
+                  emptyLabel={t('explore.chooseDate')}
+                  clear={
+                    date === null
+                      ? undefined
+                      : {
+                          label: t('explore.clearDate'),
+                          onClick: () => updateLineUrl(activeChoice.value, null),
+                        }
+                  }
+                />
+              </div>
+            </aside>
+            <div className="min-w-0 desktop:col-start-1 desktop:row-start-1">
+              {date === null ? (
+                <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
+              ) : (
+                <>
+                  <div
+                    className="flex w-full overflow-hidden rounded-xl border border-line-input bg-surface-input sm:inline-flex sm:w-auto"
+                    role="group"
+                    aria-label={t('explore.timetableView')}
+                  >
+                    {(['stops', 'trips'] as const).map((view) => (
+                      <button
+                        key={view}
+                        aria-pressed={timetableView === view}
+                        className={`motion-interactive inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-2 sm:px-3 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
+                        onClick={() => setTimetableView(view)}
+                        type="button"
+                      >
+                        <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={16} className="shrink-0" />
+                        <span>{t(view === 'trips' ? 'explore.tripList' : 'explore.timesByStop')}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {trips.length === 0 ? (
+                    <p className="mt-5 text-muted" role="status">
+                      {t('explore.noLineTrips')}{' '}
+                      <button
+                        className="motion-interactive font-semibold text-accent underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-accent"
+                        onClick={() => updateLineUrl(activeChoice.value, null)}
+                        type="button"
+                      >
+                        {t('explore.clearDate')}
+                      </button>
+                    </p>
+                  ) : timetableView === 'trips' ? (
+                    <LineTripList dataset={dataset} stops={activePattern.stops} trips={trips} query={stopQuery} />
+                  ) : (
+                    <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} trips={trips} />
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </>
       )}
     </article>
@@ -209,6 +330,60 @@ type LineStopGroup = {
   startIndex: number;
   stops: NetworkStop[];
 };
+
+/** Show the scheduled buses in travel order and expand one run for its stop times. */
+function LineTripList({
+  dataset,
+  stops,
+  trips,
+  query,
+}: {
+  dataset: NetworkDataset;
+  stops: readonly NetworkStop[];
+  trips: readonly DatedLineTrip[];
+  query: string;
+}) {
+  const { t } = useTranslation();
+  const [openRun, setOpenRun] = useState<string | null>(null);
+  return (
+    <ol className="mt-5 max-w-170 space-y-1">
+      {trips.map((run) => {
+        const key = `${run.trip.id}:${run.serviceDate}`;
+        const first = run.trip.stopTimes[0]!;
+        const last = run.trip.stopTimes[run.trip.stopTimes.length - 1]!;
+        const firstMinute = first.departureMinutes + run.minuteOffset;
+        const lastMinute = last.arrivalMinutes + run.minuteOffset;
+        const expanded = openRun === key;
+        return (
+          <li key={key} className="border-b border-line pb-1">
+            <button
+              aria-expanded={expanded}
+              className="motion-interactive flex min-h-14 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left font-semibold hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent"
+              onClick={() => setOpenRun(expanded ? null : key)}
+              type="button"
+            >
+              <span className="tabular-nums">
+                {clockTime(firstMinute)}
+                {firstMinute < 0 && <span className="ml-1 text-xs text-muted">{t('explore.previousDay')}</span>}
+                {' → '}
+                {clockTime(lastMinute)}
+                {lastMinute >= 1440 && <span className="ml-1 text-xs text-muted">{t('explore.nextDay')}</span>}
+              </span>
+              <span className="text-sm text-muted">
+                {expanded ? t('explore.hideStopTimes') : t('explore.showStopTimes')}
+              </span>
+            </button>
+            {expanded && (
+              <div className="pb-3 pl-2">
+                <LineStopTimeline dataset={dataset} stops={stops} query={query} run={run} showActions={false} />
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 /** Keep consecutive stops in one area together so its side badge fits their whole run. */
 function groupLineStops(
@@ -240,10 +415,16 @@ function LineStopTimeline({
   dataset,
   stops,
   query,
+  trips,
+  run,
+  showActions = true,
 }: {
   dataset: NetworkDataset;
   stops: readonly NetworkStop[];
   query: string;
+  trips?: readonly DatedLineTrip[];
+  run?: DatedLineTrip;
+  showActions?: boolean;
 }) {
   const { t } = useTranslation();
   const { settings } = useDevSettings();
@@ -299,6 +480,12 @@ function LineStopTimeline({
               {group.stops.map((stop, groupIndex) => {
                 const index = group.startIndex + groupIndex;
                 const matched = filtering && matchesBrowseQuery(`${stop.name} ${group.locality ?? ''}`, query);
+                const times = trips
+                  ?.map((item) => item.trip.stopTimes[index]!.arrivalMinutes + item.minuteOffset)
+                  .filter((minute) => minute >= 0 && minute < 1440)
+                  .sort((a, b) => a - b);
+                const runMinute =
+                  run === undefined ? null : run.trip.stopTimes[index]!.arrivalMinutes + run.minuteOffset;
                 const actionColor =
                   filtering && !matched
                     ? areaColored
@@ -322,30 +509,50 @@ function LineStopTimeline({
                         >
                           {stop.name}
                         </span>
+                        {times !== undefined && (
+                          <span className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted tabular-nums">
+                            {times.length === 0
+                              ? '—'
+                              : times.map((minute, timeIndex) => (
+                                  <time key={`${minute}-${timeIndex}`} dateTime={clockTime(minute)}>
+                                    {clockTime(minute)}
+                                  </time>
+                                ))}
+                          </span>
+                        )}
+                        {runMinute !== null && (
+                          <span className="mt-1 block text-sm text-muted tabular-nums">
+                            <time dateTime={clockTime(runMinute)}>{clockTime(runMinute)}</time>
+                            {runMinute < 0 && ` · ${t('explore.previousDay')}`}
+                            {runMinute >= 1440 && ` · ${t('explore.nextDay')}`}
+                          </span>
+                        )}
                       </span>
-                      <span className="flex shrink-0 items-center">
-                        <AppTooltip content={t('explore.search')}>
-                          <a
-                            className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
-                            href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
-                            aria-label={t('explore.searchFromStop', { stop: stop.name })}
-                          >
-                            <Icon name="search" size={16} strokeWidth={1.8} />
-                          </a>
-                        </AppTooltip>
-                        <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
-                        <AppTooltip content={t('explore.map')}>
-                          <a
-                            className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
-                            href={googleMapsStopUrl(stop)}
-                            aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                          >
-                            <Icon name="stop" size={16} strokeWidth={1.8} />
-                          </a>
-                        </AppTooltip>
-                      </span>
+                      {showActions && (
+                        <span className="flex shrink-0 items-center">
+                          <AppTooltip content={t('explore.search')}>
+                            <a
+                              className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                              href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
+                              aria-label={t('explore.searchFromStop', { stop: stop.name })}
+                            >
+                              <Icon name="search" size={16} strokeWidth={1.8} />
+                            </a>
+                          </AppTooltip>
+                          <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
+                          <AppTooltip content={t('explore.map')}>
+                            <a
+                              className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                              href={googleMapsStopUrl(stop)}
+                              aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <Icon name="stop" size={16} strokeWidth={1.8} />
+                            </a>
+                          </AppTooltip>
+                        </span>
+                      )}
                     </div>
                   </li>
                 );

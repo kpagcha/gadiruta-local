@@ -12,13 +12,15 @@ task is simple: choose where to board and where to get off, then see which direc
   they show scheduled services rather than live arrivals.
 - Share a search link or return to a recent search.
 - Browse places and lines in the saved network, see their stops, and start a search from a place or stop.
+  A line defaults to today's scheduled trips on one exact path, with times for every stop. Clearing
+  the date shows the path's stops without times.
 - Use the interface in English or Spanish. Official route and stop names keep their source names.
 
 A direct journey stays on one bus trip. The app does not plan transfers.
 
 ## Where the product is going
 
-The next useful views are individual stops and timetables; a map may help people explore them. Keeping
+The next useful views are individual stops and broader timetables; a map may help people explore them. Keeping
 travel data available offline and showing reliable service notices are possible later steps, once
 their data and behavior are clear.
 

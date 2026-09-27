@@ -20,6 +20,12 @@ Direct-search place values use the same convention.
 Line paths use the official label alone when it is unique. If labels repeat, the official route
 description distinguishes them. Tests check the reviewed snapshot for unresolved collisions after a
 data refresh. Source IDs are not accepted as line paths.
+Line pages accept optional `path`, `date`, and `view=stops` query values. A path alias names the
+exact ordered stop sequence by its endpoints, adding a stop count only when endpoints repeat. A
+dated view includes only trips following that sequence. Runs from the preceding service day can
+cross midnight into the selected calendar day. A plain line URL defaults to today's schedule;
+`view=stops` keeps the date cleared. These links use the saved snapshot's explicit service dates,
+not a generic weekday or holiday timetable.
 
 CTAN, the regional transit data provider, supplies the timetable ZIP.
 

@@ -2,9 +2,10 @@ import { ChevronDown } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
+import { shiftCalendarDate } from '../data/calendar-date.ts';
 import { alightableTripStopIndices, boardableTripStopIndices, type DirectJourney } from '../data/direct-journeys.ts';
 import { clockTime } from '../data/journey-time.ts';
-import { lineUrl } from '../data/line-url.ts';
+import { datedLineUrl } from '../data/line-timetable.ts';
 import { getRouteLabel } from '../data/network.ts';
 import type { NetworkDataset, NetworkStop } from '../data/network-schema.ts';
 import { Icon, type IconName } from './Icon';
@@ -281,7 +282,12 @@ export function JourneyCard({ journey, dataset }: { journey: DirectJourney; data
     ) : (
       <a
         className={`${lineChipClassName} motion-interactive no-underline hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
-        href={lineUrl(route, dataset.routes)}
+        href={datedLineUrl(
+          dataset,
+          route,
+          trip,
+          journey.minuteOffset === -1440 ? shiftCalendarDate(journey.serviceDate, 1) : journey.serviceDate,
+        )}
       >
         {lineChipContent}
       </a>

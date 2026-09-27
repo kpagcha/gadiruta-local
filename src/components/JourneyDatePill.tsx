@@ -6,6 +6,7 @@ import { madridToday } from '../data/calendar-date.ts';
 import { Icon } from './Icon';
 import { JourneyPickerPill } from './JourneyPickerPill';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { AppTooltip } from './ui/tooltip';
 
 /** Keep the visible month inside the dates available for travel. */
 function clampMonth(month: string, minimum: string, maximum: string): string {
@@ -19,18 +20,24 @@ export function JourneyDatePill({
   minimum,
   maximum,
   disabled,
+  allowPast = false,
+  emptyLabel,
+  clear,
 }: {
-  value: string;
+  value: string | null;
   onChange: (value: string) => void;
   minimum: string;
   maximum: string;
   disabled: boolean;
+  allowPast?: boolean;
+  emptyLabel?: string;
+  clear?: { label: string; onClick: () => void };
 }) {
   const { t, i18n } = useTranslation();
   const reducedMotion = useReducedMotion();
   const locale = i18n.resolvedLanguage ?? 'en';
   const today = madridToday();
-  const earliestDate = minimum > today ? minimum : today;
+  const earliestDate = allowPast || minimum > today ? minimum : today;
   const hasAvailableDates = earliestDate <= maximum;
   const pickerDisabled = disabled || !hasAvailableDates;
   const dialogId = useId();
@@ -38,16 +45,20 @@ export function JourneyDatePill({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [visibleMonth, setVisibleMonth] = useState(monthKey(value));
+  const [visibleMonth, setVisibleMonth] = useState(
+    monthKey(value ?? (today >= earliestDate && today <= maximum ? today : earliestDate)),
+  );
   const minimumMonth = monthKey(earliestDate);
   const maximumMonth = monthKey(maximum);
-  const dateCovered = value >= earliestDate && value <= maximum;
+  const dateCovered = value !== null && value >= earliestDate && value <= maximum;
   const dateLabel =
-    value === today
-      ? t('search.today')
-      : new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(
-          parseCalendarDate(value),
-        );
+    value === null
+      ? (emptyLabel ?? t('search.chooseDate'))
+      : value === today
+        ? t('search.today')
+        : new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(
+            parseCalendarDate(value),
+          );
   const monthLabel = new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(
     parseCalendarDate(`${visibleMonth}-01`),
   );
@@ -107,17 +118,24 @@ export function JourneyDatePill({
   function togglePicker() {
     if (!isOpen) {
       const currentToday = madridToday();
-      const currentEarliest = minimum > currentToday ? minimum : currentToday;
-      setVisibleMonth(clampMonth(monthKey(value), monthKey(currentEarliest), maximumMonth));
+      const currentEarliest = allowPast || minimum > currentToday ? minimum : currentToday;
+      setVisibleMonth(clampMonth(monthKey(value ?? currentToday), monthKey(currentEarliest), maximumMonth));
     }
     setIsOpen((open) => !open);
   }
 
-  /** Apply a current or future covered day and return focus to the date pill. */
+  /** Apply a covered day and return focus to the date pill. */
   function selectDate(date: string) {
-    if (date < minimum || date < madridToday() || date > maximum) return;
+    if (date < minimum || (!allowPast && date < madridToday()) || date > maximum) return;
     onChange(date);
     setIsOpen(false);
+    triggerRef.current?.focus();
+  }
+
+  /** Clear an optional date without leaving focus on a button that disappears. */
+  function clearDate() {
+    setIsOpen(false);
+    clear?.onClick();
     triggerRef.current?.focus();
   }
 
@@ -126,35 +144,52 @@ export function JourneyDatePill({
       <JourneyPickerPill
         previous={{
           label: t('search.previousDay'),
-          disabled: pickerDisabled || !dateCovered || value <= earliestDate,
+          disabled: pickerDisabled || !dateCovered || value === null || value <= earliestDate,
           onClick: () => {
+            if (value === null) return;
             const previous = shiftCalendarDate(value, -1);
-            if (previous >= minimum && previous >= madridToday()) onChange(previous);
+            if (previous >= minimum && (allowPast || previous >= madridToday())) onChange(previous);
           },
         }}
         next={{
           label: t('search.nextDay'),
-          disabled: pickerDisabled || !dateCovered || value >= maximum,
+          disabled: pickerDisabled || !dateCovered || value === null || value >= maximum,
           onClick: () => {
+            if (value === null) return;
             const next = shiftCalendarDate(value, 1);
-            if (next >= madridToday() && next <= maximum) onChange(next);
+            if ((allowPast || next >= madridToday()) && next <= maximum) onChange(next);
           },
         }}
       >
-        <button
-          ref={triggerRef}
-          type="button"
-          className="motion-interactive inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-ink enabled:hover:bg-surface-hover disabled:opacity-50"
-          aria-controls={isOpen ? dialogId : undefined}
-          aria-expanded={isOpen}
-          aria-haspopup="dialog"
-          aria-label={`${t('search.travelDate')}: ${dateLabel}`}
-          disabled={pickerDisabled}
-          onClick={togglePicker}
-        >
-          <Icon name="calendar" size={18} className="text-accent" />
-          <span className="w-14 text-left whitespace-nowrap tabular-nums">{dateLabel}</span>
-        </button>
+        <>
+          <button
+            ref={triggerRef}
+            type="button"
+            className="motion-interactive inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-ink enabled:hover:bg-surface-hover disabled:opacity-50"
+            aria-controls={isOpen ? dialogId : undefined}
+            aria-expanded={isOpen}
+            aria-haspopup="dialog"
+            aria-label={`${t('search.travelDate')}: ${dateLabel}`}
+            disabled={pickerDisabled}
+            onClick={togglePicker}
+          >
+            <Icon name="calendar" size={18} className="text-accent" />
+            <span className="min-w-14 text-left whitespace-nowrap tabular-nums">{dateLabel}</span>
+          </button>
+          {clear !== undefined && value !== null && (
+            <AppTooltip content={clear.label}>
+              <button
+                aria-label={clear.label}
+                className="motion-interactive grid size-7 shrink-0 place-items-center rounded-full text-muted focus-visible:outline-2 focus-visible:outline-accent enabled:hover:bg-surface-hover enabled:hover:text-accent disabled:opacity-35"
+                disabled={disabled}
+                onClick={clearDate}
+                type="button"
+              >
+                <Icon name="close" size={14} strokeWidth={1.8} />
+              </button>
+            </AppTooltip>
+          )}
+        </>
       </JourneyPickerPill>
 
       {isOpen && (
