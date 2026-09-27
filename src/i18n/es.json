@@ -129,6 +129,7 @@
     "areas": "Zonas",
     "stops": "Paradas",
     "filter": "Filtrar lista",
+    "clearFilter": "Borrar filtro",
     "placeFilterPlaceholder": "Lugar o zona",
     "lineFilterPlaceholder": "Nombre o número de línea",
     "filterStops": "Filtrar paradas",

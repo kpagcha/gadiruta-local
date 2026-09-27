@@ -129,6 +129,7 @@
     "areas": "Areas",
     "stops": "Stops",
     "filter": "Filter list",
+    "clearFilter": "Clear filter",
     "placeFilterPlaceholder": "Place or area",
     "lineFilterPlaceholder": "Name or line number",
     "filterStops": "Filter stops",
