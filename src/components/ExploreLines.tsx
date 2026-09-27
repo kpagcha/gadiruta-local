@@ -13,6 +13,7 @@ import {
   stopLocality,
 } from '../data/network-browse.ts';
 import { lineFromUrl, lineUrl } from '../data/line-url.ts';
+import { reviewedLinePathLabel } from '../data/line-path-labels.ts';
 import {
   datedLineTrips,
   lineDateFromQuery,
@@ -99,7 +100,7 @@ export function ExploreLines({
 
 /** Show one ordered saved trip path at a time for the selected line. */
 function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: NetworkRoute }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [stopQuery, setStopQuery] = useState('');
   const [urlSearch, setUrlSearch] = useState(() => window.location.search);
   const patterns = useMemo(() => lineStopPatterns(dataset, route.id), [dataset, route.id]);
@@ -149,13 +150,13 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     const suffix = sameEnds.length > 1 ? ` · ${t('explore.pathStopCount', { count: pattern.stops.length })}` : '';
     const variant =
       sameLength.length > 1 ? ` · ${t('explore.pathVariant', { number: sameLength.indexOf(pattern) + 1 })}` : '';
+    const value = linePathAlias(dataset, pattern, patterns);
+    const reviewedLabel = reviewedLinePathLabel(route, value, i18n.resolvedLanguage ?? i18n.language);
     return {
-      value: linePathAlias(dataset, pattern, patterns),
-      label: `${endpoints.full}${suffix}${variant}`,
-      shortLabel: `${endpoints.short}${suffix}${variant}`,
+      value,
+      label: reviewedLabel ?? `${endpoints.full}${suffix}${variant}`,
+      shortLabel: reviewedLabel ?? `${endpoints.short}${suffix}${variant}`,
       direction: endpoints.short,
-      stopCount: pattern.stops.length,
-      variant,
       runs: scheduledRuns[index]!,
     };
   });
@@ -282,10 +283,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                               onClick={() => updateLineUrl(choice.value, date)}
                               type="button"
                             >
-                              <span className="text-sm font-semibold">
-                                {t('explore.pathStopCount', { count: choice.stopCount })}
-                                {choice.variant}
-                              </span>
+                              <span className="text-sm font-semibold">{choice.shortLabel}</span>
                               {date !== null && (
                                 <span className="flex flex-wrap gap-x-2 text-xs text-muted tabular-nums">
                                   {departures.slice(0, 4).map((departure, index) => (
