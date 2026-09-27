@@ -9,6 +9,7 @@ import {
   linePathAlias,
   lineRunAlias,
   lineRunFromAlias,
+  lineStopTimesAtStop,
 } from '../../../src/data/line-timetable.ts';
 import { lineStopPatterns } from '../../../src/data/network-browse.ts';
 import type { NetworkDataset, NetworkTrip } from '../../../src/data/network-schema.ts';
@@ -78,7 +79,7 @@ const dataset: NetworkDataset = {
   ],
   serviceDates: [
     { serviceId: 'day', dates: ['2026-09-27'] },
-    { serviceId: 'night', dates: ['2026-09-26'] },
+    { serviceId: 'night', dates: ['2026-09-26', '2026-09-27'] },
   ],
   coverage: { startDate: '2026-09-27', endDate: '2026-09-27' },
 };
@@ -97,17 +98,40 @@ test('a dated line link names the trip’s exact ordered path', () => {
   );
 });
 
-test('the selected calendar day includes its own exact trips and overnight arrivals from yesterday', () => {
+test('a line timetable includes only runs starting on the selected service date', () => {
   const pattern = lineStopPatterns(dataset, 'line').find((item) => item.stops.length === 3)!;
   const runs = datedLineTrips(dataset, 'line', pattern, '2026-09-27');
   assert.deepEqual(
     runs.map((run) => [run.trip.id, run.firstMinute]),
     [
-      ['night', 5],
       ['day', 540],
+      ['night', 1425],
     ],
   );
+  assert.deepEqual(
+    runs.map((run) => run.serviceDate),
+    ['2026-09-27', '2026-09-27'],
+  );
   assert.equal(lineDateFromQuery('2026-09-26', dataset.coverage), null);
+});
+
+test('stop times keep run order across midnight without repeating yesterday’s run', () => {
+  const pattern = lineStopPatterns(dataset, 'line').find((item) => item.stops.length === 3)!;
+  const runs = datedLineTrips(dataset, 'line', pattern, '2026-09-27');
+  assert.deepEqual(
+    lineStopTimesAtStop(runs, 0).map(({ item, minute }) => [item.trip.id, minute]),
+    [
+      ['day', 540],
+      ['night', 1425],
+    ],
+  );
+  assert.deepEqual(
+    lineStopTimesAtStop(runs, 1).map(({ item, minute }) => [item.trip.id, minute]),
+    [
+      ['day', 560],
+      ['night', 1445],
+    ],
+  );
 });
 
 test('run links use departure times and distinguish buses with the same departure', () => {
@@ -117,7 +141,8 @@ test('run links use departure times and distinguish buses with the same departur
   const night = runs.find((run) => run.trip.id === 'night')!;
   const secondDay = { ...day, trip: { ...day.trip, id: 'day-2' } };
   const repeated = [...runs, secondDay];
-  assert.equal(lineRunAlias(night, runs), 'previous-day-23-45');
+  assert.equal(lineRunAlias(night, runs), '23-45');
+  assert.equal(lineRunFromAlias(runs, 'previous-day-23-45'), undefined);
   assert.equal(lineRunAlias(day, repeated), '09-00');
   assert.equal(lineRunAlias(secondDay, repeated), '09-00-2');
   assert.equal(lineRunFromAlias(repeated, '09-00-2')?.trip.id, 'day-2');

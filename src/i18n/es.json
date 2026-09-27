@@ -145,7 +145,6 @@
     "timesByStop": "Paradas",
     "showStopTimes": "Ver horas de las paradas",
     "hideStopTimes": "Ocultar horas de las paradas",
-    "previousDay": "Día anterior",
     "nextDay": "Día siguiente",
     "noLineTrips": "No hay viajes por este recorrido en la fecha elegida.",
     "selectRunHint": "Selecciona una hora para destacar su viaje. Vuelve a seleccionarla para quitar el destacado.",

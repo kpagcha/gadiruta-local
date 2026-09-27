@@ -145,7 +145,6 @@
     "timesByStop": "Stops",
     "showStopTimes": "Show stop times",
     "hideStopTimes": "Hide stop times",
-    "previousDay": "Previous day",
     "nextDay": "Next day",
     "noLineTrips": "No trips follow this path on the selected date.",
     "selectRunHint": "Select a time to highlight its trip.",

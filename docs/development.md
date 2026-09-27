@@ -22,9 +22,8 @@ description distinguishes them. Tests check the reviewed snapshot for unresolved
 data refresh. Source IDs are not accepted as line paths.
 Line pages accept optional `path`, `date`, `run`, `mode=trips`, and `view=stops` query values. A path alias names the
 exact ordered stop sequence by its endpoints, adding a stop count only when endpoints repeat. A
-dated view includes only trips following that sequence. The Stops view includes runs from the
-preceding service day that reach a stop after midnight. Trips lists runs starting on the selected
-service date, including those that finish the next day. A plain line URL defaults to today's schedule;
+dated view includes only trips following that sequence that start on the selected service date.
+Both Stops and Trips include their visits after midnight on the next day. A plain line URL defaults to today's schedule;
 `view=stops` keeps the date cleared. A `run` token names a departure time within the selected date
 and path, with a number when several buses share that time. `mode=trips` restores the trip list with
 the selected run expanded. These links use the saved snapshot's explicit service dates,

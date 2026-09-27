@@ -19,6 +19,7 @@ import {
   linePathAlias,
   lineRunAlias,
   lineRunFromAlias,
+  lineStopTimesAtStop,
   type DatedLineTrip,
 } from '../data/line-timetable.ts';
 import { clockTime } from '../data/journey-time.ts';
@@ -158,8 +159,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       ? undefined
       : visibleChoices.find((choice) => {
           const pattern = patterns[pathChoices.indexOf(choice)]!;
-          const scheduled = datedLineTrips(dataset, route.id, pattern, date);
-          return timetableView === 'trips' ? scheduled.some((run) => run.minuteOffset === 0) : scheduled.length > 0;
+          return datedLineTrips(dataset, route.id, pattern, date).length > 0;
         });
   // Keep a shared path when possible; a stop filter may temporarily choose another one.
   const activeChoice =
@@ -167,10 +167,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
   const trips =
     date !== null && activePattern !== undefined ? datedLineTrips(dataset, route.id, activePattern, date) : [];
-  // The stop timetable includes visits carried over from yesterday; the trip list starts on this date.
-  const listedTrips = trips.filter((run) => run.minuteOffset === 0);
-  const visibleTrips = timetableView === 'trips' ? listedTrips : trips;
-  const selectedRun = rawRun === null ? undefined : lineRunFromAlias(visibleTrips, rawRun);
+  const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
 
   /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
   function updateLineUrl(
@@ -325,14 +322,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                         aria-pressed={timetableView === view}
                         className={`motion-interactive inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-2 sm:px-3 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
                         onClick={() =>
-                          updateLineUrl(
-                            activeChoice.value,
-                            date,
-                            selectedRun === undefined || (view === 'trips' && selectedRun.minuteOffset < 0)
-                              ? null
-                              : rawRun,
-                            view,
-                          )
+                          updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
                         }
                         type="button"
                       >
@@ -355,7 +345,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                       )}
                     </p>
                   )}
-                  {visibleTrips.length === 0 ? (
+                  {trips.length === 0 ? (
                     <p className="mt-5 text-muted" role="status">
                       {t('explore.noLineTrips')}{' '}
                       <button
@@ -370,7 +360,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                     <LineTripList
                       dataset={dataset}
                       stops={activePattern.stops}
-                      trips={listedTrips}
+                      trips={trips}
                       query={stopQuery}
                       selectedRun={selectedRun}
                       onSelectRun={toggleRun}
@@ -439,8 +429,8 @@ function LineTripList({
         const key = `${run.trip.id}:${run.serviceDate}`;
         const first = run.trip.stopTimes[0]!;
         const last = run.trip.stopTimes[run.trip.stopTimes.length - 1]!;
-        const firstMinute = first.departureMinutes + run.minuteOffset;
-        const lastMinute = last.arrivalMinutes + run.minuteOffset;
+        const firstMinute = first.departureMinutes;
+        const lastMinute = last.arrivalMinutes;
         const expanded = selectedRun?.trip.id === run.trip.id && selectedRun.serviceDate === run.serviceDate;
         return (
           <li key={key} ref={expanded ? selectedRowRef : undefined} className="scroll-mt-4 border-b border-line pb-1">
@@ -452,7 +442,6 @@ function LineTripList({
             >
               <span className="tabular-nums">
                 {clockTime(firstMinute)}
-                {firstMinute < 0 && <span className="ml-1 text-xs text-muted">{t('explore.previousDay')}</span>}
                 {' → '}
                 {clockTime(lastMinute)}
               </span>
@@ -571,14 +560,8 @@ function LineStopTimeline({
               {group.stops.map((stop, groupIndex) => {
                 const index = group.startIndex + groupIndex;
                 const matched = filtering && matchesBrowseQuery(`${stop.name} ${group.locality ?? ''}`, query);
-                const times = trips
-                  ?.flatMap((item) => {
-                    const minute = item.trip.stopTimes[index]!.arrivalMinutes + item.minuteOffset;
-                    return minute >= 0 && minute < 1440 ? [{ minute, item }] : [];
-                  })
-                  .sort((a, b) => a.minute - b.minute || a.item.trip.id.localeCompare(b.item.trip.id));
-                const runMinute =
-                  run === undefined ? null : run.trip.stopTimes[index]!.arrivalMinutes + run.minuteOffset;
+                const times = trips === undefined ? undefined : lineStopTimesAtStop(trips, index);
+                const runMinute = run === undefined ? null : run.trip.stopTimes[index]!.arrivalMinutes;
                 const actionColor =
                   filtering && !matched
                     ? areaColored
@@ -634,7 +617,6 @@ function LineStopTimeline({
                             className={`mt-1 block text-sm text-muted tabular-nums ${filtering && !matched ? 'opacity-40' : ''}`}
                           >
                             <time dateTime={clockTime(runMinute)}>{clockTime(runMinute)}</time>
-                            {runMinute < 0 && ` · ${t('explore.previousDay')}`}
                             {runMinute >= 1440 && ` · ${t('explore.nextDay')}`}
                           </span>
                         )}

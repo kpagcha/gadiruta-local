@@ -2,20 +2,18 @@
  * Builds shareable links for exact line paths and finds their scheduled runs in the checked-in network.
  * The browser uses this after the static dataset loads; it does not contact the transit provider.
  */
-import { isCalendarDate, shiftCalendarDate } from './calendar-date.ts';
+import { isCalendarDate } from './calendar-date.ts';
 import { clockTime } from './journey-time.ts';
 import { lineUrl } from './line-url.ts';
 import { lineStopPatterns, stopLocality, type LineStopPattern } from './network-browse.ts';
 import type { NetworkDataset, NetworkRoute, NetworkTrip } from './network-schema.ts';
 import { urlSlug } from './url-alias.ts';
 
-export type DatedLineTrip = { trip: NetworkTrip; serviceDate: string; minuteOffset: 0 | -1440; firstMinute: number };
+export type DatedLineTrip = { trip: NetworkTrip; serviceDate: string; firstMinute: number };
 
-/** Name a run by its first departure on the selected day, including an overnight day marker. */
+/** Name a run by its first departure on the selected service date. */
 function departureAlias(run: DatedLineTrip): string {
-  const minute = run.trip.stopTimes[0]!.departureMinutes + run.minuteOffset;
-  const day = minute < 0 ? 'previous-day-' : minute >= 1440 ? 'next-day-' : '';
-  return `${day}${clockTime(minute).replace(':', '-')}`;
+  return clockTime(run.trip.stopTimes[0]!.departureMinutes).replace(':', '-');
 }
 
 /** Give one run a readable token, numbering buses that depart at the same time on this path. */
@@ -72,21 +70,21 @@ export function linePathAlias(
   return alias;
 }
 
-/** Build a line link for a journey's calendar travel day and exact stop sequence. */
+/** Build a line link for a journey's service date and exact stop sequence. */
 export function datedLineUrl(
   dataset: NetworkDataset,
   route: NetworkRoute,
   trip: NetworkTrip,
-  travelDate: string,
+  serviceDate: string,
 ): string {
   const patterns = lineStopPatterns(dataset, route.id);
   const pattern = patterns.find((item) => followsPath(trip, item));
   if (pattern === undefined) throw new Error(`Trip ${trip.id} has no ordered path on line ${route.id}.`);
-  const parameters = new URLSearchParams({ path: linePathAlias(dataset, pattern, patterns), date: travelDate });
+  const parameters = new URLSearchParams({ path: linePathAlias(dataset, pattern, patterns), date: serviceDate });
   return `${lineUrl(route, dataset.routes)}?${parameters.toString()}`;
 }
 
-/** List only runs following this stop sequence that visit at least one stop on the selected calendar day. */
+/** List runs that start this exact stop sequence on the selected service date. */
 export function datedLineTrips(
   dataset: NetworkDataset,
   routeId: string,
@@ -96,26 +94,25 @@ export function datedLineTrips(
   if (!isCalendarDate(date) || date < dataset.coverage.startDate || date > dataset.coverage.endDate) return [];
   // The saved service dates already include GTFS weekday rules and calendar exceptions.
   const datesByService = new Map(dataset.serviceDates.map((service) => [service.serviceId, new Set(service.dates)]));
-  const precedingDate = shiftCalendarDate(date, -1);
   const runs: DatedLineTrip[] = [];
   for (const trip of dataset.trips) {
     if (trip.routeId !== routeId || !followsPath(trip, pattern)) continue;
-    for (const [serviceDate, minuteOffset] of [
-      [date, 0],
-      [precedingDate, -1440],
-    ] as const) {
-      if (!datesByService.get(trip.serviceId)?.has(serviceDate)) continue;
-      const firstMinute = trip.stopTimes
-        .map((time) => time.arrivalMinutes + minuteOffset)
-        .find((minute) => minute >= 0 && minute < 1440);
-      if (firstMinute !== undefined) {
-        runs.push({ trip, serviceDate, minuteOffset, firstMinute });
-      }
-    }
+    if (!datesByService.get(trip.serviceId)?.has(date)) continue;
+    const firstMinute = trip.stopTimes[0]!.departureMinutes;
+    // A GTFS service day may contain starts after midnight; those belong to the next calendar date.
+    if (firstMinute < 1440) runs.push({ trip, serviceDate: date, firstMinute });
   }
   return runs.sort(
     (first, second) => first.firstMinute - second.firstMinute || first.trip.id.localeCompare(second.trip.id),
   );
+}
+
+/** Show one stop's times in scheduled run order, including visits after midnight. */
+export function lineStopTimesAtStop(
+  runs: readonly DatedLineTrip[],
+  stopIndex: number,
+): { minute: number; item: DatedLineTrip }[] {
+  return runs.map((item) => ({ minute: item.trip.stopTimes[stopIndex]!.arrivalMinutes, item }));
 }
 
 /** Keep the line URL date within the versioned snapshot while allowing historical links. */
