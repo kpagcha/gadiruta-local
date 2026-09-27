@@ -31,7 +31,6 @@ import { ExploreFilterInput } from './ExploreFilterInput';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
 import { StopTimelineTrack } from './StopTimelineTrack';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
 
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
@@ -125,6 +124,10 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       : rawView === 'stops'
         ? null
         : lineDateFromQuery(madridToday(), dataset.coverage);
+  const scheduledRuns: DatedLineTrip[][] =
+    date === null
+      ? patterns.map(() => [])
+      : patterns.map((pattern) => datedLineTrips(dataset, route.id, pattern, date));
   const matchingPatterns = filterLineStopPatterns(dataset, patterns, stopQuery);
   const pathEndpoints = patterns.map((pattern) => {
     const first = pattern.stops[0]!;
@@ -150,23 +153,21 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       value: linePathAlias(dataset, pattern, patterns),
       label: `${endpoints.full}${suffix}${variant}`,
       shortLabel: `${endpoints.short}${suffix}${variant}`,
+      direction: endpoints.short,
+      stopCount: pattern.stops.length,
+      variant,
+      runs: scheduledRuns[index]!,
     };
   });
   const visibleChoices = pathChoices.filter((_, index) => matchingPatterns.includes(patterns[index]!));
+  const visibleDirections = [...new Set(visibleChoices.map((choice) => choice.direction))];
   // A plain line link opens a path that actually runs today when one is available.
-  const firstScheduledChoice =
-    date === null
-      ? undefined
-      : visibleChoices.find((choice) => {
-          const pattern = patterns[pathChoices.indexOf(choice)]!;
-          return datedLineTrips(dataset, route.id, pattern, date).length > 0;
-        });
+  const firstScheduledChoice = date === null ? undefined : visibleChoices.find((choice) => choice.runs.length > 0);
   // Keep a shared path when possible; a stop filter may temporarily choose another one.
   const activeChoice =
     visibleChoices.find((choice) => choice.value === rawPath) ?? firstScheduledChoice ?? visibleChoices[0];
   const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
-  const trips =
-    date !== null && activePattern !== undefined ? datedLineTrips(dataset, route.id, activePattern, date) : [];
+  const trips = activeChoice?.runs ?? [];
   const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
 
   /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
@@ -248,31 +249,61 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </div>
             </div>
           ) : (
-            <div className="mt-5 flex max-w-170 flex-col gap-2">
-              <label className="text-sm font-semibold" htmlFor="line-path">
+            <div className="mt-5 max-w-170">
+              <p className="text-sm font-semibold" id="line-path-label">
                 {t('explore.path')}
-              </label>
-              <Select
-                items={visibleChoices}
-                value={activeChoice.value}
-                onValueChange={(value) => {
-                  if (value !== null) updateLineUrl(value, date);
-                }}
+              </p>
+              <div
+                aria-labelledby="line-path-label"
+                className={`mt-3 grid gap-5 ${visibleDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
+                role="group"
               >
-                <SelectTrigger
-                  className="min-h-11 rounded-xl border border-line-input bg-surface-input px-3 py-2 text-left text-sm focus:shadow-[var(--shadow-field-focus)]"
-                  id="line-path"
-                >
-                  <SelectValue className="min-w-0 truncate">{activeChoice.shortLabel}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {visibleChoices.map((choice) => (
-                    <SelectItem key={choice.value} value={choice.value}>
-                      {choice.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                {visibleDirections.map((direction, directionIndex) => (
+                  <div key={direction} aria-labelledby={`line-direction-${directionIndex}`} role="group">
+                    <h4 className="mb-2 text-sm font-semibold text-muted" id={`line-direction-${directionIndex}`}>
+                      {direction}
+                    </h4>
+                    <div className="grid gap-2">
+                      {visibleChoices
+                        .filter((choice) => choice.direction === direction)
+                        .map((choice) => {
+                          const departures = choice.runs.map((run) =>
+                            clockTime(run.trip.stopTimes[0]!.departureMinutes),
+                          );
+                          const more = departures.length - 4;
+                          return (
+                            <button
+                              key={choice.value}
+                              aria-pressed={choice.value === activeChoice.value}
+                              className={`motion-interactive flex min-h-14 min-w-0 flex-col justify-center gap-1 rounded-xl border px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                              onClick={() => updateLineUrl(choice.value, date)}
+                              type="button"
+                            >
+                              <span className="text-sm font-semibold">
+                                {t('explore.pathStopCount', { count: choice.stopCount })}
+                                {choice.variant}
+                              </span>
+                              {date !== null && (
+                                <span className="flex flex-wrap gap-x-2 text-xs text-muted tabular-nums">
+                                  {departures.length === 0 ? (
+                                    t('explore.noTripsOnDate')
+                                  ) : (
+                                    <>
+                                      {departures.slice(0, 4).map((departure, index) => (
+                                        <span key={index}>{departure}</span>
+                                      ))}
+                                      {more > 0 && <span>{t('explore.moreTrips', { count: more })}</span>}
+                                    </>
+                                  )}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           <div className="mt-5 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_16rem] desktop:gap-8">
