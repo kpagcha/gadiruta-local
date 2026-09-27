@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getRouteLabel } from '../data/network.ts';
 import {
@@ -13,8 +13,10 @@ import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-
 import { originSearchUrl } from '../data/search-url.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
 import { ExploreFilterInput } from './ExploreFilterInput';
+import { Icon } from './Icon';
 import { StopTimelineTrack } from './StopTimelineTrack';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { AppTooltip } from './ui/tooltip';
 
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
 function googleMapsStopUrl(stop: NetworkStop): string {
@@ -87,17 +89,31 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const [selectedPath, setSelectedPath] = useState('0');
   const patterns = useMemo(() => lineStopPatterns(dataset, route.id), [dataset, route.id]);
   const matchingPatterns = filterLineStopPatterns(dataset, patterns, stopQuery);
-  const pathChoices = patterns.map((pattern, index) => {
+  const pathEndpoints = patterns.map((pattern) => {
     const first = pattern.stops[0]!;
     const last = pattern.stops[pattern.stops.length - 1]!;
-    const sameEnds = patterns.filter(
-      (other) => other.stops[0]?.name === first.name && other.stops[other.stops.length - 1]?.name === last.name,
-    );
+    const firstLocality = stopLocality(dataset, first);
+    const lastLocality = stopLocality(dataset, last);
+    return {
+      full: `${first.name} → ${last.name}`,
+      short:
+        firstLocality !== null && lastLocality !== null && firstLocality !== lastLocality
+          ? `${firstLocality} → ${lastLocality}`
+          : `${first.name} → ${last.name}`,
+    };
+  });
+  const pathChoices = patterns.map((pattern, index) => {
+    const endpoints = pathEndpoints[index]!;
+    const sameEnds = patterns.filter((_, otherIndex) => pathEndpoints[otherIndex]?.short === endpoints.short);
     const sameLength = sameEnds.filter((other) => other.stops.length === pattern.stops.length);
     const suffix = sameEnds.length > 1 ? ` · ${t('explore.pathStopCount', { count: pattern.stops.length })}` : '';
     const variant =
       sameLength.length > 1 ? ` · ${t('explore.pathVariant', { number: sameLength.indexOf(pattern) + 1 })}` : '';
-    return { value: String(index), label: `${first.name} → ${last.name}${suffix}${variant}` };
+    return {
+      value: String(index),
+      label: `${endpoints.full}${suffix}${variant}`,
+      shortLabel: `${endpoints.short}${suffix}${variant}`,
+    };
   });
   const visibleChoices = pathChoices.filter((_, index) => matchingPatterns.includes(patterns[index]!));
   // Keep a manually selected path when possible; a filter may temporarily choose another one.
@@ -141,7 +157,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                   className="min-h-11 rounded-xl border border-line-input bg-surface-input px-3 py-2 text-left text-sm focus:shadow-[var(--shadow-field-focus)]"
                   id="line-path"
                 >
-                  <SelectValue className="min-w-0 truncate" />
+                  <SelectValue className="min-w-0 truncate">{activeChoice.shortLabel}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {visibleChoices.map((choice) => (
@@ -153,7 +169,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </Select>
             </div>
           ) : (
-            <h4 className="mt-5 font-semibold">{activeChoice.label}</h4>
+            <h4 className="mt-5 font-semibold">{activeChoice.shortLabel}</h4>
           )}
           <LineStopTimeline dataset={dataset} stops={activePattern.stops} query={stopQuery} />
         </>
@@ -173,54 +189,68 @@ function LineStopTimeline({
   query: string;
 }) {
   const { t } = useTranslation();
+  const filtering = query.trim() !== '';
   return (
     <ol className="mt-5 ml-2 max-w-170">
       {stops.map((stop, index) => {
         const locality = stopLocality(dataset, stop);
-        const filtering = query.trim() !== '';
+        const previousLocality = index === 0 ? null : stopLocality(dataset, stops[index - 1]!);
         const matched = filtering && matchesBrowseQuery(`${stop.name} ${locality ?? ''}`, query);
         const actionColor = filtering && !matched ? 'text-muted hover:text-accent' : 'text-accent';
         return (
-          <li key={`${stop.id}-${index}`} className="grid min-h-14 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
-            <StopTimelineTrack
-              first={index === 0}
-              last={index === stops.length - 1}
-              highlighted={!filtering || matched}
-              highlightStart={filtering || index === 0}
-              highlightEnd={filtering || index === stops.length - 1}
-            />
-            <div className={`flex min-w-0 items-start justify-between gap-3 pb-5 ${matched ? 'text-accent' : ''}`}>
-              <span className={`min-w-0 ${filtering && !matched ? 'opacity-70' : ''}`}>
-                <span className="block font-semibold">{stop.name}</span>
-                {locality !== null && (
-                  <span className={`block text-sm ${matched ? 'text-accent' : filtering ? 'text-ink' : 'text-muted'}`}>
-                    {locality}
-                  </span>
-                )}
-              </span>
-              <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold">
-                <a
-                  className={`${actionColor} underline underline-offset-4`}
-                  href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
-                  aria-label={t('explore.searchFromStop', { stop: stop.name })}
-                >
-                  {t('explore.search')}
-                </a>
-                <span aria-hidden="true" className="text-muted">
-                  |
+          <Fragment key={`${stop.id}-${index}`}>
+            {locality !== null && locality !== previousLocality && (
+              <li role="presentation" className="grid min-h-8 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
+                <span aria-hidden="true" className="relative self-stretch">
+                  {index > 0 && (
+                    <span
+                      className={`absolute -top-2 -bottom-2 left-1/2 w-0.5 -translate-x-1/2 ${filtering ? 'bg-line-brand' : 'bg-accent'}`}
+                    />
+                  )}
                 </span>
-                <a
-                  className={`${actionColor} underline underline-offset-4`}
-                  href={googleMapsStopUrl(stop)}
-                  aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {t('explore.map')}
-                </a>
-              </span>
-            </div>
-          </li>
+                <h4 className="self-center pb-1 text-xs font-bold tracking-[0.12em] text-muted uppercase">
+                  {locality}
+                </h4>
+              </li>
+            )}
+            <li className="grid min-h-14 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
+              <StopTimelineTrack
+                first={index === 0}
+                last={index === stops.length - 1}
+                highlighted={!filtering || matched}
+                highlightStart={filtering || index === 0}
+                highlightEnd={filtering || index === stops.length - 1}
+              />
+              <div className={`flex min-w-0 items-start justify-between gap-3 pb-5 ${matched ? 'text-accent' : ''}`}>
+                <span className={`min-w-0 ${filtering && !matched ? 'opacity-70' : ''}`}>
+                  <span className="block font-semibold">{stop.name}</span>
+                </span>
+                <span className="flex shrink-0 items-center">
+                  <AppTooltip content={t('explore.search')}>
+                    <a
+                      className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                      href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
+                      aria-label={t('explore.searchFromStop', { stop: stop.name })}
+                    >
+                      <Icon name="search" size={16} strokeWidth={1.8} />
+                    </a>
+                  </AppTooltip>
+                  <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
+                  <AppTooltip content={t('explore.map')}>
+                    <a
+                      className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
+                      href={googleMapsStopUrl(stop)}
+                      aria-label={t('journey.openStopInGoogleMaps', { stop: stop.name })}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <Icon name="stop" size={16} strokeWidth={1.8} />
+                    </a>
+                  </AppTooltip>
+                </span>
+              </div>
+            </li>
+          </Fragment>
         );
       })}
     </ol>
