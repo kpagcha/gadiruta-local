@@ -28,6 +28,9 @@ Both Stops and Trips include their visits after midnight on the next day. A plai
 and path, with a number when several buses share that time. `mode=trips` restores the trip list with
 the selected run expanded. These links use the saved snapshot's explicit service dates,
 not a generic weekday or holiday timetable.
+The draft `data/reviewed/ctan/line-path-labels.json` keys each affected line by its official short
+name and each exact stop sequence by its path URL alias. Check those keys after refreshing the
+network snapshot; a changed stop sequence can gain a different alias.
 
 CTAN, the regional transit data provider, supplies the timetable ZIP.
 
@@ -42,8 +45,10 @@ The ZIP uses GTFS, a common format for transit schedules. Each folder has one jo
 
 - `data/source/ctan/` holds the downloaded ZIP and saved research responses. Git ignores it; the app
   does not need it to run.
-- `data/reviewed/ctan/` holds checked-in decisions about CTAN stop locations. The builder needs
-  them when it regenerates the network file.
+- `data/reviewed/ctan/` holds checked-in decisions about CTAN stop locations and draft labels for
+  line paths with more than a simple outward and return pair. The builder needs the stop locations
+  when it regenerates the network file. The path labels are a review inventory; the app does not
+  read them yet.
 - `scripts/ctan/` contains the developer-only command and code that read those inputs, select Bay
   of Cádiz services, and write the finished network file. Its `research/` folder has optional
   location tools that run separately from a normal refresh.

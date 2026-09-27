@@ -1,0 +1,259 @@
+{
+  "lines": {
+    "M-033": {
+      "puerto-real-to-cadiz": { "en": "Puerto Real → Cádiz", "es": "Puerto Real → Cádiz" }
+    },
+    "M-037": {
+      "cadiz-to-campus-universitario": { "en": "Cádiz → Campus Universitario", "es": "Cádiz → Campus Universitario" }
+    },
+    "M-050": {
+      "cadiz-to-aeropuerto": { "en": "Cádiz → Aeropuerto", "es": "Cádiz → Aeropuerto" },
+      "jerez-to-cadiz": { "en": "Jerez → Cádiz", "es": "Jerez → Cádiz" },
+      "aeropuerto-to-cadiz": { "en": "Aeropuerto → Cádiz", "es": "Aeropuerto → Cádiz" },
+      "aeropuerto-to-jerez": { "en": "Aeropuerto → Jerez", "es": "Aeropuerto → Jerez" }
+    },
+    "M-052": {
+      "cadiz-to-jerez": { "en": "Cádiz → Jerez", "es": "Cádiz → Jerez" },
+      "aeropuerto-to-cadiz": { "en": "Aeropuerto → Cádiz", "es": "Aeropuerto → Cádiz" }
+    },
+    "M-053": {
+      "cadiz-to-aeropuerto": { "en": "Cádiz → Aeropuerto", "es": "Cádiz → Aeropuerto" },
+      "jerez-to-cadiz": { "en": "Jerez → Cádiz", "es": "Jerez → Cádiz" }
+    },
+    "M-060": {
+      "rota-to-cadiz": { "en": "Rota → Cádiz", "es": "Rota → Cádiz" },
+      "cadiz-to-rota": { "en": "Cádiz → Rota", "es": "Cádiz → Rota" },
+      "costa-ballena-rota-to-cadiz": {
+        "en": "Costa Ballena → Cádiz, via Rota",
+        "es": "Costa Ballena → Cádiz, por Rota"
+      }
+    },
+    "M-061": {
+      "cadiz-to-costa-ballena-rota": {
+        "en": "Cádiz → Costa Ballena, via Rota",
+        "es": "Cádiz → Costa Ballena, por Rota"
+      },
+      "cadiz-to-rota": { "en": "Cádiz → Rota", "es": "Cádiz → Rota" },
+      "costa-ballena-rota-to-cadiz": {
+        "en": "Costa Ballena → Cádiz, via Rota",
+        "es": "Costa Ballena → Cádiz, por Rota"
+      }
+    },
+    "M-120": {
+      "san-fernando-to-chiclana-12-stops": {
+        "en": "San Fernando → Chiclana",
+        "es": "San Fernando → Chiclana"
+      },
+      "chiclana-to-san-fernando-6-stops": {
+        "en": "Chiclana → San Fernando",
+        "es": "Chiclana → San Fernando"
+      },
+      "chiclana-to-san-fernando-7-stops": {
+        "en": "Chiclana → San Fernando, via Tres Caminos",
+        "es": "Chiclana → San Fernando, por Tres Caminos"
+      },
+      "san-fernando-to-chiclana-13-stops": {
+        "en": "San Fernando → Chiclana, via Tres Caminos",
+        "es": "San Fernando → Chiclana, por Tres Caminos"
+      }
+    },
+    "M-231": {
+      "campus-universitario-to-chiclana-13-stops": {
+        "en": "Campus Universitario → Chiclana, via Casines",
+        "es": "Campus Universitario → Chiclana, por Casines"
+      },
+      "chiclana-to-campus-universitario-7-stops": {
+        "en": "Chiclana → Campus Universitario",
+        "es": "Chiclana → Campus Universitario"
+      },
+      "chiclana-to-campus-universitario-14-stops": {
+        "en": "Chiclana → Campus Universitario, via Casines",
+        "es": "Chiclana → Campus Universitario, por Casines"
+      },
+      "campus-universitario-to-chiclana-7-stops": {
+        "en": "Campus Universitario → Chiclana",
+        "es": "Campus Universitario → Chiclana"
+      }
+    },
+    "M-250": {
+      "conil-to-jerez": { "en": "Conil → Jerez", "es": "Conil → Jerez" }
+    },
+    "M-330": {
+      "puerto-real-to-campus-universitario": {
+        "en": "Puerto Real → Campus Universitario",
+        "es": "Puerto Real → Campus Universitario"
+      }
+    },
+    "M-340": {
+      "campus-universitario-to-el-puerto-de-santa-maria": {
+        "en": "Campus Universitario → El Puerto de Santa María",
+        "es": "Campus Universitario → El Puerto de Santa María"
+      }
+    },
+    "M-352": {
+      "campus-universitario-to-jerez": { "en": "Campus Universitario → Jerez", "es": "Campus Universitario → Jerez" }
+    },
+    "M-561": {
+      "costa-ballena-rota-to-jerez-13-stops": {
+        "en": "Costa Ballena → Jerez, via Plaza del Caballo",
+        "es": "Costa Ballena → Jerez, por Plaza del Caballo"
+      },
+      "jerez-to-costa-ballena-rota-10-stops": {
+        "en": "Jerez → Costa Ballena",
+        "es": "Jerez → Costa Ballena"
+      },
+      "jerez-to-costa-ballena-rota-13-stops": {
+        "en": "Jerez → Costa Ballena, via Plaza del Caballo",
+        "es": "Jerez → Costa Ballena, por Plaza del Caballo"
+      },
+      "costa-ballena-rota-to-jerez-10-stops": {
+        "en": "Costa Ballena → Jerez",
+        "es": "Costa Ballena → Jerez"
+      }
+    },
+    "M-911": {
+      "cadiz-to-conil-11-stops": {
+        "en": "Cádiz → Conil, via Río Iro",
+        "es": "Cádiz → Conil, por Río Iro"
+      },
+      "conil-to-cadiz-12-stops": {
+        "en": "Conil → Cádiz, via Río Iro",
+        "es": "Conil → Cádiz, por Río Iro"
+      },
+      "cadiz-to-conil-10-stops": {
+        "en": "Cádiz → Conil",
+        "es": "Cádiz → Conil"
+      },
+      "conil-to-cadiz-11-stops": {
+        "en": "Conil → Cádiz",
+        "es": "Conil → Cádiz"
+      }
+    },
+    "M-914": {
+      "cadiz-to-conil": { "en": "Cádiz → Conil", "es": "Cádiz → Conil" }
+    },
+    "M-942": {
+      "cadiz-to-medina": { "en": "Cádiz → Medina, via El Berrueco", "es": "Cádiz → Medina, por El Berrueco" },
+      "medina-to-cadiz-11-stops": {
+        "en": "Medina → Cádiz",
+        "es": "Medina → Cádiz"
+      },
+      "medina-to-cadiz-12-stops": {
+        "en": "Medina → Cádiz, via El Berrueco",
+        "es": "Medina → Cádiz, por El Berrueco"
+      }
+    },
+    "M-947": {
+      "medina-to-chiclana-6-stops": {
+        "en": "Medina → Chiclana, via El Berrueco",
+        "es": "Medina → Chiclana, por El Berrueco"
+      },
+      "chiclana-to-medina-6-stops": {
+        "en": "Chiclana → Medina, via El Berrueco",
+        "es": "Chiclana → Medina, por El Berrueco"
+      },
+      "medina-to-chiclana-5-stops": {
+        "en": "Medina → Chiclana",
+        "es": "Medina → Chiclana"
+      },
+      "chiclana-to-medina-5-stops": {
+        "en": "Chiclana → Medina",
+        "es": "Chiclana → Medina"
+      }
+    },
+    "M-951": {
+      "jerez-to-arcos-6-stops": {
+        "en": "Jerez bus station → Arcos",
+        "es": "Estación de autobuses de Jerez → Arcos"
+      },
+      "arcos-to-jerez-6-stops": {
+        "en": "Arcos → Jerez bus station",
+        "es": "Arcos → Estación de autobuses de Jerez"
+      },
+      "arcos-to-jerez-10-stops": {
+        "en": "Arcos → Jerez hospital",
+        "es": "Arcos → Hospital de Jerez"
+      },
+      "jerez-to-arcos-10-stops": {
+        "en": "Jerez hospital → Arcos",
+        "es": "Hospital de Jerez → Arcos"
+      }
+    },
+    "M-952": {
+      "jerez-to-arcos-6-stops": {
+        "en": "Jerez bus station → Arcos",
+        "es": "Estación de autobuses de Jerez → Arcos"
+      },
+      "arcos-to-jerez": {
+        "en": "Arcos → Jerez bus station",
+        "es": "Arcos → Estación de autobuses de Jerez"
+      },
+      "jerez-to-arcos-10-stops": {
+        "en": "Jerez hospital → Arcos",
+        "es": "Hospital de Jerez → Arcos"
+      }
+    },
+    "M-953": {
+      "jerez-to-arcos-6-stops": {
+        "en": "Jerez bus station → Arcos",
+        "es": "Estación de autobuses de Jerez → Arcos"
+      },
+      "arcos-to-jerez-6-stops": {
+        "en": "Arcos → Jerez bus station",
+        "es": "Arcos → Estación de autobuses de Jerez"
+      },
+      "arcos-to-jerez-10-stops": {
+        "en": "Arcos → Jerez hospital",
+        "es": "Arcos → Hospital de Jerez"
+      },
+      "jerez-to-arcos-10-stops": {
+        "en": "Jerez hospital → Arcos",
+        "es": "Hospital de Jerez → Arcos"
+      }
+    },
+    "M-960": {
+      "cadiz-to-chipiona-26-stops": {
+        "en": "Cádiz → Chipiona, via Centro P. Puerto",
+        "es": "Cádiz → Chipiona, por Centro P. Puerto"
+      },
+      "chipiona-to-cadiz-26-stops": {
+        "en": "Chipiona → Cádiz, via Centro P. Puerto",
+        "es": "Chipiona → Cádiz, por Centro P. Puerto"
+      },
+      "cadiz-to-chipiona-24-stops": {
+        "en": "Cádiz → Chipiona",
+        "es": "Cádiz → Chipiona"
+      },
+      "chipiona-to-cadiz-24-stops": {
+        "en": "Chipiona → Cádiz",
+        "es": "Chipiona → Cádiz"
+      },
+      "chipiona-to-cadiz-27-stops": {
+        "en": "Chipiona → Cádiz, via Centro P. Puerto and Recinto Ferial",
+        "es": "Chipiona → Cádiz, por Centro P. Puerto y Recinto Ferial"
+      }
+    },
+    "M-961": {
+      "chipiona-to-cadiz": { "en": "Chipiona → Cádiz", "es": "Chipiona → Cádiz" },
+      "cadiz-to-chipiona-20-stops": {
+        "en": "Cádiz → Chipiona",
+        "es": "Cádiz → Chipiona"
+      },
+      "cadiz-to-chipiona-22-stops": {
+        "en": "Cádiz → Chipiona, via Centro P. Puerto",
+        "es": "Cádiz → Chipiona, por Centro P. Puerto"
+      }
+    },
+    "M-967": {
+      "chipiona-to-cadiz": { "en": "Chipiona → Cádiz", "es": "Chipiona → Cádiz" },
+      "cadiz-to-chipiona-23-stops": {
+        "en": "Cádiz → Chipiona",
+        "es": "Cádiz → Chipiona"
+      },
+      "cadiz-to-chipiona-24-stops": {
+        "en": "Cádiz → Chipiona, via Recinto Ferial",
+        "es": "Cádiz → Chipiona, por Recinto Ferial"
+      }
+    }
+  }
+}
