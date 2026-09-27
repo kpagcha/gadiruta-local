@@ -160,12 +160,15 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     };
   });
   const visibleChoices = pathChoices.filter((_, index) => matchingPatterns.includes(patterns[index]!));
-  const visibleDirections = [...new Set(visibleChoices.map((choice) => choice.direction))];
+  // A shared path can still explain an empty date; the picker offers only paths with departures.
+  const listedChoices = date === null ? visibleChoices : visibleChoices.filter((choice) => choice.runs.length > 0);
+  const listedDirections = [...new Set(listedChoices.map((choice) => choice.direction))];
   // A plain line link opens a path that actually runs today when one is available.
   const firstScheduledChoice = date === null ? undefined : visibleChoices.find((choice) => choice.runs.length > 0);
   // Keep a shared path when possible; a stop filter may temporarily choose another one.
   const activeChoice =
     visibleChoices.find((choice) => choice.value === rawPath) ?? firstScheduledChoice ?? visibleChoices[0];
+  const singleListedChoiceIsActive = listedChoices.length === 1 && listedChoices[0]?.value === activeChoice?.value;
   const activePattern = activeChoice === undefined ? undefined : patterns[pathChoices.indexOf(activeChoice)];
   const trips = activeChoice?.runs ?? [];
   const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
@@ -226,15 +229,15 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
         <p className="mt-5 text-muted">{t('explore.noMatches')}</p>
       ) : (
         <>
-          {visibleChoices.length === 1 ? (
+          {listedChoices.length === 0 ? null : singleListedChoiceIsActive ? (
             <h4 className="mt-5 font-semibold">{activeChoice.shortLabel}</h4>
-          ) : patterns.length === 2 ? (
+          ) : patterns.length === 2 || listedChoices.length === 1 ? (
             <div className="mt-5 flex max-w-170 flex-col gap-2">
               <p className="text-sm font-semibold" id="line-path-label">
                 {t('explore.path')}
               </p>
               <div aria-labelledby="line-path-label" className="grid gap-2 sm:grid-cols-2" role="group">
-                {visibleChoices.map((choice) => (
+                {listedChoices.map((choice) => (
                   <button
                     key={choice.value}
                     aria-label={choice.label}
@@ -255,16 +258,16 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               </p>
               <div
                 aria-labelledby="line-path-label"
-                className={`mt-3 grid gap-5 ${visibleDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
+                className={`mt-3 grid gap-5 ${listedDirections.length > 1 ? 'sm:grid-cols-2' : ''}`}
                 role="group"
               >
-                {visibleDirections.map((direction, directionIndex) => (
+                {listedDirections.map((direction, directionIndex) => (
                   <div key={direction} aria-labelledby={`line-direction-${directionIndex}`} role="group">
                     <h4 className="mb-2 text-sm font-semibold text-muted" id={`line-direction-${directionIndex}`}>
                       {direction}
                     </h4>
                     <div className="grid gap-2">
-                      {visibleChoices
+                      {listedChoices
                         .filter((choice) => choice.direction === direction)
                         .map((choice) => {
                           const departures = choice.runs.map((run) =>
@@ -285,16 +288,10 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                               </span>
                               {date !== null && (
                                 <span className="flex flex-wrap gap-x-2 text-xs text-muted tabular-nums">
-                                  {departures.length === 0 ? (
-                                    t('explore.noTripsOnDate')
-                                  ) : (
-                                    <>
-                                      {departures.slice(0, 4).map((departure, index) => (
-                                        <span key={index}>{departure}</span>
-                                      ))}
-                                      {more > 0 && <span>{t('explore.moreTrips', { count: more })}</span>}
-                                    </>
-                                  )}
+                                  {departures.slice(0, 4).map((departure, index) => (
+                                    <span key={index}>{departure}</span>
+                                  ))}
+                                  {more > 0 && <span>{t('explore.moreTrips', { count: more })}</span>}
                                 </span>
                               )}
                             </button>

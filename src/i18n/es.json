@@ -136,7 +136,6 @@
     "path": "Recorrido",
     "pathStopCount": "{{count}} paradas",
     "pathVariant": "Variante {{number}}",
-    "noTripsOnDate": "Sin viajes en esta fecha",
     "moreTrips": "+{{count}} más",
     "timetable": "Horario",
     "chooseDate": "Elegir fecha",

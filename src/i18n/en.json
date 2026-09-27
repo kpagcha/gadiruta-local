@@ -136,7 +136,6 @@
     "path": "Path",
     "pathStopCount": "{{count}} stops",
     "pathVariant": "Variant {{number}}",
-    "noTripsOnDate": "No trips on this date",
     "moreTrips": "+{{count}} more",
     "timetable": "Timetable",
     "chooseDate": "Choose date",
