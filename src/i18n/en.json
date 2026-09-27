@@ -152,7 +152,7 @@
     "clearRunSelection": "Clear highlight",
     "highlightRunAtStop": "Select the trip passing {{stop}} at {{time}}",
     "invalidRunLink": "This trip is not scheduled on the selected date and path.",
-    "invalidLineLink": "This line link has an invalid path or date. Choose a path or date below.",
+    "invalidLineLink": "This line link has an invalid path, date, or view. Choose a path or date below.",
     "todayUnavailable": "Today's timetable is outside the saved dates. Choose a covered date.",
     "stopFilterPlaceholder": "Stop or area",
     "noMatches": "No matches in this list.",

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { useTranslation } from 'react-i18next';
 import { madridToday } from '../data/calendar-date.ts';
@@ -102,7 +102,6 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const { t } = useTranslation();
   const [stopQuery, setStopQuery] = useState('');
   const [urlSearch, setUrlSearch] = useState(() => window.location.search);
-  const [timetableView, setTimetableView] = useState<'trips' | 'stops'>('stops');
   const patterns = useMemo(() => lineStopPatterns(dataset, route.id), [dataset, route.id]);
   useEffect(() => {
     /** Restore the line's path and date from a shared link or browser history. */
@@ -116,7 +115,9 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const rawDate = parameters.get('date');
   const rawPath = parameters.get('path');
   const rawView = parameters.get('view');
+  const rawMode = parameters.get('mode');
   const rawRun = parameters.get('run');
+  const timetableView = rawMode === 'trips' ? 'trips' : 'stops';
   const date =
     rawDate !== null
       ? lineDateFromQuery(rawDate, dataset.coverage)
@@ -167,13 +168,20 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     date !== null && activePattern !== undefined ? datedLineTrips(dataset, route.id, activePattern, date) : [];
   const selectedRun = rawRun === null ? undefined : lineRunFromAlias(trips, rawRun);
 
-  /** Keep the selected path, date, and optional run in a shareable line URL. */
-  function updateLineUrl(path: string, nextDate: string | null, runAlias: string | null = null) {
+  /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
+  function updateLineUrl(
+    path: string,
+    nextDate: string | null,
+    runAlias: string | null = null,
+    nextMode: 'trips' | 'stops' = timetableView,
+  ) {
     const next = new URLSearchParams({ path });
     if (nextDate !== null) next.set('date', nextDate);
     else next.set('view', 'stops');
     if (nextDate !== null && runAlias !== null) next.set('run', runAlias);
+    if (nextDate !== null && nextMode === 'trips') next.set('mode', 'trips');
     const search = `?${next.toString()}`;
+    if (search === window.location.search) return;
     window.history.pushState(null, '', `${window.location.pathname}${search}`);
     setUrlSearch(search);
   }
@@ -195,7 +203,8 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       )}
       {(rawDate !== null && date === null) ||
       (rawPath !== null && !pathChoices.some((choice) => choice.value === rawPath)) ||
-      (rawView !== null && (rawView !== 'stops' || rawDate !== null)) ? (
+      (rawView !== null && (rawView !== 'stops' || rawDate !== null)) ||
+      (rawMode !== null && rawMode !== 'trips' && rawMode !== 'stops') ? (
         <p className="mt-4 text-sm text-warning" role="alert">
           {t('explore.invalidLineLink')}
         </p>
@@ -311,7 +320,9 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                         key={view}
                         aria-pressed={timetableView === view}
                         className={`motion-interactive inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-1 text-xs leading-4 font-semibold first:border-r first:border-line-input focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-accent sm:flex-none sm:gap-2 sm:px-3 sm:text-sm ${timetableView === view ? 'bg-surface-active text-accent' : 'text-ink hover:bg-surface-hover'}`}
-                        onClick={() => setTimetableView(view)}
+                        onClick={() =>
+                          updateLineUrl(activeChoice.value, date, selectedRun === undefined ? null : rawRun, view)
+                        }
                         type="button"
                       >
                         <Icon name={view === 'stops' ? 'listClock' : 'timeline'} size={16} className="shrink-0" />
@@ -398,6 +409,19 @@ function LineTripList({
   onSelectRun: (run: DatedLineTrip) => void;
 }) {
   const { t } = useTranslation();
+  const selectedRowRef = useRef<HTMLLIElement>(null);
+  const selectedKey = selectedRun === undefined ? null : `${selectedRun.trip.id}:${selectedRun.serviceDate}`;
+  useEffect(() => {
+    if (selectedKey === null) return;
+    // Wait for the expanded timeline to render before placing its trip at the viewport top.
+    const frame = requestAnimationFrame(() => {
+      selectedRowRef.current?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedKey]);
   return (
     <ol className="mt-5 max-w-170 space-y-1">
       {trips.map((run) => {
@@ -408,7 +432,7 @@ function LineTripList({
         const lastMinute = last.arrivalMinutes + run.minuteOffset;
         const expanded = selectedRun?.trip.id === run.trip.id && selectedRun.serviceDate === run.serviceDate;
         return (
-          <li key={key} className="border-b border-line pb-1">
+          <li key={key} ref={expanded ? selectedRowRef : undefined} className="scroll-mt-4 border-b border-line pb-1">
             <button
               aria-expanded={expanded}
               className={`motion-interactive flex min-h-14 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left font-semibold hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${expanded ? 'text-accent' : ''}`}
