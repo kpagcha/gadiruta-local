@@ -494,12 +494,13 @@ function LineStopTimeline({
                     : stopColor;
                 return (
                   <li key={`${stop.id}-${index}`} className="grid min-h-14 grid-cols-[0.75rem_minmax(0,1fr)] gap-x-3">
+                    {/* Search fades stop content while the physical line remains continuous. */}
                     <StopTimelineTrack
                       first={index === 0}
                       last={index === stops.length - 1}
-                      highlighted={!filtering || matched}
-                      highlightStart={filtering || index === 0}
-                      highlightEnd={filtering || index === stops.length - 1}
+                      highlighted
+                      highlightStart={index === 0}
+                      highlightEnd={index === stops.length - 1}
                       areaColored={areaColored}
                     />
                     <div className="flex min-w-0 items-start justify-between gap-3 pb-2">
