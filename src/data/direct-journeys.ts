@@ -57,6 +57,58 @@ function permitsAction(time: NetworkStopTime, action: 'pickup' | 'dropOff'): boo
   return (action === 'pickup' ? time.pickupType : time.dropOffType) !== 1;
 }
 
+/** Build a date-independent check for a ride between two choices on one saved trip. */
+export function createDirectPathChecker(
+  dataset: NetworkDataset,
+): (origin: LocationOption, destination: LocationOption) => boolean {
+  const onwardByStopId = new Map<string, Set<string>>();
+  const stopIdsByMunicipality = new Map<string, string[]>();
+  const stopIdsByArea = new Map<string, string[]>();
+
+  for (const stop of dataset.stops) {
+    if (stop.municipalityId !== null) {
+      const ids = stopIdsByMunicipality.get(stop.municipalityId) ?? [];
+      ids.push(stop.id);
+      stopIdsByMunicipality.set(stop.municipalityId, ids);
+    }
+    if (stop.localAreaId !== null) {
+      const ids = stopIdsByArea.get(stop.localAreaId) ?? [];
+      ids.push(stop.id);
+      stopIdsByArea.set(stop.localAreaId, ids);
+    }
+  }
+
+  // Keep visits on the same trip and in travel order; sharing a route alone is not enough.
+  for (const trip of dataset.trips) {
+    for (const [boardingIndex, boarding] of trip.stopTimes.entries()) {
+      if (!permitsAction(boarding, 'pickup')) continue;
+      for (const alighting of trip.stopTimes.slice(boardingIndex + 1)) {
+        if (!permitsAction(alighting, 'dropOff') || alighting.arrivalMinutes < boarding.departureMinutes) continue;
+        const onward = onwardByStopId.get(boarding.stopId) ?? new Set<string>();
+        onward.add(alighting.stopId);
+        onwardByStopId.set(boarding.stopId, onward);
+      }
+    }
+  }
+
+  /** Expand an exact stop or reviewed place to the physical stops it contains. */
+  function stopIdsFor(location: LocationOption): readonly string[] {
+    if (location.kind === 'stop') return [location.id];
+    if (location.municipalityId !== undefined) return stopIdsByMunicipality.get(location.municipalityId) ?? [];
+    return location.localAreaId === undefined ? [] : (stopIdsByArea.get(location.localAreaId) ?? []);
+  }
+
+  return (origin, destination) => {
+    const destinationIds = new Set(stopIdsFor(destination));
+    for (const stopId of stopIdsFor(origin)) {
+      for (const nextStopId of onwardByStopId.get(stopId) ?? []) {
+        if (destinationIds.has(nextStopId)) return true;
+      }
+    }
+    return false;
+  };
+}
+
 /** List the stops where this trip can end after the chosen boarding visit. */
 export function alightableTripStopIndices(trip: NetworkTrip, boardingIndex: number): number[] {
   const boarding = trip.stopTimes[boardingIndex];

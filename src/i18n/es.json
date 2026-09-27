@@ -86,6 +86,8 @@
     "resultCount_one": "{{count}} sugerencia",
     "resultCount_other": "{{count}} sugerencias",
     "noResults": "No hay lugares ni paradas que coincidan.",
+    "noDirectSuggestions": "No hay lugares ni paradas coincidentes conectados por un viaje directo.",
+    "noDirectPlaces": "No hay lugares conectados por un viaje directo.",
     "loading": "Cargando paradas locales…",
     "error": "No se pudieron cargar las paradas. Actualiza la página para volver a intentarlo.",
     "travelDate": "Fecha de viaje",

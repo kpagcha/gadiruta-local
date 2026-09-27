@@ -23,6 +23,8 @@ interface LocationFieldProps {
   municipalities: readonly LocationMunicipality[];
   disabled: boolean;
   invalid: boolean;
+  isAvailable: (choice: LocationOption) => boolean;
+  isFiltered: boolean;
   value: LocationFieldValue;
   onChange: (value: LocationFieldValue, committed: boolean) => void;
 }
@@ -36,6 +38,8 @@ export function LocationField({
   municipalities,
   disabled,
   invalid,
+  isAvailable,
+  isFiltered,
   value,
   onChange,
 }: LocationFieldProps) {
@@ -65,9 +69,9 @@ export function LocationField({
   // Assign keyboard positions once, including each group's expand/collapse button.
   let visibleCount = 0;
   const groups: SuggestionGroup[] = [
-    { id: 'places', label: t('search.places'), choices: results.places },
-    { id: 'areas', label: t('search.areas'), choices: results.areas },
-    { id: 'stops', label: t('search.stops'), choices: results.stops },
+    { id: 'places', label: t('search.places'), choices: results.places.filter(isAvailable) },
+    { id: 'areas', label: t('search.areas'), choices: results.areas.filter(isAvailable) },
+    { id: 'stops', label: t('search.stops'), choices: results.stops.filter(isAvailable) },
   ]
     .filter((group) => group.choices.length > 0)
     .map((group) => {
@@ -288,6 +292,8 @@ export function LocationField({
         id={id}
         label={label}
         municipalities={municipalities}
+        isAvailable={isAvailable}
+        isFiltered={isFiltered}
         isOpen={pickerOpen}
         step={pickerStep}
         pendingChoice={pendingChoice}
@@ -300,6 +306,7 @@ export function LocationField({
           groups={groups}
           totalResults={totalResults}
           isWaitingForResults={isWaitingForResults}
+          isFiltered={isFiltered}
           resultRefs={resultRefs}
           onSelect={selectSuggestion}
           onResultKeyDown={handleResultKeyDown}

@@ -86,6 +86,8 @@
     "resultCount_one": "{{count}} suggestion",
     "resultCount_other": "{{count}} suggestions",
     "noResults": "No matching places or stops.",
+    "noDirectSuggestions": "No matching places or stops connected by a direct trip.",
+    "noDirectPlaces": "No places connected by a direct trip.",
     "loading": "Loading local stops…",
     "error": "Stops could not load. Refresh the page to try again.",
     "travelDate": "Travel date",

@@ -6,7 +6,8 @@ task is simple: choose where to board and where to get off, then see which direc
 ## What people can do today
 
 - Search between familiar places or choose an exact bus stop. A place covers an area; a stop is one
-  boarding point.
+  boarding point. Once one end is chosen, the other end shows only locations connected by a direct
+  trip in the saved network, in the selected direction. A particular travel date may still have no service.
 - Choose a travel date and, if useful, a departure time. Results come from a saved timetable, so
   they show scheduled services rather than live arrivals.
 - Share a search link or return to a recent search.

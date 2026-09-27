@@ -20,6 +20,7 @@ export function LocationSuggestions({
   groups,
   totalResults,
   isWaitingForResults,
+  isFiltered,
   resultRefs,
   onSelect,
   onResultKeyDown,
@@ -28,6 +29,7 @@ export function LocationSuggestions({
   groups: readonly SuggestionGroup[];
   totalResults: number;
   isWaitingForResults: boolean;
+  isFiltered: boolean;
   resultRefs: RefObject<Array<HTMLButtonElement | null>>;
   onSelect: (choice: LocationOption) => void;
   onResultKeyDown: (event: KeyboardEvent<HTMLButtonElement>, index: number) => void;
@@ -47,7 +49,9 @@ export function LocationSuggestions({
         </p>
       )}
       {!isWaitingForResults && totalResults === 0 ? (
-        <p className="px-3 py-3 text-sm text-muted">{t('search.noResults')}</p>
+        <p className="px-3 py-3 text-sm text-muted">
+          {t(isFiltered ? 'search.noDirectSuggestions' : 'search.noResults')}
+        </p>
       ) : totalResults > 0 ? (
         <div className="max-h-[min(28rem,60vh)] overflow-y-auto" inert={isWaitingForResults}>
           {groups.map((group) => {

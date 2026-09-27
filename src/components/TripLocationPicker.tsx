@@ -5,6 +5,7 @@ import { createLocationMunicipalities, isSameLocationChoice, type LocationOption
 import { madridToday } from '../data/calendar-date.ts';
 import { currentMadridQuarterHour } from '../data/journey-time.ts';
 import type { TripSearchDraft, JourneySearch } from '../data/journey-search.ts';
+import { createDirectPathChecker } from '../data/direct-journeys.ts';
 import type { NetworkDatasetState } from '../hooks/use-network-dataset.ts';
 import { LocationField } from './LocationField';
 import { JourneyDatePill } from './JourneyDatePill';
@@ -35,16 +36,25 @@ export function TripLocationPicker({
 }) {
   const { t } = useTranslation();
   const disabled = state.status !== 'ready';
+  const dataset = state.status === 'ready' ? state.dataset : null;
   const municipalities = useMemo(
-    () => (state.status === 'ready' ? createLocationMunicipalities(options, state.dataset) : []),
-    [options, state],
+    () => (dataset === null ? [] : createLocationMunicipalities(options, dataset)),
+    [options, dataset],
   );
+  const hasDirectPath = useMemo(() => (dataset === null ? null : createDirectPathChecker(dataset)), [dataset]);
   const swapDisabled = disabled || (!draft.origin.text && !draft.destination.text);
   const coverage = state.status === 'ready' ? state.dataset.coverage : null;
   const today = madridToday();
   const earliestDate = coverage === null ? draft.date : coverage.startDate > today ? coverage.startDate : today;
   const departureDisabled = disabled || (coverage !== null && earliestDate > coverage.endDate);
   const sameLocation = isSameLocationChoice(draft.origin.choice, draft.destination.choice);
+
+  /** Filter one field against the other selected end without using a date or time cutoff. */
+  function isAvailable(choice: LocationOption, other: LocationOption | null, field: 'origin' | 'destination') {
+    if (other === null) return true;
+    if (isSameLocationChoice(choice, other) || hasDirectPath === null) return false;
+    return field === 'origin' ? hasDirectPath(choice, other) : hasDirectPath(other, choice);
+  }
 
   /** Update edited text immediately, and search once a choice or time is committed. */
   function changeDraft(nextDraft: TripSearchDraft, committed: boolean) {
@@ -85,6 +95,8 @@ export function TripLocationPicker({
                 disabled={disabled}
                 id="origin"
                 invalid={sameLocation}
+                isAvailable={(choice) => isAvailable(choice, draft.destination.choice, 'origin')}
+                isFiltered={draft.destination.choice !== null}
                 label={t('search.origin')}
                 placeholder={t('search.originPlaceholder')}
                 municipalities={municipalities}
@@ -98,6 +110,8 @@ export function TripLocationPicker({
                 disabled={disabled}
                 id="destination"
                 invalid={sameLocation}
+                isAvailable={(choice) => isAvailable(choice, draft.origin.choice, 'destination')}
+                isFiltered={draft.origin.choice !== null}
                 label={t('search.destination')}
                 placeholder={t('search.destinationPlaceholder')}
                 municipalities={municipalities}

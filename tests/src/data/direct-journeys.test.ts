@@ -5,6 +5,7 @@ import { madridToday } from '../../../src/data/calendar-date.ts';
 import {
   alightableTripStopIndices,
   boardableTripStopIndices,
+  createDirectPathChecker,
   findDirectJourneys,
 } from '../../../src/data/direct-journeys.ts';
 import type { NetworkDataset } from '../../../src/data/network-schema.ts';
@@ -83,6 +84,56 @@ test('returns one trip card with reachable alternatives and respects stop direct
     findDirectJourneys(dataset, '2026-09-22', exactB, exactA).later.map((journey) => journey.trip.id),
     ['reverse'],
   );
+});
+
+test('direct choice paths include intermediate stops but follow one trip in travel order', () => {
+  const morningOnly = { ...dataset, trips: [dataset.trips[0]!] };
+  const hasPath = createDirectPathChecker(morningOnly);
+  const intermediate: LocationOption = { kind: 'stop', id: 'a2', name: 'A2', routeLabels: [] };
+  assert.equal(hasPath(exactA, intermediate), true);
+  assert.equal(hasPath(intermediate, exactB), true);
+  assert.equal(hasPath(cadiz, rota), true);
+  assert.equal(hasPath(rota, cadiz), false);
+  assert.equal(hasPath(exactB, exactA), false);
+});
+
+test('sharing a route across separate trips does not make a direct path', () => {
+  const disconnected: NetworkDataset = {
+    ...dataset,
+    trips: [
+      { id: 'first', routeId: 'line', serviceId: 'weekday', stopTimes: [time('a', 480), time('road', 500)] },
+      { id: 'second', routeId: 'line', serviceId: 'weekday', stopTimes: [time('road', 520), time('b', 540)] },
+    ],
+  };
+  const hasPath = createDirectPathChecker(disconnected);
+  assert.equal(hasPath(exactA, exactB), false);
+  assert.equal(hasPath(exactA, { kind: 'stop', id: 'road', name: 'Road', routeLabels: [] }), true);
+});
+
+test('direct choices respect pickup, drop-off, and narrower place boundaries', () => {
+  const restricted: NetworkDataset = {
+    ...dataset,
+    localAreas: [
+      { id: 'town', name: 'Town', municipalityId: 'cadiz', referencePoint: null },
+      { id: 'suburb', name: 'Suburb', municipalityId: 'cadiz', referencePoint: null },
+    ],
+    trips: [
+      { id: 'no-pickup', routeId: 'line', serviceId: 'weekday', stopTimes: [time('a', 480, 1), time('b', 500)] },
+      { id: 'no-dropoff', routeId: 'line', serviceId: 'weekday', stopTimes: [time('a', 520), time('b', 540, 0, 1)] },
+      { id: 'suburb-only', routeId: 'line', serviceId: 'weekday', stopTimes: [time('a2', 560), time('b', 600)] },
+    ],
+    stops: dataset.stops.map((item) =>
+      item.id === 'a' ? { ...item, localAreaId: 'town' } : item.id === 'a2' ? { ...item, localAreaId: 'suburb' } : item,
+    ),
+    serviceDates: [{ serviceId: 'weekday', dates: [] }],
+  };
+  const hasPath = createDirectPathChecker(restricted);
+  const town: LocationOption = { kind: 'place', id: 'town', name: 'Town', localAreaId: 'town' };
+  const suburb: LocationOption = { kind: 'place', id: 'suburb', name: 'Suburb', localAreaId: 'suburb' };
+  assert.equal(hasPath(exactA, exactB), false);
+  assert.equal(hasPath(town, rota), false);
+  assert.equal(hasPath(suburb, rota), true);
+  assert.equal(hasPath(cadiz, rota), true);
 });
 
 test('uses resolved service dates and includes after-midnight boarding from yesterday', () => {

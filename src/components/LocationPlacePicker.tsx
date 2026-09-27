@@ -10,6 +10,8 @@ export function LocationPlacePicker({
   id,
   label,
   municipalities,
+  isAvailable,
+  isFiltered,
   isOpen,
   step,
   pendingChoice,
@@ -20,6 +22,8 @@ export function LocationPlacePicker({
   id: string;
   label: string;
   municipalities: readonly LocationMunicipality[];
+  isAvailable: (choice: LocationOption) => boolean;
+  isFiltered: boolean;
   isOpen: boolean;
   step: 'municipalities' | 'areas';
   pendingChoice: LocationOption | null;
@@ -30,10 +34,6 @@ export function LocationPlacePicker({
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const firstChoiceRef = useRef<HTMLButtonElement>(null);
-  /** Focus the active choice after opening or changing picker steps. */
-  useEffect(() => {
-    if (isOpen) firstChoiceRef.current?.focus();
-  }, [isOpen, step]);
   const selectedMunicipality = municipalities.find(
     (municipality) =>
       pendingChoice?.kind === 'place' &&
@@ -44,6 +44,24 @@ export function LocationPlacePicker({
     selectedAreaId === 'all'
       ? t('search.allAreas')
       : (selectedMunicipality?.areas.find((area) => area.id === selectedAreaId)?.name ?? t('search.allAreas'));
+  const visibleMunicipalities = municipalities.filter((municipality) => isAvailable(municipality.choice));
+  const visibleAreas = selectedMunicipality
+    ? [
+        { id: 'all', name: t('search.allAreas'), choice: selectedMunicipality.choice },
+        ...selectedMunicipality.areas,
+      ].filter((area) => isAvailable(area.choice))
+    : [];
+  const focusedMunicipalityId = visibleMunicipalities.some(
+    (municipality) => municipality.id === selectedMunicipality?.id,
+  )
+    ? selectedMunicipality?.id
+    : visibleMunicipalities[0]?.id;
+  const focusedAreaId = visibleAreas.some((area) => area.id === selectedAreaId) ? selectedAreaId : visibleAreas[0]?.id;
+
+  /** Focus the first available choice after opening or changing picker steps. */
+  useEffect(() => {
+    if (isOpen) firstChoiceRef.current?.focus();
+  }, [isOpen, step, focusedMunicipalityId, focusedAreaId]);
 
   return (
     <AnimatePresence>
@@ -69,14 +87,15 @@ export function LocationPlacePicker({
                 transition={{ duration: 0.1 }}
                 onAnimationComplete={() => firstChoiceRef.current?.focus()}
               >
-                {municipalities.map((municipality, index) => (
+                {visibleMunicipalities.length === 0 && (
+                  <p className="px-3 py-3 text-sm text-muted" role="status">
+                    {t(isFiltered ? 'search.noDirectPlaces' : 'search.noResults')}
+                  </p>
+                )}
+                {visibleMunicipalities.map((municipality) => (
                   <button
                     key={municipality.id}
-                    ref={
-                      municipality.id === selectedMunicipality?.id || (!selectedMunicipality && index === 0)
-                        ? firstChoiceRef
-                        : undefined
-                    }
+                    ref={municipality.id === focusedMunicipalityId ? firstChoiceRef : undefined}
                     className="motion-interactive flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none"
                     onClick={() => onSelectMunicipality(municipality)}
                     type="button"
@@ -109,27 +128,28 @@ export function LocationPlacePicker({
                   <span className="min-w-0 truncate text-sm font-[700] text-accent">{selectedAreaName}</span>
                 </div>
                 <div className="max-h-[min(18rem,52dvh)] space-y-1 overflow-y-auto pt-1">
-                  {selectedMunicipality &&
-                    [
-                      { id: 'all', name: t('search.allAreas'), choice: selectedMunicipality.choice },
-                      ...selectedMunicipality.areas,
-                    ].map((area) => (
-                      <button
-                        key={area.id}
-                        ref={selectedAreaId === area.id ? firstChoiceRef : undefined}
-                        aria-pressed={selectedAreaId === area.id}
-                        className={
-                          selectedAreaId === area.id
-                            ? 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl bg-surface-selected px-3 py-2 text-left text-sm font-[700] text-accent focus-visible:outline-2 focus-visible:outline-accent'
-                            : 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none'
-                        }
-                        onClick={() => onSelectArea(area.choice)}
-                        type="button"
-                      >
-                        <span>{area.name}</span>
-                        {selectedAreaId === area.id && <Check aria-hidden="true" className="shrink-0" size={16} />}
-                      </button>
-                    ))}
+                  {visibleAreas.length === 0 && (
+                    <p className="px-3 py-3 text-sm text-muted" role="status">
+                      {t(isFiltered ? 'search.noDirectPlaces' : 'search.noResults')}
+                    </p>
+                  )}
+                  {visibleAreas.map((area) => (
+                    <button
+                      key={area.id}
+                      ref={area.id === focusedAreaId ? firstChoiceRef : undefined}
+                      aria-pressed={selectedAreaId === area.id}
+                      className={
+                        selectedAreaId === area.id
+                          ? 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl bg-surface-selected px-3 py-2 text-left text-sm font-[700] text-accent focus-visible:outline-2 focus-visible:outline-accent'
+                          : 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none'
+                      }
+                      onClick={() => onSelectArea(area.choice)}
+                      type="button"
+                    >
+                      <span>{area.name}</span>
+                      {selectedAreaId === area.id && <Check aria-hidden="true" className="shrink-0" size={16} />}
+                    </button>
+                  ))}
                 </div>
               </motion.div>
             )}
