@@ -77,6 +77,8 @@ Tests mirror the source folders under `tests/src/` and `tests/scripts/`, with sa
 Use Node.js 24, npm 11, and [just](https://just.systems/). Run `just install` once, then `just dev`
 to open the site at `http://127.0.0.1:5173`. Run `just check` before committing; it checks formatting,
 lint, tests, types, and the production build. `just --list` shows the other commands.
+ESLint also flags Tailwind classes with a simpler canonical form, such as `font-[700]` in place of
+`font-bold`; Prettier keeps class order consistent.
 
 ## Updating transit data
 

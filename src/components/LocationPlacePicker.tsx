@@ -69,7 +69,7 @@ export function LocationPlacePicker({
         <motion.div
           id={id + '-place-picker'}
           aria-label={label + ': ' + t('search.chooseFromList')}
-          className="absolute right-0 left-0 z-50 mt-2 w-full overflow-hidden rounded-2xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
+          className="absolute right-0 left-0 z-50 mt-2 w-full overflow-hidden rounded-2xl border border-line-popover bg-surface-card p-2 shadow-(--shadow-popover)"
           initial={reducedMotion ? false : { opacity: 0, y: -6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={reducedMotion ? undefined : { opacity: 0, y: -4, scale: 0.98 }}
@@ -118,14 +118,14 @@ export function LocationPlacePicker({
               >
                 <div className="flex min-w-0 items-center gap-2 border-b border-line px-1 pb-2">
                   <button
-                    className="motion-interactive min-w-0 rounded-lg bg-surface-hover px-2.5 py-2 text-left text-sm font-[700] text-ink hover:bg-surface-active focus-visible:outline-2 focus-visible:outline-accent"
+                    className="motion-interactive min-w-0 rounded-lg bg-surface-hover px-2.5 py-2 text-left text-sm font-bold text-ink hover:bg-surface-active focus-visible:outline-2 focus-visible:outline-accent"
                     onClick={onBack}
                     type="button"
                   >
                     <span className="block truncate">{selectedMunicipality?.name}</span>
                   </button>
                   <Icon name="arrow" className="shrink-0 text-accent" size={17} />
-                  <span className="min-w-0 truncate text-sm font-[700] text-accent">{selectedAreaName}</span>
+                  <span className="min-w-0 truncate text-sm font-bold text-accent">{selectedAreaName}</span>
                 </div>
                 <div className="max-h-[min(18rem,52dvh)] space-y-1 overflow-y-auto pt-1">
                   {visibleAreas.length === 0 && (
@@ -140,7 +140,7 @@ export function LocationPlacePicker({
                       aria-pressed={selectedAreaId === area.id}
                       className={
                         selectedAreaId === area.id
-                          ? 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl bg-surface-selected px-3 py-2 text-left text-sm font-[700] text-accent focus-visible:outline-2 focus-visible:outline-accent'
+                          ? 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl bg-surface-selected px-3 py-2 text-left text-sm font-bold text-accent focus-visible:outline-2 focus-visible:outline-accent'
                           : 'motion-interactive flex min-h-8 w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-[650] text-ink hover:bg-surface-hover focus-visible:bg-surface-hover focus-visible:outline-none'
                       }
                       onClick={() => onSelectArea(area.choice)}

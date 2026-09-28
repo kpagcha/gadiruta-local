@@ -29,7 +29,7 @@ export function DirectJourneyResults({
 
   return (
     <PanelCard ref={panelRef} aria-labelledby="journey-results-title">
-      <h2 id="journey-results-title" className="text-xl font-[700]">
+      <h2 id="journey-results-title" className="text-xl font-bold">
         {t('journey.results')}
       </h2>
       {result === null ? (

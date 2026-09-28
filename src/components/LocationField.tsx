@@ -213,7 +213,7 @@ export function LocationField({
           aria-describedby={invalid ? 'same-location-error' : undefined}
           aria-invalid={invalid || undefined}
           autoComplete="off"
-          className={`motion-field h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pl-9 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-[var(--shadow-field-focus)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${displayText ? 'pr-12' : 'pr-4'}`}
+          className={`motion-field h-15 w-full min-w-0 rounded-xl border border-line-input bg-surface-card pl-9 text-[17px] text-ink placeholder:text-muted-soft focus:shadow-(--shadow-field-focus) focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 max-[380px]:text-base ${displayText ? 'pr-12' : 'pr-4'}`}
           disabled={disabled}
           id={id + '-search'}
           onChange={(event) => {
@@ -239,7 +239,7 @@ export function LocationField({
         {!isInputFocused && displayText === '' && (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-9 -translate-y-1/2 text-[17px] font-[700] text-accent max-[380px]:text-base"
+            className="pointer-events-none absolute top-1/2 left-9 -translate-y-1/2 text-[17px] font-bold text-accent max-[380px]:text-base"
           >
             {label}
           </span>

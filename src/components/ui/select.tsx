@@ -40,7 +40,7 @@ export function SelectContent({
     <SelectPrimitive.Portal container={portalContainer}>
       <SelectPrimitive.Positioner align="start" alignItemWithTrigger={false} className="z-100" sideOffset={6}>
         <SelectPrimitive.Popup
-          className={`motion-base-popup max-h-64 w-[var(--anchor-width)] max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-[var(--shadow-popover)] outline-none ${className ?? ''}`}
+          className={`motion-base-popup max-h-64 w-(--anchor-width) max-w-[calc(100vw-2rem)] min-w-36 overflow-y-auto rounded-xl border border-line-popover bg-surface-card p-1 text-sm text-ink shadow-(--shadow-popover) outline-none ${className ?? ''}`}
         >
           <SelectPrimitive.List>{children}</SelectPrimitive.List>
         </SelectPrimitive.Popup>
@@ -53,7 +53,7 @@ export function SelectContent({
 export function SelectItem({ children, className, ...props }: SelectPrimitive.Item.Props & { children: ReactNode }) {
   return (
     <SelectPrimitive.Item
-      className={`flex min-h-9 w-full cursor-default items-center gap-2 rounded-lg px-3 py-1.5 outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-surface-hover data-[selected]:font-[700] ${className ?? ''}`}
+      className={`flex min-h-9 w-full cursor-default items-center gap-2 rounded-lg px-3 py-1.5 outline-none data-disabled:opacity-50 data-highlighted:bg-surface-hover data-selected:font-bold ${className ?? ''}`}
       {...props}
     >
       <SelectPrimitive.ItemText className="min-w-0 flex-1 truncate">{children}</SelectPrimitive.ItemText>

@@ -67,7 +67,7 @@ export function ColorPicker({
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Positioner side="bottom" align="start" sideOffset={7} className="z-100">
-          <PopoverPrimitive.Popup className="motion-base-popup w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-line-popover bg-surface-card p-3 text-ink shadow-[var(--shadow-popover)] outline-none">
+          <PopoverPrimitive.Popup className="motion-base-popup w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-line-popover bg-surface-card p-3 text-ink shadow-(--shadow-popover) outline-none">
             <PopoverPrimitive.Title className="mb-3 text-sm font-semibold">{label}</PopoverPrimitive.Title>
             <div
               ref={areaRef}

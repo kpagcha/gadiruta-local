@@ -29,7 +29,7 @@ export function ExplorePage({ view }: { view: ExploreView }) {
   return (
     <main id="main-content" className="flex-1 pt-5 pb-12 focus:outline-none desktop:pt-8" tabIndex={-1}>
       <header className="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-2 border-b border-line">
-        <h1 className="pb-3 text-2xl font-[700] tracking-[-0.7px] desktop:text-[32px]">{t('explore.title')}</h1>
+        <h1 className="pb-3 text-2xl font-bold tracking-[-0.7px] desktop:text-[32px]">{t('explore.title')}</h1>
         <ExploreTabs active={category} />
       </header>
       {networkState.status === 'loading' && (

@@ -179,7 +179,7 @@ export function JourneyTimePill({
       {isOpen && !disabled && (
         <div
           ref={popoverRef}
-          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-52 rounded-xl border border-line-popover bg-surface-card p-2 shadow-[var(--shadow-popover)]"
+          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-52 rounded-xl border border-line-popover bg-surface-card p-2 shadow-(--shadow-popover)"
         >
           <ul
             id={listId}

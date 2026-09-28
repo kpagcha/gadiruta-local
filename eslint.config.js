@@ -2,6 +2,7 @@
 import js from '@eslint/js';
 import { builtinModules } from 'node:module';
 import { defineConfig, globalIgnores } from 'eslint/config';
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
@@ -23,6 +24,14 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
+  {
+    files: ['src/**/*.{jsx,tsx}'],
+    plugins: { 'better-tailwindcss': betterTailwindcss },
+    settings: { 'better-tailwindcss': { entryPoint: 'src/styles/app.css' } },
+    rules: {
+      'better-tailwindcss/enforce-canonical-classes': ['error', { collapse: false, logical: false }],
     },
   },
   {

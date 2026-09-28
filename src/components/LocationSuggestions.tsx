@@ -41,7 +41,7 @@ export function LocationSuggestions({
   return (
     <div
       aria-busy={isWaitingForResults}
-      className="motion-popover absolute z-30 mt-2 min-h-12 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-[var(--shadow-popover)]"
+      className="motion-popover absolute z-30 mt-2 min-h-12 w-full rounded-xl border border-line-popover bg-surface-card p-1.5 shadow-(--shadow-popover)"
     >
       {!isWaitingForResults && (
         <p className="sr-only" role="status">
@@ -58,7 +58,7 @@ export function LocationSuggestions({
             const { expanded, visible, focusStart, toggleIndex } = group;
             return (
               <div key={group.id}>
-                <p className="px-3 pt-2.5 pb-1 text-xs font-[700] tracking-wide text-muted uppercase">{group.label}</p>
+                <p className="px-3 pt-2.5 pb-1 text-xs font-bold tracking-wide text-muted uppercase">{group.label}</p>
                 <ul aria-label={group.label}>
                   {visible.map((result, choiceIndex) => {
                     const index = focusStart + choiceIndex;

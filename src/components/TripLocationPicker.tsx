@@ -189,7 +189,7 @@ export function TripLocationPicker({
             >
               <SelectTrigger
                 aria-label={t('search.departureMode')}
-                className="min-h-12 shrink-0 rounded-full border border-line-input bg-surface-input py-2 pr-3 pl-4 text-sm font-[650] focus:shadow-[var(--shadow-field-focus)]"
+                className="min-h-12 shrink-0 rounded-full border border-line-input bg-surface-input py-2 pr-3 pl-4 text-sm font-[650] focus:shadow-(--shadow-field-focus)"
                 disabled={disabled}
                 id="departure-mode"
               >

@@ -69,7 +69,7 @@ function StopTimelineOption({
       id={id}
       aria-disabled={!choice.selectable}
       aria-selected={selected}
-      className={`motion-timeline-color flex min-h-8 w-full items-stretch px-2 py-1 ${selected ? 'font-[700] text-accent' : endpoint ? 'font-[650] text-accent' : choice.selectable ? '' : 'text-muted'} ${active && !selected ? 'underline decoration-accent underline-offset-4' : ''} ${choice.selectable ? 'cursor-pointer hover:text-accent-strong' : 'cursor-default'}`}
+      className={`motion-timeline-color flex min-h-8 w-full items-stretch px-2 py-1 ${selected ? 'font-bold text-accent' : endpoint ? 'font-[650] text-accent' : choice.selectable ? '' : 'text-muted'} ${active && !selected ? 'underline decoration-accent underline-offset-4' : ''} ${choice.selectable ? 'cursor-pointer hover:text-accent-strong' : 'cursor-default'}`}
       onClick={choice.selectable ? onSelect : undefined}
       onMouseDown={(event) => event.preventDefault()}
       role="option"
@@ -306,14 +306,14 @@ export function JourneyCard({ journey, dataset }: { journey: DirectJourney; data
       </div>
       <div className="mt-3 flex items-center gap-3 tabular-nums">
         <time
-          className="text-[25px] font-[700] tracking-[-0.8px]"
+          className="text-[25px] font-bold tracking-[-0.8px]"
           dateTime={clockTime(boarding.departureMinutes + minuteOffset)}
         >
           {clockTime(boarding.departureMinutes + minuteOffset)}
         </time>
         <Icon name="arrow" className="size-5 shrink-0 text-icon-muted" />
         <time
-          className="text-[25px] font-[700] tracking-[-0.8px]"
+          className="text-[25px] font-bold tracking-[-0.8px]"
           dateTime={clockTime(alighting.arrivalMinutes + minuteOffset)}
         >
           {clockTime(alighting.arrivalMinutes + minuteOffset)}

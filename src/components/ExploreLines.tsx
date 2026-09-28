@@ -716,13 +716,13 @@ function LineStopTimeline({
                       openOnHover
                       delay={300}
                       type="button"
-                      className="line-area-badge absolute top-0 left-0 max-h-[calc(100%-0.5rem)] rotate-180 truncate rounded-lg border px-1 py-0.5 text-xs leading-4 font-bold uppercase [writing-mode:vertical-rl] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+                      className="line-area-badge absolute top-0 left-0 max-h-[calc(100%-0.5rem)] rotate-180 truncate rounded-lg border px-1 py-0.5 text-xs leading-4 font-bold uppercase [writing-mode:vertical-rl] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                     >
                       {group.locality}
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Portal>
                       <PopoverPrimitive.Positioner side="top" sideOffset={7} className="z-100">
-                        <PopoverPrimitive.Popup className="motion-base-popup rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-[var(--shadow-popover)] outline-none">
+                        <PopoverPrimitive.Popup className="motion-base-popup rounded-lg bg-ink px-2.5 py-1.5 text-xs font-[650] text-surface-card shadow-(--shadow-popover) outline-none">
                           <PopoverPrimitive.Title>{group.locality}</PopoverPrimitive.Title>
                         </PopoverPrimitive.Popup>
                       </PopoverPrimitive.Positioner>

@@ -196,7 +196,7 @@ export function JourneyDatePill({
         <div
           id={dialogId}
           ref={popoverRef}
-          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-[min(20rem,calc(100vw-3rem))] rounded-2xl border border-line-popover bg-surface-card p-4 shadow-[var(--shadow-popover)] max-[380px]:p-3"
+          className="motion-popover absolute top-[calc(100%+8px)] left-0 z-50 w-[min(20rem,calc(100vw-3rem))] rounded-2xl border border-line-popover bg-surface-card p-4 shadow-(--shadow-popover) max-[380px]:p-3"
           role="dialog"
           aria-label={t('search.chooseDate')}
         >
@@ -210,7 +210,7 @@ export function JourneyDatePill({
             >
               <Icon name="chevronLeft" size={18} />
             </button>
-            <div className="flex min-w-0 items-center gap-1 text-sm font-[700] max-[380px]:text-xs">
+            <div className="flex min-w-0 items-center gap-1 text-sm font-bold max-[380px]:text-xs">
               <span className="truncate capitalize">{monthLabel}</span>
               <Select
                 items={years.map((year) => ({ value: String(year), label: String(year) }))}
@@ -222,7 +222,7 @@ export function JourneyDatePill({
               >
                 <SelectTrigger
                   aria-label={t('search.calendarYear')}
-                  className="min-h-10 rounded-lg bg-surface-card px-2 text-sm font-[700] focus:shadow-[var(--shadow-field-focus)] max-[380px]:min-h-8 max-[380px]:text-xs"
+                  className="min-h-10 rounded-lg bg-surface-card px-2 text-sm font-bold focus:shadow-(--shadow-field-focus) max-[380px]:min-h-8 max-[380px]:text-xs"
                 >
                   <SelectValue />
                 </SelectTrigger>
