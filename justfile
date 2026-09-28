@@ -24,6 +24,10 @@ data-refresh:
 locations-probe:
     npm run locations:probe
 
+# Download CTAN place evidence and generate the reviewed stop-to-place directory.
+locations-generate:
+    npm run locations:generate
+
 # Derive reviewable local-area coordinates from the tracked network stops.
 locations-coordinates:
     npm run locations:coordinates

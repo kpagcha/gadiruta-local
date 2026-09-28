@@ -51,6 +51,7 @@ interface ProbeArguments {
 interface CapturedResponse {
   url: string;
   text: string;
+  status: number;
 }
 
 /** One captured optional CTAN response, including an ordinary no-data response. */
@@ -69,7 +70,7 @@ interface BahiaGtfsProbeInput {
 interface CaptureManifest {
   retrievedAt: string;
   gtfsArchiveSha256: string;
-  responses: Array<{ path: string; sha256: string; url: string }>;
+  responses: Array<{ path: string; sha256: string; url: string; status: number }>;
 }
 
 /** Reject an upstream or command-line condition with a distinct, actionable error prefix. */
@@ -85,7 +86,7 @@ async function fetchJson(url: string): Promise<CapturedResponse> {
     fail(`could not load ${url} (${response.status}).`);
   }
 
-  return { url, text: await response.text() };
+  return { url, text: await response.text(), status: response.status };
 }
 
 /** Fetch and retain an optional response whose absence is unresolved-stop evidence, not a crash. */
@@ -98,7 +99,7 @@ async function fetchOptionalCtanJson(url: string): Promise<CtanOptionalResponse>
     fail(`could not load ${url} (${response.status}).`);
   }
 
-  return { url, text, isMissing };
+  return { url, text, status: response.status, isMissing };
 }
 
 /** Parse one captured response as JSON without losing the original text written to disk. */
@@ -177,6 +178,7 @@ async function writeCapture(outputPath: string, response: CapturedResponse, mani
     path: outputPath,
     sha256: createHash('sha256').update(response.text).digest('hex'),
     url: response.url,
+    status: response.status,
   });
 }
 

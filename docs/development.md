@@ -90,12 +90,17 @@ The data script limits the file's date range to what the source provides. It als
 locations for selected stops rather than guessing them. A saved timetable has limited date
 coverage, so it needs an intentional refresh when the source changes or expires.
 
-Location research is separate from this routine build. `just locations-probe` saves CTAN responses
-under ignored `data/source/ctan/`; `just locations-coordinates` writes candidate points to the tracked
-location directory. Review those findings before using them to rebuild the network file or
-committing them. CTAN location information can be incomplete or misleading: leave an area unknown
-when it cannot be established, rather than inferring it from a stop name or coordinates. The tests
-under `tests/scripts/ctan/research/` record the specific provider quirks.
+Location research is separate from this routine build. `just locations-generate` reads the local
+GTFS ZIP, downloads CTAN's place and stop records, and updates the tracked
+`data/reviewed/ctan/location-directory.json` only when the names, assignments, or derived coordinates
+change. It saves the CTAN replies under ignored `data/source/ctan/location-probe/`; review the Git
+diff before rebuilding the network file or committing it. `just locations-probe` only saves and
+checks those replies. `just locations-coordinates` only recalculates area points from the tracked
+network snapshot when reviewed assignments already exist. CTAN location information can be
+incomplete or misleading: leave an area unknown when it cannot be established, rather than
+inferring it from a stop name or coordinates. The tests under `tests/scripts/ctan/research/`
+record the specific provider quirks. To regenerate from saved replies without downloading again,
+run `npm run locations:generate -- --capture <saved-probe-directory>`.
 
 ## Working on the app
 

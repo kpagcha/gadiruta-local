@@ -14,6 +14,7 @@
     "data": "node --experimental-strip-types scripts/ctan/build.ts",
     "data:refresh": "npm run data -- --download --current-and-next-year",
     "locations:probe": "node --experimental-strip-types scripts/ctan/research/probe-ctan-locations.ts",
+    "locations:generate": "node --experimental-strip-types scripts/ctan/research/generate-location-directory.ts",
     "locations:coordinates": "node --experimental-strip-types scripts/ctan/research/derive-location-coordinates.ts",
     "test": "node --experimental-strip-types --test --test-isolation=none \"tests/**/*.test.ts\"",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.tools.json --noEmit",

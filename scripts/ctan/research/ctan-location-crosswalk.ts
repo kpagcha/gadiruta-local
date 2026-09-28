@@ -8,14 +8,15 @@ import { z } from 'zod';
 
 // CTAN IDs must be decimal strings before they can become URLs or capture filenames.
 const identifier = z.string().regex(/^\d+$/, 'must be a non-empty decimal identifier');
-const municipalityResponse = z.object({ idMunicipio: identifier });
-const localAreaResponse = z.object({ idNucleo: identifier, idMunicipio: identifier });
+const locationName = z.string().trim().min(1);
+const municipalityResponse = z.object({ idMunicipio: identifier, datos: locationName });
+const localAreaResponse = z.object({ idNucleo: identifier, idMunicipio: identifier, nombre: locationName });
 const stopResponse = z.object({ idParada: identifier, idMunicipio: identifier, idNucleo: identifier });
 const lineStopResponse = z.object({ idParada: identifier, idNucleo: identifier });
 
-/** One municipality reduced to its authoritative identifier. */
+/** One municipality with its official ID and name. */
 export type CtanMunicipality = ReturnType<typeof parseCtanMunicipalities>[number];
-/** One local area's declared municipality relationship. */
+/** One local area with its official name and municipality relationship. */
 export type CtanLocalArea = ReturnType<typeof parseCtanLocalAreas>[number];
 /** A physical stop's declared location relationship. */
 export type CtanStop = ReturnType<typeof parseCtanStop>;
@@ -58,16 +59,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-/** Parse a municipality reply once and discard fields irrelevant to the crosswalk. */
+/** Parse CTAN's municipality IDs and names for both the probe and reviewed directory. */
 export function parseCtanMunicipalities(value: unknown) {
   const { municipios } = z.object({ municipios: z.array(municipalityResponse) }).parse(value);
-  return municipios.map((item) => ({ id: item.idMunicipio }));
+  return municipios.map((item) => ({ id: item.idMunicipio, name: item.datos }));
 }
 
-/** Read the explicit municipality relationship in a local-area collection. */
+/** Read local-area names and their explicit municipality relationships. */
 export function parseCtanLocalAreas(value: unknown) {
   const { nucleos } = z.object({ nucleos: z.array(localAreaResponse) }).parse(value);
-  return nucleos.map((item) => ({ id: item.idNucleo, municipalityId: item.idMunicipio }));
+  return nucleos.map((item) => ({ id: item.idNucleo, municipalityId: item.idMunicipio, name: item.nombre }));
 }
 
 /** Read the hierarchy declared by CTAN's all-stops collection. */
