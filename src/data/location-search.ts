@@ -200,7 +200,8 @@ export function createLocationMunicipalities(
           return areaChoice === undefined ? [] : [{ id: area.id, name: area.name, choice: areaChoice }];
         })
         .sort(byName);
-      return [{ id: municipality.id, name: municipality.name, choice, areas }];
+      // The reviewed place label corrects shortened or unaccented provider municipality names.
+      return [{ id: municipality.id, name: choice.name, choice, areas }];
     })
     .sort(byName);
 }
