@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite --configLoader native",
-    "build": "npm run typecheck && vite build --configLoader native",
+    "build": "npm run typecheck && vite build --configLoader native && node --experimental-strip-types scripts/minify-network.ts",
     "preview": "vite preview --configLoader native",
     "data": "node --experimental-strip-types scripts/ctan/build.ts",
     "data:refresh": "npm run data -- --download --current-and-next-year",
