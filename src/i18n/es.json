@@ -152,7 +152,7 @@
     "hideStopTimes": "Ocultar horas de las paradas",
     "nextDay": "Día siguiente",
     "noLineTrips": "No hay viajes por este recorrido en la fecha elegida.",
-    "selectRunHint": "Selecciona una hora para destacar su viaje. Vuelve a seleccionarla para quitar el destacado.",
+    "selectRunHint": "Selecciona una hora para destacar su viaje.",
     "clearRunSelection": "Quitar destacado",
     "highlightRunAtStop": "Seleccionar el viaje que pasa por {{stop}} a las {{time}}",
     "invalidRunLink": "Este viaje no está programado para la fecha y el recorrido elegidos.",
