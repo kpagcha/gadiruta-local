@@ -158,7 +158,6 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const { t, i18n } = useTranslation();
   const reducedMotion = useReducedMotion();
   const trayId = useId();
-  const trayTriggerRef = useRef<HTMLButtonElement>(null);
   const [trayOpen, setTrayOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_MEDIA_QUERY).matches);
   const [traySettled, setTraySettled] = useState(true);
@@ -255,7 +254,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
   const trayExpanded = isDesktop || trayOpen;
   const dateSummary =
     date === null
-      ? t('explore.stopsOnly')
+      ? null
       : date === today
         ? t('search.today')
         : new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
@@ -263,6 +262,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
             month: 'short',
             timeZone: 'UTC',
           }).format(parseCalendarDate(date));
+  const filterSummary = stopQuery.trim() === '' ? null : t('explore.filterSummary', { query: stopQuery.trim() });
 
   /** Keep the selected path, date, timetable view, and optional run in a shareable line URL. */
   function updateLineUrl(
@@ -289,12 +289,6 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
     updateLineUrl(activeChoice.value, date, rawRun === alias ? null : alias);
   }
 
-  /** Close the mobile controls after the rider confirms their choices. */
-  function confirmTray() {
-    setTraySettled(false);
-    setTrayOpen(false);
-    trayTriggerRef.current?.focus();
-  }
   return (
     <article>
       <a className="text-sm font-semibold text-accent underline underline-offset-4" href="/explore/lines">
@@ -328,14 +322,13 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
       ) : (
         <div className="mt-6 grid gap-5 desktop:grid-cols-[minmax(0,1fr)_20rem] desktop:gap-8">
           <aside
-            className="min-w-0 rounded-2xl border border-line bg-surface-card desktop:col-start-2 desktop:row-start-1 desktop:rounded-none desktop:border-0 desktop:bg-transparent"
+            className="min-w-0 rounded-2xl border border-line bg-[color-mix(in_srgb,var(--color-ink)_6%,var(--color-paper))] desktop:col-start-2 desktop:row-start-1 desktop:rounded-none desktop:border-0 desktop:bg-transparent"
             aria-label={t('explore.timetableControls')}
           >
             <button
-              ref={trayTriggerRef}
               aria-controls={trayId}
               aria-expanded={trayOpen}
-              className="flex min-h-16 w-full items-center gap-3 rounded-2xl px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-accent desktop:hidden"
+              className="flex min-h-14 w-full items-center gap-3 rounded-2xl px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-accent desktop:hidden"
               onClick={() => {
                 setTraySettled(false);
                 setTrayOpen((open) => !open);
@@ -344,10 +337,13 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
             >
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-semibold text-ink">{activeChoice.shortLabel}</span>
-                <span className="block truncate text-xs text-muted">
-                  {dateSummary}
-                  {stopQuery.trim() !== '' && ` · ${t('explore.filterSummary', { query: stopQuery.trim() })}`}
-                </span>
+                {(dateSummary !== null || filterSummary !== null) && (
+                  <span className="block truncate text-xs text-muted">
+                    {dateSummary}
+                    {dateSummary !== null && filterSummary !== null && ' · '}
+                    {filterSummary}
+                  </span>
+                )}
               </span>
               <Icon
                 name="chevronDown"
@@ -365,7 +361,7 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
               aria-hidden={!trayExpanded}
               inert={!trayExpanded}
             >
-              <div className="border-t border-line px-3 pt-3 pb-3 desktop:border-0 desktop:p-0">
+              <div className="border-t border-line/70 px-3 pt-3 pb-3 desktop:border-0 desktop:p-0">
                 {listedChoices.length === 0 ? null : singleListedChoiceIsActive ? (
                   <div className="text-sm font-semibold text-ink">
                     {activeChoice.shortLabel}
@@ -456,15 +452,6 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                       }
                     />
                   </div>
-                </div>
-                <div className="mt-4 flex justify-end border-t border-line pt-3 desktop:hidden">
-                  <button
-                    className="motion-interactive min-h-10 rounded-xl bg-accent px-5 text-sm font-semibold text-on-accent hover:bg-accent-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                    onClick={confirmTray}
-                    type="button"
-                  >
-                    {t('explore.done')}
-                  </button>
                 </div>
               </div>
             </motion.div>

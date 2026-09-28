@@ -141,8 +141,6 @@
     "durationHours": "{{hours}}h",
     "durationHoursMinutes": "{{hours}}h {{minutes}}min",
     "averageDuration": "~{{duration}}",
-    "done": "Done",
-    "stopsOnly": "Stops only",
     "filterSummary": "Filter: {{query}}",
     "timetable": "Timetable",
     "chooseDate": "Choose date",

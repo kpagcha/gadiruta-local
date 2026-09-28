@@ -100,7 +100,15 @@ export function AppRoutes() {
       event.preventDefault();
       const nextUrl = `${url.pathname}${url.search}`;
       if (nextUrl === `${window.location.pathname}${window.location.search}`) return;
+      const currentView = appViewFromPath(window.location.pathname);
+      const nextView = appViewFromPath(url.pathname);
+      const fromDirectory =
+        currentView.kind === 'explore' && (currentView.view.kind === 'places' || currentView.view.kind === 'lines');
+      const opensDetail =
+        nextView.kind === 'explore' && (nextView.view.kind === 'place' || nextView.view.kind === 'line');
       window.history.pushState(null, '', nextUrl);
+      // A directory link should open its detail at the top, as a normal page visit would.
+      if (fromDirectory && opensDetail) window.scrollTo(0, 0);
       // Notify both the page selector and the home form's existing history listener.
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
@@ -111,7 +119,7 @@ export function AppRoutes() {
   useEffect(() => {
     // Strict Mode replays mount effects in development; only a real navigation moves focus.
     if (!hasNavigated || appView.kind === 'settings') return;
-    document.getElementById('main-content')?.focus();
+    document.getElementById('main-content')?.focus({ preventScroll: true });
   }, [appView, hasNavigated]);
 
   return (
