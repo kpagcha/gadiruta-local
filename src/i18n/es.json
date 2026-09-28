@@ -45,6 +45,8 @@
     "customColors": "Colores personalizados",
     "lightAccent": "Color principal del tema claro",
     "darkAccent": "Color principal del tema oscuro",
+    "deriveDark": "Sugerir color oscuro a partir del claro",
+    "deriveLight": "Sugerir color claro a partir del oscuro",
     "hexColor": "Color hexadecimal",
     "hue": "Tono",
     "invalidColor": "Elige un color válido de seis dígitos.",

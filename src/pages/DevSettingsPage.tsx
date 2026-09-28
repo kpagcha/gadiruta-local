@@ -6,6 +6,7 @@ import {
   ACCENT_PRESETS,
   DEFAULT_DEV_SETTINGS,
   checkAccentContrast,
+  deriveAccentColor,
   type AccentPreset,
   type ThemeMode,
 } from '../data/dev-settings.ts';
@@ -66,6 +67,22 @@ export default function DevSettingsPage({
     if (hexToHsv(value) === null) return;
     setDarkVisual(value);
     setSettings((current) => ({ ...current, accentChoice: 'custom', customDark: value.toLowerCase() }));
+  }
+
+  /** Generate and preview a readable dark accent from the current light draft. */
+  function deriveDark(): void {
+    const color = deriveAccentColor(lightDraft, 'dark');
+    if (color === null) return;
+    changeDarkDraft(color);
+    selectTheme('dark');
+  }
+
+  /** Generate and preview a readable light accent from the current dark draft. */
+  function deriveLight(): void {
+    const color = deriveAccentColor(darkDraft, 'light');
+    if (color === null) return;
+    changeLightDraft(color);
+    selectTheme('light');
   }
 
   return (
@@ -155,6 +172,14 @@ export default function DevSettingsPage({
                   onOpen={() => selectTheme('light')}
                   messageId={!lightCheck.valid ? 'dev-light-contrast' : undefined}
                 />
+                <button
+                  type="button"
+                  disabled={hexToHsv(lightDraft) === null}
+                  className="mt-2 block min-h-11 rounded-lg border border-line-input px-3 text-xs font-semibold text-accent hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-45"
+                  onClick={deriveDark}
+                >
+                  {t('devSettings.deriveDark')}
+                </button>
                 {!lightCheck.valid && (
                   <p id="dev-light-contrast" role="status" className="mt-2 text-xs text-warning">
                     {contrastMessage(lightCheck)}
@@ -176,6 +201,14 @@ export default function DevSettingsPage({
                   onOpen={() => selectTheme('dark')}
                   messageId={!darkCheck.valid ? 'dev-dark-contrast' : undefined}
                 />
+                <button
+                  type="button"
+                  disabled={hexToHsv(darkDraft) === null}
+                  className="mt-2 block min-h-11 rounded-lg border border-line-input px-3 text-xs font-semibold text-accent hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-45"
+                  onClick={deriveLight}
+                >
+                  {t('devSettings.deriveLight')}
+                </button>
                 {!darkCheck.valid && (
                   <p id="dev-dark-contrast" role="status" className="mt-2 text-xs text-warning">
                     {contrastMessage(darkCheck)}

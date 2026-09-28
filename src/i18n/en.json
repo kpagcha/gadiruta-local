@@ -45,6 +45,8 @@
     "customColors": "Custom colors",
     "lightAccent": "Light theme accent",
     "darkAccent": "Dark theme accent",
+    "deriveDark": "Suggest dark color from light",
+    "deriveLight": "Suggest light color from dark",
     "hexColor": "Hex color",
     "hue": "Hue",
     "invalidColor": "Choose a valid six-digit color.",

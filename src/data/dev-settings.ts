@@ -3,6 +3,7 @@
  * Production always uses these defaults; no setting here changes the tracked network data.
  */
 import { MAX_RECENT_SEARCH_LIMIT, RECENT_SEARCH_LIMIT } from '../config.ts';
+import { hexToHsv, hsvToHex } from './color-picker.ts';
 
 export type ThemeMode = 'light' | 'dark';
 export type AccentPreset = 'bay' | 'atlantic' | 'plum' | 'renfe' | 'cercanias' | 'andalusiaLime';
@@ -99,6 +100,32 @@ export function checkAccentContrast(color: string, mode: ThemeMode): { valid: bo
     contrastRatio(color, ON_ACCENT[mode]),
   );
   return { valid: lowestRatio >= MIN_TEXT_CONTRAST, lowestRatio };
+}
+
+/** Suggest a matching accent for the other theme while keeping the source hue. */
+export function deriveAccentColor(source: string, target: ThemeMode): string | null {
+  const hsv = hexToHsv(source);
+  if (hsv === null) return null;
+
+  // Dark surfaces need a lighter, usually softer color; light surfaces need a deeper one.
+  if (target === 'light') {
+    const saturation = Math.min(90, hsv.saturation * 1.2);
+    for (let value = 40; value >= 0; value--) {
+      const color = hsvToHex({ hue: hsv.hue, saturation, value });
+      if (checkAccentContrast(color, 'light').valid) return color;
+    }
+    return '#000000';
+  }
+
+  // Try more brightness before reducing saturation, so vivid hues survive when readable.
+  for (let saturation = Math.min(65, hsv.saturation * 0.7); saturation >= 0; saturation = Math.max(0, saturation - 5)) {
+    for (let value = 80; value <= 100; value++) {
+      const color = hsvToHex({ hue: hsv.hue, saturation, value });
+      if (checkAccentContrast(color, 'dark').valid) return color;
+    }
+    if (saturation === 0) break;
+  }
+  return '#ffffff';
 }
 
 /** Accept only a complete, safe browser-saved settings object. */
