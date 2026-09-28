@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { JourneySearchResult } from '../data/journey-search.ts';
 import type { NetworkDataset } from '../data/network-schema.ts';
 import { JourneyCard } from './JourneyCard';
+import { PanelCard } from './ui/panel-card';
 
 /** Render submitted journeys or a prompt while the rider edits a previous search. */
 export function DirectJourneyResults({
@@ -27,11 +28,7 @@ export function DirectJourneyResults({
   const hasLater = laterCount < later.length;
 
   return (
-    <section
-      ref={panelRef}
-      aria-labelledby="journey-results-title"
-      className="min-w-0 rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)] max-[380px]:p-4.5 desktop:p-8"
-    >
+    <PanelCard ref={panelRef} aria-labelledby="journey-results-title">
       <h2 id="journey-results-title" className="text-xl font-[700]">
         {t('journey.results')}
       </h2>
@@ -90,6 +87,6 @@ export function DirectJourneyResults({
           )}
         </>
       )}
-    </section>
+    </PanelCard>
   );
 }

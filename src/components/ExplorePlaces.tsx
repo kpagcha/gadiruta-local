@@ -6,8 +6,8 @@ import { getRouteLabel } from '../data/network.ts';
 import { linesForStops, matchesBrowseQuery, stopLocality, stopsForPlace } from '../data/network-browse.ts';
 import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-schema.ts';
 import { placeFromUrl, placePageUrl } from '../data/place-url.ts';
-import { originSearchUrl } from '../data/search-url.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
+import { SearchOriginLink } from './SearchOriginLink';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from './ui/breadcrumb';
+import { PillLink } from './ui/pill-link';
 
 /** Show the place directory or one selected place from the local network. */
 export function ExplorePlaces({
@@ -62,7 +63,7 @@ export function ExplorePlaces({
       {visible.length === 0 && <p className="text-muted">{t('explore.noMatches')}</p>}
       <ul className="grid gap-4 desktop:grid-cols-2">
         {visible.map((municipality) => (
-          <li key={municipality.id} className="rounded-2xl border border-line bg-surface-card p-5">
+          <li key={municipality.id} className="directory-card">
             <a
               className="text-lg font-bold text-ink underline decoration-line-decoration underline-offset-4 hover:text-accent"
               href={placePageUrl(municipality.choice)}
@@ -75,12 +76,7 @@ export function ExplorePlaces({
                   .filter((area) => !area.choice.isTown)
                   .map((area) => (
                     <li key={area.id}>
-                      <a
-                        className="motion-interactive inline-flex min-h-10 items-center rounded-lg bg-surface-active px-3 text-sm text-ink no-underline hover:text-accent"
-                        href={placePageUrl(area.choice)}
-                      >
-                        {area.name}
-                      </a>
+                      <PillLink href={placePageUrl(area.choice)}>{area.name}</PillLink>
                     </li>
                   ))}
               </ul>
@@ -139,12 +135,7 @@ function PlaceDetail({
         </BreadcrumbList>
       </Breadcrumb>
       <h2 className="mt-4 text-3xl font-bold tracking-[-0.8px]">{choice.name}</h2>
-      <a
-        className="motion-interactive mt-5 inline-flex min-h-11 items-center rounded-lg bg-accent px-4 font-semibold text-on-accent no-underline"
-        href={originSearchUrl(choice)}
-      >
-        {t('explore.searchFromHere')}
-      </a>
+      <SearchOriginLink origin={choice} variant="prominent" className="mt-5" />
       {areas.length > 0 && (
         <section className="mt-8" aria-labelledby="place-areas-title">
           <h3 id="place-areas-title" className="text-xl font-bold">
@@ -153,12 +144,9 @@ function PlaceDetail({
           <ul className="mt-3 flex flex-wrap gap-2">
             {areas.map((area) => (
               <li key={area.id}>
-                <a
-                  className="motion-interactive inline-flex min-h-10 items-center rounded-lg bg-surface-active px-3 text-sm text-ink no-underline hover:text-accent"
-                  href={placePageUrl(area.choice)}
-                >
+                <PillLink href={placePageUrl(area.choice)}>
                   {area.choice.isTown ? area.choice.name : area.name}
-                </a>
+                </PillLink>
               </li>
             ))}
           </ul>
@@ -186,12 +174,7 @@ function LineLinks({ lines, allLines }: { lines: readonly NetworkRoute[]; allLin
     <ul className="mt-3 flex flex-wrap gap-2">
       {lines.map((route) => (
         <li key={route.id}>
-          <a
-            className="motion-interactive inline-flex min-h-10 items-center rounded-lg bg-surface-active px-3 text-sm font-semibold text-ink no-underline hover:text-accent"
-            href={lineUrl(route, allLines)}
-          >
-            {getRouteLabel(route)}
-          </a>
+          <PillLink href={lineUrl(route, allLines)}>{getRouteLabel(route)}</PillLink>
         </li>
       ))}
     </ul>
@@ -200,7 +183,6 @@ function LineLinks({ lines, allLines }: { lines: readonly NetworkRoute[]; allLin
 
 /** Render stops with reviewed locality names and links into the existing journey form. */
 function StopList({ dataset, stops }: { dataset: NetworkDataset; stops: readonly NetworkStop[] }) {
-  const { t } = useTranslation();
   return (
     <ul className="mt-3 grid gap-3 desktop:grid-cols-2">
       {stops.map((stop) => {
@@ -214,13 +196,11 @@ function StopList({ dataset, stops }: { dataset: NetworkDataset; stops: readonly
               <span className="block font-semibold">{stop.name}</span>
               {locality !== null && <span className="block text-sm text-muted">{locality}</span>}
             </span>
-            <a
-              className="shrink-0 text-sm font-semibold text-accent underline underline-offset-4"
-              href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
-              aria-label={t('explore.searchFromStop', { stop: stop.name })}
-            >
-              {t('explore.search')}
-            </a>
+            <SearchOriginLink
+              origin={{ kind: 'stop', id: stop.id, name: stop.name }}
+              variant="inline"
+              className="shrink-0"
+            />
           </li>
         );
       })}

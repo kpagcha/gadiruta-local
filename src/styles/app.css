@@ -42,6 +42,10 @@
 }
 
 @layer components {
+  .directory-card {
+    @apply rounded-2xl border border-line bg-surface-card p-5;
+  }
+
   .line-area-colored {
     --line-area-color: var(--line-area-color-light);
   }

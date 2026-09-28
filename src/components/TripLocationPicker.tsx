@@ -11,6 +11,7 @@ import { LocationField } from './LocationField';
 import { JourneyDatePill } from './JourneyDatePill';
 import { JourneyTimePill } from './JourneyTimePill';
 import { RecentSearches } from './RecentSearches';
+import { PanelCard } from './ui/panel-card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AppTooltip } from './ui/tooltip';
 
@@ -63,10 +64,7 @@ export function TripLocationPicker({
   }
 
   return (
-    <section
-      aria-labelledby="trip-search-title"
-      className="min-w-0 rounded-3xl border border-line bg-surface-card p-6 shadow-[var(--shadow-card)] max-[380px]:p-4.5 desktop:p-8"
-    >
+    <PanelCard aria-labelledby="trip-search-title">
       <h2 id="trip-search-title" className="sr-only">
         {t('search.title')}
       </h2>
@@ -229,6 +227,6 @@ export function TripLocationPicker({
           )}
         </div>
       </form>
-    </section>
+    </PanelCard>
   );
 }

@@ -28,12 +28,12 @@ import {
 } from '../data/line-timetable.ts';
 import { clockTime } from '../data/journey-time.ts';
 import type { NetworkDataset, NetworkRoute, NetworkStop } from '../data/network-schema.ts';
-import { originSearchUrl } from '../data/search-url.ts';
 import { useDevSettings } from '../hooks/dev-settings-context.ts';
 import { ExploreDirectoryHeading } from './ExploreDirectoryHeading';
 import { ExploreFilterInput } from './ExploreFilterInput';
 import { Icon } from './Icon';
 import { JourneyDatePill } from './JourneyDatePill';
+import { SearchOriginLink } from './SearchOriginLink';
 import { StopTimelineTrack } from './StopTimelineTrack';
 import { AppTooltip } from './ui/tooltip';
 
@@ -89,6 +89,35 @@ function LinePathMeta({
   );
 }
 
+/** Show one selectable line path with its departures and average duration. */
+function LinePathChoiceButton({
+  label,
+  runs,
+  averageDurationMinutes,
+  showDepartures,
+  selected,
+  onClick,
+}: {
+  label: string;
+  runs: readonly DatedLineTrip[];
+  averageDurationMinutes: number | null;
+  showDepartures: boolean;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      aria-pressed={selected}
+      className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:outline-accent ${selected ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+      onClick={onClick}
+      type="button"
+    >
+      <span className="text-sm leading-5 font-semibold">{label}</span>
+      <LinePathMeta runs={runs} averageDurationMinutes={averageDurationMinutes} showDepartures={showDepartures} />
+    </button>
+  );
+}
+
 /** Open a physical stop at its saved coordinates, as in direct journey results. */
 function googleMapsStopUrl(stop: NetworkStop): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${stop.latitude},${stop.longitude}`)}`;
@@ -138,7 +167,7 @@ export function ExploreLines({
         {visible.map((route) => (
           <li key={route.id}>
             <a
-              className="motion-interactive flex min-h-20 flex-col justify-center rounded-2xl border border-line bg-surface-card p-5 text-ink no-underline hover:border-line-brand hover:text-accent"
+              className="directory-card motion-interactive flex min-h-20 flex-col justify-center text-ink no-underline hover:border-line-brand hover:text-accent"
               href={lineUrl(route, dataset.routes)}
             >
               <span className="font-bold">{getRouteLabel(route)}</span>
@@ -378,20 +407,15 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                     role="group"
                   >
                     {listedChoices.map((choice) => (
-                      <button
+                      <LinePathChoiceButton
                         key={choice.value}
-                        aria-pressed={choice.value === activeChoice.value}
-                        className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center rounded-xl border px-2.5 py-1 text-left text-sm leading-5 font-semibold focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
+                        label={choice.shortLabel}
+                        runs={choice.runs}
+                        averageDurationMinutes={choice.averageDurationMinutes}
+                        showDepartures={date !== null}
+                        selected={choice.value === activeChoice.value}
                         onClick={() => updateLineUrl(choice.value, date)}
-                        type="button"
-                      >
-                        <span>{choice.shortLabel}</span>
-                        <LinePathMeta
-                          runs={choice.runs}
-                          averageDurationMinutes={choice.averageDurationMinutes}
-                          showDepartures={date !== null}
-                        />
-                      </button>
+                      />
                     ))}
                   </div>
                 ) : (
@@ -404,24 +428,17 @@ function LineDetail({ dataset, route }: { dataset: NetworkDataset; route: Networ
                       <div key={direction} aria-label={direction} className="grid content-start gap-1.5" role="group">
                         {listedChoices
                           .filter((choice) => choice.direction === direction)
-                          .map((choice) => {
-                            return (
-                              <button
-                                key={choice.value}
-                                aria-pressed={choice.value === activeChoice.value}
-                                className={`motion-interactive flex min-h-11 min-w-0 flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:outline-accent ${choice.value === activeChoice.value ? 'border-accent bg-surface-active text-accent' : 'border-line-input bg-surface-input text-ink hover:bg-surface-hover'}`}
-                                onClick={() => updateLineUrl(choice.value, date)}
-                                type="button"
-                              >
-                                <span className="text-sm font-semibold">{choice.shortLabel}</span>
-                                <LinePathMeta
-                                  runs={choice.runs}
-                                  averageDurationMinutes={choice.averageDurationMinutes}
-                                  showDepartures={date !== null}
-                                />
-                              </button>
-                            );
-                          })}
+                          .map((choice) => (
+                            <LinePathChoiceButton
+                              key={choice.value}
+                              label={choice.shortLabel}
+                              runs={choice.runs}
+                              averageDurationMinutes={choice.averageDurationMinutes}
+                              showDepartures={date !== null}
+                              selected={choice.value === activeChoice.value}
+                              onClick={() => updateLineUrl(choice.value, date)}
+                            />
+                          ))}
                       </div>
                     ))}
                   </div>
@@ -781,15 +798,11 @@ function LineStopTimeline({
                       </span>
                       {showActions && (
                         <span className="flex shrink-0 items-center">
-                          <AppTooltip content={t('explore.search')}>
-                            <a
-                              className={`motion-interactive grid size-10 place-items-center rounded-xl hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent ${actionColor}`}
-                              href={originSearchUrl({ kind: 'stop', id: stop.id, name: stop.name })}
-                              aria-label={t('explore.searchFromStop', { stop: stop.name })}
-                            >
-                              <Icon name="search" size={16} strokeWidth={1.8} />
-                            </a>
-                          </AppTooltip>
+                          <SearchOriginLink
+                            origin={{ kind: 'stop', id: stop.id, name: stop.name }}
+                            variant="icon"
+                            className={actionColor}
+                          />
                           <span aria-hidden="true" className="mx-0.5 h-3.5 border-l border-line" />
                           <AppTooltip content={t('explore.map')}>
                             <a
