@@ -32,7 +32,7 @@
     "recentSearchLimit": "Búsquedas recientes guardadas",
     "recentSearchLimitHelp": "Elige 0 para ocultar y dejar de guardar búsquedas recientes.",
     "themeAccent": "Paleta del tema",
-    "themeAccentHelp": "Los colores predefinidos y personalizados cambian el texto, los fondos, las superficies y los bordes en ambos temas.",
+    "themeAccentHelp": "Los colores personalizados se aplican al elegirlos. Al abrir un selector, se activa el tema claro u oscuro correspondiente.",
     "presets": "Paletas predefinidas",
     "preset": {
       "bay": "Verde azulado",
@@ -48,8 +48,7 @@
     "hexColor": "Color hexadecimal",
     "hue": "Tono",
     "invalidColor": "Elige un color válido de seis dígitos.",
-    "lowContrast": "El contraste mínimo es {{ratio}}:1; se requiere al menos 4,5:1.",
-    "applyCustom": "Aplicar colores personalizados",
+    "lowContrast": "Contraste bajo ({{ratio}}:1). El texto puede ser difícil de leer; procura alcanzar al menos 4,5:1.",
     "browserOnly": "Guardado solo en este navegador.",
     "reset": "Restablecer valores"
   },

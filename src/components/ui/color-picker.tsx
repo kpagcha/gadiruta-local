@@ -12,7 +12,8 @@ export function ColorPicker({
   value,
   visualColor,
   onChange,
-  errorId,
+  onOpen,
+  messageId,
 }: {
   id: string;
   label: string;
@@ -21,7 +22,8 @@ export function ColorPicker({
   value: string;
   visualColor: string;
   onChange: (color: string) => void;
-  errorId?: string;
+  onOpen: () => void;
+  messageId?: string;
 }) {
   const areaRef = useRef<HTMLDivElement>(null);
   const [lastHue, setLastHue] = useState(() => hexToHsv(visualColor)?.hue ?? 0);
@@ -48,13 +50,17 @@ export function ColorPicker({
   }
 
   return (
-    <PopoverPrimitive.Root>
+    <PopoverPrimitive.Root
+      onOpenChange={(open) => {
+        if (open) onOpen();
+      }}
+    >
       <PopoverPrimitive.Trigger
         id={id}
         type="button"
         aria-label={label}
-        aria-describedby={errorId}
-        aria-invalid={parsed === null || errorId !== undefined ? true : undefined}
+        aria-describedby={messageId}
+        aria-invalid={parsed === null ? true : undefined}
         className="motion-interactive mt-2 flex min-h-11 min-w-35 items-center gap-3 rounded-xl border border-line-input bg-surface-input px-2.5 text-left text-sm text-ink hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-accent"
       >
         <span
@@ -72,9 +78,11 @@ export function ColorPicker({
             <div
               ref={areaRef}
               aria-hidden="true"
-              className="relative h-40 w-full cursor-crosshair touch-none overflow-hidden rounded-lg"
+              className="relative h-40 w-full cursor-crosshair touch-none overflow-hidden rounded-lg select-none"
               style={{ backgroundColor: `hsl(${hsv.hue} 100% 50%)` }}
               onPointerDown={(event) => {
+                // A drag changes the color; it must not start selecting nearby page text.
+                event.preventDefault();
                 event.currentTarget.setPointerCapture(event.pointerId);
                 chooseFromArea(event);
               }}
@@ -103,8 +111,8 @@ export function ColorPicker({
             </label>
             <input
               id={`${id}-hex`}
-              aria-describedby={errorId}
-              aria-invalid={parsed === null || errorId !== undefined ? true : undefined}
+              aria-describedby={messageId}
+              aria-invalid={parsed === null ? true : undefined}
               autoComplete="off"
               className="mt-1.5 min-h-10 w-full rounded-lg border border-line-input bg-surface-input px-3 font-mono text-sm text-ink focus-visible:outline-2 focus-visible:outline-accent"
               maxLength={7}

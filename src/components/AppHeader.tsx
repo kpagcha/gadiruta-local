@@ -1,14 +1,21 @@
 import { useTranslation } from 'react-i18next';
 import { changeLanguage } from '../i18n';
-import { useTheme } from '../hooks/use-theme';
+import type { ThemeMode } from '../data/dev-settings.ts';
 import { Icon } from './Icon';
 
 /** Render navigation and preferences in the persistent site header. */
-export function AppHeader({ activePage }: { activePage: 'search' | 'explore' | null }) {
+export function AppHeader({
+  activePage,
+  theme,
+  toggleTheme,
+}: {
+  activePage: 'search' | 'explore' | null;
+  theme: ThemeMode;
+  toggleTheme: () => void;
+}) {
   // The resolved language controls which selector button is visually and semantically active.
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage ?? 'en';
-  const { theme, toggleTheme } = useTheme();
   const themeLabel = theme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark');
 
   return (

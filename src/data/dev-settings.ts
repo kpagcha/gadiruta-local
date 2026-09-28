@@ -37,28 +37,28 @@ export const DEFAULT_DEV_SETTINGS: DevSettings = {
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 const MIN_TEXT_CONTRAST = 4.5;
-// Match the accent-tinted surfaces in app.css, where accent text must stay readable.
+// Match the neutral-based experimental surfaces in app.css, where accent text must stay readable.
 const CONTRAST_BACKGROUNDS: Record<ThemeMode, readonly { base: string; accentPercent: number }[]> = {
   light: [
-    { base: '#f7f6f0', accentPercent: 4 },
-    { base: '#ffffff', accentPercent: 2 },
-    { base: '#e7eee8', accentPercent: 10 },
-    { base: '#e6eee8', accentPercent: 10 },
-    { base: '#e4eee6', accentPercent: 10 },
-    { base: '#eaf2ec', accentPercent: 10 },
-    { base: '#f5f9f6', accentPercent: 4 },
+    { base: '#faf8f4', accentPercent: 6 },
+    { base: '#ffffff', accentPercent: 3 },
+    { base: '#eceeeb', accentPercent: 12 },
+    { base: '#edeeec', accentPercent: 10 },
+    { base: '#e9ecea', accentPercent: 12 },
+    { base: '#eef0eb', accentPercent: 12 },
+    { base: '#f7f8f5', accentPercent: 6 },
   ],
   dark: [
-    { base: '#0e191a', accentPercent: 3 },
-    { base: '#142425', accentPercent: 4 },
-    { base: '#18342f', accentPercent: 12 },
-    { base: '#192d2b', accentPercent: 12 },
-    { base: '#1c3832', accentPercent: 12 },
-    { base: '#1e3c35', accentPercent: 12 },
-    { base: '#172d2b', accentPercent: 12 },
+    { base: '#131719', accentPercent: 5 },
+    { base: '#1b2023', accentPercent: 8 },
+    { base: '#2b3032', accentPercent: 10 },
+    { base: '#282e30', accentPercent: 10 },
+    { base: '#303638', accentPercent: 10 },
+    { base: '#343a3b', accentPercent: 10 },
+    { base: '#252b2d', accentPercent: 10 },
   ],
 };
-const ON_ACCENT: Record<ThemeMode, string> = { light: '#ffffff', dark: '#0e191a' };
+const ON_ACCENT: Record<ThemeMode, string> = { light: '#ffffff', dark: '#131719' };
 
 /** Calculate the brightness used by WCAG contrast ratios for one hexadecimal color. */
 function luminance(color: string): number {
@@ -89,7 +89,7 @@ function mixedColor(accent: string, base: string, accentPercent: number): string
     .join('')}`;
 }
 
-/** Require readable accent text on every fixed surface and readable text on accent buttons. */
+/** Measure accent contrast so the picker can warn without rejecting a chosen color. */
 export function checkAccentContrast(color: string, mode: ThemeMode): { valid: boolean; lowestRatio: number | null } {
   if (!HEX_COLOR.test(color)) return { valid: false, lowestRatio: null };
   const lowestRatio = Math.min(
@@ -120,8 +120,8 @@ export function parseDevSettings(value: unknown): DevSettings {
       saved.accentChoice !== 'custom') ||
     typeof saved.customLight !== 'string' ||
     typeof saved.customDark !== 'string' ||
-    !checkAccentContrast(saved.customLight, 'light').valid ||
-    !checkAccentContrast(saved.customDark, 'dark').valid
+    !HEX_COLOR.test(saved.customLight) ||
+    !HEX_COLOR.test(saved.customDark)
   ) {
     return { ...DEFAULT_DEV_SETTINGS };
   }
@@ -134,7 +134,7 @@ export function parseDevSettings(value: unknown): DevSettings {
   };
 }
 
-/** Resolve the active preset or validated custom pair into concrete CSS colors. */
+/** Resolve the active preset or complete custom pair into concrete CSS colors. */
 export function selectedAccentColors(settings: DevSettings): { light: string; dark: string } {
   return settings.accentChoice === 'custom'
     ? { light: settings.customLight, dark: settings.customDark }

@@ -2,14 +2,26 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MAX_RECENT_SEARCH_LIMIT } from '../config.ts';
 import { hexToHsv } from '../data/color-picker.ts';
-import { ACCENT_PRESETS, DEFAULT_DEV_SETTINGS, checkAccentContrast, type AccentPreset } from '../data/dev-settings.ts';
+import {
+  ACCENT_PRESETS,
+  DEFAULT_DEV_SETTINGS,
+  checkAccentContrast,
+  type AccentPreset,
+  type ThemeMode,
+} from '../data/dev-settings.ts';
 import { useDevSettings } from '../hooks/dev-settings-context.ts';
 import { ColorPicker } from '../components/ui/color-picker.tsx';
 
 const PRESET_NAMES: readonly AccentPreset[] = ['bay', 'atlantic', 'plum', 'renfe', 'cercanias', 'andalusiaLime'];
 
 /** Offer browser-local controls for experiments that are absent from the production site. */
-export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?: boolean }) {
+export default function DevSettingsPage({
+  focusOnLoad = false,
+  selectTheme,
+}: {
+  focusOnLoad?: boolean;
+  selectTheme: (theme: ThemeMode) => void;
+}) {
   const { t, i18n } = useTranslation();
   const mainRef = useRef<HTMLElement>(null);
   const { settings, setSettings, resetSettings } = useDevSettings();
@@ -19,13 +31,12 @@ export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?:
   const [darkVisual, setDarkVisual] = useState(settings.customDark);
   const lightCheck = checkAccentContrast(lightDraft, 'light');
   const darkCheck = checkAccentContrast(darkDraft, 'dark');
-  const canApplyCustom = lightCheck.valid && darkCheck.valid;
 
   useEffect(() => {
     if (focusOnLoad) mainRef.current?.focus();
   }, [focusOnLoad]);
 
-  /** Explain a failed color without applying it to the rest of the interface. */
+  /** Explain an incomplete color or warn when an applied color may be hard to read. */
   function contrastMessage(result: ReturnType<typeof checkAccentContrast>): string {
     if (result.lowestRatio === null) return t('devSettings.invalidColor');
     const ratio = new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(result.lowestRatio);
@@ -41,16 +52,20 @@ export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?:
     setDarkVisual(DEFAULT_DEV_SETTINGS.customDark);
   }
 
-  /** Keep the canvas on the last complete color while a hex field is being edited. */
+  /** Apply each complete light color while preserving incomplete hex edits in the field. */
   function changeLightDraft(value: string): void {
     setLightDraft(value);
-    if (hexToHsv(value) !== null) setLightVisual(value);
+    if (hexToHsv(value) === null) return;
+    setLightVisual(value);
+    setSettings((current) => ({ ...current, accentChoice: 'custom', customLight: value.toLowerCase() }));
   }
 
-  /** Keep the dark canvas on the last complete color while a hex field is being edited. */
+  /** Apply each complete dark color while preserving incomplete hex edits in the field. */
   function changeDarkDraft(value: string): void {
     setDarkDraft(value);
-    if (hexToHsv(value) !== null) setDarkVisual(value);
+    if (hexToHsv(value) === null) return;
+    setDarkVisual(value);
+    setSettings((current) => ({ ...current, accentChoice: 'custom', customDark: value.toLowerCase() }));
   }
 
   return (
@@ -137,7 +152,8 @@ export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?:
                   value={lightDraft}
                   visualColor={lightVisual}
                   onChange={changeLightDraft}
-                  errorId={!lightCheck.valid ? 'dev-light-contrast' : undefined}
+                  onOpen={() => selectTheme('light')}
+                  messageId={!lightCheck.valid ? 'dev-light-contrast' : undefined}
                 />
                 {!lightCheck.valid && (
                   <p id="dev-light-contrast" role="status" className="mt-2 text-xs text-warning">
@@ -157,7 +173,8 @@ export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?:
                   value={darkDraft}
                   visualColor={darkVisual}
                   onChange={changeDarkDraft}
-                  errorId={!darkCheck.valid ? 'dev-dark-contrast' : undefined}
+                  onOpen={() => selectTheme('dark')}
+                  messageId={!darkCheck.valid ? 'dev-dark-contrast' : undefined}
                 />
                 {!darkCheck.valid && (
                   <p id="dev-dark-contrast" role="status" className="mt-2 text-xs text-warning">
@@ -166,21 +183,6 @@ export default function DevSettingsPage({ focusOnLoad = false }: { focusOnLoad?:
                 )}
               </div>
             </div>
-            <button
-              type="button"
-              disabled={!canApplyCustom}
-              className="mt-5 min-h-11 rounded-xl bg-accent px-4 text-sm font-semibold text-on-accent disabled:cursor-not-allowed disabled:opacity-45"
-              onClick={() =>
-                setSettings((current) => ({
-                  ...current,
-                  accentChoice: 'custom',
-                  customLight: lightDraft.toLowerCase(),
-                  customDark: darkDraft.toLowerCase(),
-                }))
-              }
-            >
-              {t('devSettings.applyCustom')}
-            </button>
           </fieldset>
         </section>
 

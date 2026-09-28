@@ -32,7 +32,7 @@
     "recentSearchLimit": "Saved recent searches",
     "recentSearchLimitHelp": "Choose 0 to hide and stop saving recent searches.",
     "themeAccent": "Theme palette",
-    "themeAccentHelp": "Presets and custom colors change text, backgrounds, surfaces, and borders in both themes.",
+    "themeAccentHelp": "Custom colors apply as you choose them. Opening a picker switches to its light or dark theme.",
     "presets": "Theme palettes",
     "preset": {
       "bay": "Bay teal",
@@ -48,8 +48,7 @@
     "hexColor": "Hex color",
     "hue": "Hue",
     "invalidColor": "Choose a valid six-digit color.",
-    "lowContrast": "Lowest contrast is {{ratio}}:1; at least 4.5:1 is required.",
-    "applyCustom": "Apply custom colors",
+    "lowContrast": "Low contrast ({{ratio}}:1). Text may be hard to read; aim for at least 4.5:1.",
     "browserOnly": "Saved only in this browser.",
     "reset": "Reset defaults"
   },

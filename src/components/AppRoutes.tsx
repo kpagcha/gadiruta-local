@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExplorePage, type ExploreView } from '../pages/ExplorePage';
 import { HomePage } from '../pages/HomePage';
+import { useTheme } from '../hooks/use-theme';
 import { AppHeader } from './AppHeader';
 import { PageSkeleton } from './PageSkeleton';
 
@@ -44,6 +45,7 @@ function appViewFromPath(path: string): AppView {
 /** Keep the visible page, active navigation link, and title in step with browser history. */
 export function AppRoutes() {
   const { t } = useTranslation();
+  const { theme, toggleTheme, selectTheme } = useTheme();
   const [appView, setAppView] = useState<AppView>(() => appViewFromPath(window.location.pathname));
   // Only the first document visit should play Search's entrance animation.
   const [hasNavigated, setHasNavigated] = useState(false);
@@ -124,7 +126,11 @@ export function AppRoutes() {
 
   return (
     <>
-      <AppHeader activePage={appView.kind === 'settings' ? null : appView.kind === 'search' ? 'search' : 'explore'} />
+      <AppHeader
+        activePage={appView.kind === 'settings' ? null : appView.kind === 'search' ? 'search' : 'explore'}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
       {appView.kind === 'search' ? (
         <HomePage animateArrival={!hasNavigated} />
       ) : appView.kind === 'settings' ? (
@@ -136,7 +142,7 @@ export function AppRoutes() {
               </main>
             }
           >
-            <DevSettingsPage focusOnLoad={hasNavigated} />
+            <DevSettingsPage focusOnLoad={hasNavigated} selectTheme={selectTheme} />
           </Suspense>
         )
       ) : (

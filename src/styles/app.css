@@ -280,71 +280,77 @@
     --shadow-field-focus: 0 0 0 3px #79cbc233;
   }
 
-  /* Keep the shipped Bay palette intact; experiments tint the whole interface. */
+  /* Experimental palettes start from neutral surfaces so the Bay teal cannot show through. */
   :root[data-dev-palette] {
-    --color-paper: color-mix(in srgb, var(--dev-light-accent) 4%, #f7f6f0);
-    --color-ink: color-mix(in srgb, var(--dev-light-accent) 35%, #193839);
-    --color-muted: color-mix(in srgb, var(--dev-light-accent) 20%, #5f6f6c);
-    --color-muted-soft: color-mix(in srgb, var(--dev-light-accent) 18%, #727d79);
-    --color-muted-faint: color-mix(in srgb, var(--dev-light-accent) 18%, #b4beb7);
-    --color-icon-muted: color-mix(in srgb, var(--dev-light-accent) 24%, #83978c);
-    --color-icon-accent: color-mix(in srgb, var(--dev-light-accent) 45%, #63877c);
-    --color-icon-strong: color-mix(in srgb, var(--dev-light-accent) 45%, #648478);
-    --color-line: color-mix(in srgb, var(--dev-light-accent) 25%, #dce2dc);
-    --color-line-subtle: color-mix(in srgb, var(--dev-light-accent) 15%, #edf0eb);
-    --color-line-brand: color-mix(in srgb, var(--dev-light-accent) 32%, #b8c9bf);
-    --color-line-decoration: color-mix(in srgb, var(--dev-light-accent) 30%, #adbbb2);
-    --color-line-input: color-mix(in srgb, var(--dev-light-accent) 22%, #c8d2cc);
-    --color-line-popover: color-mix(in srgb, var(--dev-light-accent) 25%, #bfcfc3);
-    --color-line-hover: color-mix(in srgb, var(--dev-light-accent) 35%, #a4b8aa);
-    --color-surface-active: color-mix(in srgb, var(--dev-light-accent) 10%, #e7eee8);
-    --color-surface-hover: color-mix(in srgb, var(--dev-light-accent) 10%, #e6eee8);
-    --color-surface-hover-strong: color-mix(in srgb, var(--dev-light-accent) 10%, #e4eee6);
-    --color-surface-selected: color-mix(in srgb, var(--dev-light-accent) 10%, #eaf2ec);
-    --color-surface-input: color-mix(in srgb, var(--dev-light-accent) 4%, #f5f9f6);
-    --color-surface-card: color-mix(in srgb, var(--dev-light-accent) 2%, #ffffff);
+    --color-paper: color-mix(in srgb, var(--dev-light-accent) 6%, #faf8f4);
+    --color-ink: color-mix(in srgb, var(--dev-light-accent) 18%, #262b2e);
+    --color-muted: color-mix(in srgb, var(--dev-light-accent) 18%, #62686b);
+    --color-muted-soft: color-mix(in srgb, var(--dev-light-accent) 16%, #788087);
+    --color-muted-faint: color-mix(in srgb, var(--dev-light-accent) 16%, #b9bec1);
+    --color-icon-muted: color-mix(in srgb, var(--dev-light-accent) 26%, #899397);
+    --color-icon-accent: color-mix(in srgb, var(--dev-light-accent) 48%, #798387);
+    --color-icon-strong: color-mix(in srgb, var(--dev-light-accent) 48%, #687377);
+    --color-line: color-mix(in srgb, var(--dev-light-accent) 24%, #dce0dd);
+    --color-line-subtle: color-mix(in srgb, var(--dev-light-accent) 16%, #eff0ed);
+    --color-line-brand: color-mix(in srgb, var(--dev-light-accent) 34%, #c6ccc8);
+    --color-line-decoration: color-mix(in srgb, var(--dev-light-accent) 30%, #b9c0bc);
+    --color-line-input: color-mix(in srgb, var(--dev-light-accent) 24%, #cfd4d0);
+    --color-line-popover: color-mix(in srgb, var(--dev-light-accent) 26%, #c7ceca);
+    --color-line-hover: color-mix(in srgb, var(--dev-light-accent) 36%, #aeb9b3);
+    --color-surface-active: color-mix(in srgb, var(--dev-light-accent) 12%, #eceeeb);
+    --color-surface-hover: color-mix(in srgb, var(--dev-light-accent) 10%, #edeeec);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-light-accent) 12%, #e9ecea);
+    --color-surface-selected: color-mix(in srgb, var(--dev-light-accent) 12%, #eef0eb);
+    --color-surface-input: color-mix(in srgb, var(--dev-light-accent) 6%, #f7f8f5);
+    --color-surface-card: color-mix(in srgb, var(--dev-light-accent) 3%, #ffffff);
+    --shadow-card: 0 14px 50px -35px #222b2d33;
+    --shadow-popover: 0 18px 35px -12px #222b2d38;
     --shadow-field-focus: 0 0 0 3px color-mix(in srgb, var(--dev-light-accent) 12%, transparent);
   }
 
   :root[data-dev-palette][data-theme='dark'] {
-    --color-paper: color-mix(in srgb, var(--dev-dark-accent) 3%, #0e191a);
-    --color-ink: color-mix(in srgb, var(--dev-dark-accent) 12%, #edf5ef);
-    --color-muted: color-mix(in srgb, var(--dev-dark-accent) 10%, #a8bab3);
-    --color-muted-soft: color-mix(in srgb, var(--dev-dark-accent) 10%, #9bafa7);
-    --color-muted-faint: color-mix(in srgb, var(--dev-dark-accent) 10%, #7f9790);
-    --color-icon-muted: color-mix(in srgb, var(--dev-dark-accent) 18%, #91aea4);
-    --color-icon-accent: color-mix(in srgb, var(--dev-dark-accent) 30%, #76bcae);
-    --color-icon-strong: color-mix(in srgb, var(--dev-dark-accent) 30%, #8fc6b9);
-    --color-line: color-mix(in srgb, var(--dev-dark-accent) 22%, #34504b);
-    --color-line-subtle: color-mix(in srgb, var(--dev-dark-accent) 16%, #243b38);
-    --color-line-brand: color-mix(in srgb, var(--dev-dark-accent) 22%, #57776d);
-    --color-line-decoration: color-mix(in srgb, var(--dev-dark-accent) 22%, #66877d);
-    --color-line-input: color-mix(in srgb, var(--dev-dark-accent) 20%, #4a625d);
-    --color-line-popover: color-mix(in srgb, var(--dev-dark-accent) 20%, #55736a);
-    --color-line-hover: color-mix(in srgb, var(--dev-dark-accent) 24%, #6a9386);
-    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 12%, #18342f);
-    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 12%, #192d2b);
-    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 12%, #1c3832);
-    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 12%, #1e3c35);
-    --color-surface-input: color-mix(in srgb, var(--dev-dark-accent) 12%, #172d2b);
-    --color-surface-card: color-mix(in srgb, var(--dev-dark-accent) 4%, #142425);
+    --color-paper: color-mix(in srgb, var(--dev-dark-accent) 5%, #131719);
+    --color-ink: color-mix(in srgb, var(--dev-dark-accent) 12%, #f1f2ee);
+    --color-muted: color-mix(in srgb, var(--dev-dark-accent) 12%, #b0b8b7);
+    --color-muted-soft: color-mix(in srgb, var(--dev-dark-accent) 12%, #a2acab);
+    --color-muted-faint: color-mix(in srgb, var(--dev-dark-accent) 12%, #899393);
+    --color-icon-muted: color-mix(in srgb, var(--dev-dark-accent) 22%, #9ba5a5);
+    --color-icon-accent: color-mix(in srgb, var(--dev-dark-accent) 42%, #97a1a0);
+    --color-icon-strong: color-mix(in srgb, var(--dev-dark-accent) 42%, #a6adab);
+    --color-line: color-mix(in srgb, var(--dev-dark-accent) 22%, #42494a);
+    --color-line-subtle: color-mix(in srgb, var(--dev-dark-accent) 18%, #303738);
+    --color-line-brand: color-mix(in srgb, var(--dev-dark-accent) 26%, #687271);
+    --color-line-decoration: color-mix(in srgb, var(--dev-dark-accent) 26%, #77817f);
+    --color-line-input: color-mix(in srgb, var(--dev-dark-accent) 22%, #596261);
+    --color-line-popover: color-mix(in srgb, var(--dev-dark-accent) 22%, #65706d);
+    --color-line-hover: color-mix(in srgb, var(--dev-dark-accent) 26%, #798581);
+    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 10%, #2b3032);
+    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 10%, #282e30);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 10%, #303638);
+    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 10%, #343a3b);
+    --color-surface-input: color-mix(in srgb, var(--dev-dark-accent) 10%, #252b2d);
+    --color-surface-card: color-mix(in srgb, var(--dev-dark-accent) 8%, #1b2023);
+    --color-on-accent: #131719;
+    --shadow-card: 0 12px 20px -18px #080b0caa;
+    --shadow-popover: 0 18px 35px -12px #080b0ccc;
     --shadow-field-focus: 0 0 0 3px color-mix(in srgb, var(--dev-dark-accent) 22%, transparent);
   }
 
   /* The Andalucía experiment pairs a readable dark green with a livelier lime surface. */
   :root[data-dev-palette='andalusiaLime'] {
-    --color-surface-active: color-mix(in srgb, #c5e86f 28%, #e7eee8);
-    --color-surface-hover: color-mix(in srgb, #c5e86f 23%, #e6eee8);
-    --color-surface-hover-strong: color-mix(in srgb, #c5e86f 30%, #e4eee6);
-    --color-surface-selected: color-mix(in srgb, #c5e86f 30%, #eaf2ec);
-    --color-line-brand: color-mix(in srgb, #a0c04a 38%, #b8c9bf);
+    --color-surface-active: color-mix(in srgb, #c5e86f 28%, #eceeeb);
+    --color-surface-hover: color-mix(in srgb, #c5e86f 23%, #edeeec);
+    --color-surface-hover-strong: color-mix(in srgb, #c5e86f 30%, #e9ecea);
+    --color-surface-selected: color-mix(in srgb, #c5e86f 30%, #eef0eb);
+    --color-line-brand: color-mix(in srgb, #a0c04a 38%, #c6ccc8);
   }
 
   :root[data-dev-palette='andalusiaLime'][data-theme='dark'] {
-    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 18%, #18342f);
-    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 16%, #192d2b);
-    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 20%, #1c3832);
-    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 22%, #1e3c35);
+    --color-line-brand: color-mix(in srgb, var(--dev-dark-accent) 26%, #687271);
+    --color-surface-active: color-mix(in srgb, var(--dev-dark-accent) 24%, #2b3032);
+    --color-surface-hover: color-mix(in srgb, var(--dev-dark-accent) 22%, #282e30);
+    --color-surface-hover-strong: color-mix(in srgb, var(--dev-dark-accent) 26%, #303638);
+    --color-surface-selected: color-mix(in srgb, var(--dev-dark-accent) 24%, #343a3b);
   }
 
   body {

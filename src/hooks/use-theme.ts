@@ -87,10 +87,9 @@ export function useTheme() {
     [],
   );
 
-  /** Toggle to the opposite explicit theme, overriding the system choice for this browser. */
-  function toggleTheme(): void {
-    // Toggling always creates an explicit preference, even if the starting mode was "system".
-    const nextTheme: ResolvedTheme = theme === 'dark' ? 'light' : 'dark';
+  /** Choose and save an explicit theme, including when a color picker opens. */
+  function selectTheme(nextTheme: ResolvedTheme): void {
+    if (theme === nextTheme) return;
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.classList.add('theme-shift');
       if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
@@ -101,7 +100,13 @@ export function useTheme() {
     }
     persistThemeMode(nextTheme);
     setMode(nextTheme);
+    setTheme(applyTheme(nextTheme));
   }
 
-  return { theme, toggleTheme };
+  /** Toggle to the opposite explicit theme, overriding the system choice for this browser. */
+  function toggleTheme(): void {
+    selectTheme(theme === 'dark' ? 'light' : 'dark');
+  }
+
+  return { theme, toggleTheme, selectTheme };
 }
